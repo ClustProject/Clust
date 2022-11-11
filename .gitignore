@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+/KETI_setting
+
 # C extensions
 *.so
 
