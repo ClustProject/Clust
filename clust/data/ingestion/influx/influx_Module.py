@@ -1,4 +1,5 @@
 import pandas as pd
+
 def getAllMSDataSetFromInfluxDB(start_time, end_time, db_client, db_name):
     """
         It returns dataSet from all MS of a speicific DB.
@@ -88,7 +89,3 @@ def saveDataToInfluxDB(db_client, data):
 
     db_client.write_db(bk_name, ms_name, data_frame)
     db_client.close_db()
-
-
-
-
