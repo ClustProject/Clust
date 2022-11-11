@@ -1,6 +1,3 @@
-from doctest import DocFileCase
-import warnings
-#from influxdb_client.client.warnings import MissingPivotFunction
 from influxdb_client.client.write_api import SYNCHRONOUS, ASYNCHRONOUS, WriteOptions
 from influxdb_client import InfluxDBClient, Point, BucketsService, Bucket
 import sys
@@ -8,9 +5,8 @@ import os
 import pandas as pd
 from datetime import datetime
 
-#warnings.simplefilter("ignore", MissingPivotFunction)
-
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+sys.path.append("../")
+sys.path.append("../../")
 
 UTC_Style = '%Y-%m-%dT%H:%M:%SZ'
 class influxClient():
@@ -32,7 +28,6 @@ class influxClient():
     def __init__(self, influx_setting):
         self.influx_setting = influx_setting
         self.DBClient = InfluxDBClient(url=self.influx_setting["url"], token=self.influx_setting["token"], org=self.influx_setting["org"], timeout=30000_000)
-
 
 
     def get_DBList(self):
@@ -823,58 +818,3 @@ f
 
         self.close_db()
         print("========== write success ==========")
-
-
-
-    # def write_db_highCapacity(self, bk_name, ms_name, df) : 
-
-    #     write_client = self.DBClient.write_api(write_options=ASYNCHRONOUS)    
-        
-    #     dataSize = len(df.index)
-
-    #     if dataSize > 25000 : 
-    #         chucksize = 25000
-    #         import math
-    #         share = math.ceil(dataSize / chucksize)
-    #         x = 0
-    #         y = chucksize                
-
-    #         for idx in range(share) :
-    #             chunkDF = df[x:y]
-    #             write_client.write(bucket=bk_name, record=chunkDF, data_frame_measurement_name=ms_name)
-    #             x = y
-    #             y = x + chucksize
-    #             print("dataSize :: ", dataSize, ", x ::", x, ", y ::" , y, ", share :: ", share)
-
-    #     else : 
-    #         write_client.write(bucket=bk_name, record=df, data_frame_measurement_name=ms_name)
-
-
-
-
-
-
-
-
-
-## -------------------------------------- Influx Test --------------------------------------
-# if __name__ == "__main__":
-#     from KETIPreDataIngestion.KETI_setting import influx_setting_KETI as ins
-#     test = influxClient(ins.CLUSTDataServer2)
-#     db_name="air_indoor_아파트"
-#     ms_name="ICW0W2000781"
-    # db_name="air_indoor_경로당"
-    # ms_name="ICL1L2000235"
-    # start_time = '2021-05-01T00:00:00Z'
-    # end_time = '2021-08-31T00:00:00Z'
-    # db_name = "finance_korean_stock"
-    # ms_name = "stock"
-    # start_time = '2022-01-01T00:00:00Z'
-    # end_time = '2022-02-28T00:00:00Z' 
-    # number = 7
-    # days = 7
-    # tag_key = 'company'
-    # tag_value = 'GS리테일'
-
-    # aa = test.measurement_list(db_name)
-    # print(aa)
