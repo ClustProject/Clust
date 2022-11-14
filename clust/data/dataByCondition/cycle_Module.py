@@ -8,6 +8,21 @@ from KETIPrePartialDataPreprocessing.data_preprocessing import DataPreprocessing
 
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
+    """
+    get Cycle Data
+
+    :param query_data: query_data
+    :type query_data: dataframe
+
+    :param feature_cycle: feature_cycle
+    :type feature_cycle: string
+
+    :param feature_cycle_times:feature_cycle_times
+    :type feature_cycle_times: int
+
+    :param frequency: frequency
+    :type frequency: int
+    """
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': frequency}}
     output_data = DataPreprocessing().get_refinedData(query_data, refine_param)
     cycleData = CycleData()
@@ -28,6 +43,21 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
 
 
 def getCycleSelectDataSet(query_data, feature_cycle, feature_cycle_times, frequency=None):
+    """
+    get Cycle Data Set
+
+    :param query_data: query_data
+    :type query_data: dataframe
+
+    :param feature_cycle: feature_cycle
+    :type feature_cycle: string
+
+    :param feature_cycle_times:feature_cycle_times
+    :type feature_cycle_times: int
+
+    :param frequency: frequency
+    :type frequency: int
+    """
     data_list = getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency)
     dataSet = {}
     for data_slice in data_list:

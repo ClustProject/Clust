@@ -647,6 +647,10 @@ class influxClient():
     def create_bucket(self, bk_name):  # write_db 수행 시, bucket 생성 필요
         """
         Create bucket to the influxdb
+
+        :param db_name: database name
+        :type db_name: string
+
         """
         buckets_api = self.DBClient.buckets_api()
         buckets_api.create_bucket(bucket_name=bk_name)
@@ -656,6 +660,15 @@ class influxClient():
     def write_db(self, bk_name, ms_name, data_frame):
         """
         Write data to the influxdb
+
+        :param db_name: database name
+        :type db_name: string
+
+        :param ms_name: measurement name
+        :type ms_name: string
+
+        :param data_frame: data
+        :type: dataframe
         """
         write_client = self.DBClient.write_api(write_options=WriteOptions(batch_size=10000))
         if bk_name not in self.get_DBList():
@@ -666,10 +679,15 @@ class influxClient():
         import time
         time.sleep(2)
     
-
     def drop_measurement(self, bk_name, ms_name):
         """
         Drop Measurement
+
+        :param db_name: database name
+        :type db_name: string
+
+        :param ms_name: measurement name
+        :type ms_name: string
         """
         start_time = '1970-01-01T00:00:00Z'
         end_time = datetime.now().strftime(UTC_Style)
@@ -679,12 +697,18 @@ class influxClient():
 
 
 
-
-
-
-
 # --------------------------------------------- new function from wiz ---------------------------------------------
     def get_tagList(self, bk_name, ms_name):
+        """
+        Get Tag List(database must have a tag keys)
+
+
+        :param db_name: database name
+        :type db_name: string
+
+        :param ms_name: measurement name
+        :type ms_name: string
+        """
 
         query = f'''
             from(bucket: "{bk_name}") 
@@ -734,6 +758,18 @@ f
 
 
     def get_fieldList_type(self, bk_name, ms_name, onlyFieldName= False):
+        """
+        Get Field List and Type by dictionary
+
+        :param db_name: bucket(database) 
+        :type db_name: string
+f
+        :param ms_name: measurement
+        :type ms_name: string
+
+        :return: field list, type
+        :rtype: dict
+        """
         query = f'''from(bucket: "{bk_name}") 
         |> range(start: 0, stop: now()) 
         |> filter(fn: (r) => r._measurement == "{ms_name}")
@@ -773,9 +809,7 @@ f
 
         return field_list
 
-
     def create_database(self, bk_name):
-       
         buckets_api = self.DBClient.buckets_api()
 
         if buckets_api.find_bucket_by_name(bucket_name=bk_name) == None:
@@ -783,7 +817,6 @@ f
 
 
     def write_db_with_tags(self, df_data, bk_name, ms_name, tags_array, fields_array, batch_size=5000):
-
         with self.DBClient.write_api(write_options=WriteOptions(batch_size=batch_size)) as write_client:
             write_client.write(bucket=bk_name, record=df_data,
                                data_frame_measurement_name=ms_name, data_frame_tag_columns=tags_array)
@@ -792,29 +825,7 @@ f
         return self.DBClient.ping()
 
     def close_db(self) :
+        """
+        close influxdb conntection
+        """
         self.DBClient.close()
-
-
-
-    def write_db_large(self, bk_name, ms_name, data_frame):
-        """
-        Write large data to the influxdb
-        """
-        write_client = self.DBClient.write_api(write_options=ASYNCHRONOUS)
-        if bk_name not in self.get_DBList():
-            self.create_bucket(bk_name)
-        
-        df_count = len(data_frame.index)
-
-        import math
-        df_range = math.ceil(df_count/10000)
-
-        for i in range(0, df_range):
-            new_data_frame = data_frame.iloc[10000*i:10000*(i+1)-1]
-            
-            write_client.write(bucket=bk_name, record=new_data_frame, data_frame_measurement_name=ms_name)
-            import time
-            time.sleep(2)
-
-        self.close_db()
-        print("========== write success ==========")
