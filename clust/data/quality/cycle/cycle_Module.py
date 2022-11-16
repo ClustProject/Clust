@@ -3,7 +3,7 @@ import os
 sys.path.append("../")
 sys.path.append("../../")
 
-from clust.data.quality.cycleData import CycleData
+from clust.data.quality.cycle.cycleData import CycleData
 from clust.preprocessing.data_preprocessing import DataPreprocessing
 
 

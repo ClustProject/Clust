@@ -2,7 +2,7 @@ import sys
 sys.path.append("../")
 sys.path.append("../..")
 import pandas as pd
-from clust.preprocessing.dataRemovebyNaN import data_remove_byNaN
+from clust.preprocessing.quality.NaN.import data_remove_byNaN
 from clust.preprocessing import data_preprocessing
 
 # 특정 datasetd에 대해 품질을 점검하고 각 피쳐별로 이상 수치를 넘는 피쳐 데이터는 제거하고 깨끗한 데이터를 전달

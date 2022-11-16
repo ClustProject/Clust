@@ -5,8 +5,9 @@
             * ingestion
                 * influx
                 * csvInput(KETIPreDataCollection-CSVtoInfluxS)
-            * selection
-            * collection
+            * quality
+                *cycle
+                *NaN
         * integration
         * meta
         * ML
