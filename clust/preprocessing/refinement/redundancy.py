@@ -8,36 +8,20 @@ class ExcludeRedundancy():
         """ Get Clean Data without redundency using all data preprocessing functions.
 
         :param data: input data
-        :type data: DataFrame 
+        :type data: pandas.DataFrame 
 
-        :return: output data
-        :rtype: DataFrame
+        :return: result, output data
+        :rtype: pandas.DataFrame
 
         example
             >>> output = ExcludeRedundancy().get_result(data)
         """
-        self.result = self.RemoveDuplicateData(data)
-        return self.result
 
-    def RemoveDuplicateData(self, data):
-        """ Return clean data removing duplicate row and/or column
-
-        :param data: input data
-        :type data: DataFrame 
-
-        :return: output data
-        :rtype: DataFrame
-
-        example
-            >>> output = ExcludeRedundancy().RemoveDuplicateData(data)
-        """
-        ## 
-        # duplicated column remove
         data = data.loc[:, ~data.columns.duplicated()]
-        
         # duplicated Index Drop
         data = data.sort_index()
         result = data[~data.index.duplicated(keep='first')]
+        
         return result
 
  

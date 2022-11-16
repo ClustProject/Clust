@@ -20,26 +20,28 @@ class DataPreprocessing():
         It refines data adaptively depending on flag status. (removeDuplication, staticFrequency)
         "removeDuplication" :It removes duplicated data.
         "staticFrequency" :The data will have a constant timestamp index. 
-        
-        data: DataFrame
-            input data
-        refine_param: json
+
+        :param data: data
+        :type data: pandas.DataFrame
+
+        :param refine_param: refinement parameter
+        :type refine_param: dictionary
+
+        :return: refinedData, refined DataFrame output
+        :rtype: pandas.DataFrame
+
+        refine_param additional info: 
+        -------
             refine_param['removeDuplication']={'flag':(Boolean)} 
-
             refine_param['staticFrequency'] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
-
             refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
-        
-    
-        :return data : New refined DataFrame output
-        :return data: DataFrame
-
+        -------
        Example
         -------
-            >>> data = input_data
-            >>> from clust.preprocessing.data_preprocessing import DataPreprocessing
-            >>> refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': '1H'}}
-            >>> output = DataPreprocessing().get_refinedData(data, refine_param) 
+            >>> from clust.preprocessing.dataPreprocessing import DataPreprocessing
+            >>> refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': None}}
+            >>> refine_param2 = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': "3H"}}
+            >>> refinementData = DataPreprocessing().get_refinedData(data, refine_param)
 
         """
         result = data.copy()
@@ -113,7 +115,7 @@ class DataPreprocessing():
 
     # Add New Function
 
-class packagedPartialProcessing(DataPreprocessing):
+class DataProcessing(DataPreprocessing):
     '''This class provides funtion having packged preprocessing procedure.
     '''
     def __init__(self, process_param):
@@ -123,13 +125,11 @@ class packagedPartialProcessing(DataPreprocessing):
         :type process_param: json 
 
         '''
-        
-        
         self.refine_param = process_param['refine_param']
         self.outlier_param = process_param['outlier_param']
         self.imputation_param = process_param['imputation_param']
     
-    def PartialProcessing(self, input_data, flag):
+    def preprocessing(self, input_data, flag):
         """ Produces only one clean data with one preprocessing module.
 
         :param input_data: input data
@@ -141,7 +141,7 @@ class packagedPartialProcessing(DataPreprocessing):
         :rtype: DataFrame
         
         example
-            >>> output = packagedPartialProcessing().PartialProcessing(data, 'refine')
+            >>> output = DataProcessing().preprocessing(data, 'refine')
             
         """
         if flag == 'refine':
@@ -151,10 +151,10 @@ class packagedPartialProcessing(DataPreprocessing):
         elif flag == 'imputation':
             result = self.get_imputedData(input_data, self.imputation_param)
         elif flag == 'all':
-            result = self.allPartialProcessing(input_data)
+            result = self.all_preprocessing(input_data)
         return result
 
-    def allPartialProcessing(self, input_data):
+    def all_preprocessing(self, input_data):
         """ Produces partial Processing data depending on process_param
 
         :param input_data: input data
@@ -164,7 +164,7 @@ class packagedPartialProcessing(DataPreprocessing):
         :rtype: json (key: process name, value : output DataFrame)
         
         example
-            >>> output = packagedPartialProcessing(process_param).allPartialProcessing(data)
+            >>> output = DataProcessing(process_param).all_preprocessing(data)
             
         """
         ###########
@@ -179,7 +179,7 @@ class packagedPartialProcessing(DataPreprocessing):
         return result
 
     ## Get Multiple output
-    def MultipleDatasetallPartialProcessing(self, multiple_dataset):
+    def multiDataset_all_preprocessing(self, multiple_dataset):
         """ Produces multiple DataFrame Processing result depending on process_param
 
         :param input_data: multiple_dataset
@@ -189,10 +189,10 @@ class packagedPartialProcessing(DataPreprocessing):
         :rtype: json (value : output DataFrame)
         
         example
-            >>> output = packagedPartialProcessing(process_param).MultipleDatasetallPartialProcessing(multiple_dataset)
+            >>> output = DataProcessing(process_param).multiDataset_all_preprocessing(multiple_dataset)
         """
         output={}
         for key in list(multiple_dataset.keys()):
-            output[key] = self.allPartialProcessing(multiple_dataset[key])
+            output[key] = self.all_preprocessing(multiple_dataset[key])
         return output
 

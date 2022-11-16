@@ -4,7 +4,7 @@ sys.path.append("../")
 sys.path.append("../../")
 
 from clust.quality.cycle.cycleData import CycleData
-from clust.preprocessing.data_preprocessing import DataPreprocessing
+from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
 
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):

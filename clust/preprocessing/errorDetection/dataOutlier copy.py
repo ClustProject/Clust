@@ -9,7 +9,7 @@ import sranodec as anom
 from sklearn.ensemble import IsolationForest   
 from sklearn.neighbors import KernelDensity, LocalOutlierFactor
 from sklearn.mixture import GaussianMixture
-from clust.preprocessing.data_preprocessing import DataPreprocessing
+from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
 class DataOutlier():
     """
     
