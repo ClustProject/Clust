@@ -1,23 +1,30 @@
-* clust
-    * data
-        * Ingestion
-            * influx
-            * csvInput(KETIPreDataCollection-CSVtoInfluxS)
-        * Selection
-    * preprocessing
-        * impuatation
-        * refinement
-        * errorDetection
-        * dataProcessing.py
-    * integration
-    * transformation
-    * analysis
-    * machineLearning
-    * meta
-    * application
-    * utils
-        * plot
-        * stats
-        * etc
+*Clust
+    * clust
+        * analysis
+        * data
+            * ingestion
+                * influx
+                * csvInput(KETIPreDataCollection-CSVtoInfluxS)
+            * selection
+            * collection
+        * integration
+        * meta
+        * ML
+        * preprocessing
+            * impuatation
+            * refinement
+            * NaNhandler
+            * errorDetection
+            * dataProcessing.py
+        * tool
+            * plot
+            * stats
+            * etc
+        * transformation
+    * docs
+    * examples
+    * setting
+
+
         
 
