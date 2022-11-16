@@ -4,7 +4,7 @@ sys.path.append("../")
 sys.path.append("../../")
 
 from cycleData import CycleData
-from KETIPrePartialDataPreprocessing.data_preprocessing import DataPreprocessing
+from clust.preprocessing.data_preprocessing import DataPreprocessing
 
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
