@@ -22,7 +22,7 @@ class DataScaler():
         
         Example 1 (make new scaler and scale data )
         -------
-        >>> from clust.transformation.general_transformation.dataScaler import DataScaler
+        >>> from clust.transformation.general.dataScaler import DataScaler
         >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
         >>> DS = DataScaler('minmax', scalerRootpath )
         >>> #feature_col_list = dataScaler.get_scalable_columns(train_o)
@@ -33,7 +33,7 @@ class DataScaler():
 
 
         Example 2 (load scaler and scale data)
-        >>> from clust.transformation.general_transformation.dataScaler import DataScaler
+        >>> from clust.transformation.general.dataScaler import DataScaler
         >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
         >>> DS = DataScaler('minmax', scalerRootpath )
         >>> feature_col_list= ['CO/value', 'H2S/value', 'NH3/value',  'O2/value', 'sin_hour']
@@ -94,7 +94,7 @@ class DataScaler():
         
         Example
         -------
-        >>> from clust.transformation.general_transformation.dataScaler import DataScaler
+        >>> from clust.transformation.general.dataScaler import DataScaler
         >>> scalerRootpath = os.path.join('/Users','scaler')
         >>> DS = DataScaler('minmax',scalerRootpath )
         >>> scaler = DS.setNewScaler(trainval_o)
@@ -222,7 +222,7 @@ class DataInverseScaler():
 
         Example
         -------
-        >>> from clust.transformation.general_transformation.dataScaler import DataScaler
+        >>> from clust.transformation.general.dataScaler import DataScaler
         >>> scalerRootpath = os.path.join('/Users','jw_macmini','CLUSTGit','KETIAppMachineLearning','scaler')
         >>> DIS = DataInverseScaler(df_features, 'minmax',scalerRootpath )
         >>> DIS.setScaleColumns(df_features) 

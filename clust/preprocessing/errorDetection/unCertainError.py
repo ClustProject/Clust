@@ -1,4 +1,4 @@
-from clust.preprocessing.error_detection import dataOutlier
+from clust.preprocessing.errorDetection import dataOutlier
 import numpy as np
 class unCertainErrorRemove():
     '''Let UnCertain Outlier from DataFrame Data to NaN. This function makes more Nan according to the data status.

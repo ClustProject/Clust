@@ -9,19 +9,29 @@
                 *cycle
                 *NaN
         * integration
+            * meta
+            * ML
         * meta
         * ML
         * preprocessing
-            * impuatation
             * refinement
-            * NaNhandler
             * errorDetection
-            * dataProcessing.py
+            * impuatation
+        * quality
+            * cycle
+            * NaN
         * tool
             * plot
             * stats
             * etc
         * transformation
+            * entropy
+            * featureExtension
+            * featureReduction
+            * general
+            * purpose
+            * sampling
+            * type
     * docs
     * examples
     * setting

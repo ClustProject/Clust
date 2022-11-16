@@ -416,7 +416,7 @@ class influxClient():
                 data = self.get_datafront_by_num(10,db_name, ms_name,tag_key, tag_value)
         else:
             data = self.get_datafront_by_num(10,db_name, ms_name)
-        from clust.preprocessing.data_refine.frequency import RefineFrequency
+        from clust.preprocessing.refinement.frequency import RefineFrequency
         frequency = str(RefineFrequency().get_frequencyWith3DataPoints(data))
         print(frequency)
 

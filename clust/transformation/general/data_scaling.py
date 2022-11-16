@@ -1,7 +1,7 @@
 import sys
 sys.path.append("../")
 sys.path.append("../..")
-from clust.transformation.general_transformation import dataScaler
+from clust.transformation.general import dataScaler
 from sklearn.preprocessing import RobustScaler
 import pandas as pd
 import numpy as np
