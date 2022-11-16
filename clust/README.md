@@ -1,18 +1,22 @@
 *Clust
     * clust
         * analysis
+            * time
         * data
             * ingestion
                 * influx
-                * csvInput(KETIPreDataCollection-CSVtoInfluxS)
-            * quality
-                *cycle
-                *NaN
+                * fromCSV
         * integration
             * meta
             * ML
         * meta
+            * generator
+            * util
         * ML
+            * clustering
+            * training
+            * prediction
+            * tools
         * preprocessing
             * refinement
             * errorDetection
@@ -28,10 +32,10 @@
             * entropy
             * featureExtension
             * featureReduction
-            * general
             * purpose
             * sampling
             * type
+            * general
     * docs
     * examples
     * setting
