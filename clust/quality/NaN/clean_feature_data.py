@@ -2,8 +2,8 @@ import sys
 sys.path.append("../")
 sys.path.append("../..")
 import pandas as pd
-from clust.quality.NaN import data_remove_byNaN
-from clust.preprocessing import dataPreprocessing
+from Clust.clust.quality.NaN import data_remove_byNaN
+from Clust.clust.preprocessing import dataPreprocessing
 
 # 특정 datasetd에 대해 품질을 점검하고 각 피쳐별로 이상 수치를 넘는 피쳐 데이터는 제거하고 깨끗한 데이터를 전달
 # - multiple dataFrame:getMultipleCleanDataSetsByFeature
@@ -203,7 +203,7 @@ class CleanFeatureData:
             #1. Preprocessing (Data Refining/Static Frequency/OutlierDetection)
             MDP = dataPreprocessing.DataPreprocessing()
             refined_data = MDP.get_refinedData(data, self.refine_param)
-            from clust.preprocessing.errorDetection.errorToNaN import errorToNaN 
+            from Clust.clust.preprocessing.errorDetection.errorToNaN import errorToNaN 
             datawithMoreCertainNaN = errorToNaN().getDataWithCertainNaN(refined_data, self.certainParam)
         
         return refined_data, datawithMoreCertainNaN

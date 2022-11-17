@@ -18,7 +18,7 @@ def somTrain(feature_dataset, feature_datasetName):
     som_x = som_y = math.ceil(math.sqrt(math.sqrt(len(seriesData_SS_series))))
     som_x = som_y = 3
     from minisom import MiniSom
-    from clust.ML.clustering import som_visual
+    from Clust.clust.ML.clustering import som_visual
     som = MiniSom(som_x, som_y,len(seriesData_SS_series[0]), sigma=0.3, learning_rate = 0.1)
     som.random_weights_init(seriesData_SS_series)
     som.train(seriesData_SS_series, 50000)

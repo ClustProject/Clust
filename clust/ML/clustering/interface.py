@@ -35,7 +35,7 @@ def clusteringByMethod(feature_dataset, feature_datasetName, model):
     figdata2=None
     if (len(feature_datasetName)>0):
         if model =="som":
-            from clust.ML.clustering import som_visual
+            from Clust.clust.ML.clustering import som_visual
             result, figdata, figdata2 = som_visual.somTrain(feature_dataset, feature_datasetName)
     
     return result, figdata, figdata2

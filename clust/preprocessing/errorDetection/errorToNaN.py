@@ -7,14 +7,14 @@ class errorToNaN():
         self.limit_min_max = self.dataRangeInfoManager(data_type)
 
     def dataRangeInfoManager(self, data_type):
-        from clust.preprocessing.errorDetection import dataRangeInfo_manager
+        from Clust.clust.preprocessing.errorDetection import dataRangeInfo_manager
         limit_min_max = dataRangeInfo_manager.MinMaxLimitValueSet().get_data_min_max_limitSet(data_type)
         return limit_min_max
 
 
     def getDataWithCertainNaN(self, data, CertainParam):
         if CertainParam['flag'] ==True:  
-            from clust.preprocessing.errorDetection import certainError
+            from Clust.clust.preprocessing.errorDetection import certainError
             anomal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] 
             #anomal_value_list=[]
             datawithMoreCertainNaN = certainError.CertainErrorRemove(data, self.limit_min_max, anomal_value_list).getDataWitoutcertainError()  
@@ -24,7 +24,7 @@ class errorToNaN():
     
     def getDataWithUncertainNaN(self, data, uncertainParam):    
         if uncertainParam['flag'] == True:
-            from clust.preprocessing.errorDetection import unCertainError
+            from Clust.clust.preprocessing.errorDetection import unCertainError
             param = uncertainParam['param']
             data_outlier = unCertainError.unCertainErrorRemove(data, param)
             outlierIndex = data_outlier.getNoiseIndex()
