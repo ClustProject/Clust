@@ -1,12 +1,11 @@
 from influxdb_client.client.write_api import SYNCHRONOUS, ASYNCHRONOUS, WriteOptions
 from influxdb_client import InfluxDBClient, Point, BucketsService, Bucket
-import sys
-import os
-import pandas as pd
+from influxdb_client.client.warnings import MissingPivotFunction
 from datetime import datetime
+import pandas as pd
+import warnings
 
-sys.path.append("../")
-sys.path.append("../../")
+warnings.simplefilter("ignore", MissingPivotFunction)
 
 UTC_Style = '%Y-%m-%dT%H:%M:%SZ'
 class influxClient():
