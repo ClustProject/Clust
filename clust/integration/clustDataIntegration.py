@@ -4,7 +4,7 @@ sys.path.append("../")
 sys.path.append("../..")
 import datetime
 from KETIPreDataIntegration.meta import partialDataInfo
-from KETIPrePartialDataPreprocessing import dataProcessing
+from clust.preprocessing import dataPreprocessing
 from KETIPreDataIngestion.data_influx import influx_Module
 from KETIPreDataIntegration.ML import RNNAEAlignment
 from KETIPreDataIntegration.meta import data_integration
@@ -169,7 +169,7 @@ class ClustIntegration():
         if not integration_freq_sec:
             process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
         ## Preprocessing
-        partialP = DataPreprocessing.DataProcessing(process_param)
+        partialP = dataPreprocessing.DataProcessing(process_param)
         multiple_dataset = partialP.multiDataset_all_preprocessing(multiple_dataset)
         ## Integration
         imputed_datas = {}

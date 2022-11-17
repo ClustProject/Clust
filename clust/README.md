@@ -2,10 +2,9 @@
     * clust
         * analysis
             * time
-        * data
-            * ingestion
-                * influx
-                * fromCSV
+        * ingestion
+            * influx
+            * fromCSV
         * integration
             * meta
             * ML

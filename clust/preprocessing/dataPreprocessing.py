@@ -5,9 +5,7 @@ sys.path.append("../..")
 
 class DataPreprocessing():
     '''This class has interfaces of Data Preprocessing.
-    
     **Data Preprocessing Modules**::
-
             Refine Data, Remove Outlier, Impute Missing Data
     '''
     
@@ -64,16 +62,20 @@ class DataPreprocessing():
 
         Example
         -------
-        >>> outlier_param = {'certainErrorToNaN': {'flag': True}, 'unCertainErrorToNaN': {----}}
+        >>> uncertainErrorParam = {
+            # TODO define
+        }
+        >>> outlier_param = {'certainErrorToNaN': {'flag': True}, 'unCertainErrorToNaN': uncertainErrorParam}
         >>> datawithMoreCertainNaN, datawithMoreUnCertainNaN = DataPreprocessing().get_errorToNaNData(data, outlier_param)
 
-        data: dataFrame
-            input data
-        outlier_param: json
-            outlier Param
+        :param data: data
+        :type data: pandas.DataFrame
 
-        return: dataFrame
-            result
+        :param outlier_param: outlier handling parameter
+        :type outlier_param: dictionary
+
+        :return: datawithMoreCertainNaN, datawithMoreUnCertainNaN
+        :rtype: pandas.DataFrame, pandas.DataFrame
 
         **Two Outlier Detection Modules**::
 
