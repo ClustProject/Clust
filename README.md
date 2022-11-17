@@ -34,7 +34,6 @@ Clust/
 │   │   └── impuatation
 │   │
 │   ├── quality
-│   │   ├── cycle
 │   │   └── NaN
 │   │
 │   ├── tool
@@ -49,9 +48,11 @@ Clust/
 │       ├── general
 │       ├── purpose
 │       ├── sampling
+│       ├── dataByCycle
 │       └── type
 │
 ├── docs
 ├── examples
 └── setting
 ```
+
