@@ -31,7 +31,7 @@ Clust/
 │   ├── preprocessing
 │   │   ├── refinement
 │   │   ├── errorDetection
-│   │   └── impuatation
+│   │   └── imputatation
 │   │
 │   ├── quality
 │   │   └── NaN

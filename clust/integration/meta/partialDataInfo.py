@@ -21,7 +21,7 @@ class PartialData():
         
         example
             >>> partial_data_set ={0: pd.DataFrame, 1: pd.DataFrame, 2:pd.DataFrame}
-            >>> from KETIPreDataIntegration.meta import partialDataInfo
+            >>> from clust.integration.meta import partialDataInfo
             >>> partial_data_info = partialDataInfo.PartialData(partial_data_set)
             partial_data_info.column_meta = {
                 "overlap_duration": {

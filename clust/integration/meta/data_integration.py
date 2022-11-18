@@ -40,7 +40,7 @@ class DataIntegration():
         
         :return: merged_data
         :rtype: DataFrame
-        >>> from KETIPreDataIntegration.meta import data_integration
+        >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(data_partial_numeric)
         >>> integrated_data = data_int.simple_integration(partial_data_info.column_meta['overlap_duration'])
         """
@@ -90,7 +90,6 @@ class DataIntegration():
                         "fillna_limit": 31,
                     },
                     "data2": {
-                        "column_name": "data2",
                         "column_frequency": Timedelta("0 days 00:03:00"),
                         "column_type": dtype("int64"),
                         "occurence_time": "Continuous",
@@ -103,7 +102,7 @@ class DataIntegration():
             }
         :return: merged_data
         :rtype: DataFrame
-        >>> from KETIPreDataIntegration.meta import data_integration
+        >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(dataset)
         >>> re_frequency = datetime.timedelta(seconds=180)
         >>> integrated_data_resample = data_int.restructured_data_with_new_frequency(re_frequency, column_characteristics)
@@ -167,7 +166,7 @@ class DataIntegration():
         :return: reconstructedData
         :rtype: DataFrame
 
-        >>> from KETIPreDataIntegration.meta import data_integration
+        >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(dataset)
         >>> re_frequency = datetime.timedelta(seconds=180)
         >>> integrated_data_resample = data_int.restructured_data_with_new_frequency(re_frequency, column_characteristics)

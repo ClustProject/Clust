@@ -5,8 +5,8 @@ import numpy as np
 from sklearn.impute import KNNImputer
 import torch
 import torch.nn as nn
-from KETIPreDataIntegration.ML.RNN_AE.model import RecurrentAutoencoder
-from KETIPreDataIntegration.ML.RNN_AE.train_model import train_model, get_representation
+from Clust.clust.integration.ML.RNN_AE.model import RecurrentAutoencoder
+from Clust.clust.integration.ML.RNN_AE.train_model import train_model, get_representation
 
 def RNN_AE(dataset, parameter):
     """

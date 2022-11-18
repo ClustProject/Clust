@@ -12,7 +12,7 @@ def somTrain(feature_dataset, feature_datasetName):
     import math
     result = {}; figdata=""
     
-    from KETIPreDataTransformation.general import basicTransform
+    from Clust.clust.transformation.general import basicTransform
     seriesData_SS_DF = basicTransform.scalingSmoothingDF(feature_dataset, ewm_parameter=0.3 )
     seriesData_SS_series = basicTransform.DFSetToSeries(seriesData_SS_DF)
     som_x = som_y = math.ceil(math.sqrt(math.sqrt(len(seriesData_SS_series))))
