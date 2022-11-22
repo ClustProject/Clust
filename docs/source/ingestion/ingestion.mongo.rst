@@ -1,2 +1,2 @@
-Clust: ingestion.mongo
+ingestion.mongo
 =================================
