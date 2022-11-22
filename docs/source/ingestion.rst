@@ -1,8 +1,9 @@
 Clust: ingestion
 =================================
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 5
    :caption: Contents:
 
-   clust.ingestion.influx
-   clust.ingestion.mongo
+   ingestion/ingestion.influx
+   
+   ingestion/ingestion.mongo

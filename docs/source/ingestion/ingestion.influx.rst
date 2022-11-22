@@ -1,4 +1,4 @@
-Clust: ingestion.influx
+ingestion.influx
 =================================
 
 

@@ -9,15 +9,15 @@ Clust Documentation
    :maxdepth: 10
    :caption: Contents:
    
-   clust.analysis
-   clust.ingestion
-   clust.integration
-   clust.meta
-   clust.ML
-   clust.preprocessing
-   clust.quality
-   clust.tool
-   clust.transformation
+   analysis
+   ingestion
+   integration
+   meta
+   ML
+   preprocessing
+   quality
+   tool
+   transformation
 
 
 
