@@ -1,9 +1,10 @@
-integration.ML
+transformation.sampling
 =================================
 
-integration.RNNAEAlignment
+
+transformation.data_up_down
 ------------------------------
-.. automodule:: clust.integration.ML.RNNAEAlignment
+.. automodule:: clust.transformation.sampling.data_up_down
    :members:
    :undoc-members:
    :show-inheritance:

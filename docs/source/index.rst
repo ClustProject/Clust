@@ -6,7 +6,7 @@
 Clust Documentation
 =================================
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 20
    :caption: Contents:
    
    analysis

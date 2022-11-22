@@ -1,5 +1,21 @@
 Clust: transformation
 =================================
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 10
    :caption: Contents:
+
+   transformation/transformation.dataByCycle
+
+   transformation/transformation.entropy
+
+   transformation/transformation.featureExtension
+   
+   transformation/transformation.featureReduction
+
+   transformation/transformation.general
+
+   transformation/transformation.purpose
+
+   transformation/transformation.sampling
+
+   transformation/transformation.type
