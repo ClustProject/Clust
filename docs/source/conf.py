@@ -18,9 +18,9 @@ import sphinx_rtd_theme
 from recommonmark.parser import CommonMarkParser
 
 
-project = 'clust'
-copyright = '2022, clust'
-author = 'clust'
+project = 'Clust'
+copyright = '2022, Clust'
+author = 'Clust'
 release = '1.0.0'
 
 
