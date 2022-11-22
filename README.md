@@ -12,7 +12,7 @@ Clust/
 │   ├── ingestion
 │   │   ├── influx
 │   │   ├── mongo
-│   │   └── fromCSV
+│   │   └── CSVtoInflux
 │   │
 │   ├── integration
 │   │   ├── ML
