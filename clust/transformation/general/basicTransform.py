@@ -40,3 +40,30 @@ def DFSetToSeries(dataSet):
         value = dataSet[i].values
         seriesData.append(value.reshape(len(value)))
     return seriesData
+
+
+def checkNumericColumns(data, checkColumnList=None):
+    """
+    This function returns data by trnsforming the Numeric type colums specified in "checkColumnList". 
+    If checkColumnList is None, all columns are converted to Numeric type.
+
+        :param data: inputData
+        :type data: dataFrame
+        :param checkColumnList: db_name
+        :type db_name: string array or None
+
+        :returns: dataSet
+        :rtype: dataType
+
+    1. CheckColumnList==None : change all columns to numeric type
+    2. CheckColumnList has values: change only CheckColumnList to numeric type
+    """
+    if checkColumnList:
+        pass
+    
+    else:
+        checkColumnList = list(data.select_dtypes(include=['object']).columns)
+
+    data[checkColumnList] = data[checkColumnList].apply(pd.to_numeric, errors='coerce')
+    
+    return data

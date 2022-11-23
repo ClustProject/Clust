@@ -2,16 +2,16 @@ from functools import partial
 import sys
 sys.path.append("../")
 sys.path.append("../..")
+sys.path.append("../../..")
 import datetime
-from Clust.clust.integration.meta import partialDataInfo
-from Clust.clust.preprocessing import dataPreprocessing
-from Clust.clust.ingestion.influx import influx_Module
-from Clust.clust.integration.ML import RNNAEAlignment
+from clust.integration.meta import partialDataInfo
+from clust.preprocessing import dataPreprocessing
+from clust.ingestion.influx import multipleDataSets
+from clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
-# CLUST Project based custom function
 
-class ClustIntegration():
+class IntegrationInterface():
     """
     Data Integration Class
     """
@@ -20,11 +20,10 @@ class ClustIntegration():
 
     def clustIntegrationFromInfluxSource(self, db_client, intDataInfo, process_param, integration_param):
         """ 
-        사용자가 입력한 Parameter에 따라 데이터를 병합하는 함수
-        1. intDataInfo 에 따라 InfluxDB로 부터 데이터를 읽어와 DataSet을 생성
-        2. 병합에 필요한 partialDataInfo(column characteristics)를 추출
-        3. Refine Frequency 진행
-        4. 입력 method에 따라 ML(transformParam) 혹은 Meta(column characteristics)으로 데이터 병합
+        Influx에서 데이터를 직접 읽고 Parameter에 의거하여 데이터를 병합
+
+        1. intDataInfo 에 따라 InfluxDB로 부터 데이터를 읽어와 DataSet을 생성함
+        2. clustIntegrationFromDataset 함수를 이용하여 결합된 데이터셋 재생성
 
         :param  intDataInfo: 병합하고 싶은 데이터의 정보로 DB Name, Measuremen Name, Start Time, End Time를 기입
         :type intDataInfo: json
@@ -67,9 +66,10 @@ class ClustIntegration():
         >>> integrationFreq_min= 30
         >>> integration_freq_sec = 60 * integrationFreq_min# 분
 
-        >>> integration_param1 = {
+        >>> MLIntegrationParamExample = {
+                "integration_duration":"total" ["total" or "common"],
                 "granularity_sec":"",
-                "transformParam":{
+                "param":{
                                 "model": 'RNN_AE',
                                 "model_parameter": {
                                     "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
@@ -82,7 +82,8 @@ class ClustIntegration():
                             },
                 "method":"ML" #["ML", "meta", "simple]
             }
-        >>> integration_param2 = {
+        >>> metaIntegrationParamExample = {
+                "integration_duration":"total" ["total" or "common"],
                 "granularity_sec":integration_freq_sec,
                 "param":{},
                 "method":"meta"
@@ -92,7 +93,7 @@ class ClustIntegration():
         :rtype: DataFrame    
         """
         ## multiple dataset
-        multiple_dataset  = influx_Module.get_MeasurementDataSetOnlyNumeric(db_client, intDataInfo)
+        multiple_dataset  = multipleDataSets.get_onlyNumericDataSets(db_client, intDataInfo)
         
         ## get integrated data
         result = self.clustIntegrationFromDataset(process_param, integration_param, multiple_dataset)
@@ -113,55 +114,12 @@ class ClustIntegration():
         :param  integration_param: Integration을 위한 method, transformParam이 담긴 Parameter
         :type integration_param: json
 
-        >>> process_param 
-            refine_param = {
-                "removeDuplication":{"flag":True},
-                "staticFrequency":{"flag":True, "frequency":None}
-            }
-            CertainParam= {'flag': True}
-            uncertainParam= {'flag': False, "param":{
-                    "outlierDetectorConfig":[
-                            {'algorithm': 'IQR', 'percentile':99 ,'alg_parameter': {'weight':100}}    
-            ]}}
-            outlier_param ={
-                "certainErrorToNaN":CertainParam, 
-                "unCertainErrorToNaN":uncertainParam
-            }
-            imputation_param = {
-                "serialImputation":{
-                    "flag":False,
-                    "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
-                    "totalNonNanRatio":80
-                }
-            }
-            process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
-
-        >>> integration_param1 = {
-                "granularity_sec":"",
-                "transformParam":{
-                                "model": 'RNN_AE',
-                                "model_parameter": {
-                                    "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
-                                    "emb_dim": 5, # 변환할 데이터의 차원, int(범위: 16~256)
-                                    "num_epochs": 50, # 학습 epoch 횟수, int(범위: 1 이상, 수렴 여부 확인 후 적합하게 설정)
-                                    "batch_size": 128, # batch 크기, int(범위: 1 이상, 컴퓨터 사양에 적합하게 설정)
-                                    "learning_rate": 0.0001, # learning rate, float(default: 0.0001, 범위: 0.1 이하)
-                                    "device": 'cpu' # 학습 환경, ["cuda", "cpu"] 중 선택
-                                }
-                            },
-                "method":"ML" #["ML", "meta", "simple]
-            }
-        >>> integration_param2 = {
-                "granularity_sec":integration_freq_sec,
-                "param":{},
-                "method":"meta"
-            }
-                
         :return: integrated_data
         :rtype: DataFrame    
         """
-        integration_duration_criteria = integration_param["integration_duration_criteria"]
-        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration_criteria)
+
+        integration_duration = integration_param["integration_duration"]
+        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
         
         overlap_duration = partial_data_info.column_meta["overlap_duration"]
         integration_freq_sec = integration_param["granularity_sec"]
@@ -197,18 +155,7 @@ class ClustIntegration():
             
         :param  transform_param: RNN_AE를 하기 위한 Parameter
         :type process_param: json
-        >>> transformParam = {
-                "model": 'RNN_AE',
-                "model_parameter": {
-                    "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
-                    "emb_dim": 5, # 변환할 데이터의 차원, int(범위: 16~256)
-                    "num_epochs": 50, # 학습 epoch 횟수, int(범위: 1 이상, 수렴 여부 확인 후 적합하게 설정)
-                    "batch_size": 128, # batch 크기, int(범위: 1 이상, 컴퓨터 사양에 적합하게 설정)
-                    "learning_rate": 0.0001, # learning rate, float(default: 0.0001, 범위: 0.1 이하)
-                    "device": 'cpu' # 학습 환경, ["cuda", "cpu"] 중 선택
-                }
-            }
-        
+
         :param  overlap_duration: 병합하고 싶은 데이터들의 공통 시간 구간
         :type integration_param: json
         >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 'end_time': Timestamp('2018-01-05 00:00:00')}
@@ -222,7 +169,7 @@ class ClustIntegration():
         dintegrated_data = data_int.simple_integration(overlap_duration)
         
         model = transform_param["model"]
-        transfomrParam = transform_param['model_parameter']
+        transfomrParam = transform_param['param']
         if model == "RNN_AE":
             alignment_result = RNNAEAlignment.RNN_AE(dintegrated_data, transfomrParam)
         else :

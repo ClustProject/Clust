@@ -10,4 +10,4 @@ Clust: integration
 
    integration/integration.utils
    
-   integration/integration.clustDataIntegration
+   integration/integration.integrationInterface

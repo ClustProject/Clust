@@ -9,9 +9,9 @@ ingestion.influx
    :undoc-members:
    :show-inheritance:
 
-ingestion.influx_Module
+ingestion.multipleDataSets
 ------------------------------
-.. automodule:: clust.ingestion.influx.influx_Module
+.. automodule:: clust.ingestion.influx.multipleDataSets
    :members:
    :undoc-members:
    :show-inheritance:

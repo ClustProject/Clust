@@ -1,9 +1,9 @@
-integration.clustDataIntegration
+integration.integrationInterface
 ============================================
 
-integration.clustDataIntegration
+integration.integrationInterface
 ---------------------------------------
-.. automodule:: clust.integration.clustDataIntegration
+.. automodule:: clust.integration.integrationInterface
    :members:
    :undoc-members:
    :show-inheritance:
