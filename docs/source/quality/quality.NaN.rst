@@ -1,16 +1,16 @@
-integration.meta
+quality.NaN
 =================================
 
-integration.data_integration
+quality.interface
 ------------------------------
-.. automodule:: clust.integration.meta.data_integration
+.. automodule:: clust.quality.NaN.clean_feature_data
    :members:
    :undoc-members:
    :show-inheritance:
 
-integration.partialDataInfo
+quality.plot_seriesDataSet
 ------------------------------
-.. automodule:: clust.integration.meta.partialDataInfo
+.. automodule:: clust.quality.NaN.data_remove_byNaN
    :members:
    :undoc-members:
    :show-inheritance:
