@@ -105,13 +105,13 @@ class DataPreprocessing():
         :rtype: DataFrame
         
         example
-            >>> imputation_param = {'serialImputation': {'flag': True, 'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 'totalNonNanRatio': 80}}
+            >>> imputation_param = {'flag': True, 'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 'totalNonNanRatio': 80}
             >>> output = DataPreprocessing().get_imputedData(data, outlier_param)
         """
         self.imputedData = data.copy()
-        if imputation_param['serialImputation']['flag'] == True:
+        if imputation_param['flag'] == True:
             from Clust.clust.preprocessing.imputation import Imputation
-            self.imputedData = Imputation.SerialImputation().get_dataWithSerialImputationMethods(self.imputedData, imputation_param['serialImputation'])
+            self.imputedData = Imputation.SerialImputation().get_dataWithSerialImputationMethods(self.imputedData, imputation_param)
 
         return self.imputedData
 
@@ -125,6 +125,11 @@ class DataProcessing(DataPreprocessing):
 
         :param process_param: process_param
         :type process_param: json 
+        >>> process_param={
+            "refine_param": {},
+            "outlier_param": {},
+            "imputation_param":{}
+        }
 
         '''
         self.refine_param = process_param['refine_param']

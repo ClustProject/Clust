@@ -55,11 +55,9 @@ class IntegrationInterface():
                 "unCertainErrorToNaN":uncertainParam
             }
             imputation_param = {
-                "serialImputation":{
-                    "flag":False,
-                    "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
-                    "totalNonNanRatio":80
-                }
+                "flag":False,
+                "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
+                "totalNonNanRatio":80
             }
             process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
@@ -68,7 +66,7 @@ class IntegrationInterface():
 
         >>> MLIntegrationParamExample = {
                 "integration_duration":"total" ["total" or "common"],
-                "granularity_sec":"",
+                "integration_frequency":"",
                 "param":{
                                 "model": 'RNN_AE',
                                 "model_parameter": {
@@ -84,7 +82,7 @@ class IntegrationInterface():
             }
         >>> metaIntegrationParamExample = {
                 "integration_duration":"total" ["total" or "common"],
-                "granularity_sec":integration_freq_sec,
+                "integration_frequency":integration_freq_sec,
                 "param":{},
                 "method":"meta"
             }
@@ -102,11 +100,7 @@ class IntegrationInterface():
     
     def clustIntegrationFromDataset(self, process_param, integration_param, multiple_dataset):
         """ 
-        사용자가 입력한 dataSet과 Parameter에 따라 데이터를 병합하는 함수
-        1. 통합을 원하는 dataSet 입력
-        2. 병합에 필요한 partialDataInfo(column characteristics)를 추출
-        3. Refine Frequency 진행
-        4. 입력 method에 따라 ML(transformParam) 혹은 Meta(column characteristics)으로 데이터 병합
+        dataSet과 Parameter에 따라 데이터를 병합하는 함수
             
         :param  process_param: Refine Frequency를 하기 위한 Preprocessing Parameter
         :type process_param: json
@@ -116,22 +110,31 @@ class IntegrationInterface():
 
         :return: integrated_data
         :rtype: DataFrame    
+
+        1. 각 데이터셋이서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
+        2. 명확하게 정합 주기 값이 입력 없을 경우 최소공배수 주기를 설정함
+        3. 각 데이터들에 대한 Preprocessing  
+        4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
+
         """
 
         integration_duration = integration_param["integration_duration"]
         partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
-        
         overlap_duration = partial_data_info.column_meta["overlap_duration"]
-        integration_freq_sec = integration_param["granularity_sec"]
+        integration_freq_sec = integration_param["integration_frequency"]
+        integrationMethod = integration_param['method']
+
         ## set refine frequency parameter
         if not integration_freq_sec:
             process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
+
         ## Preprocessing
         partialP = dataPreprocessing.DataProcessing(process_param)
         multiple_dataset = partialP.multiDataset_all_preprocessing(multiple_dataset)
+
         ## Integration
         imputed_datas = {}
-        integrationMethod = integration_param['method']
+    
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key]["imputed_data"])
         if integrationMethod=="meta":
@@ -171,11 +174,12 @@ class IntegrationInterface():
         model = transform_param["model"]
         transfomrParam = transform_param['param']
         if model == "RNN_AE":
-            alignment_result = RNNAEAlignment.RNN_AE(dintegrated_data, transfomrParam)
+            integratedDataSet = RNNAEAlignment.RNN_AE(dintegrated_data, transfomrParam)
         else :
             print('Not Available')
+            integratedDataSet= None
             
-        return alignment_result
+        return integratedDataSet
 
     def getIntegratedDataSetByMeta(self, data_set, integration_freq_sec, partial_data_info):
         """ 
@@ -197,9 +201,9 @@ class IntegrationInterface():
         data_it = data_integration.DataIntegration(data_set)
         
         re_frequency = datetime.timedelta(seconds= integration_freq_sec)
-        integrated_data_resample = data_it.dataIntegrationByMeta(re_frequency, partial_data_info.column_meta)
+        integratedDataSet = data_it.dataIntegrationByMeta(re_frequency, partial_data_info.column_meta)
         
-        return integrated_data_resample 
+        return integratedDataSet 
     
     def IntegratedDataSetBySimple(self, data_set, integration_freq_sec, overlap_duration):
         """ 
@@ -220,10 +224,10 @@ class IntegrationInterface():
         ## simple integration
         re_frequency = datetime.timedelta(seconds= integration_freq_sec)
         data_int = data_integration.DataIntegration(data_set)
-        dintegrated_data = data_int.simple_integration(overlap_duration)
-        dintegrated_data = dintegrated_data.resample(re_frequency).mean()
+        integratedDataSet = data_int.simple_integration(overlap_duration)
+        integratedDataSet = integratedDataSet.resample(re_frequency).mean()
         
-        return dintegrated_data
+        return integratedDataSet
 
 
 

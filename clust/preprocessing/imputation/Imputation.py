@@ -26,7 +26,7 @@ class SerialImputation():
         :rtype: DataFrame
         
         example
-            >>> imputation_param = {'serialImputation': {'flag': True, 'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 'totalNonNanRatio': 80}}
+            >>> imputation_param = {'flag': True, 'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 'totalNonNanRatio': 80}
             >>> output = SerialImputation().get_dataWithSerialImputationMethods(data, imputation_param)
         """
         result = data.copy()

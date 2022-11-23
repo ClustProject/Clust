@@ -90,10 +90,9 @@ class DataOutlier():
 
         '''   example
          imputation_param = {
-            "serialImputation":{
                 "flag":True,
                 "imputation_method":[{"min":0,"max":1000000,"method":"linear", "parameter":{}}
-                ],"totalNonNanRatio":0}}
+                ],"totalNonNanRatio":0}
         '''
 
         """ 

@@ -36,11 +36,9 @@ class ReadData():
         }
 
         imputation_param = {
-            "serialImputation":{
-                "flag":True,
-                "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
-                "totalNonNanRatio":70
-            }
+            "flag":True,
+            "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
+            "totalNonNanRatio":70
         }
         self.process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
         
