@@ -4,10 +4,10 @@ sys.path.append("../")
 sys.path.append("../..")
 sys.path.append("../../..")
 import datetime
-from clust.integration.meta import partialDataInfo
-from clust.preprocessing import dataPreprocessing
-from clust.ingestion.influx import multipleDataSets
-from clust.integration.ML import RNNAEAlignment
+from Clust.clust.integration.meta import partialDataInfo
+from Clust.clust.preprocessing import dataPreprocessing
+from Clust.clust.ingestion.influx import multipleDataSets
+from Clust.clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
 
