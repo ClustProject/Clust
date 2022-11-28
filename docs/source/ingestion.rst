@@ -1,7 +1,7 @@
 Clust: ingestion
 =================================
 .. toctree::
-   :maxdepth: 50
+   :maxdepth: 2
    :caption: Contents:
 
    ingestion/ingestion.influx

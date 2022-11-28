@@ -1,7 +1,7 @@
 Clust: meta
 =================================
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
    :caption: Contents:
 
    meta/meta.analysisMeta

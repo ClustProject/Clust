@@ -1,7 +1,7 @@
 Clust: tool
 =================================
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
    :caption: Contents:
 
    tool/tool.plot_graph

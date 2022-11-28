@@ -1,7 +1,7 @@
 Clust: quality
 =================================
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
    :caption: Contents:
 
    quality/quality.NaN

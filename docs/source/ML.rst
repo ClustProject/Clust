@@ -1,7 +1,7 @@
 Clust: Machine Learning
 =================================
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
    :caption: Contents:
 
    ML/ML.clustering

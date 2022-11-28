@@ -1,7 +1,7 @@
 Clust: transformation
 =================================
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 2
    :caption: Contents:
 
    transformation/transformation.dataByCycle
