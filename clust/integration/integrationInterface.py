@@ -18,12 +18,12 @@ class IntegrationInterface():
     def __init__(self):
         pass
 
-    def clustIntegrationFromInfluxSource(self, db_client, intDataInfo, process_param, integration_param):
+    def integrationByInfluxInfo(self, db_client, intDataInfo, process_param, integration_param):
         """ 
         Influx에서 데이터를 직접 읽고 Parameter에 의거하여 데이터를 병합
 
         1. intDataInfo 에 따라 InfluxDB로 부터 데이터를 읽어와 DataSet을 생성함
-        2. clustIntegrationFromDataset 함수를 이용하여 결합된 데이터셋 재생성
+        2. multipleDatasetsIntegration 함수를 이용하여 결합된 데이터셋 재생성
 
         :param  intDataInfo: 병합하고 싶은 데이터의 정보로 DB Name, Measuremen Name, Start Time, End Time를 기입
         :type intDataInfo: json
@@ -92,13 +92,12 @@ class IntegrationInterface():
         """
         ## multiple dataset
         multiple_dataset  = multipleDataSets.get_onlyNumericDataSets(db_client, intDataInfo)
-        
         ## get integrated data
-        result = self.clustIntegrationFromDataset(process_param, integration_param, multiple_dataset)
+        result = self.multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
 
         return result
     
-    def clustIntegrationFromDataset(self, process_param, integration_param, multiple_dataset):
+    def multipleDatasetsIntegration(self, process_param, integration_param, multiple_dataset):
         """ 
         dataSet과 Parameter에 따라 데이터를 병합하는 함수
             
@@ -130,11 +129,12 @@ class IntegrationInterface():
 
         ## Preprocessing
         partialP = dataPreprocessing.DataProcessing(process_param)
+        print("processingStart")
         multiple_dataset = partialP.multiDataset_all_preprocessing(multiple_dataset)
-
+        print("processingEnd")
         ## Integration
         imputed_datas = {}
-    
+        print("integrationStart")
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key]["imputed_data"])
         if integrationMethod=="meta":
@@ -145,7 +145,7 @@ class IntegrationInterface():
             result = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
         else:
             result = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
-
+        print("integrationEnd")
         return result
 
     def getIntegratedDataSetByML(self, data_set, transform_param, overlap_duration):
