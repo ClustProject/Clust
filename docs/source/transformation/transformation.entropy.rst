@@ -10,6 +10,6 @@ transformation.entropy
 
    entropy/transformation.entropy.entropy
 
-   entropy/transformation.utils
+   entropy/transformation.entropy.utils
 
-   entropy/transformation.main
+   entropy/transformation.entropy.main

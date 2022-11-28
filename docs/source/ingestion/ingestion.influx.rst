@@ -2,7 +2,7 @@ ingestion.influx
 =================================
 
 
-ingestion.influx
+ingestion.influx_Client_v2
 ------------------------------
 .. automodule:: clust.ingestion.influx.influx_Client_v2
    :members:
@@ -16,7 +16,7 @@ ingestion.multipleDataSets
    :undoc-members:
    :show-inheritance:
 
-ingestion.influx
+ingestion.influx_Client
 ------------------------------
 .. automodule:: clust.ingestion.influx.influx_Client
    :members:
