@@ -72,6 +72,10 @@ class Collector():
             
 # self.data = self.data[self.data[self.selected_datas[0]["Selected_columns"][n]] == self.selected_datas[1]["Selected_values"][n]].copy()
     def get_data_by_condition(self):
+        """
+        사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
+        - Data Upload Type2에 해당
+        """
         self.get_basic_data()
         for n in range(len(self.selected_datas[0]["Selected_columns"])):
             if self.selected_datas[2]["Selected_Function"][n] == "Equal":
