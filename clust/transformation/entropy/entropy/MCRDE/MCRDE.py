@@ -19,10 +19,9 @@
 
 
 import numpy as np
-
-from entropy.DisEn_NCDF import DisEn_NCDF
-from entropy.DisEn_NCDF_ms import DisEn_NCDF_ms
-from entropy.Multi import Multi
+from clust.transformation.entropy.entropy.DisEn_NCDF import DisEn_NCDF
+from clust.transformation.entropy.entropy.DisEn_NCDF_ms import DisEn_NCDF_ms
+from clust.transformation.entropy.entropy.Multi import Multi
 
 def MCRDE(x,m,c,tau,scale):
         

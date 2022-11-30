@@ -15,9 +15,9 @@ ML.plot_seriesDataSet
    :undoc-members:
    :show-inheritance:
 
-ML.som_visual
+ML.somClustering
 ------------------------------
-.. automodule:: clust.ML.clustering.som_visual
+.. automodule:: clust.ML.clustering.somClustering
    :members:
    :undoc-members:
    :show-inheritance:

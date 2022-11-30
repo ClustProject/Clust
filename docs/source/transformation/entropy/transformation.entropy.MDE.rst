@@ -2,9 +2,9 @@ transformation.entropy.entropy.MDE
 ========================================
 
 
-transformation.Multi
+transformation.MDE
 -----------------------------------------------
-.. automodule:: clust.transformation.entropy.entropy.MDE.Multi
+.. automodule:: clust.transformation.entropy.entropy.MDE.MDE
    :members:
    :undoc-members:
    :show-inheritance:

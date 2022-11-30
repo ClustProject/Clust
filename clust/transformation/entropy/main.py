@@ -1,8 +1,11 @@
 import numpy as np
+import sys, os
 from scipy import io
 from scipy.stats import ranksums
-
-from entropy.MCRDE.MCRDE import MCRDE
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+# from entropy.MCRDE.MCRDE import MCRDE
+from Clust.clust.transformation.entropy.entropy.MCRDE.MCRDE import MCRDE
 
 from utils.plot_Entropy import plot_Entropy
 from utils.write_txt import write_txt

@@ -8,8 +8,8 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../..")
 sys.path.append("../../..")
-from KETIToolAnalyzer.basicTool import BasicTool
-from KETIToolAnalyzer.meanAnalyzer import holiday
+from Clust.clust.meta.analysisMeta.basicTool import BasicTool
+from Clust.clust.meta.analysisMeta.meanAnalyzer import holiday
 
 class MeanByWorking():
     def __init__(self, data):
