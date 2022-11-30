@@ -34,6 +34,7 @@ source_parsers = {
                 '.md': CommonMarkParser,
 }
 
+autodoc_mock_imports = ["matplotlib.nanolib_helper"]
 
 
 # -- General configuration ---------------------------------------------------
@@ -56,6 +57,9 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
+    "sphinx.ext.autodoc", 
+    "sphinx.ext.autosummary", 
+    "sphinx_autodoc_typehints",
     'recommonmark'
 ]
 

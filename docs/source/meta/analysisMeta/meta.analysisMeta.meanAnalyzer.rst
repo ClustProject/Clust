@@ -1,17 +1,24 @@
-meta.analysisMeta.simpleAnalyzer
+meta.analysisMeta.meanAnalyzer
 =================================
 
 
-meta.countAnalyzer
+meta.holiday
 -----------------------------------------------
-.. automodule:: clust.meta.analysisMeta.simpleAnalyzer.countAnalyzer
+.. automodule:: clust.meta.analysisMeta.meanAnalyzer.holiday
    :members:
    :undoc-members:
    :show-inheritance:
 
-meta.statisticsAnalyzer
+meta.timeStep
 -----------------------------------------------
-.. automodule:: clust.meta.analysisMeta.simpleAnalyzer.statisticsAnalyzer
+.. automodule:: clust.meta.analysisMeta.meanAnalyzer.timeStep
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+meta.working
+-----------------------------------------------
+.. automodule:: clust.meta.analysisMeta.meanAnalyzer.working
    :members:
    :undoc-members:
    :show-inheritance:

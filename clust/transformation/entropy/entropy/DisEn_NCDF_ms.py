@@ -36,7 +36,7 @@ Created on Thu Nov 18 03:18:33 2021
 
 import numpy as np
 from scipy.stats import norm
-from entropy.MCRDE.cumulativeFunc import cumulativeFunc
+from clust.transformation.entropy.entropy.MCRDE.cumulativeFunc import cumulativeFunc
 
 
 def DisEn_NCDF_ms(x,m,nc,mu,sigma,tau,Type):
