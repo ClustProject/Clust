@@ -5,7 +5,7 @@ from io import BytesIO
 import base64
 from tslearn.barycenters import dtw_barycenter_averaging
 import math
-plt.switch_backend('Agg')
+#plt.switch_backend('Agg')
 from minisom import MiniSom
 import pickle
 

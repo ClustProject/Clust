@@ -2,9 +2,9 @@ tool.stats_table
 =================================
 
 
-tool.corr_table
+tool.Corr
 ------------------------------
-.. automodule:: clust.tool.stats_table.corr_table
+.. automodule:: clust.tool.stats_table.correlation
    :members:
    :undoc-members:
    :show-inheritance:
