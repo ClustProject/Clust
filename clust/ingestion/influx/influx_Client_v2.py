@@ -133,6 +133,11 @@ class influxClient():
         
         Returns:
             Dataframe: df, measurement data
+
+        Note
+        -------
+        Insert tag key & tag value if database has tag
+
         """
         if tag_key:
             if tag_value:

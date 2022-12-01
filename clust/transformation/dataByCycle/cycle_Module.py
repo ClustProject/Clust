@@ -11,17 +11,14 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
     """
     get Cycle Data
 
-    :param query_data: query_data
-    :type query_data: dataframe
-
-    :param feature_cycle: feature_cycle
-    :type feature_cycle: string
-
-    :param feature_cycle_times:feature_cycle_times
-    :type feature_cycle_times: int
-
-    :param frequency: frequency
-    :type frequency: int
+    Args:
+        query_data (dataframe): query_data
+        feature_cycle (string): feature_cycle
+        feature_cycle_times (int): feature_cycle_times
+        frequency (int): frequency (option)
+    
+    Returns:
+        List: Cycle Data
     """
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': frequency}}
     output_data = DataPreprocessing().get_refinedData(query_data, refine_param)
@@ -46,17 +43,14 @@ def getCycleSelectDataSet(query_data, feature_cycle, feature_cycle_times, freque
     """
     get Cycle Data Set
 
-    :param query_data: query_data
-    :type query_data: dataframe
-
-    :param feature_cycle: feature_cycle
-    :type feature_cycle: string
-
-    :param feature_cycle_times:feature_cycle_times
-    :type feature_cycle_times: int
-
-    :param frequency: frequency
-    :type frequency: int
+    Args:
+        query_data (dataframe): query_data
+        feature_cycle (string): feature_cycle
+        feature_cycle_times (int): feature_cycle_times
+        frequency (int): frequency (option)
+    
+    Returns:
+        Dictionary: Cycle DataSet
     """
     data_list = getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency)
     dataSet = {}
