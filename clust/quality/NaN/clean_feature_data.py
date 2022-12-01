@@ -109,7 +109,7 @@ class CleanFeatureData:
 
         ms_list = dataSet.keys()
         for ms_name in ms_list:
-            print("=======",ms_name,"=======")
+            #print("=======",ms_name,"=======")
             data = dataSet[ms_name]
             refinedData, NaNRemovedData, ImputedData, finalFlag  = self.getOneCleanDataSetByFeature(data, NanInfoForCleanData, duration)
             for feature in self.feature_list:
