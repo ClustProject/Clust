@@ -10,11 +10,11 @@ sys.path.append("../../")
 
 class CycleData():
     """
-    시, 일, 주, 월, 연 단위의 주기를 설정
+    Cycle - Hour, Day, Week, Month, Year
     """
     def __init__(self):
         """
-        data의 start시간을 알아내기 위한 변수 - 저장할 모든 데이터는 '00:00:00'부터 시작해야 한다.
+        All data to be stored must start with '00:00:00'.
         """
         # self.start, self.end = self.getTimePointByDayUnit(data)
         # self.data = data[self.start: self.end] #(??)
@@ -25,16 +25,21 @@ class CycleData():
 
     def getHourCycleSet(self, data, num, FullCycle):
         """
-        1시간 단위로 '00:00 ~ 59:59'사이의 데이터를 만드며, num의 수만큼 주기를 설정한다.
+        Split the data by time ('00:00 to 59:59').
+        If num is 2 or more, split num*hour units.
 
-        :param data: 시계열 데이터
-        :type data: dataframe
+        Args:
+            data (dataframe): timeseires data
+            num (int): data cycle times
+            FullCycle (bool): split complete or not
+        
+        Returns:
+            List: data split by Hour Cycle
 
-        :param num: 나눠서 저장할 데이터 주기
-        :type num: int
+        Note
+        --------
+        if set cycle Hour and num=3 --> hour*num --> split by 3Hours
 
-        :return: dataFrameCollectionResult(시간 단위로 잘라서 저장된 데이터)
-        :rtype: List
         """
         hour_first = data.index[0]
         hour_last = data.index[-1]
@@ -85,16 +90,16 @@ class CycleData():
     def getDayCycleSet(self, data, num, FullCycle):
         # day 단위의 데이터 셋 리턴
         """
-        1일 단위로 '00:00:00 ~ 23:59:59'사이의 데이터를 만드며, num의 수만큼 주기를 설정한다.
+        Split the data by time ('00:00:00 ~ 23:59:59').
+        If num is 2 or more, split num*day units.
 
-        :param data: 시계열 데이터
-        :type data: dataframe
-
-        :param num: 나눠서 저장할 데이터 주기
-        :type num: int
-
-        :return: dataFrameCollectionResult(시간 단위로 잘라서 저장된 데이터)
-        :rtype: List
+        Args:
+            data (dataframe): timeseires data
+            num (int): data cycle times
+            FullCycle (bool): split complete or not
+        
+        Returns:
+            List: data split by Day Cycle
         """""
         # 첫 시간과 마지막 시간 구하기
         day_first = data.index[0]
@@ -150,16 +155,16 @@ class CycleData():
     def getWeekCycleSet(self, data, num, FullCycle):
         # Week 단위의 데이터 셋 리턴
         """
-        일주일 단위로 '월요일 00:00:00 ~ 일요일 23:59:59'사이의 데이터를 만드며, num의 수만큼 주기를 설정한다.
+        Split the data by time ('Monday 00:00:00 ~ Sunday 23:59:59').
+        If num is 2 or more, split num*week units.
 
-        :param data: 시계열 데이터
-        :type data: dataframe
-
-        :param num: 나눠서 저장할 데이터 주기
-        :type num: int
-
-        :return: dataFrameCollectionResult(시간 단위로 잘라서 저장된 데이터)
-        :rtype: List
+        Args:
+            data (dataframe): timeseires data
+            num (int): data cycle times
+            FullCycle (bool): split complete or not
+        
+        Returns:
+            List: data split by Day Cycle
         """""
         week_first = data.index[0]
         week_last = data.index[-1]
@@ -213,16 +218,16 @@ class CycleData():
     def getMonthCycleSet(self, data, num, FullCycle):
         #  Month 단위의 데이터셋 리턴
         """
-        한달 단위로 '1일 00:00:00 ~  해당월의 마지막 일 23:59:59'사이의 데이터를 만드며, num의 수만큼 주기를 설정한다.
+        Split the data by time ('1st 00:00:00 ~  last day 23:59:59').
+        If num is 2 or more, split num*month units.
 
-        :param data: 시계열 데이터
-        :type data: dataframe
-
-        :param num: 나눠서 저장할 데이터 주기
-        :type num: int
-
-        :return: dataFrameCollectionResult(시간 단위로 잘라서 저장된 데이터)
-        :rtype: List
+        Args:
+            data (dataframe): timeseires data
+            num (int): data cycle times
+            FullCycle (bool): split complete or not
+        
+        Returns:
+            List: data split by Day Cycle
         """""
         month_first = data.index[0]
         month_last = data.index[-1]
@@ -289,16 +294,16 @@ class CycleData():
     def getYearCycleSet(self, data, num, FullCycle):
         # Year 단위의 데이터셋 리턴
         """
-        1년 단위로 '01-01 00:00:00 ~  12-31 23:59:59'사이의 데이터를 만드며, num의 수만큼 주기를 설정한다.
+        Split the data by time ('01-01 00:00:00 ~  12-31 23:59:59').
+        If num is 2 or more, split num*year units.
 
-        :param data: 시계열 데이터
-        :type data: dataframe
-
-        :param num: 나눠서 저장할 데이터 주기
-        :type num: int
-
-        :return: dataFrameCollectionResult(시간 단위로 잘라서 저장된 데이터)
-        :rtype: List
+        Args:
+            data (dataframe): timeseires data
+            num (int): data cycle times
+            FullCycle (bool): split complete or not
+        
+        Returns:
+            List: data split by Day Cycle
         """""
         year_first = data.index[0]
         year_last = data.index[-1]

@@ -1,8 +1,24 @@
 Clust: preprocessing
 =================================
+
+
+
+Preprocessing Architecture
+-------------------------------------
+.. image:: ../image/preprocessing11.png
+   :scale: 50%
+   :alt: The rolling mechanism
+   :align: center
+
+Preprocessing explain...
+
+
+
+
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    preprocessing/preprocessing.errorDetection
 

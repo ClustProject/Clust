@@ -4,6 +4,7 @@ from influxdb_client.client.warnings import MissingPivotFunction
 from datetime import datetime
 import pandas as pd
 import warnings
+import numpy as np
 
 warnings.simplefilter("ignore", MissingPivotFunction)
 
@@ -22,6 +23,7 @@ class influxClient():
 
             |> drop(columns: ["_start", "_stop", "_measurement"])
             |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+            
     """
 
     def __init__(self, influx_setting):
@@ -33,8 +35,8 @@ class influxClient():
         """
         get all bucket(Database) list
 
-        :return: db_list
-        :rtype: List
+        Returns:
+            List: db_list
         """
         buckets_api = self.DBClient.buckets_api()
         buckets = buckets_api.find_buckets(limit=100).buckets  # bucket list 보여주기 최대 100까지만 가능
@@ -50,11 +52,11 @@ class influxClient():
         """
         get all measurement list of specific Bucket
 
-        :param bk_name: bucket(database) 
-        :type bk_name: string
+        Args:
+            bk_name (string): bucket(databse)
 
-        :return: measurement list
-        :rtype: List
+        Returns:
+            List: measurement list
         """
         query = f'import "influxdata/influxdb/schema" schema.measurements(bucket: "{bk_name}")'
         ms_list = []
@@ -71,10 +73,11 @@ class influxClient():
         Get the only start and end measurement name
         Use this function to reduce the DB load time.
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-        :return: measurement list
-        :rtype: List
+        Args:
+            db_name (string): bucket(database) 
+        
+        Returns:
+            List: measurement list
         """
         ms_list = []
         ori_ms_list = self.measurement_list(bk_name)
@@ -96,13 +99,12 @@ class influxClient():
         """
         get all field list of specific measurements
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-        :param ms_name: measurement 
-        :type ms_name: string
+        Args:
+            db_name (string): bucket(database) 
+            ms_name (string): measurement 
 
-        :return: fieldList in measurement
-        :rtype: List
+        Returns:
+            List: fieldList in measurement
         """
         query = f'''
         import "experimental/query"
@@ -122,19 +124,20 @@ class influxClient():
     def get_data(self, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get :guilabel:`all data` of the specific mearuement, change dataframe
+
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement 
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
         
-        :param db_name: bucket(database) 
-        :type db_name: string
-        :param ms_name: measurement 
-        :type ms_name: string
-        :param tag_key: tagkey (option)
-        :type ms_name: string
+        Returns:
+            Dataframe: df, measurement data
 
-        :param tag_value: tagValue (option)
-        :type ms_name: string
+        Note
+        -------
+        Insert tag key & tag value if database has tag
 
-        :return: df, measurement data
-        :rtype: DataFrame
         """
         if tag_key:
             if tag_value:
@@ -165,14 +168,14 @@ class influxClient():
         """
         Get the :guilabel:`first data` of the specific mearuement
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-        :param ms_name: measurement
-        :type ms_name: string
-
-        :return: first time in data
-        :return: pandas._libs.tslibs.timestamps.Timestamp
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            Timestamp: first time in data
         """
+
         query = f'''from(bucket: "{bk_name}") 
         |> range(start: 0, stop: now()) 
         |> filter(fn: (r) => r._measurement == "{ms_name}")
@@ -192,14 +195,14 @@ class influxClient():
         """
         Get the :guilabel:`last data` of the specific mearuement
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-        :param ms_name: measurement 
-        :type ms_name: string
-
-        :return: last time in data
-        :rtype: pandas._libs.tslibs.timestamps.Timestamp
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            Timestamp: last time in data
         """
+
         query = f'''
         from(bucket: "{bk_name}") 
         |> range(start: 0, stop: now()) 
@@ -220,27 +223,18 @@ class influxClient():
         Get data of the specific measurement based on :guilabel:`start-end duration`
         *get_datafront_by_duration(self, start_time, end_time)*
 
-        :param start_time: start time
-        :type start_time: pandas._libs.tslibs.timestamps.Timestamp or string
-
-        :param end_time: end time
-        :type end_time: pandas._libs.tslibs.timestamps.Timestamp or string
-
-        :param db_name: database name
-        :type db_name: string
-
-        :param ms_name: measurement name
-        :type ms_name: string
-
-        :param tag_key: tagkey (option)
-        :type ms_name: string
-
-        :param tag_value: tag_value (option)
-        :type ms_name: string
-
-        :return: df, time duration
-        :rtype: DataFrame
+        Args:
+            start_time (Timestamp): start time
+            end_time (Timestamp): end time
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            Dataframe: df, time duration
         """
+
         if isinstance(start_time, str):
             if 'T' not in start_time:
                 if len(start_time) < 12:
@@ -282,22 +276,16 @@ class influxClient():
         """
         Get data of the specific mearuement based on :guilabel:`time duration` (days)
 
-        :param end_time: end time 
-        :type end_time: pandas._libs.tslibs.timestamps.Timestamp
-
-        :param days: duration days
-        :type days: integer
-
-        :param db_name: database
-        :type db_name: string
-
-        :param ms_name: measurement
-        :type ms_name: string
-
-        :return: df, time duration
-        :rtype: DataFrame
-
+        Args:
+            end_time (Timestamp): end time
+            days (integer): duration days
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            Dataframe: df, time duration
         """
+
         if isinstance(end_time, str):
             if 'T' not in end_time:
                 if len(end_time) < 12:
@@ -337,19 +325,18 @@ class influxClient():
     def get_datafront_by_num(self, number, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`first N number` data from the specific measurement
+
+        Args:
+            number (integer): number(limit) 
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
         
-        :param db_name: number(limit) 
-        :type db_name: integer
-
-        :param db_name: bucket(database)   
-        :type db_name: string
-
-        :param ms_name: measurement 
-        :type ms_name: string
-
-        :return: df, first N(number) row data in measurement
-        :rtype: DataFrame
+        Returns:
+            Dataframe: df, first N(number) row data in measurement
         """
+
         if tag_key:
             if tag_value:
                 query = f'''
@@ -380,18 +367,17 @@ class influxClient():
         """
         Get the :guilabel:`last N number` data from the specific measurement
 
-        :param db_name: number(limit) 
-        :type db_name: integer
-
-        :param db_name: bucket(database)  
-        :type db_name: string
-
-        :param ms_name: measurement 
-        :type ms_name: string
-
-        :return: df, last N(number) row data in measurement
-        :rtype: DataFrame
+        Args:
+            number (integer): number(limit)
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            Dataframe: df, last N(number) row data in measurement
         """
+
         if tag_key:
             if tag_value:
                 query = f'''
@@ -424,18 +410,13 @@ class influxClient():
         """
         Clean data, remove duplication, Sort, Set index (datetime)
 
-        - Set index to datetime
-        - Remove duplication
-        - Sort ascending
-        - Replace blank to Nan
-
-        :param df: dataFrame
-        :type df: dataFrame
-
-        :return: df, data setting
-        :rtype: DataFrame
+        Args:
+            df (dataFrame): dataFrame
+        
+        Returns:
+            Dataframe: df, data setting
         """
-        import numpy as np
+
         if 'result' in df.columns:
             df = df.drop(['result', 'table'], axis=1)
             if '_time' in df.columns:
@@ -457,14 +438,18 @@ class influxClient():
 
     def get_freq(self, bk_name, ms_name, tag_key=None, tag_value=None): 
         """
-        :param db_name: bucket(database)  
-        :type db_name: string
-        :param ms_name: measurement
-        :type ms_name: string
+        Get Frequency
 
-        :return: freq
-        :rtype: Dict
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            String: freq
         """
+
         if tag_key:
             if tag_value:
                 data = self.get_datafront_by_num(10,bk_name, ms_name,tag_key, tag_value)
@@ -478,27 +463,20 @@ class influxClient():
     def get_data_limit_by_time(self, start_time, end_time, number, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`limit data` of the specific mearuement based on :guilabel:`time duration` (days)
+
+        Args:
+            start_time (Timestamp): start time
+            end_time (Timestamp): end time
+            number (integer): number(limit) 
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
         
-        
-        :param start_time: start time
-        :type start_time: pandas._libs.tslibs.timestamps.Timestamp
-
-        :param end_time: end time 
-        :type end_time: pandas._libs.tslibs.timestamps.Timestamp
-
-        :param db_name: number(limit) 
-        :type db_name: integer
-
-        :param db_name: bucket(database)  
-        :type db_name: string
-
-        :param ms_name: measurement 
-        :type ms_name: string
-
-
-        :return: df, time duration
-        :rtype: DataFrame
+        Returns:
+            Dataframe: df, time duration
         """
+
         if isinstance(start_time, str):
             if 'T' not in start_time:
                 if len(start_time) < 12:
@@ -543,15 +521,16 @@ class influxClient():
         """
         Get the :guilabel:`data count` from the specific measurement
 
-        :param db_name: bucket(database)  
-        :type db_name: string
-
-        :param ms_name: measurement 
-        :type ms_name: string
-
-        :return: data count
-        :rtype: integer
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            Integer: data count
         """
+
         if tag_key:
             if tag_value:
                 query = f'''
@@ -584,27 +563,18 @@ class influxClient():
         Get data of the specific measurement based on :guilabel:`start-end duration`
         *get_datafront_by_duration(self, start_time, end_time)*
 
-        :param start_time: start time
-        :type start_time: pandas._libs.tslibs.timestamps.Timestamp or string
-
-        :param end_time: end time
-        :type end_time: pandas._libs.tslibs.timestamps.Timestamp or string
-
-        :param db_name: database name
-        :type db_name: string
-
-        :param ms_name: measurement name
-        :type ms_name: string
-
-        :param tag_key: tagkey (option)
-        :type ms_name: string
-
-        :param tag_value: tag_value (option)
-        :type ms_name: string
-
-        :return: df, time duration
-        :rtype: DataFrame
+        Args:
+            start_time (Timestamp): start time
+            end_time (Timestamp): end time
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            Integer: data count
         """
+
         if isinstance(start_time, str):
             if 'T' not in start_time:
                 if len(start_time) < 12:
@@ -647,10 +617,10 @@ class influxClient():
         """
         Create bucket to the influxdb
 
-        :param db_name: database name
-        :type db_name: string
-
+        Args:
+            db_name (string): bucket(database)
         """
+
         buckets_api = self.DBClient.buckets_api()
         buckets_api.create_bucket(bucket_name=bk_name)
         print("========== create bucket ==========")
@@ -660,15 +630,11 @@ class influxClient():
         """
         Write data to the influxdb
 
-        :param db_name: database name
-        :type db_name: string
-
-        :param ms_name: measurement name
-        :type ms_name: string
-
-        :param data_frame: data
-        :type: dataframe
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
         """
+
         write_client = self.DBClient.write_api(write_options=WriteOptions(batch_size=10000))
         if bk_name not in self.get_DBList():
             self.create_bucket(bk_name)
@@ -682,12 +648,11 @@ class influxClient():
         """
         Drop Measurement
 
-        :param db_name: database name
-        :type db_name: string
-
-        :param ms_name: measurement name
-        :type ms_name: string
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
         """
+
         start_time = '1970-01-01T00:00:00Z'
         end_time = datetime.now().strftime(UTC_Style)
         delete_api = self.DBClient.delete_api()
@@ -701,12 +666,12 @@ class influxClient():
         """
         Get Tag List(database must have a tag keys)
 
-
-        :param db_name: database name
-        :type db_name: string
-
-        :param ms_name: measurement name
-        :type ms_name: string
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            List: tag list
         """
 
         query = f'''
@@ -727,17 +692,13 @@ class influxClient():
         """
         Get :guilabel:`unique value` of selected tag key
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-f
-        :param ms_name: measurement
-        :type ms_name: string
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey
 
-        :param tag_key: select tag key data
-        :type tag_key: string
-
-        :return: unique tag value list
-        :rtype: List
+        Returns:
+            List: unique tag value list
         """
 
         query = f'''
@@ -760,15 +721,15 @@ f
         """
         Get Field List and Type by dictionary
 
-        :param db_name: bucket(database) 
-        :type db_name: string
-f
-        :param ms_name: measurement
-        :type ms_name: string
-
-        :return: field list, type
-        :rtype: dict
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            onlyFieldName (string): onlyFieldName(option)
+        
+        Returns:
+            List: field list, type
         """
+
         query = f'''from(bucket: "{bk_name}") 
         |> range(start: 0, stop: now()) 
         |> filter(fn: (r) => r._measurement == "{ms_name}")
@@ -826,5 +787,6 @@ f
     def close_db(self) :
         """
         close influxdb conntection
+
         """
         self.DBClient.close()
