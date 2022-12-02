@@ -20,32 +20,34 @@ class DataScaler():
         Unless otherwise specified, scalers are created for scalable numeric data.
 
         
-        Example 1 (make new scaler and scale data )
-        -------
-        >>> from clust.transformation.general.dataScaler import DataScaler
-        >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
-        >>> DS = DataScaler('minmax', scalerRootpath )
-        >>> #feature_col_list = dataScaler.get_scalable_columns(train_o)
-        >>> feature_col_list= ['CO/value', 'H2S/value', 'NH3/value',  'O2/value', 'sin_hour']
-        >>> DS.setScaleColumns(feature_col_list)
-        >>> DS.setNewScaler(trainval_o)
-        >>> train = DS.transform(train_o)
+        Example:
+            >>> make new scaler and scale data
+            ... 
+            >>> from clust.transformation.general.dataScaler import DataScaler
+            >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
+            >>> DS = DataScaler('minmax', scalerRootpath )
+            >>> #feature_col_list = dataScaler.get_scalable_columns(train_o)
+            >>> feature_col_list= ['CO/value', 'H2S/value', 'NH3/value',  'O2/value', 'sin_hour']
+            >>> DS.setScaleColumns(feature_col_list)
+            >>> DS.setNewScaler(trainval_o)
+            >>> train = DS.transform(train_o)
 
 
-        Example 2 (load scaler and scale data)
-        >>> from clust.transformation.general.dataScaler import DataScaler
-        >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
-        >>> DS = DataScaler('minmax', scalerRootpath )
-        >>> feature_col_list= ['CO/value', 'H2S/value', 'NH3/value',  'O2/value', 'sin_hour']
-        >>> DS.setScaleColumns(feature_col_list)
-        >>> DS.loadScaler()
-        >>> train = DS.transform(train_o)
+        Example:
+            >>> load scaler and scale data
+            ... 
+            >>> from clust.transformation.general.dataScaler import DataScaler
+            >>> scalerRootpath = = os.path.join('/home','keti','CLUST_KETI','Clust','KETIAppTestCode','scaler','VIBES')
+            >>> DS = DataScaler('minmax', scalerRootpath )
+            >>> feature_col_list= ['CO/value', 'H2S/value', 'NH3/value',  'O2/value', 'sin_hour']
+            >>> DS.setScaleColumns(feature_col_list)
+            >>> DS.loadScaler()
+            >>> train = DS.transform(train_o)
 
-        :param scaling_method: scaling method 
-        :type scaling_method: string (one of ['minmax','standard','maxabs','robust'])'
+        Args:
+            scaling_method (one of ['minmax','standard','maxabs','robust']): scaling method 
+            rootPath (String): Root path where the scaler will be stored 
 
-        :param rootPath: Root path where the scaler will be stored 
-        :type rootPath: String (result of os.path.join('directory1','directory2'....))
         """
         self.scaling_method = scaling_method #
         #self.scale_columns = get_scalable_columns(data)
@@ -57,8 +59,9 @@ class DataScaler():
         """
         This function set scalerListJsonFilePath and update it. and describes detail information in [rootpath]/scaler_list.json
 
-        :param rootPath: Root path where the scaler will be stored 
-        :type rootPath: String (result of os.path.join('directory1','directory2'....))
+        Args:
+            scaling_method (one of ['minmax','standard','maxabs','robust']): scaling method 
+            rootPath (String): Root path where the scaler will be stored 
 
         """
         scaler_list = self.readJson(self.scalerListJsonFilePath)
@@ -78,13 +81,12 @@ class DataScaler():
         The function can be set to scale only a limited columns. (use self.setScaleColumns)
         Unless otherwise specified, scalers are created for scalable numeric data.
 
-        :param scaleColumns: limited column list to be scaled
-        :type scaleColumns: string list
+        Args:
+            scaleColumns (string list): limited column list to be scaled
 
-        Example
-        -------
-        >>> scaleColumns=['a','b']
-        >>> DS.setScaleColumns(scaleColumns) # can skip
+        Example:
+            >>> scaleColumns=['a','b']
+            >>> DS.setScaleColumns(scaleColumns) # can skip
         """
         self.scale_columns = scaleColumns
 
@@ -92,19 +94,18 @@ class DataScaler():
         """
         The function can read json file.  It can be used to find out column list of scaler file.
         
-        Example
-        -------
-        >>> from clust.transformation.general.dataScaler import DataScaler
-        >>> scalerRootpath = os.path.join('/Users','scaler')
-        >>> DS = DataScaler('minmax',scalerRootpath )
-        >>> scaler = DS.setNewScaler(trainval_o)
-        >>> df_features = DS.transform(data)
-        >>> y = os.path.split(os.path.dirname(DS.scalerFilePath))
-        >>> scalerList = DS.readJson(DS.scalerListJsonFilePath)
-        >>> scalerList[y[-1]] # print column list of scaler
+        Example:
+            >>> from clust.transformation.general.dataScaler import DataScaler
+            >>> scalerRootpath = os.path.join('/Users','scaler')
+            >>> DS = DataScaler('minmax',scalerRootpath )
+            >>> scaler = DS.setNewScaler(trainval_o)
+            >>> df_features = DS.transform(data)
+            >>> y = os.path.split(os.path.dirname(DS.scalerFilePath))
+            >>> scalerList = DS.readJson(DS.scalerListJsonFilePath)
+            >>> scalerList[y[-1]] # print column list of scaler
 
-        Returns: scaler
-            scaler
+        Returns:
+            json: scaler
         """
         if os.path.isfile(jsonFilePath):
             pass
@@ -142,11 +143,11 @@ class DataScaler():
         """
         The function transform data by scaler
 
-        :param data: input data to be scaled
-        :type data: dataFrame
+        Args:
+            data (dataFrame): input data to be scaled
 
-        Returns: pd.DataFarme
-            transformed Data
+        Returns:
+            DataFrame: transformed Data
         """
         self.data = data
         dataTobeScaled = self.data[self.scale_columns]
@@ -158,11 +159,11 @@ class DataScaler():
         """
         The function makes new scaler and saves it
 
-        :param dataForScaler: data to make a new scaler
-        :type dataForScaler: dataFrame
+        Args:
+            dataForScaler (dataFrame): data to make a new scaler
 
-        Returns: scaler
-            scaler
+        Returns:
+            scaler: scaler
         """
         self._setNewScalerInfo()
         dataForScaler = dataForScaler[self.scale_columns]
@@ -178,8 +179,8 @@ class DataScaler():
         """
         The function loads scaler. 
         
-        Returns: scaler
-            scaler
+        Returns:
+            scaler: scaler
         """
         self._setScalerInfo()
         if os.path.isfile(self.scalerFilePath):
@@ -220,19 +221,16 @@ class DataInverseScaler():
         """
         This class makes inverse scaled data.
 
-        Example
-        -------
-        >>> from clust.transformation.general.dataScaler import DataScaler
-        >>> scalerRootpath = os.path.join('/Users','jw_macmini','CLUSTGit','KETIAppMachineLearning','scaler')
-        >>> DIS = DataInverseScaler(df_features, 'minmax',scalerRootpath )
-        >>> DIS.setScaleColumns(df_features) 
-        >>> result = DIS.transform()
+        Example:
+            >>> from clust.transformation.general.dataScaler import DataScaler
+            >>> scalerRootpath = os.path.join('/Users','jw_macmini','CLUSTGit','KETIAppMachineLearning','scaler')
+            >>> DIS = DataInverseScaler(df_features, 'minmax',scalerRootpath )
+            >>> DIS.setScaleColumns(df_features) 
+            >>> result = DIS.transform()
 
-        :param scaling_method: scaling method 
-        :type scaling_method: string (one of ['minmax','standard','maxabs','robust'])'
-
-        :param rootPath: Root path where the scaler will be stored 
-        :type rootPath: String (result of os.path.join('directory1','directory2'....))
+        Args:
+            scaling_method (one of ['minmax','standard','maxabs','robust']): scaling method 
+            rootPath (String): Root path where the scaler will be stored 
         """
         self.scaling_method = scaling_method #
         self.rootPath = rootPath
@@ -240,8 +238,9 @@ class DataInverseScaler():
     def setScaleColumns(self, column_list):
         """
         Set scale columns and get scalerFilePath
-        :param column_list: 
-        :type column_list: list
+
+        Args:
+            column_list (list): column_list
 
         """
         
@@ -254,11 +253,11 @@ class DataInverseScaler():
         """
         The function set scaler. (generation or load based on root_path info, scale columns)
         
-        :param data: input data to be inverse-scaled
-        :type data: dataFrame
+        Args:
+            data (dataFrame): input data to be inverse-scaled
 
         Returns: scaler
-            scaler
+            scaler: scaler
         """
         if os.path.isfile(self.scalerFilePath):
             self.scaler = joblib.load(self.scalerFilePath)      
@@ -273,11 +272,11 @@ class DataInverseScaler():
         """
         The function transform data by inverse-scaler
 
-        :param data: input data to be inverse-scaled
-        :type data: dataFrame
+        Args:
+            data (dataFrame): input data to be inverse-scaled
 
-        Returns: pd.DataFarme
-            transformed Data
+        Returns:
+            Dataframe: transformed Data
         """
         self.data = data
         self.dataToBeScaled = self.data[self.scale_columns]
@@ -298,17 +297,19 @@ def getScaledData(data, feature_col_list, scalerRootpath, scale_method):
 
         This function finds scaler based and scale numpy array.
 
-        Note:
-            Original scaler was generated and stored before using this method for feature_col_list features.
-
         Args:
             data (np.array): data array, size = (past_step, len(feature_col_list))
             feature_col_list (list[string]): feature list for scaler
             scalerRootpath (string): rootPath for scaler
 
         Returns:
-            scaledData (pd.DataFrame): scaled Output Data
+            DataFrame: scaledData - scaled Output Data
         
+        Note
+        ---------
+        Original scaler was generated and stored before using this method for feature_col_list features.
+
+
     """
     data_df = pd.DataFrame(data, columns=feature_col_list, index=range(len(data)))
     

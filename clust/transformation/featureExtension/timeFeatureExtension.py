@@ -5,18 +5,18 @@ class TimeFeature():
     
     def extendNewTimeFeatureByTimeindex(self, original_df):
         """
-        This function generate new features(hour, day, month, day_of_week, week_of_year features), 
-        and extend original dataframe
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
-        >>> TF = TimeFeature()
-        >>> df_generated = TF.extendNewTimeFeatureByTimeindex(df)
+        This function generate new features(hour, day, month, day_of_week, week_of_year features), and extend original dataframe
 
-        original_df: pandas.DataFrame
-            original Input DataFrame with timeDataIndex
+        Example:
+            >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
+            >>> TF = TimeFeature()
+            >>> df_generated = TF.extendNewTimeFeatureByTimeindex(df)
+
+        Args:
+            original_df (DataFrame): original Input DataFrame with timeDataIndex
+
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with new time features(hour, day, month, day_of_week, week_of_year features)
+            DataFrame: extended_df - New dataFrmae with new time features(hour, day, month, day_of_week, week_of_year features)
         """ 
         if original_df.index.inferred_type == "datetime64":
             df_generated = (
@@ -37,18 +37,17 @@ class TimeFeature():
         This function generate new feature "dayOff" and extend original dataframe.
         When feature value is 0, index time is dayOff (Holiday, Saturday, Sunday). when 1, index time is dayon.
         
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
-        >>> TF = TimeFeature()
-        >>> extended_df = TF.extendWorkDayOffFeature(df_features, us_holidays)
+        Example:
+            >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
+            >>> TF = TimeFeature()
+            >>> extended_df = TF.extendWorkDayOffFeature(df_features, us_holidays)
 
-        original_df: pandas.DataFrame
-            original Input DataFrame with timeDataIndex
-        holiday_list: list of datetime
-            holiday list
+        Args:
+            original_df (DataFrame): original Input DataFrame with timeDataIndex
+            holiday_list (list): list of datetime
+
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with new time feature, "dayOff"
+            DataFrame: extended_df - New dataFrmae with new time feature, "dayOff"
         """ 
         
         extended_df = origin_df.copy()
@@ -70,20 +69,18 @@ class TimeFeature():
         This function generate new feature "worktime" and extend original dataframe.
         When feature value is 0, index time is not working time.
         
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
-        >>> TF = TimeFeature()
-        >>> extended_df = TF.extendWorkTimeFeature(origin_df, workStartTime, workEndTime)
+        Example:
+            >>> from clust.transformation.featureExtension.timeFeatureExtension import TimeFeature
+            >>> TF = TimeFeature()
+            >>> extended_df = TF.extendWorkTimeFeature(origin_df, workStartTime, workEndTime)
 
-        original_df: pandas.DataFrame
-            original Input DataFrame with timeDataIndex
-        workStartTime: int
-            work start time
-        workEndTime: int
-            work end time
+        Args:
+            original_df (DataFrame): original Input DataFrame with timeDataIndex
+            workStartTime (int): work start time
+            workEndTime (int): work end time
+
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with new time feature, "worktime"
+            DataFrame: extended_df - New dataFrmae with new time feature, "worktime"
         """ 
         
         extended_df = origin_df.copy()

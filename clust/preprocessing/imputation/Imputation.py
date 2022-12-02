@@ -61,6 +61,7 @@ class SerialImputation():
         ---------
         If the ratio of non-NaN values is less than or equal to the Ratio value, column data is removed.
             
+            
         Returns:
             DataFrame: NewDataframe excluding columns that do not meet the qualifications
         

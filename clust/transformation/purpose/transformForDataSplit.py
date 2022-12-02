@@ -13,23 +13,15 @@ def getSplitAndTransformDataByFrequency(data, splitNum, splitInterval, transform
     Create divided data according to the input number of splits and transform each data according to the entered time frequency.
     Transformation methods according to time frequency are deletion and averaging sampling methods.
     
-    :param data: DataFrame with time stamp as index
-    :type data: 2D DataFrame
-    
-    :param splitNum: number of split data
-    :type splitNum: Integer
-    
-    :param splitInterval: split data interval
-    :type splitInterval: Interger
-    
-    :param transformFreqList: List of transform time frequency for each data
-    :type: List of integers
-    
-    :param  freqTransformMode: Transformation methods according to time frequency
-    :type: String
-    
-    :return dataset: split dataset
-    :rtype: Dict 
+    Args:
+        data (DataFrame): DataFrame with time stamp as index
+        splitNum (Integer): number of split data
+        splitInterval (Interger): split data interval
+        transformFreqList (List of integers): List of transform time frequency for each data
+        freqTransformMode (String): Transformation methods according to time frequency
+
+    Returns:
+        Dict: dataSet - split dataset
     """
     columns = data.columns
     dataset = {}

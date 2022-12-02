@@ -7,26 +7,25 @@ class TimeLagFeature():
     def extendTimeLagFeatures(self, origin_df, columnNameList, n_lags, deleteFirstLagDuration= False):
         """
         This function generate time-lags-Features and extend original dataframe
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.timeLagFeatureExtension import class TimeLagFeature
-        >>> TLF = TimeLagFeature()
-        >>> lag = 100
-        >>> columnNameList=['value']
-        >>> df_generated = TLF.extendTimeLagFeatures(df, columnNameList, lag, deleteFirstLagDuration=True)
 
-        
-        original_df: pandas.DataFrame
-            original Input DataFrame
-        columnNameList: list of str
-            List of columns to extend lag features
-        n_lags: int
-            number of lags to be extend
-        deleteFirstLagDuration : bool, default = False
-            When set to True, it deletes the NaN row data that was inevitably created to generate lag data.
+        Example:
+            >>> from clust.transformation.featureExtension.timeLagFeatureExtension import class TimeLagFeature
+            >>> TLF = TimeLagFeature()
+            >>> lag = 100
+            >>> columnNameList=['value']
+            >>> df_generated = TLF.extendTimeLagFeatures(df, columnNameList, lag, deleteFirstLagDuration=True)
+
+        Args:
+            original_df (DataFrame): original Input DataFrame with timeDataIndex
+            columnNameList (list of str): List of columns to extend lag features
+            n_lags (int): number of lags to be extend
+            deleteFirstLagDuration (bool): hen set to True, it deletes the NaN row data that was inevitably created to generate lag data.
+
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with lag features
-            (ex originalFeatureName = "value", n_lags = 2 -> added features: "value_lag1", "value_lag2")
+            DataFrame: extended_df - New dataFrmae with lag features
+
+        Example:
+            >>> originalFeatureName = "value", n_lags = 2 -> added features: "value_lag1", "value_lag2"
         """ 
         
         extended_df = origin_df.copy()

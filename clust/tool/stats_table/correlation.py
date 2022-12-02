@@ -5,8 +5,9 @@ class Correlation():
     def __init__(self, data):
         """
         set input data
-        :param data: data
-        :type data: dataFrame
+
+        Args:
+            data (dataFrame): data
         """
         self.data = data
 
@@ -14,8 +15,8 @@ class Correlation():
         """
         get pearson correlation Matrix
 
-        :return: correlation Matrix
-        :rtype: DataFrame
+        Returns:
+            DataFrame: correlation Matrix
         """
         self.corrMtx = self.data.corr()
         return self.corrMtx
@@ -23,8 +24,9 @@ class Correlation():
     def _get_redundant_pairs(self):
         """
         Get diagonal and lower triangular pairs of correlation matrix
-        :return: pairs of correlation matrix
-        :rtype: DataFrame
+
+        Returns:
+            DataFrame: pairs of correlation matrix
         """
         pairs_to_drop = set()
         cols = self.data.columns
@@ -37,14 +39,14 @@ class Correlation():
         """
         Get the highest correlation pairs
 
-        :param data: data
-        :type data: dataFrame
-        :param ranking: variable to specify the top Nth value
-        :type ranking: Integer
-        :param target: If target is specified, only results related to target name are provided
-        :type target: String
-        :return: pairs of correlation matrix
-        :rtype: series of DataFrame
+        Args:
+            data (dataFrame): data
+            ranking (Integer): variable to specify the top Nth value
+            target (String): If target is specified, only results related to target name are provided
+
+        Returns:
+            series of DataFrame: pairs of correlation matrix
+
         """
         au_corr = self.getCorrelationMatrix().abs().unstack()
         labels_to_drop = self._get_redundant_pairs()

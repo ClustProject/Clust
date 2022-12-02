@@ -7,20 +7,19 @@ def trans3NPtoDF(X, y, startTime):
     Every Sample of X has (featureNum X sequenceNum) datapoints.
     Every Sample of y has (one value) related to the value of X.
     Every New Sample can be separated by time index (Every Days)
-    - X.shape (sampleNum, featureNum, sequenceNum )
-    - y.shape (sampleNum, )
 
-    :param: X
-    :type: 3D numpy array
-    
-    :param: y
-    :type: 1D numpy array
+    Example:
+        >>> Retunrn 
+        ... X.shape (sampleNum, featureNum, sequenceNum )
+        ... y.shape (sampleNum, )
 
-    :param: startTime: start Time of DataFrame Index
-    :type: string
-
-    :return: df_X, df_y
-    :type: DataFrame
+    Args:
+        X (3D numpy array): X
+        y (1D numpy array): y
+        startTime (string): start Time of DataFrame Index
+        
+    Returns:
+        DataFrame:  df_X, df_y
     
     """
     sampleNum = X.shape[0]
@@ -63,21 +62,18 @@ def trans2NPtoDF(array, startTime, data_freq):
     
     - array.shape (featureNum, sequenceNum )
 
-    :param array: 2D Array
-    :type: 2D numpy array
-    
-    :param startTime: start Time of DataFrame Index
-    :type: string
-    
-    :param data_freq: time frequency of DataFrame
-    :type: string
+    Args:
+        array (numpy array): 2D Array
+        startTime (string): start Time of DataFrame Index
+        data_freq (string): time frequency of DataFrame
 
-    >>> startTime : "2022-01-01"
-    >>> data_freq : "1S"
+    Example:
+        >>> startTime : "2022-01-01"
+        >>> data_freq : "1S"
 
 
-    :return df: DataFrame with time stamp as index
-    :rtype: DataFrame
+    Returns:
+        DataFrame:  df - DataFrame with time stamp as index
     
     """
     seq_len = array.shape[1]

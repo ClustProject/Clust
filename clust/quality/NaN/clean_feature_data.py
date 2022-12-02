@@ -31,18 +31,24 @@ class CleanFeatureData:
     def getMultipleCleanDataSetsByDF(self, dataSet, NanInfoForCleanData) :
         """
         This funtion can work by only num type of NaNInfoForCleanData
-        :param dataSet: input Data to be handled
-        :type dataSet: dictionary
-        :param NanInfoForCleanData: selection condition
-        :type NanInfoForCleanData: dictionary
-        :param duration:  duration, if set duration, make data with full duration, default=None
-        :type duration: dictionary
 
-        example:
-        >>> NanInfoForCleanData = {'type':'num', 'ConsecutiveNanLimit':1, 'totalNaNLimit':10}
+        Args:
+            dataSet (dictionary):  input Data to be handled
+            NanInfoForCleanData (dictionary): selection condition 
+            duration (dictionary): duration
+            
+        Note
+        ---------
+        if set duration, make data with full duration, default=None
 
-        :returns: self.refinedDataSet, self.FilteredImputedDataSet
-        :rtype: 
+
+        Example:
+
+            >>> NanInfoForCleanData = {'type':'num', 'ConsecutiveNanLimit':1, 'totalNaNLimit':10}
+
+        Returns:
+            Dict: self.refinedDataSet, self.FilteredImputedDataSet
+
         """
 
         self.refinedDataSet={}
@@ -71,28 +77,24 @@ class CleanFeatureData:
 
     def getMultipleCleanDataSetsByFeature(self, dataSet, NanInfoForCleanData, duration=None) :
         """
-        refinedDataSet, refinedDataSetName: 간단한 cleaning 진행한 데이터셋
-        NaNRemovedDataSet : 품질이 좋지 않은 NaN 값을 다수 포함한 컬럼을 제거한 데이터
-        ImputedDataSet: datasetNanRemove의 nan을 임의대로 interpolation한 데이터
-        ImputedDataSetName: datasetNanRemove 에 대한 ms 이름
+        - refinedDataSet, refinedDataSetName: 간단한 cleaning 진행한 데이터셋
+        - NaNRemovedDataSet : 품질이 좋지 않은 NaN 값을 다수 포함한 컬럼을 제거한 데이터
+        - ImputedDataSet: datasetNanRemove의 nan을 임의대로 interpolation한 데이터
+        - ImputedDataSetName: datasetNanRemove 에 대한 ms 이름
 
+        Args:
+            dataSet (dictionary):  input Data to be handled
+            NanInfoForCleanData (dictionary): selection condition 
+            duration (dictionary): duration
+            
+        Returns:
+            Dict: self.refinedDataSet, self.refinedDataSetName, self.NaNRemovedDataSet, self.ImputedDataSetName, self.ImputedDataSet
 
-        :param dataSet: input Data to be handled
-        :type dataSet: dictionary
-        :param NanInfoForCleanData: selection condition
-        :type NanInfoForCleanData: dictionary
-        :param duration:  duration, if set duration, make data with full duration, default=None
-        :type duration: dictionary
+        Example:
 
-        :returns: self.refinedDataSet, self.refinedDataSetName, self.NaNRemovedDataSet, self.ImputedDataSetName, self.ImputedDataSet
-        :rtype: 
+            >>> duration = { 'start_time' : "2021-02-01 00:00:00",
+            ...               'end_time' : "2021-02-04 00:00:00" }
 
-        prameter ``duration`` example
-            docstring::
-                {
-                    'start_time' : "2021-02-01 00:00:00",
-                    'end_time' : "2021-02-04 00:00:00",
-                }
         """
 
         self.refinedDataSet={}
@@ -131,28 +133,23 @@ class CleanFeatureData:
         """
         This function gets CleanDataSet by Feature
 
-        :param data: input Data to be handled
-        :type data: dataFrame
-        :param NanInfoForCleanData:  selection condition
-        :type NanInfoForCleanData: dictionary
-        :param duration:  duration, if set duration, make data with full duration, default=None
-        :type duration: dictionary
+        Args:
+            dataSet (dictionary):  input Data to be handled
+            NanInfoForCleanData (dictionary): selection condition 
+            duration (dictionary): duration
 
-        :returns: refinedData
-        :rtype: dataframe
-        :returns: NaNRemovedData
-        :rtype: dataFrame
-        :returns: ImputedData
-        :rtype: dataFrame
-        :returns: finalFlag
-        :rtype: dictionary (-1: no data, 0:useless data, 1:useful data)
+        Returns:
+            dataframe: refinedData, NaNRemovedData, ImputedData
 
-        prameter ``duration`` example
-        docstring::
-            {
-                'start_time' : "2021-02-01 00:00:00",
-                'end_time' : "2021-02-04 00:00:00",
-            }
+        Returns:
+            dictionary: finalFlag (-1: no data, 0:useless data, 1:useful data)
+
+
+        Example:
+
+            >>> duration = { 'start_time' : "2021-02-01 00:00:00",
+            ...               'end_time' : "2021-02-04 00:00:00" }
+
         """
 
         if duration:
@@ -185,14 +182,11 @@ class CleanFeatureData:
         """
         This function produced cleaner data with parameter
 
-        :param data: input Data to be handled
-        :type data: dataFrame with only one feature
+        Args:
+            dataSet (dictionary):  input Data to be handled
 
-        :returns: refinedData
-        :rtype: dataFrame
-
-        :returns: dataWithMoreNaN
-        :rtype: dataFrame
+        Returns:
+            dataframe: refinedData, dataWithMoreNaN
         """
         refined_data = pd.DataFrame()
         datawithMoreCertainNaN = pd.DataFrame()

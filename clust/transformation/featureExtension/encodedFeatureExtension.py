@@ -9,20 +9,19 @@ class EncodedFeature():
     def encode_onehot(self, origin_df, onehot_encode_columnName , dropOriginal=False):
         """
         This function generate one_hot_encoded columns
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.encodedFeatureExtension import EncodedFeature
-        >>> EF = EncodedFeature()
-        >>> df_generated = EF.encode_onehot(original_df, columnNameList)
 
-        original_df: pandas.DataFrame
-            original Input DataFrame
-        columnNameList: list of str
-            List of columns to one-hot-encode
-        dropOriginal : bool, default = False
-            When set to True, it drops original column features (leaves only one-hot-encoded features) 
+        Example:
+            >>> from clust.transformation.featureExtension.encodedFeatureExtension import EncodedFeature
+            >>> EF = EncodedFeature()
+            >>> df_generated = EF.encode_onehot(original_df, columnNameList)
+
+        Args:
+            original_df (DataFrame): original Input DataFrame
+            columnNameList (list): List of columns to one-hot-encode
+            dropOriginal (bool): When set to True, it drops original column features (leaves only one-hot-encoded features) 
+            
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with one-hot-encoded features
+            DataFrame: extended_df - New dataFrmae with one-hot-encoded features
         """ 
         extended_df = origin_df.copy()
         dummies = pd.get_dummies(extended_df[onehot_encode_columnName].astype(str), prefix = onehot_encode_columnName)

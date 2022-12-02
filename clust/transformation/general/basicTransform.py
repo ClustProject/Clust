@@ -15,13 +15,12 @@ def scalingSmoothingDF(dataSet, ewm_parameter):
     """
     Data can be scaled and smoothed by this function.
 
-    :param dataset: input dataset
-    :type dataset: dictionary dataFrameSet
-    :param ewm_parameter:  parameter for ewm function
-    :type ewm_parameter: float
+    Args:
+        dataset (dictionary): input dataset
+        ewm_parameter (float): parameter for ewm function
 
-    :returns ssDataSet: scale and smoothed dataframeSet
-    :rtype: dataframe
+    Returns:
+        dataframe: ssDataSet - scale and smoothed dataframeSet
     """
     ssDataSet=[]
     from sklearn.preprocessing import MinMaxScaler
@@ -47,13 +46,12 @@ def checkNumericColumns(data, checkColumnList=None):
     This function returns data by trnsforming the Numeric type colums specified in "checkColumnList". 
     If checkColumnList is None, all columns are converted to Numeric type.
 
-        :param data: inputData
-        :type data: dataFrame
-        :param checkColumnList: db_name
-        :type db_name: string array or None
+    Args:
+        data (dataFrame): input Data
+        checkColumnList (string array or None): db_name
 
-        :returns: dataSet
-        :rtype: dataType
+    Returns:
+        dataSet: dataSet
 
     1. CheckColumnList==None : change all columns to numeric type
     2. CheckColumnList has values: change only CheckColumnList to numeric type

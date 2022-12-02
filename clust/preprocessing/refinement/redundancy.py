@@ -7,13 +7,14 @@ class ExcludeRedundancy():
     def get_result(self, data):
         """ Get Clean Data without redundency using all data preprocessing functions.
 
-        :param data: input data
-        :type data: pandas.DataFrame 
+        Args:
+            data (DataFrame): input data
+            
+        Returns:
+            DataFrame: result, output data
 
-        :return: result, output data
-        :rtype: pandas.DataFrame
+        Example:
 
-        example
             >>> output = ExcludeRedundancy().get_result(data)
         """
 

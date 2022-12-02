@@ -3,7 +3,10 @@ import matplotlib.pyplot as plt
 def plot_correlation_chart(data):
     """
     Plot Correlation Chart
-    Input:
+
+    Args:
+        data (dataFrame): data
+        
     """
     import seaborn as sns
     corr = data.corr()

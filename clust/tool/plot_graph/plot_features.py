@@ -6,14 +6,12 @@ def Plot_OneCloumnData(df, y_columnName, title):
     """
     This function plots one column data by index
 
-    :param df: input dataframe
-    :type df: dataFrame
+    Args:
+        df (dataFrame): input dataframe
+        y_columnName (string): one of column name to be shown
 
-    :param y_columnName: one of column name to be shown
-    :type y_columnNamedf: string
-
-    :param title: Graph title
-    :type title: string
+    Returns:
+        string: title - Graph title
 
     """
 
@@ -73,13 +71,12 @@ def show3Dgraph(data, colorData):
     """ 
     Show 3D data with 3 columns from DataFrame
 
-    :param data: input data
-    :type data: DataFrame 
-    
-    :param colorData: an array with N different values. Express a color acoording to each value.
-    :type data: numeric array
+    Args:
+        data (dataFrame): input data
+        colorData (numeric array): an array with N different values. Express a color acoording to each value
 
-    example
+    Example:
+
         >>> output = ExcludeRedundancy().get_result(data)
     """
     print(colorData.dtypes)

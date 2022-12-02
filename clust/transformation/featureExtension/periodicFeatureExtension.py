@@ -12,22 +12,19 @@ class PeriodicFeature():
         """
         This function generate transformed feature by period. Each column must have a specific period.
         It calculats sine and cosine transform value of the given feature.
-        Example
-        -------
-        >>> from clust.transformation.featureExtension.periodicFeatureExtension import PeriodicFeature
-        >>> PF = PeriodicFeature()
-        >>> df_extended =  PF.extendCosSinFeature(data, 'hour', 24, 0, True)
 
-        original_df: pandas.DataFrame
-            original Input DataFrame
-        columnName: str
-            Column name to convert
-        period: int
-            the period of column
-        dropOriginal : bool, default = False
-            When set to True, it drops original column features 
+        Example:
+            >>> from clust.transformation.featureExtension.periodicFeatureExtension import PeriodicFeature
+            >>> PF = PeriodicFeature()
+            >>> df_extended =  PF.extendCosSinFeature(data, 'hour', 24, 0, True)
+
+        Args:
+            original_df (DataFrame): original Input DataFrame
+            columnName (str): column name to convert
+            dropOriginal (bool): When set to True, it drops original column features 
+
         Returns:
-            extended_df (pandas.DataFrame), New dataFrmae with one-hot-encoded features
+            DataFrame: extended_df - New dataFrmae with one-hot-encoded features
         """ 
         extended_df = origin_df.copy()
         

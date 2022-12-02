@@ -1,27 +1,23 @@
 import pandas as pd
 def featureReduction(data, n_components = 3, method ="TSNE"):
     """ 
-    
     Feature Reduction
 
-    :param data: input data
-    :type data: DataFrame 
+    Args:
+        data (DataFrame): input data
+        n_components (integer): umber of features to be reduced
+        method (string ["TSNE", "PCA"]): feature reduction method
 
-    :param n_components: number of features to be reduced
-    :type n_components: integer
+    Returns:
+        DataFrame: feature_extraction - reduced data result
 
-    :param method: feature reduction method
-    :type datmethoda: string ["TSNE", "PCA"]
-
-    :return: feature_extraction : reduced data result
-    :rtype: DataFrame
-
-    example
+    Example:
         >>> inputData = data
         >>> n_components = 4
         >>> method = "PCA" #['PCA', 'TSNE']
         >>> inputData = standardScale(inputData)
         >>> FE_data = featureExtraction.featureReduction(inputData, n_components, method)
+
     """
 
     colList = MakeColumnName(n_components, method)
@@ -42,16 +38,14 @@ def MakeColumnName(num = 3, prefix ="col"):
     """ 
     Make new string list 
 
-    :param num: length of list
-    :type num: integer
+    Args:
+        num (integer): length of list
+        prefix (string): prefix of string
 
-    :param prefix: prefix of string
-    :type prefix: string
+    Returns:
+        string array: colList - new string list 
 
-    :return: colList : new string list 
-    :rtype: string array
-
-    example
+    Example:
         >>> n_components = 3
         >>> method = "PCA" 
         >>> colList = MakeColumnName(n_components, method)

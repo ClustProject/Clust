@@ -4,10 +4,14 @@ sys.path.append("../")
 sys.path.append("../..")
 
 class DataPreprocessing():
-    '''This class has interfaces of Data Preprocessing.
+    """
+    This class has interfaces of Data Preprocessing.
+
     **Data Preprocessing Modules**::
+
             Refine Data, Remove Outlier, Impute Missing Data
-    '''
+    """
+    
     
     def __init__(self):
         pass
@@ -16,26 +20,26 @@ class DataPreprocessing():
         """
         This function gets refined data with static frequency, without redundency data. 
         It refines data adaptively depending on flag status. (removeDuplication, staticFrequency)
-        "removeDuplication" :It removes duplicated data.
-        "staticFrequency" :The data will have a constant timestamp index. 
+        ``removeDuplication`` :It removes duplicated data.
+        ``staticFrequency`` :The data will have a constant timestamp index. 
 
-        :param data: data
-        :type data: pandas.DataFrame
 
-        :param refine_param: refinement parameter
-        :type refine_param: dictionary
+        Args:
+            data (DataFrame): data
+            refine_param (Dictionary): refinement parameter
+            
+        Returns:
+            DataFrame: refinedData, refined DataFrame output
 
-        :return: refinedData, refined DataFrame output
-        :rtype: pandas.DataFrame
 
         refine_param additional info: 
-        -------
-            refine_param['removeDuplication']={'flag':(Boolean)} 
-            refine_param['staticFrequency'] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
-            refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
-        -------
-       Example
-        -------
+            >>> refine_param['removeDuplication']={'flag':(Boolean)} 
+            >>> refine_param['staticFrequency'] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
+            >>> refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
+
+
+        Example:
+
             >>> from clust.preprocessing.dataPreprocessing import DataPreprocessing
             >>> refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': None}}
             >>> refine_param2 = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': "3H"}}
@@ -58,24 +62,23 @@ class DataPreprocessing():
     def get_errorToNaNData(self, data, outlier_param):
 
         """
-        This function gets data with more NaN. This function converts data identified as errors to NaN. This module finds fake data generated due to network errors, etc., and converts it to NaN.
+        This function gets data with more NaN. This function converts data identified as errors to NaN. 
+        This module finds fake data generated due to network errors, etc., and converts it to NaN.
 
-        Example
-        -------
-        >>> uncertainErrorParam = {
-            # TODO define
-        }
-        >>> outlier_param = {'certainErrorToNaN': {'flag': True}, 'unCertainErrorToNaN': uncertainErrorParam}
-        >>> datawithMoreCertainNaN, datawithMoreUnCertainNaN = DataPreprocessing().get_errorToNaNData(data, outlier_param)
+        Args:
+            data (DataFrame): data
+            outlier_param (Dictionary): outlier handling parameter
+            
+        Returns:
+            DataFrame: datawithMoreCertainNaN, datawithMoreUnCertainNaN
 
-        :param data: data
-        :type data: pandas.DataFrame
+        Example:
 
-        :param outlier_param: outlier handling parameter
-        :type outlier_param: dictionary
+            >>> uncertainErrorParam = {
+                # TODO define }
+            >>> outlier_param = {'certainErrorToNaN': {'flag': True}, 'unCertainErrorToNaN': uncertainErrorParam}
+            >>> datawithMoreCertainNaN, datawithMoreUnCertainNaN = DataPreprocessing().get_errorToNaNData(data, outlier_param)
 
-        :return: datawithMoreCertainNaN, datawithMoreUnCertainNaN
-        :rtype: pandas.DataFrame, pandas.DataFrame
 
         **Two Outlier Detection Modules**::
 
@@ -96,17 +99,21 @@ class DataPreprocessing():
     def get_imputedData(self, data, imputation_param):
         """ Get imputed data
 
-        :param data: input data
-        :type data: DataFrame 
-        :param refine_param: imputation_param
-        :type refine_param: json
+        Args:
+            data (DataFrame): input data
+            refine_param (json): imputation_param
+            
+        Returns:
+            DataFrame: New Dataframe after imputation
         
-        :return: New Dataframe after imputation
-        :rtype: DataFrame
-        
-        example
-            >>> imputation_param = {'flag': True, 'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 'totalNonNanRatio': 80}
+        Example:
+
+            >>> imputation_param = {'flag': True, 
+            ...                     'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, '
+            ...                                           {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 
+            ...                     'totalNonNanRatio': 80}
             >>> output = DataPreprocessing().get_imputedData(data, outlier_param)
+
         """
         self.imputedData = data.copy()
         if imputation_param['flag'] == True:
@@ -123,13 +130,16 @@ class DataProcessing(DataPreprocessing):
     def __init__(self, process_param):
         '''Set process_param related to each preprocessing module.
 
-        :param process_param: process_param
-        :type process_param: json 
-        >>> process_param={
-            "refine_param": {},
-            "outlier_param": {},
-            "imputation_param":{}
-        }
+        Args:
+            process_param (json): process_param
+
+        Example:
+
+            >>> process_param={
+            ...                 "refine_param": {},
+            ...                 "outlier_param": {},
+            ...                 "imputation_param":{}
+            ...                 }
 
         '''
         self.refine_param = process_param['refine_param']
@@ -139,15 +149,15 @@ class DataProcessing(DataPreprocessing):
     def preprocessing(self, input_data, flag):
         """ Produces only one clean data with one preprocessing module.
 
-        :param input_data: input data
-        :type input_data: DataFrame 
-        :param flag: preprocessing name
-        :type flag: string
+        Args:
+            data (DataFrame): input data
+            flag (string): preprocessing name
+            
+        Returns:
+            DataFrame: New Dataframe after one preprocessing (flag)
         
-        :return: New Dataframe after one preprocessing (flag)
-        :rtype: DataFrame
-        
-        example
+        Example:
+
             >>> output = DataProcessing().preprocessing(data, 'refine')
             
         """
@@ -164,13 +174,14 @@ class DataProcessing(DataPreprocessing):
     def all_preprocessing(self, input_data):
         """ Produces partial Processing data depending on process_param
 
-        :param input_data: input data
-        :type input_data: DataFrame 
+        Args:
+            input_data (DataFrame): input data
+            
+        Returns:
+            json: New Dataframe after preprocessing according to the process_param
         
-        :return: New Dataframe after preprocessing according to the process_param
-        :rtype: json (key: process name, value : output DataFrame)
-        
-        example
+        Example:
+
             >>> output = DataProcessing(process_param).all_preprocessing(data)
             
         """
@@ -189,13 +200,14 @@ class DataProcessing(DataPreprocessing):
     def multiDataset_all_preprocessing(self, multiple_dataset):
         """ Produces multiple DataFrame Processing result depending on process_param
 
-        :param input_data: multiple_dataset
-        :type input_data: json (having DataFrame value) 
+        Args:
+            input_data (json): multiple_dataset - (having DataFrame value) 
+            
+        Returns:
+            json: json having New Dataframe after preprocessing according to the process_param
         
-        :return: json having New Dataframe after preprocessing according to the process_param
-        :rtype: json (value : output DataFrame)
-        
-        example
+        Example:
+
             >>> output = DataProcessing(process_param).multiDataset_all_preprocessing(multiple_dataset)
         """
         output={}

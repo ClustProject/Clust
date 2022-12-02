@@ -7,21 +7,18 @@ def transDFtoNP(dfX, dfy, windowNum = 0, dim = None):
     if windowNum = 0 ----> slice X by day
     if windowNum = N ----> slice X by windowNum
     
-    Return
-    - X.shape (sampleNum, featureNum, sequenceNum )
-    - y.shape (sampleNum, )
+    Example:
+        >>> Retunrn 
+        ... X.shape (sampleNum, featureNum, sequenceNum )
+        ... y.shape (sampleNum, )
 
-    :param: dfX
-    :type: dataFrame
-    
-    :param: dfy
-    :type: dataFrame
+    Args:
+        dfX (DataFrame): dfX
+        dfy (DataFrame): dfy
+        windowNum (Interger): windowNum
 
-    :param: windowNum
-    :type: integer
-
-    :return: X, y
-    :type: numpy array
+    Returns:
+        numpy array:  X, y
     
     """
     import datetime as dt
