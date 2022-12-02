@@ -15,14 +15,12 @@ class DataIntegration():
         2. restructure data with new frequency
         3. fill NA resulting from integration
 
-        :param  re_frequency: metadata for integration of each dataset   
-        :type re_frequency: json
+        Args:
+            re_frequency (json): metadata for integration of each dataset 
+            column_characteristics (json): metadata for integration of each dataset  
             
-        :param  column_characteristics: metadata for integration of each dataset   
-        :type column_characteristics: json
-                
-        :return: integrated_data_resample_fillna
-        :rtype: DataFrame    
+        Returns:
+            DataFrame: integrated_data_resample_fillna    
         """
         column_characteristics = column_meta['column_characteristics']
         self.simple_integration(column_meta['overlap_duration'])
@@ -33,16 +31,23 @@ class DataIntegration():
         return integrated_data_resample_fillna
 
     def simple_integration(self, duration):
-        """ This function integrates datasetCollection without no pre-post processing.
+        """ 
+        This function integrates datasetCollection without no pre-post processing.
         
-        :param  duration:   example) {'start_time': Timestamp('2018-01-01 00:00:00'), 'end_time': Timestamp('2018-01-01 23:55:00')}
-        :type duration: dictionary types 
-        
-        :return: merged_data
-        :rtype: DataFrame
+        Args:
+            duration (dictionary): duration
+            
+        Returns:
+            DataFrame: merged_data
+
+        Example:
+            >>> duration: {'start_time': Timestamp('2018-01-01 00:00:00'), 
+            ...             'end_time': Timestamp('2018-01-01 23:55:00')}
+
         >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(data_partial_numeric)
         >>> integrated_data = data_int.simple_integration(partial_data_info.column_meta['overlap_duration'])
+
         """
         data_key_list = list(self.data_partial.keys())
         merged_data_list =[]
@@ -61,51 +66,53 @@ class DataIntegration():
     def restructured_data_with_new_frequency(self, re_frequency, column_characteristics):
         """ This function integrates datasetCollection with new data frequency
         
-        :param  re_frequncy: description frequency for new integrated data   
-        :type re_frequncy: timedelta 
+        Args:
+            re_frequncy (timedelta): description frequency for new integrated data
+            column_characteristics (json): metadata for integration of each dataset
 
-        :param  column_characteristics: metadata for integration of each dataset   
-        :type column_characteristics: json
         >>> column_characteristics = {
-                    "data0": {
-                        "column_name": "data0",
-                        "column_frequency": Timedelta("0 days 00:10:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous",
-                        "pointDependency": "Yes",
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean",
-                        "fillna_function": "interpolate",
-                        "fillna_limit": 31,
-                    },
-                    "data1": {
-                        "column_name": "data1",
-                        "column_frequency": Timedelta("0 days 00:07:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous",
-                        "pointDependency": "Yes",
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean",
-                        "fillna_function": "interpolate",
-                        "fillna_limit": 31,
-                    },
-                    "data2": {
-                        "column_frequency": Timedelta("0 days 00:03:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous",
-                        "pointDependency": "Yes",
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean",
-                        "fillna_function": "interpolate",
-                        "fillna_limit": 31,
-                    },
-            }
-        :return: merged_data
-        :rtype: DataFrame
+        ...          "data0": {
+        ...             "column_name": "data0",
+        ...             "column_frequency": Timedelta("0 days 00:10:00"),
+        ...             "column_type": dtype("int64"),
+        ...             "occurence_time": "Continuous",
+        ...             "pointDependency": "Yes",
+        ...             "upsampling_method": "mean",
+        ...             "downsampling_method": "mean",
+        ...             "fillna_function": "interpolate",
+        ...             "fillna_limit": 31,
+        ...         },
+        ...         "data1": {
+        ...             "column_name": "data1",
+        ...             "column_frequency": Timedelta("0 days 00:07:00"),
+        ...             "column_type": dtype("int64"),
+        ...             "occurence_time": "Continuous",
+        ...             "pointDependency": "Yes",
+        ...             "upsampling_method": "mean",
+        ...             "downsampling_method": "mean",
+        ...             "fillna_function": "interpolate",
+        ...             "fillna_limit": 31,
+        ...         },
+        ...         "data2": {
+        ...             "column_frequency": Timedelta("0 days 00:03:00"),
+        ...             "column_type": dtype("int64"),
+        ...             "occurence_time": "Continuous",
+        ...             "pointDependency": "Yes",
+        ...             "upsampling_method": "mean",
+        ...             "downsampling_method": "mean",
+        ...             "fillna_function": "interpolate",
+        ...             "fillna_limit": 31,
+        ...         },
+        ... }
+
+        Returns:
+            DataFrame: merged_data
+
         >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(dataset)
         >>> re_frequency = datetime.timedelta(seconds=180)
         >>> integrated_data_resample = data_int.restructured_data_with_new_frequency(re_frequency, column_characteristics)
+
         """
         
         # TODO JW 수정해서 바꿔야함. 우선 스트링 타입에 대해서 이젠 동작하지 않고 있음
@@ -154,17 +161,13 @@ class DataIntegration():
     def restructured_data_fillna(self, origin_data, column_characteristics,re_frequency):
         """ This function integrates datasetCollection and fill NA
         
-        :param  origin_data: integrated with resampling NaN   
-        :type origin_data: DataFrame
-
-        :param  column_characteristics: metadata for integration of each dataset   
-        :type column_characteristics: json
-        
-        :param  re_frequency: metadata for integration of each dataset   
-        :type re_frequency: json
-                       
-        :return: reconstructedData
-        :rtype: DataFrame
+        Args:
+            origin_data (DataFrame): integrated with resampling NaN
+            column_characteristics (json): metadata for integration of each dataset  
+            re_frequency (json): metadata for integration of each dataset 
+            
+        Returns:
+            DataFrame: reconstructedData
 
         >>> from clust.integration.meta import data_integration
         >>> data_int = data_integration.DataIntegration(dataset)

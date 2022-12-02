@@ -7,17 +7,13 @@ import torch.nn as nn
 
 def train_model(model, train_dataloader, parameter):
     """
-    :param model: model 
-    :type model: model
-
-    :param train_dataloader: dataloader for training
-    :type train_dataloader: DataLoader
-
-    :param parameter: config
-    :type parameter: dictionary
-
-    :return model: trined model
-    :rtype model: model
+    Args:
+        model (model): model 
+        train_dataloader (DataLoader): dataloader for training
+        parameter (dictionary): config
+        
+    Returns:
+        trined model: model - trined model
     
     """
     n_epochs, lr, device = parameter['num_epochs'], parameter['learning_rate'], parameter['device']
@@ -63,17 +59,13 @@ def train_model(model, train_dataloader, parameter):
 
 def get_representation(model, dataloader, parameter):
     """
-    :param model: trined model
-    :type model: model
-
-    :param dataloader: dataloader for inference
-    :type dataloader: DataLoader
-
-    :param parameter: config
-    :type parameter: dictionary
-
-    :return result: represented vectors
-    :rtype result: np.array
+    Args:
+        model (model): model 
+        dataloader (DataLoader): dataloader for inference
+        parameter (dictionary): config
+        
+    Returns:
+        np.array: result - represented vectors
     
     """
     device = parameter['device']

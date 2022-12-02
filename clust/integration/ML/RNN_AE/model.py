@@ -4,14 +4,12 @@ import torch.nn as nn
 
 class Encoder(nn.Module):
     """
-    :param n_features: input dimension (number of variables) 
-    :type n_features: int
-
-    :param embedding_dim: embedding dimension (number of new variables)
-    :type embedding_dim: int
-    
-    :return x: embedded vectors
-    :rtype x: Tensor
+    Args:
+        n_features (int): input dimension (number of variables) 
+        embedding_dim (int): embedding dimension (number of new variables) 
+        
+    Returns:
+        Tensor: x - embedded vectors
     
     """
     def __init__(self, n_features, embedding_dim=64):
@@ -33,6 +31,9 @@ class Encoder(nn.Module):
         )
 
     def forward(self, x):
+        """
+
+        """
         x, _ = self.rnn1(x)
         x, _ = self.rnn2(x)
         return x
@@ -40,14 +41,12 @@ class Encoder(nn.Module):
 
 class Decoder(nn.Module):
     """
-    :param n_features: input dimension 
-    :type n_features: int
-
-    :param output_dim: output dimension (same as number of variables)
-    :type output_dim: int
-    
-    :return x: reconstructed data
-    :rtype x: Tensor
+    Args:
+        n_features (int): input dimension (number of variables) 
+        output_dim (int): output dimension (same as number of variables)
+        
+    Returns:
+        Tensor: x - reconstructed vectors
     
     """
     def __init__(self, n_features, output_dim):
@@ -70,6 +69,9 @@ class Decoder(nn.Module):
         self.output_layer = nn.Linear(self.hidden_dim, self.output_dim)
 
     def forward(self, x):
+        """
+
+        """
         x, _ = self.rnn1(x)
         x, _ = self.rnn2(x)
         x = self.output_layer(x)
@@ -78,14 +80,12 @@ class Decoder(nn.Module):
 
 class RecurrentAutoencoder(nn.Module):
     """
-    :param n_features: input dimension (number of variables) 
-    :type n_features: int
-
-    :param embedding_dim: embedding dimension (number of new variables)
-    :type embedding_dim: int
-    
-    :return x: reconstructed data
-    :rtype x: Tensor
+    Args:
+        n_features (int): input dimension (number of variables) 
+        embedding_dim (int): embedding dimension (number of new variables)
+        
+    Returns:
+        Tensor: x - reconstructed vectors
     
     """
     def __init__(self, n_features, embedding_dim=64):
@@ -94,6 +94,9 @@ class RecurrentAutoencoder(nn.Module):
         self.decoder = Decoder(embedding_dim, n_features)
     
     def forward(self, x):
+        """
+
+        """
         x = self.encoder(x)
         x = self.decoder(x)
         return x

@@ -10,62 +10,64 @@ from functools import reduce
 
 class PartialData():
     def __init__(self, partial_data_set, integration_duration):
+        """ 
+        This function makes several metadata based on multiple functions
+
+        Args:
+            partial_data_set (DataFrameCollection): multiple input dataSet
+
+        Returns:
+            json: column_meta
         
-        """ This function makes several metadata based on multiple functions
-        
-        :param  partial_data_set: multiple input dataSet
-        :type data: DataFrameCollection
-        
-        :return: column_meta
-        :rtype: json
-        
-        example
+        Example:
+
             >>> partial_data_set ={0: pd.DataFrame, 1: pd.DataFrame, 2:pd.DataFrame}
             >>> from clust.integration.meta import partialDataInfo
             >>> partial_data_info = partialDataInfo.PartialData(partial_data_set)
-            partial_data_info.column_meta = {
-                "overlap_duration": {
-                    "start_time": Timestamp("2018-01-01 00:00:00"),
-                    "end_time": Timestamp("2018-01-01 23:55:00"),
-                },
-                "column_characteristics": {
-                    "data0": {
-                        "column_name": "data0",
-                        "column_frequency": Timedelta("0 days 00:10:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous"
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean"
-                    },
-                    "data1": {
-                        "column_name": "data1",
-                        "column_frequency": Timedelta("0 days 00:07:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous"
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean"
-                    },
-                    "data2": {
-                        "column_name": "data2",
-                        "column_frequency": Timedelta("0 days 00:03:00"),
-                        "column_type": dtype("int64"),
-                        "occurence_time": "Continuous",
 
-                        "upsampling_method": "mean",
-                        "downsampling_method": "mean"
+            >>> partial_data_info.column_meta = {
+            ...    "overlap_duration": {
+            ...     "start_time": Timestamp("2018-01-01 00:00:00"),
+            ...     "end_time": Timestamp("2018-01-01 23:55:00"),
+            ... },
+            ... "column_characteristics": {
+            ...     "data0": {
+            ...         "column_name": "data0",
+            ...         "column_frequency": Timedelta("0 days 00:10:00"),
+            ...         "column_type": dtype("int64"),
+            ...         "occurence_time": "Continuous"
+            ...         "upsampling_method": "mean",
+            ...         "downsampling_method": "mean"
+            ...     },
+            ...     "data1": {
+            ...         "column_name": "data1",
+            ...         "column_frequency": Timedelta("0 days 00:07:00"),
+            ...         "column_type": dtype("int64"),
+            ...         "occurence_time": "Continuous"
+            ...         "upsampling_method": "mean",
+            ...         "downsampling_method": "mean"
+            ...     },
+            ...     "data2": {
+            ...         "column_name": "data2",
+            ...         "column_frequency": Timedelta("0 days 00:03:00"),
+            ...         "column_type": dtype("int64"),
+            ...         "occurence_time": "Continuous",
+            ...         "upsampling_method": "mean",
+            ...         "downsampling_method": "mean"
+            ...     },
+            ...   },
+            ... }
 
-                    },
-                },
-            }
-            partial_data_info.partial_frequency_info = {'frequency_list': [600.0, 420.0, 180.0],
-                'min_frequency': 180.0,
-                'max_frequency': 600.0,
-                'frequency_is_same': False,
-                'average_frequency': 400.0,
-                'median_frequency': 420.0,
-                'GCD': 60.0,
-                'GCDs': '60S'}
-            partial_data_info.integrated_data_type = AllNumeric
+            >>> partial_data_info.partial_frequency_info = {'frequency_list': [600.0, 420.0, 180.0],
+            ... 'min_frequency': 180.0,
+            ... 'max_frequency': 600.0,
+            ... 'frequency_is_same': False,
+            ... 'average_frequency': 400.0,
+            ... 'median_frequency': 420.0,
+            ... 'GCD': 60.0,
+            ... 'GCDs': '60S'}
+            ... partial_data_info.integrated_data_type = AllNumeric
+
         """
         self.freq_check_length= 3
         self.partial_data_set = partial_data_set

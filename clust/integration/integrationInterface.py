@@ -25,72 +25,69 @@ class IntegrationInterface():
         1. intDataInfo 에 따라 InfluxDB로 부터 데이터를 읽어와 DataSet을 생성함
         2. multipleDatasetsIntegration 함수를 이용하여 결합된 데이터셋 재생성
 
-        :param  intDataInfo: 병합하고 싶은 데이터의 정보로 DB Name, Measuremen Name, Start Time, End Time를 기입
-        :type intDataInfo: json
+        Args:
+            intDataInfo (json): 병합하고 싶은 데이터의 정보로 DB Name, Measuremen Name, Start Time, End Time를 기입
+            process_param (json): Refine Frequency를 하기 위한 Preprocessing Parameter
+            integration_param (json): Integration을 위한 method, transformParam이 담긴 Parameter
             
-        :param  process_param: Refine Frequency를 하기 위한 Preprocessing Parameter
-        :type process_param: json
-        
-        :param  integration_param: Integration을 위한 method, transformParam이 담긴 Parameter
-        :type integration_param: json
-
         Example:
 
         >>> intDataInfo = { "db_info":[ 
-                {"db_name":"farm_inner_air", "measurement":"HS1", "start":start_time, "end":end_time},
-                {"db_name":"farm_outdoor_weather_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
-                {"db_name":"farm_outdoor_air_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
-            ]} 
+        ...     {"db_name":"farm_inner_air", "measurement":"HS1", "start":start_time, "end":end_time},
+        ...     {"db_name":"farm_outdoor_weather_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
+        ...     {"db_name":"farm_outdoor_air_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
+        ... ]} 
 
         >>> process_param 
-            refine_param = {
-                "removeDuplication":{"flag":True},
-                "staticFrequency":{"flag":True, "frequency":None}
-            }
-            CertainParam= {'flag': True}
-            uncertainParam= {'flag': False, "param":{
-                    "outlierDetectorConfig":[
-                            {'algorithm': 'IQR', 'percentile':99 ,'alg_parameter': {'weight':100}}    
-            ]}}
-            outlier_param ={
-                "certainErrorToNaN":CertainParam, 
-                "unCertainErrorToNaN":uncertainParam
-            }
-            imputation_param = {
-                "flag":False,
-                "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
-                "totalNonNanRatio":80
-            }
-            process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
+        ... refine_param = {
+        ...     "removeDuplication":{"flag":True},
+        ...     "staticFrequency":{"flag":True, "frequency":None}
+        ... }
+        ... CertainParam= {'flag': True}
+        ... uncertainParam= {'flag': False, "param":{
+        ...         "outlierDetectorConfig":[
+        ...                 {'algorithm': 'IQR', 'percentile':99 ,'alg_parameter': {'weight':100}}    
+        ... ]}}
+        ... outlier_param ={
+        ...     "certainErrorToNaN":CertainParam, 
+        ...     "unCertainErrorToNaN":uncertainParam
+        ... }
+        ... imputation_param = {
+        ...     "flag":False,
+        ...     "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
+        ...     "totalNonNanRatio":80
+        ... }
+        ... process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
         >>> integrationFreq_min= 30
-        >>> integration_freq_sec = 60 * integrationFreq_min# 분
+        >>> integration_freq_sec = 60 * integrationFreq_min # 분
 
         >>> MLIntegrationParamExample = {
-                "integration_duration":"total" ["total" or "common"],
-                "integration_frequency":"",
-                "param":{
-                                "model": 'RNN_AE',
-                                "model_parameter": {
-                                    "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
-                                    "emb_dim": 5, # 변환할 데이터의 차원, int(범위: 16~256)
-                                    "num_epochs": 50, # 학습 epoch 횟수, int(범위: 1 이상, 수렴 여부 확인 후 적합하게 설정)
-                                    "batch_size": 128, # batch 크기, int(범위: 1 이상, 컴퓨터 사양에 적합하게 설정)
-                                    "learning_rate": 0.0001, # learning rate, float(default: 0.0001, 범위: 0.1 이하)
-                                    "device": 'cpu' # 학습 환경, ["cuda", "cpu"] 중 선택
-                                }
-                            },
-                "method":"ML" #["ML", "meta", "simple]
-            }
+        ...     "integration_duration":"total" ["total" or "common"],
+        ...     "integration_frequency":"",
+        ...     "param":{
+        ...                     "model": 'RNN_AE',
+        ...                     "model_parameter": {
+        ...                         "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
+        ...                         "emb_dim": 5, # 변환할 데이터의 차원, int(범위: 16~256)
+        ...                         "num_epochs": 50, # 학습 epoch 횟수, int(범위: 1 이상, 수렴 여부 확인 후 적합하게 설정)
+        ...                         "batch_size": 128, # batch 크기, int(범위: 1 이상, 컴퓨터 사양에 적합하게 설정)
+        ...                         "learning_rate": 0.0001, # learning rate, float(default: 0.0001, 범위: 0.1 이하)
+        ...                         "device": 'cpu' # 학습 환경, ["cuda", "cpu"] 중 선택
+        ...                     }
+        ...                 },
+        ...     "method":"ML" #["ML", "meta", "simple]
+        ... }
+
         >>> metaIntegrationParamExample = {
-                "integration_duration":"total" ["total" or "common"],
-                "integration_frequency":integration_freq_sec,
-                "param":{},
-                "method":"meta"
-            }
+        ...     "integration_duration":"total" ["total" or "common"],
+        ...     "integration_frequency":integration_freq_sec,
+        ...     "param":{},
+        ...     "method":"meta"
+        ... }
                 
-        :return: integrated_data
-        :rtype: DataFrame    
+        Returns:
+            DataFrame: integrated_data  
         
         """
         ## multiple dataset
@@ -103,21 +100,19 @@ class IntegrationInterface():
     def multipleDatasetsIntegration(self, process_param, integration_param, multiple_dataset):
         """ 
         dataSet과 Parameter에 따라 데이터를 병합하는 함수
-            
-        :param  process_param: Refine Frequency를 하기 위한 Preprocessing Parameter
-        :type process_param: json
-        
-        :param  integration_param: Integration을 위한 method, transformParam이 담긴 Parameter
-        :type integration_param: json
-
-        :return: integrated_data
-        :rtype: DataFrame    
 
         1. 각 데이터셋이서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
         2. 명확하게 정합 주기 값이 입력 없을 경우 최소공배수 주기를 설정함
         3. 각 데이터들에 대한 Preprocessing  
         4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
 
+        Args:
+            process_param (json): Refine Frequency를 하기 위한 Preprocessing Parameter
+            integration_param (json): Integration을 위한 method, transformParam이 담긴 Parameter
+            
+        Returns:
+            DataFrame: integrated_data
+    
         """
 
         integration_duration = integration_param["integration_duration"]
@@ -156,18 +151,18 @@ class IntegrationInterface():
         ML을 활용한 데이터 병합 함수
         1. 병합한 데이터에 RNN_AE 를 활용해 변환된 데이터를 반환
 
-        :param  data_set: 병합하고 싶은 데이터들의 셋
-        :type intDataInfo: json
-            
-        :param  transform_param: RNN_AE를 하기 위한 Parameter
-        :type process_param: json
+        Args:
+            data_set (json): 병합하고 싶은 데이터들의 셋
+            transform_param (json): RNN_AE를 하기 위한 Parameter
+            overlap_duration (json): 병합하고 싶은 데이터들의 공통 시간 구간
 
-        :param  overlap_duration: 병합하고 싶은 데이터들의 공통 시간 구간
-        :type integration_param: json
-        >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 'end_time': Timestamp('2018-01-05 00:00:00')}
+        Example:
+
+        >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 
+        ...                     'end_time': Timestamp('2018-01-05 00:00:00')}
                 
-        :return: integrated_data by transform
-        :rtype: DataFrame    
+        Returns:
+            DataFrame: integrated_data by transform
         """
         
         ## simple integration
@@ -188,17 +183,13 @@ class IntegrationInterface():
         """ 
         Meta(column characteristics)을 활용한 데이터 병합 함수
 
-        :param  data_set: 병합하고 싶은 데이터들의 셋
-        :type intDataInfo: json
+        Args:
+            data_set (json): 병합하고 싶은 데이터들의 셋
+            integration_freq_sec (json): 조정하고 싶은 second 단위의 Frequency
+            partial_data_info (json): column characteristics의 info
             
-        :param  integration_freq_sec: 조정하고 싶은 second 단위의 Frequency
-        :type process_param: json
-        
-        :param  partial_data_info: column characteristics의 info
-        :type integration_param: json
-      
-        :return: integrated_data
-        :rtype: DataFrame    
+        Returns:
+            DataFrame: integrated_data   
         """
         ## Integration
         data_it = data_integration.DataIntegration(data_set)
@@ -212,17 +203,13 @@ class IntegrationInterface():
         """ 
         Simple한 병합
 
-        :param  data_set: 병합하고 싶은 데이터들의 셋
-        :type intDataInfo: json
-
-        :param  integration_freq_sec: 조정하고 싶은 second 단위의 Frequency
-        :type process_param: json
+        Args:
+            data_set (json): 병합하고 싶은 데이터들의 셋
+            integration_freq_sec (json): 조정하고 싶은 second 단위의 Frequency
+            overlap_duration (json): 조정하고 싶은 second 단위의 Frequency
             
-        :param  overlap_duration: 조정하고 싶은 second 단위의 Frequency
-        :type overlap_duration: json
-      
-        :return: integrated_data
-        :rtype: DataFrame    
+        Returns:
+            DataFrame: integrated_data
         """
         ## simple integration
         re_frequency = datetime.timedelta(seconds= integration_freq_sec)

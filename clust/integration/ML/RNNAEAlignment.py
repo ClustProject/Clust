@@ -12,15 +12,17 @@ def RNN_AE(dataset, parameter):
     """
     RAE 모델을 기반으로 새롭게 도출된 변수로 align 된 데이터를 dataFrame 형태로 반환하는 함수
 
-    :param dataset: overlap Data with [maximum MinIndex : minimum MaxIndex]
-    :type dataset: dataFrame
+    Args:
+        dataset (dataFrame): overlap Data with [maximum MinIndex : minimum MaxIndex] 
+        parameter (dictionary): config for RNN_AE model
+        
+    Returns:
+        dataFrame: concat & aligned dataset
+
+    Note
+    -----------
+    shape: [x1과 x2의 공통 수집 기간 중 주기가 짧은 데이터의 시간 index 개수 - window_size, emb_dim]
     
-    :param parameter: config for RNN_AE model
-    :type parameter: dictionary
-    
-    :return : concat & aligned dataset
-    :rtype: dataFrame
-    :shape: [x1과 x2의 공통 수집 기간 중 주기가 짧은 데이터의 시간 index 개수 - window_size, emb_dim]
     """
     n_features = len(dataset.columns)
     sliding_size = parameter["sliding_size"]
@@ -55,17 +57,13 @@ def get_loaders(data, window_size, batch_size, sliding_size):
     """
     전체 시계열 데이터를 기반으로 window_size 크기의 time window를 생성하고 이에 대한 dataloader를 구축하는 함수
     
-    :param data: overlap Data with [maximum MinIndex : minimum MaxIndex]
-    :type data: dataFrame
-    
-    :param window_size: input length
-    :type window_size: int
-    
-    :param batch_size: batch size
-    :type batch_size: int
-    
-    :return: dataloaders for training and inference
-    :rtype: DataLoader
+    Args:
+        data (dataFrame): overlap Data with [maximum MinIndex : minimum MaxIndex] 
+        window_size (int): input length
+        batch_size (int): batch size
+        
+    Returns:
+        DataLoader: dataloaders for training and inference
     
     """
     # numpy array 형태로 변환
@@ -89,14 +87,12 @@ def getOverlapData(x1, x2):
     시간 index는 수집 주기가 짧은 데이터를 기준으로 정렬됨
     수집 주기가 긴 데이터의 missing value는 np.nan 값으로 표기됨
 
-    :param x1: the first dataframe input
-    :type x1: dataFrame
-
-    :param x1: the second dataframe input
-    :type x2: dataFrame
-
-    :return: overlap Data with [maximum MinIndex : minimum MaxIndex]
-    :rtype: dataFrame
+    Args:
+        x1 (dataFrame): the first dataframe input
+        x2 (dataFrame): the second dataframe input
+        
+    Returns:
+        dataFrame: data_concat - overlap Data with [maximum MinIndex : minimum MaxIndex]
     """
     # check each min-max range
     v1_min = x1.index.min()
