@@ -66,6 +66,7 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = []
 
+napoleon_include_private_with_doc = True
 
 
 # -- Options for HTML output -------------------------------------------------

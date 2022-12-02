@@ -106,11 +106,6 @@ class PartialData():
         return column_list
      
     def _get_partial_data_frequency_info(self):
-        """
-
-            napoleon_include_private_with_doc = True
-            
-        """
         
         partialFreqList=[]
         data_length = len(self.partial_data_set)
