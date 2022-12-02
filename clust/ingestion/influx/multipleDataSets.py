@@ -16,8 +16,8 @@ def get_all_msdata_in_bucket_list(bucket_list, db_client, start_time, end_time, 
     dataSet={}
     for idx, bucket_name in enumerate(bucket_list):
         # data exploration start
-        print(bucket_name)
         dataSet_indi = get_all_msdata_in_bucket(start_time, end_time, db_client, bucket_name)
+        print(bucket_name, " length:", len(dataSet_indi) )
         if new_bucket_list:
             new_bucket_name = new_bucket_list[idx]
         dataSet_indi = {f'{k}_{new_bucket_name}': v for k, v in dataSet_indi.items()}
