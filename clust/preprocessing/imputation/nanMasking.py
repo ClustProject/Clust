@@ -3,16 +3,17 @@ import numpy as np
 def getConsecutiveNaNInfoOvermaxNaNNumLimit(data, maxNaNNumLimit):
     """ This function get NaN data distribution information related to especially consecutive NaN.
 
-        :param data: input_data
-        :type data: DataFrame
-        :param maxNaNNumLimit: max limit number
-        :type maxNaNNumLimit: int
+    Args:
+        data (DataFrame): input data
+        maxNaNNumLimit (int): max limit number
+
+    Returns:
+        json: {['feature_name':[related nan time stamps]],}
         
-        :return: json = {['feature_name':[related nan time stamps]],}
-        :rtype: json
-        
-        example
-            >>> output = getConsecutiveNaNInfoOvermaxNaNNumLimit(data, 10):
+    Example:
+
+        >>> output = getConsecutiveNaNInfoOvermaxNaNNumLimit(data, 10):
+
     """
 
     a = data.index
@@ -32,18 +33,18 @@ def getConsecutiveNaNInfoOvermaxNaNNumLimit(data, maxNaNNumLimit):
 def setNaNSpecificDuration(data, NaNInfoOverThresh, maxNaNNumLimit):
     """ This function get NaN data distribution information related to especially consecutive NaN
 
-        :param data: input_data
-        :type data: DataFrame
-        :param NaNInfoOverThresh: Array containing nan data information of each feature {['feature_name':[related nan time stamps]],}
-        :type NaNInfoOverThresh: json
-        :param maxNaNNumLimit: max limit number
-        :type maxNaNNumLimit: int
-        
-        :return: New dataFrame masked with NaN values according to maxNaNNumLimit
-        :rtype: DataFrame
-        
-        example
-            >>> output = setNaNSpecificDuration(data, maxNaNNumLimit, 10):
+    Args:
+        data (DataFrame): input data
+        NaNInfoOverThresh (json): Array containing nan data information of each feature {['feature_name':[related nan time stamps]],}
+        maxNaNNumLimit (int): max limit number
+
+    Returns:
+        DataFrame: New dataFrame masked with NaN values according to maxNaNNumLimit
+    
+    Example:
+
+        >>> output = setNaNSpecificDuration(data, maxNaNNumLimit, 10):
+
     """
     result = data.copy()
     for column_name in data.columns:

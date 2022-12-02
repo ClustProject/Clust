@@ -16,15 +16,15 @@ class DataOutlier():
     """
     def __init__(self, raw_data):
         """
-        :param raw_data: train data whose shape is (num_index x num_variable)
-        :type raw_data: dataframe
-
         AlgorithmList =[ 'IF', 'KDE', 'LOF', 'MoG', 'SR']
         # 1. Isolation Forest (IF)
         # 2. Kernel density estimation (KDE) 
         # 3. LOF:Local Outlier Factor (LOF)
         # 4. Mixture of Gaussian (MoG)
         # 5. SR: Spectral Residual(SR)
+
+        Args:
+            raw_data (DataFrame): train data whose shape is (num_index x num_variable)
 
         """
         self.AlgParameter = {
@@ -66,8 +66,9 @@ class DataOutlier():
         - Get refined data (same frequency, no redundency)
         - optional function for not cleaned data
 
-        :return index_list: indices of detected outliers
-        :type: json
+        Returns:
+            json: index_list - indices of detected outliers
+
         """ 
         refine_param = {
             "removeDuplication":{"flag":True},
@@ -82,18 +83,18 @@ class DataOutlier():
         1. Get self.originNaNIndex =  NaN data index before imputation
         2. Get imputed data before outlier detection
 
-        :param imputation_param: Parameter for imputation
-        :type imputation_param: json
+        Args:
+            imputation_param (json): Parameter for imputation
+            
+        Returns:
+            json: index_list - indices of detected outliers
 
-        :return index_list: indices of detected outliers
-        :type: json
+        Example:
 
-        '''   example
-         imputation_param = {
-                "flag":True,
-                "imputation_method":[{"min":0,"max":1000000,"method":"linear", "parameter":{}}
-                ],"totalNonNanRatio":0}
-        '''
+            >>> imputation_param = {
+            ...     "flag":True,
+            ...     "imputation_method":[{"min":0,"max":1000000,"method":"linear", "parameter":{}}
+            ...     ],"totalNonNanRatio":0}
 
         """ 
         self.originNaNIndex = getNaNIndex(self.data)
@@ -109,30 +110,28 @@ class DataOutlier():
     ### Outlier Detector
     def getOneDetectionResult(self, data, config):
         """    
-        :param data: data for outlier Detetcion
-        :type data: dataFrame
+        Args:
+            data (dataFrame): data for outlier Detetcion
+            config (dictionary): config
+            percentile (integer/float): 예측시 활용되는 outlier 임계값
 
-        :param config: config 
-        :type config: dictionary
+        Example:
 
-        :param percentile: # 예측시 활용되는 outlier 임계값
-        :type percentile: integer/float
-
-        :return index_list: indices of detected outliers
-        :type: json
-
-        example
             >>> config = { 
-                    'algorithm': 'IF', # outlier detection에 활용할 알고리즘 정의, {'SR', 'LOF', 'MoG', 'KDE', 'IF'} 중 택 1            
-                    'alg_parameter': AlgParameter['IF']      # option
-                }
+            ...     'algorithm': 'IF', # outlier detection에 활용할 알고리즘 정의, {'SR', 'LOF', 'MoG', 'KDE', 'IF'} 중 택 1            
+            ...     'alg_parameter': AlgParameter['IF']      # option
+            ... }
             >>> data_outlier = mod.DataOutlier(raw_data)
             >>> replaced_data, index_list = data_outlier.getOneDetectionResult(config, 95)
 
-        # Output Example
-        ``` json
-        {'in_co2': array([  324,  1229,  1230, ..., 50274, 50275, 50276])}
-        ```
+        Returns:
+            json: index_list - indices of detected outliers
+
+        Output Example:
+
+        >>> json = {'in_co2': 
+        ...         array([  324,  1229,  1230, ..., 50274, 50275, 50276])}
+        
         """
         self.percentile = config['percentile']
         self.algorithm = config['algorithm']
@@ -157,11 +156,11 @@ class DataOutlier():
     
     def getModel(self, data_col):
         """
-        :param data_col: data for each column
-        :type: np.array
-        
-        :return model: fitted model of selected outlier detection algorithm
-        :type: model
+        Args:
+            data_col (np.array): data for each column
+            
+        Returns:
+            model: model - fitted model of selected outlier detection algorithm
         
         """
         if self.algorithm == 'SR':
@@ -187,14 +186,12 @@ class DataOutlier():
     
     def getIndexList(self, data_col, model):
         """
-        :param data_col: data for each column
-        :type: np.array
-        
-        :param model: fitted model of selected outlier detection algorithm
-        :type: model
-        
-        :return indexes: indices of detected outliers
-        :type: list
+        Args:
+            data_col (np.array): data for each column
+            model (model): fitted model of selected outlier detection algorithm
+            
+        Returns:
+            list: indexes - indices of detected outliers
         
         """
         if self.algorithm == 'SR':
@@ -208,14 +205,10 @@ class DataOutlier():
     
 def showResult(data, result, outlierIndex):
     """
-    :param data: data for each column
-    :type: np.array
-    
-    :param result: fitted model of selected outlier detection algorithm
-    :type: model
-
-    :param outlierIndex: fitted model of selected outlier detection algorithm
-    :type: model
+    Args:
+        data_col (np.array): data for each column
+        model (model): fitted model of selected outlier detection algorithm
+        indexes (list): indices of detected outliers
 
     """
     import matplotlib.pyplot as plt
@@ -230,14 +223,12 @@ def showResult(data, result, outlierIndex):
 
 def getMoreNaNDataByNaNIndex(data, NaNIndex):
     """
-    :param data_col: data
-    :type: dataFrame
-
-    :param NaNIndex: NaNIndex
-    :type: dictionary
-    
-    :return NaNData: data with NaN according to the NaNIndex
-    :type: dataFrame
+    Args:
+        data_col (DataFrame): data
+        NaNIndex (Dictionary): NaNIndex
+        
+    Returns:
+        DataFrame: NaNData - data with NaN according to the NaNIndex
     """
     NaNData = data.copy()
     for column in data.columns:
@@ -248,11 +239,11 @@ def getMoreNaNDataByNaNIndex(data, NaNIndex):
 
 def getNaNIndex(data):
     """
-    :param data_col: data
-    :type: dataFrame
-    
-    :return NaNIndex: NaN Index of data
-    :type: dictionary
+    Args:
+        data_col (DataFrame): data
+        
+    Returns:
+        Dictionary: NaNIndex - NaN Index of data
     """
 
     NaNIndex={}

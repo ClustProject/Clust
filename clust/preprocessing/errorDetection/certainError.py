@@ -1,14 +1,15 @@
-
 import numpy as np
 import pandas as pd
 
 class CertainErrorRemove():
-    '''Let Certain Outlier from DataFrame Data to NaN. This function makes more Nan according to the data status.
+    """
+    Let Certain Outlier from DataFrame Data to NaN. 
+    This function makes more Nan according to the data status.
     
     **Data Preprocessing Modules**::
 
             ``Sensor Min Max Check``, ``Remove no numeric data``
-    '''
+    """
     def __init__(self, data, min_max_limit, anomal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] ):
         # TODO JW min_max 통과하는 모듈도 업그레이드 해야함
         self.anomal_value_list = anomal_value_list
@@ -27,21 +28,23 @@ class CertainErrorRemove():
         return data_out
         
     def _out_of_range_error_remove (self, data, min_max_limit):
-        """ Remove out-of-range errors and outliers. change error values to NaN
+        """
+        Remove out-of-range errors and outliers. change error values to NaN
 
-        :param data: input data
-        :type data: DataFrame 
-        :param min_max_limit: min_max_limit information
-        :type min_max_limit: json
-
-        :return: New Dataframe having more (or same) NaN
-        :rtype: DataFrame
+        Args:
+            data (DataFrame): input data
+            x2min_max_limit(json): min_max_limit information
+            
+        Returns:
+            DataFrame: New Dataframe having more (or same) NaN
 
         **Two Outlier Detection Modules**::
+            
             - remove _out_of_range_error
             - Delete Out of range error
         
-        example
+        Example:
+
             >>> output = CertainErrorRemove().getDataWitoutcertainError(daata, min_max_limit)     
         """
 
@@ -65,17 +68,18 @@ class CertainErrorRemove():
         return data_out
 
     def _anomal_value_remove(self, data, anomal_value_list):
-        """ Remove out-of-range errors. change error values to NaN
+        """
+        Remove out-of-range errors. change error values to NaN
 
-        :param data: input data
-        :type data: DataFrame 
-        :param min_max_limit: min_max_limit information
-        :type min_max_limit: json
+        Args:
+            data (DataFrame): input data
+            x2min_max_limit(json): min_max_limit information
+            
+        Returns:
+            DataFrame: New Dataframe having more (or same) NaN
         
-        :return: New Dataframe having more (or same) NaN
-        :rtype: DataFrame
-        
-        example
+        Example:
+
             >>> output = CertainErrorRemove().remove_out_of_range_error(data, min_max_limit)     
         """
 

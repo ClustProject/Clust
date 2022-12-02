@@ -1,11 +1,13 @@
 from Clust.clust.preprocessing.errorDetection import dataOutlier
 import numpy as np
 class unCertainErrorRemove():
-    '''Let UnCertain Outlier from DataFrame Data to NaN. This function makes more Nan according to the data status.
+    '''
+    Let UnCertain Outlier from DataFrame Data to NaN. This function makes more Nan according to the data status.
     
     **Data Preprocessing Modules**::
 
             neighbor_error_detected_data
+
     '''
     def __init__(self, data, param):
   
@@ -15,8 +17,8 @@ class unCertainErrorRemove():
     
     def getNoiseIndex(self):
         """    
-        :return result: Noise Index
-        :type: json
+        Returns:
+            json: result - Noise Index
 
         self.outlierIndex
         self.mergedOutlierIndex
@@ -46,11 +48,11 @@ class unCertainErrorRemove():
 
     def getIntersectionIndex(self, outlierIndex):
         """    
-        :param outlierIndex: Noise Index
-        :type outlierIndex: json
-
-        :return intersectionIndex: Intersection index by each noise index key
-        :type: list
+        Args:
+            outlierIndex (json): Noise Index
+            
+        Returns:
+            list: intersectionIndex - Intersection index by each noise index key
         """
         first_key= list(outlierIndex.keys())[0]
         intersectionIndex = outlierIndex[first_key]
@@ -60,11 +62,11 @@ class unCertainErrorRemove():
 
     def getOutlierIndexByIQR(self, param):
         """    
-        :param param: having 'weight' parameter. weight is IQR duration adjustment parameter.
-        :type weight: json
-
-        :return outlier_index: Intersection index by each noise index key
-        :type: list
+        Args:
+            param (json): having 'weight' parameter. weight is IQR duration adjustment parameter.
+            
+        Returns:
+            list: outlier_index - Intersection index by each noise index key
         """
         df = self.data.copy()
         weight = param['alg_parameter']['weight']
@@ -89,11 +91,16 @@ class unCertainErrorRemove():
 
     def getOutlierIndexBySeasonalDecomposition(self, outlierDetectorConfig):
         """    
-        :param outlierDetectorConfig: have period and limit information ex> {"period":60*24, "limit":10}
-        :type outlierDetectorConfig: json
+        Args:
+            outlierDetectorConfig (json): have period and limit information
 
-        :return outlier_index: Intersection index by each noise index key
-        :type: list
+        Example:
+
+            >>> {"period":60*24, "limit":10}
+
+        Returns:
+            list: outlier_index - Intersection index by each noise index key
+
         """
 
         period = outlierDetectorConfig['period']
@@ -119,11 +126,11 @@ class unCertainErrorRemove():
 
     def getDataWithoutUncertainError(self, outlierIndex):
         """    
-        :param outlierIndex: Noise Index
-        :type outlierIndex: json
-
-        :return outlierIndex: noise index of each column
-        :type: json
+        Args:
+            outlierIndex (json): Noise Index
+            
+        Returns:
+            json: outlier_index - noise index of each column
         """
 
         result = dataOutlier.getMoreNaNDataByNaNIndex(self.data, outlierIndex)
@@ -131,17 +138,19 @@ class unCertainErrorRemove():
 
     def getOutlierIndexByMLOutlierDetector(self, outlierDetectorConfig):
         """    
-        :param outlierDetectorConfig: Config for outlier detection
-        :type outlierDetectorConfig: json
+        Args:
+            outlierDetectorConfig (json): Config for outlier detection
+            
+        Returns:
+            json: outlierIndex - noise index of each column
 
-        :return outlierIndex: noise index of each column
-        :type: json
+        Example:
 
-        Example
-        >>> percentile = 99
-        >>> AlgorithmList =[ 'IF', 'KDE', 'LOF', 'MoG', 'SR']
-        >>> algorithm = AlgorithmList[2]
-        >>> config= {'algorithm': algorithm, 'percentile':percentile}#,'alg_parameter': Parameter[algorithm]
+            >>> percentile = 99
+            >>> AlgorithmList =[ 'IF', 'KDE', 'LOF', 'MoG', 'SR']
+            >>> algorithm = AlgorithmList[2]
+            >>> config= {'algorithm': algorithm, 'percentile':percentile}#,'alg_parameter': Parameter[algorithm]
+
         """
         
         data_outlier = dataOutlier.DataOutlier(self.data)
