@@ -1,28 +1,23 @@
-
 from sklearn.cluster import DBSCAN
 import pandas as pd
 def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
     """ 
-    
     Clustering
 
-    :param data: input data
-    :type data: DataFrame 
+    Args:
+        data (DataFrame): input data
+        minPts (integer): minimum points for clusting(3)
+        method (string): Clustering Method(["DBSCAN"])
 
-    :param minPts: minimum points for clusting
-    :type minPts: integer
+    Returns:
+        array of integer: clustering result
 
-    :param method: Clustering Method
-    :type method: string ["DBSCAN"]
-
-    :return: result : clustering result
-    :rtype: array of integer 
-
-    example
+    Example:
         >>> inputData = data
         >>> minPts = 10
         >>> result = pd.DataFrame() 
         >>> result['predict'] = ClusteringByMinPoints.Clustering(inputData, minPts, "DBSCAN")
+
     """
 
     if method =="DBSCAN":
@@ -31,8 +26,8 @@ def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
     return result
 
 def clusteringByMethod(feature_dataset: [pd.DataFrame], feature_datasetName:[str], model:int, x:int=None, y:int=None):
-    
-    """ make clustering result of multiple dataset bu clustering model name
+    """ 
+    make clustering result of multiple dataset bu clustering model name
 
     Retrieves rows pertaining to the given keys from the Table instance
     represented by table_handle.  String keys will be UTF-8 encoded.
@@ -45,12 +40,15 @@ def clusteringByMethod(feature_dataset: [pd.DataFrame], feature_datasetName:[str
         y: y length
 
     Returns:
-        A dict mapping keys to the corresponding clustering result number. 
-        example:
-        {b'ICW0W2000011': '5',
-         b'ICW0W2000013': '4',
-         b'ICW0W2000014': '6'...
-        }
+        Dictionary: result (A dict mapping keys to the corresponding clustering result number)
+        String: figdata (image)
+        String: figdata2 (image)
+    
+    **Return Result Example**::
+
+        result = { b'ICW0W2000011': '5',
+                   b'ICW0W2000013': '4',
+                   b'ICW0W2000014': '6'... }
     """
 
     result =None

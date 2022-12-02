@@ -15,6 +15,7 @@ class MeanByHoliday():
     def set_holiday_criteria(self, holiday_criteria):
         """
         기본적으로 설정된 휴일의 기준을 변경하는 함수
+        
         Args:
             timestep_criteria (dictionary)): 
                 - "step", "label" 두 개의 key를 갖고 있다.

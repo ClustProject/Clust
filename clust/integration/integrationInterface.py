@@ -34,6 +34,8 @@ class IntegrationInterface():
         :param  integration_param: Integration을 위한 method, transformParam이 담긴 Parameter
         :type integration_param: json
 
+        Example:
+
         >>> intDataInfo = { "db_info":[ 
                 {"db_name":"farm_inner_air", "measurement":"HS1", "start":start_time, "end":end_time},
                 {"db_name":"farm_outdoor_weather_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
@@ -89,6 +91,7 @@ class IntegrationInterface():
                 
         :return: integrated_data
         :rtype: DataFrame    
+        
         """
         ## multiple dataset
         multiple_dataset  = multipleDataSets.get_onlyNumericDataSets(db_client, intDataInfo)
