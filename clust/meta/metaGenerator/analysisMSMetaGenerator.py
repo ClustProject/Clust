@@ -4,8 +4,7 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
 from Clust.clust.meta.metaDataManager import collector
-from Clust.clust.meta.analysisMeta.meanAnalyzer import holiday, timeStep, working
-#from Clust.clust.meta.analysisMeta.simpleAnalyzer import countAnalyzer, statisticsAnalyzer
+from Clust.clust.analysis.timeAnalyzer import mean_by_holiday, mean_by_timeStep, mean_by_working
 from Clust.clust.analysis.statisticAnalyzer.statistics import StatisticsAnalysis
 
 class analysisMSMetaGenerator():
@@ -121,11 +120,11 @@ class analysisMSMetaGenerator():
             if "StatisticsAnalyzer"  == function:
                 result[function] = StatisticsAnalysis(data).get_basic_analysis_result()
             elif "MeanByHoliday" ==function:
-                result[function] = holiday.MeanByHoliday(data).get_result()
+                result[function] = mean_by_holiday.MeanByHoliday(data).get_result()
             elif "MeanByWorking" ==function:
-                result[function] = working.MeanByWorking(data).get_result()
+                result[function] = mean_by_working.MeanByWorking(data).get_result()
             elif "MeanByTimeStep" ==function:
-                result[function] = timeStep.MeanByTimeStep(data).get_result()
+                result[function] = mean_by_timeStep.MeanByTimeStep(data).get_result()
             elif "CountByFeatureLabel" ==function:
                 result[function] = StatisticsAnalysis(data).get_count_by_label_analysis_result(meta)
 
