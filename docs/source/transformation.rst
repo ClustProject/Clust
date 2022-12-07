@@ -4,7 +4,7 @@ Clust: transformation
    :maxdepth: 2
    :caption: Contents:
 
-   transformation/transformation.dataByCycle
+   transformation/transformation.splitDataByCycle
 
    transformation/transformation.entropy
 

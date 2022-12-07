@@ -48,7 +48,7 @@ Clust/
 │       ├── general
 │       ├── purpose
 │       ├── sampling
-│       ├── dataByCycle
+│       ├── splitDataByCycle
 │       └── type
 │
 ├── docs

@@ -7,30 +7,35 @@ from Clust.clust.meta.analysisMeta.basicTool import BasicTool
 
 class StatisticsAnalysis():
     """
-    Analyzer
-    데이터를 통계적 관점에서 분석한 결과 생성
-    데이터를 통계적 관점에서 분석하는 분석기로 2가지 방식이 있음
-        1. Pandas에서 제공하는 기본적인 통계 분석
-        2. 데이터 Feature별 기준 범주 및 라벨에 따른 분포를 분석
+    Generate statistical analysis results. There are 2 types.
+        1. Basic statistical analysis provided by Pandas
+        2. Analyze the distribution according to the criterion category (label) by data column
+    
+    Args:
+        data (dataframe) : Time Series Data
     """
     def __init__(self, data):
         self.data = data
 
     def get_basic_analysis_result(self):
         """
-        Analyze statistical distribution information of data
-
+        Generate the basic statistical analysis results provided by Pandas. 
+        The analysis result is information about the statistical distribution of the data.
+                
         Returns:
-            Dictionary : Analysis Result 
-        
-        
-        
-        데이터의 통계적 분포 정보를 Dictionary로 생성하는 함수
-        
-        데이터의 통계적 분포 정보를 분석
-
-        Returns:
-            데이터의 통계적 분포 정보를 담고 있는 Dictionary
+            Dictionary : Analysis Results
+            
+        Example:
+        >>> AnalysisResult = {'column1': {
+            'count': 1007583.0,
+            'mean': 353.9929951180201,
+            'std': 84.57299647078351,
+            'min': 177.0,
+            '25%': 279.0,
+            '50%': 366.0,
+            '75%': 413.0,
+            'max': 870.0
+            }}
         """
         labels = ["count", "mean", "std", "min", "25%", "50%", "75%", "max"]
         statistics_result_dict = self.data.describe().to_dict()
@@ -39,18 +44,22 @@ class StatisticsAnalysis():
     
     def get_count_by_label_analysis_result(self, base_meta):
         """
-        Analyze statistical distribution information of data
+        Generate analysis results for the distribution according to the criterion category (label) for each data column.
+        Essentially, Label Information must exist in bucket_meta_info of the measurement.
 
         Args:
-            bk_name (string): bucket(databse)
+            base_meta (dictionary): bucket_meta_info of the measurement
 
         Returns:
-            List: measurement list
-        
-        데이터의 Label Information Meta 를 생성하는 함수
+            Dictionary: Anaysis Results
 
-        - 데이터베이스에 Label Information 정보가 있어야 함
-
+        Example:
+        >>> AnalysisResult = {'column1': [
+            {'value': 775053, 'name': '좋음'},
+            {'value': 134025, 'name': '보통'},
+            {'value': 19865, 'name': '나쁨'},
+            {'value': 227, 'name': '매우나쁨'}
+            ]}
         """
         data_cut = pd.DataFrame()
         countbyfeaturelabel_result_dict = {}
