@@ -4,6 +4,7 @@ def save_data(df, file_name):
     """
     - delete old file
     - save DF into CSV file
+    
     Args:
          df(pd.DataFrame): input DF
          file_name(string): file name to be saved

@@ -5,6 +5,7 @@ Clust: ingestion
    :caption: Contents:
 
    ingestion/ingestion.influx
-   ingestion/ingestion.CSVtoInflux
    ingestion/ingestion.mongo
+   ingestion/ingestion.DataToCSV
+   ingestion/ingestion.CSVtoInflux
    

@@ -9,6 +9,7 @@ Clust Documentation
    :maxdepth: 2
    :caption: Contents:
    
+   analysis
    ingestion
    integration
    meta
