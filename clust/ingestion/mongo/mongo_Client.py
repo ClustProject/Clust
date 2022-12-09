@@ -112,6 +112,14 @@ class mongoClient():
         
 
 
+    def update_document(self, db_name, collection_name, document):
+        database = self.DBClient[db_name]
+        collection = database[collection_name]
+
+        collection.update_one({"_id":"aa"}, {"$set":document})
+
+
+        collection.update_many({}, {"$set":document})
 
 
 
