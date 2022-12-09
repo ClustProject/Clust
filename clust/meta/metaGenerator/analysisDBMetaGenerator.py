@@ -24,7 +24,7 @@ class analysisDBMetaGenerator():
 
         >>> labels = {
             "StatisticsAnalyzer" : ["min", "max", "mean"],
-            "MeanByHoliday" : ["holiday", "notHoliday"],
+            "MeanByHoliday" : ["holiday", "notholiday"],
             "MeanByWorking" : ["working", "notWorking"],
             "MeanByTimeStep" : ["dawn", "morning", "afternoon", "evening", "night"]
         }

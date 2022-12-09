@@ -78,7 +78,7 @@ class MeanByHoliday():
         """
         self.data = self.make_holiday_column()
         print(">>>>> make holiday column success <<<<<")
-        meanbyholiday_result_dict = self.data.groupby("HoliDay").mean().to_dict()
+        meanbyholiday_result_dict = self.data.groupby("Holiday").mean().to_dict()
         print(">>>>> holiday groupby success <<<<<")
         meanbyholiday_result_dict = BasicTool.data_none_error_solution(self.labels, meanbyholiday_result_dict)
         
