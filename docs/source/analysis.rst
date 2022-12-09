@@ -4,4 +4,8 @@ Clust : analysis
    :maxdepth: 2
    :caption: Contents:
 
+   analysis/analysis.statisticAnalyzer
+
+   analysis/analysis.timeAnalyzer
+
    analysis/analysis.bucketReport

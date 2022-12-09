@@ -2,17 +2,17 @@ transformation.splitDataByCycle
 =================================
 
 
-transformation.cycle_Module
+transformation.cycleModule
 -----------------------------------------------
-.. automodule:: clust.transformation.splitDataByCycle.cycle_Module
+.. automodule:: clust.transformation.splitDataByCycle.cycleModule
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-transformation.cycleModule
+transformation.dataByCycle
 -------------------------------------------
-.. automodule:: clust.transformation.splitDataByCycle.cycleModule
+.. automodule:: clust.transformation.splitDataByCycle.dataByCycle
    :members:
    :undoc-members:
    :show-inheritance:

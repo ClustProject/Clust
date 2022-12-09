@@ -14,6 +14,7 @@ class mongoClient():
         self.DBClient = pymongo.MongoClient(host=self.mongo_setting["host"], port=self.mongo_setting["port"], username=self.mongo_setting["username"], password=self.mongo_setting["password"], authSource="admin")
 
 
+## ------------------------------ Get Function ------------------------------
     def get_DBList(self):
         """
         Get All Mongo Database List
@@ -22,14 +23,16 @@ class mongoClient():
             List: db_list
         """
         db_list = self.DBClient.list_database_names()
-        db_list.remove('admin')
-        db_list.remove('config')
-        db_list.remove('local')
+
+        db_list = [bk for bk in db_list if bk not in ['admin', 'config', 'local']]
+        # db_list.remove('admin')
+        # db_list.remove('config')
+        # db_list.remove('local')
 
         return db_list
 
 
-    def get_Collection(self, db_name):
+    def get_CollectionList(self, db_name):
         """
         Get All Collection list of specific Database
 
@@ -39,8 +42,8 @@ class mongoClient():
         Returns:
             List: collection list
         """
-        db = self.DBClient.get_database(db_name)
-        collection_list = db.list_collection_names()
+        database = self.DBClient.get_database(db_name)
+        collection_list = database.list_collection_names()
 
         return collection_list
 
@@ -49,26 +52,30 @@ class mongoClient():
         """
         
         """
-        db = self.DBClient.get_database(db_name)
-        cursor = db[collection_name].find()
+        database = self.DBClient.get_database(db_name)
+        cursor = database[collection_name].find()
         document_list = list(cursor)
 
         for cursor_info in document_list:
             del(cursor_info['_id'])
+
+        document_list = loads(dumps(document_list))
 
         return document_list
 
         
-    def get_one_document_by_json(self, db_name, collection_name, search):
+    def get_document_by_json(self, db_name, collection_name, search):
         """
         
         """
-        db = self.DBClient.get_database(db_name)
-        cursor = db[collection_name].find(search)
+        database = self.DBClient.get_database(db_name)
+        cursor = database[collection_name].find(search)
         document_list = list(cursor)
 
         for cursor_info in document_list:
             del(cursor_info['_id'])
+
+        document_list = loads(dumps(document_list))
 
         return document_list     
 
@@ -77,15 +84,15 @@ class mongoClient():
         """
         
         """
-        db = self.DBClient.get_database(db_name)
+        database = self.DBClient.get_database(db_name)
         table_Info = {'table_name': table_name}
-        cursor = db[collection_name].find(table_Info)
+        cursor = database[collection_name].find(table_Info)
         document_list = list(cursor)
 
         for cursor_info in document_list:
             del(cursor_info['_id'])
         
-        # document_list = loads(dumps(document_list[0]))
+        document_list = loads(dumps(document_list))
 
         return document_list
 
@@ -95,6 +102,22 @@ class mongoClient():
 
 
 
+## ------------------------------ Create & Insert Function ------------------------------
+    def insert_document(self, db_name, collection_name, document):
+        database = self.DBClient[db_name]
+        collection = database[collection_name]
+
+        collection.insert_one(document)
+        print("Success")
+        
+
+
+
+
+
+
+
+## ------------------------------ Delete Function ------------------------------
     def delete_database(self, db_name):
         """
         Delete Database
@@ -103,7 +126,7 @@ class mongoClient():
             db_name (string): databse
         """
         self.DBClient.drop_database(db_name)
-        print("mongo database delete success")
+        print("Mongo Database Delete Success")
 
 
     def delete_collection(self, db_name, collection_name):
@@ -117,11 +140,37 @@ class mongoClient():
         """
         database = self.DBClient.get_database(db_name)
         database[collection_name].drop()
-        print("mongo collection delete success")
+        print("Mongo Collection Delete Success")
 
 
+    def delete_document(self, db_name, collection_name, document=None):
+        """
+        Delete Document.
+
+        - document = None: delete all document
+        - document = {...}: delete some({...}) document
+        """
+        database = self.DBClient.get_database(db_name)
+        collection = database[collection_name]
+
+        if document == None:
+            collection.delete_many({})
+            print("Delete All Document Success")
+        else:
+            collection.delete_many(document)
+            print("Delte Some Document Success")    
 
 
+    def delete_one_document(self, db_name, collection_name, document):
+        """
+        Delete One Document
+
+        """
+        database = self.DBClient.get_database(db_name)
+        collection = database[collection_name]
+
+        collection.delete_one(document)
+        print("Delte One Document Success")
 
 
 
@@ -135,36 +184,16 @@ class mongoClient():
         # else:
         #     cursor = db[collec_name].find().limit(limit)
 
-
-## -------------------------------------- Mongo Test --------------------------------------
 if __name__ == "__main__":
 
-    test = mongoClient(ins.CLUSTMetaInfo)
+    test = mongoClient(ins.CLUSTMetaInfo2)
 
     print("================================ get_DBList ==========================================\n")
-    aa = test.get_DBList()
-    print(aa)
+    # aa = test.get_DBList()
+    # print(aa)
 
-    db_name = 'city'
-    print("\n================================= get_Collection =========================================\n")
-    bb = test.get_Collection(db_name)
-    print(bb)
-
-    print("\n******************************************** get_all_document *************************************************************\n")
-    collection_name = 'exhibition_entrance_status'
-    # cc = test.get_all_document(db_name, collec_name,2)
-    # # print(cc)
-    # for i in cc:
-    #     print(i)
-    #     print("\n************************************************\n")
-
-    # search = {'table_name': '57239b9-2-CO'}
-    # dd = test.get_one_document_by_json(db_name, collec_name, search)
-    # print("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    # print(dd)
-
-
-    table_name = '57239b9-2-CO'
-    print("\n-------------------------------------- get_document_by_table -----------------------------------")
-    ee = test.get_document_by_table(db_name, collection_name, table_name)
-    print(ee)
+    db_name = 'test'
+    collection_name = 'abcdef'
+    aaa = test.get_all_document(db_name, collection_name)
+    print(type(aaa))
+    print(aaa)

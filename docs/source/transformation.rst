@@ -6,6 +6,8 @@ Clust: transformation
 
    transformation/transformation.splitDataByCycle
 
+   transformation/transformation.splitDataByCondition
+
    transformation/transformation.entropy
 
    transformation/transformation.featureExtension
