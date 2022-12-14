@@ -120,7 +120,7 @@ class analysisMSMetaGenerator():
             if "StatisticsAnalyzer"  == function:
                 result[function] = StatisticsAnalysis(data).get_basic_analysis_result()
             elif "MeanByHoliday" ==function:
-                result[function] = mean_by_holiday.MeanByHoliday(data).get_result()
+                result[function] = mean_by_holiday.get_mean_analysis_result_by_holiday(data)
             elif "MeanByWorking" ==function:
                 result[function] = mean_by_working.MeanByWorking(data).get_result()
             elif "MeanByTimeStep" ==function:

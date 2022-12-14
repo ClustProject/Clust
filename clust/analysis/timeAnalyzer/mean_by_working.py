@@ -34,6 +34,7 @@ class MeanByWorking():
 
         - 데이터에 휴일 정보가 있다면 해당 Column의 이름은 "HoliDay" 로 지정한 후에 파라미터에 입력해야한다.
         - 데이터에 휴일 정보가 없다면 휴일을 생성하는 make_holiday_column 함수를 활용하여 휴일정보를 생성
+        - TODO : 그래도 휴일
         - 설정된 working_start, working_end 범위 외의 시간과 휴일을 일하지 않는 시간으로 정의
         - 데이터 시간 정보의 주기가 1시간 이하일때 사용
 
@@ -61,8 +62,8 @@ class MeanByWorking():
         self.data["Working"] = working_row_df
         self.data["Working"].fillna("notWorking", inplace = True)
         
-        # 휴일인 경우
-        self.data.loc[self.data[self.data.HoliDay == "holiday"].index, "Working"] = "notWorking"
+        # 휴일인 경우       
+        self.data.loc[self.data[self.data.Holiday == "Holiday"].index, "Working"] = "notWorking"
         
         return self.data
     
