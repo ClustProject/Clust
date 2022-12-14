@@ -4,7 +4,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from Clust.clust.meta.analysisMeta.basicTool import BasicTool
+from Clust.clust.transformation.general.basicTransform import nan_to_none_in_dict
 
 class MeanByTimeStep():
     def __init__(self, data):
@@ -51,6 +51,6 @@ class MeanByTimeStep():
         """
         self.data = self.make_timestep_column()
         meanbytimestep_result_dict = self.data.groupby("TimeStep").mean().to_dict()
-        meanbytimestep_result_dict = BasicTool.data_none_error_solution(self.timestep_criteria["label"], meanbytimestep_result_dict)
+        meanbytimestep_result_dict = nan_to_none_in_dict(self.timestep_criteria["label"], meanbytimestep_result_dict)
         
         return meanbytimestep_result_dict

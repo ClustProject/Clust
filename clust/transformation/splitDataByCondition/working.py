@@ -8,8 +8,7 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../..")
 sys.path.append("../../..")
-from Clust.clust.meta.analysisMeta.basicTool import BasicTool
-from Clust.clust.meta.analysisMeta.meanAnalyzer import holiday
+#from Clust.clust.meta.analysisMeta.meanAnalyzer import holiday
 
 class MeanByWorking():
     def __init__(self, data):
@@ -40,8 +39,8 @@ class MeanByWorking():
         Returns:
             Working Feature 정보를 포함한 데이터
         """
-        if "HoliDay" not in self.data.columns: 
-            self.data = holiday(self.data).make_holiday_column()
+        #if "HoliDay" not in self.data.columns: 
+            #self.data = holiday(self.data).make_holiday_column()
         
         work_idx_list = list(locate(self.workingtime_criteria["label"], lambda x: x == "working"))
         working_row_df = pd.DataFrame()
@@ -78,6 +77,6 @@ class MeanByWorking():
         """
         self.data = self.make_workingtime_column()
         meanbyworking_result_dict = self.data.groupby("Working").mean().to_dict()
-        meanbyworking_result_dict = BasicTool.data_none_error_solution(self.labels, meanbyworking_result_dict)
+        #meanbyworking_result_dict = BasicTool.data_none_error_solution(self.labels, meanbyworking_result_dict)
         
         return meanbyworking_result_dict
