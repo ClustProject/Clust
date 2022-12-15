@@ -124,7 +124,7 @@ class analysisMSMetaGenerator():
             elif "MeanByWorking" ==function:
                 result[function] = mean_by_working.MeanByWorking(data).get_result()
             elif "MeanByTimeStep" ==function:
-                result[function] = mean_by_timeStep.MeanByTimeStep(data).get_result()
+                result[function] = mean_by_timeStep.get_mean_analysis_result_by_timestep(data)
             elif "CountByFeatureLabel" ==function:
                 result[function] = StatisticsAnalysis(data).get_count_by_label_analysis_result(meta)
 

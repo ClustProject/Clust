@@ -8,7 +8,6 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 from Clust.clust.transformation.general.basicTransform import nan_to_none_in_dict
 from Clust.clust.transformation.splitDataByCondition import holiday
 
-
 def get_mean_analysis_result_by_holiday(data):
     """
     Holiday &Not Holiday 에 따른 데이터의 평균 값을 Meta 로 생성하는 함수

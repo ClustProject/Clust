@@ -1,4 +1,3 @@
-from unittest import result
 from pytimekr import pytimekr
 import sys
 import os
@@ -35,7 +34,7 @@ def get_holiday_feature(data):
 
     return data
 
-def get_holiday_cycle_set_by_dataframe(data):
+def get_holidayCycleSet_from_dataframe(data):
     """
     Split the data by holiday/non-holiday.
 
@@ -55,18 +54,20 @@ def get_holiday_cycle_set_by_dataframe(data):
     holiday_data_list = []
     notholiday_data_list = []
     for cycle_data in cycle_dataset_by_day:
-        if "holiday" in cycle_data["HoliDay"][0]:
+        if "holiday" in cycle_data["Holiday"][0]:
+            cycle_data = cycle_data.drop(["Day", "Holiday"], axis=1)
             holiday_data_list.append(cycle_data)
         else:
+            cycle_data = cycle_data.drop(["Day", "Holiday"], axis=1)
             notholiday_data_list.append(cycle_data)
     
     holiday_cycle_set = {"holiday":holiday_data_list, "notholiday":notholiday_data_list}
     return holiday_cycle_set
 
-def get_holiday_cycle_set_by_dataset(dataset):
-    # feature_list = list(dataset.keys())
-    # for feature_name in feature_list:
-    #     feature_dataset = dataset[feature_name]
-    #     for data in feature_dataset:
-    #         get_holiday_cycle_set_by_dataframe
-    pass
+def get_holidayCycleSet_from_dataset(dataset, feature_list):
+    holiday_cycle_set_from_dataset = {}
+    for feature in feature_list:
+        feature_dataset = dataset[feature]
+        holiday_cycle_set_from_dataset[feature] = list(map(get_holidayCycleSet_from_dataframe, feature_dataset))
+    
+    return holiday_cycle_set_from_dataset
