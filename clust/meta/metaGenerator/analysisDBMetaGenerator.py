@@ -77,13 +77,16 @@ class analysisDBMetaGenerator():
         """
         mongodb_c = wiz.WizApiMongoMeta(mongo_instance)
         ms_list = mongodb_c.get_tableName_list(dbName, collectionName)[dbName][collectionName]
+
         
-        ms_list.remove("db_information") # db_information 이전 완료하면 삭제하기
+        if ms_list.count("db_information") :             
+            ms_list.remove("db_information") # db_information 이전 완료하면 삭제하기
         
         total_ms_analysis_meta = []
         column_list = []
         for ms in ms_list:
             ms_meta = mongodb_c.read_mongodb_document_by_get(dbName, collectionName, ms)
+          
             total_ms_analysis_meta.append(ms_meta["analysisResult"])
             column_list.extend([field["fieldKey"] for field in ms_meta["fields"]])
         
