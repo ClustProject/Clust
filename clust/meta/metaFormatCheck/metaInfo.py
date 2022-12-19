@@ -13,9 +13,10 @@ def get_ms_meta_info_inBucket(ms_meta_info):
     ms_meta_array['basic_a_flag'] = basic_a_flag
     ms_meta_array['basic_b_flag'] = basic_b_flag
     ms_meta_array['analysis_a_flag'] = analysis_a_flag
+
     return ms_meta_array
 
-def get_ms_meta_info_inBucket(bucket_meta_info):
+def get_bk_meta_info_inBucket(bucket_meta_info):
     
     bucket_meta_array ={}
     #key 변경 시 에러남. key 고정 또는 db에 저장 필요

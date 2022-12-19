@@ -71,14 +71,16 @@ class analysisMSMetaGenerator():
         bucket_meta = collect.get_bucket_meta(self.mongodb_db, self.mongodb_collection, self.mongo_instance)
 
         self.analysis_meta_set = []
+        
         for measurement in self.influx_measurement_list:
             print(f"====== Analyze Meta By {measurement}... ======")
             data = collect.get_ms_data_by_days(self.influxdb_bucket_name, measurement, self.influx_instance)
-            analysis_result_set = self.get_result_set(data, bucket_meta, self.function_list)
-            analysis_result_set["table_name"] = measurement
+            analysis_result_set = self.get_result_set(data, bucket_meta, self.function_list)  
+            analysis_result_set["table_name"] = measurement           
             self.analysis_meta_set.append(analysis_result_set)
-            print(f"====== SUCCESS {measurement} ======")
-        
+            
+            print(f"====== SUCCESS {measurement} ======")              
+
         return self.analysis_meta_set
 
     def _check_ms_list(self, ms_list): 

@@ -76,15 +76,18 @@ class WizApiMongoMeta():
         :rtype: dictionary (single) or array (multiple)
 
         """
+     
 
-        if tableName: #one document
-            url = self.mongodb_instance_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)
+        if tableName: #one document          
+            url = self.mongodb_instance_url+"/rest/1.0/mongodb/document/{}/{}?table_name={}".format(domain, subdomain, tableName)           
         else: #all documents under domain/subdomain/
             url = self.mongodb_instance_url+"/rest/1.0/mongodb/documents/{}/{}".format(domain, subdomain)
+           
 
         response = requests.get(url)
         print(response.status_code)
         text = response.text
+      
         result = json.loads(text)
 
         return result

@@ -70,7 +70,8 @@ class ReadData():
         """
         db_name ="bucket"
         collection_name = "meta_info"
-        mongodb_c = wiz.WizApiMongoMeta(mongo_instance)
+        mongodb_c = wiz.WizApiMongoMeta(mongo_instance)       
+
         bucket_meta = mongodb_c.read_mongodb_document_by_get(db_name, collection_name, domain+'_'+sub_domain)
 
         return bucket_meta

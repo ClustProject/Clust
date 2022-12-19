@@ -63,12 +63,15 @@ class StatisticsAnalysis():
         """
         data_cut = pd.DataFrame()
         countbyfeaturelabel_result_dict = {}
+        
         for column_info in base_meta["columnInformation"]:
             column = column_info["columnName"]
             if "columnLevelCriteria" not in column_info.keys():
                 countbyfeaturelabel_result_dict[column] = ["None"]
+                
             else:
-                if column in self.data.columns: 
+                if column in self.data.columns:                  
+
                     data_cut[column] = pd.cut(x=self.data[column], 
                                         bins=column_info["columnLevelCriteria"]["step"],
                                         labels=column_info["columnLevelCriteria"]["label"])
@@ -82,5 +85,7 @@ class StatisticsAnalysis():
                         label_ls.append(label_dict.copy())
 
                     countbyfeaturelabel_result_dict[column] = label_ls
+
                 
+
         return countbyfeaturelabel_result_dict
