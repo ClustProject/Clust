@@ -4,18 +4,24 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from Clust.clust.transformation.splitDataByCycle.cycleModule import CycleData
 
 def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
     """
-    설정된 Time Step에 따라 구분된 Time Label 정보를 "TimeStep" column 에 추가하는 함수
+    A function that adds a "TimeStep" column constructed according to the input timeStep.
     
-    - Hour의 흐름에 따라 구분을 하는 함수로 데이터 시간 정보의 주기가 Hour, Minute, Second 일때 사용
+    - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
+    - Used when the period of data time information is less than 1 hour
 
-    Returns:
-        Time Step 에 따른 Time Label 정보를 포함한 데이터
-    """
+    Args:
+        data (dataframe) : Time series data
+        timestep_criteria (dictionary) : TimeStep criteria information
+        
+    Example:
+        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
     
+    Returns:
+        dataframe : Time sereis data with "TimeStep" column
+    """
     timestep = timestep_criteria["step"]
     timelabel = timestep_criteria["label"]
     
@@ -24,33 +30,51 @@ def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24
         data.loc[data[(data.index.hour >= timestep[n])&(data.index.hour < timestep[n+1])].index, "TimeStep"] = timelabel[n]
     return data
 
-def get_timestepCycleSet_from_dataframe(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
+def get_split_data_by_timestep_from_dataframe(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
+    """
+    Split the data by TimeStep.
+
+    Args:
+        data (dataframe): Time series data
+        timestep_criteria (dictionary) : TimeStep criteria infromation
+        
+    Example:
+        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+
+    Returns:
+        dictionary: Return value composed of dataframes divided according to each label of timestep.
+    """
     # Get data with timestep feature
     data = get_timestep_feature(data, timestep)
     
-    # Get Split Cycle Data By Day
-    cycle_dataset_by_day = CycleData().getDayCycleSet(data,1,False)
+    # Split Data by Timestep
+    split_data_by_timestep = {}
     
-    # Get Split timestep Dataset
-    timestep_cycle_set = {}
-    timestep_label_list = timestep["label"]
-    for label in timestep_label_list:
-        timestep_cycle_set[label] = []
+    for label in timestep["label"]:
+        split_data_by_timestep[label] = data[label == data["TimeStep"]].drop(["TimeStep"], axis=1)
     
-    for cycle_data in cycle_dataset_by_day:
-        for label in timestep_label_list:
-            split_data = cycle_data[cycle_data["TimeStep"] == label].drop(["TimeStep"], axis=1)
-            timestep_cycle_set[label].append(split_data)
+    return split_data_by_timestep
 
-    return timestep_cycle_set
+def get_split_data_by_timestep_from_dataset(dataset, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
+    """
+    Split Data Set by TimeStep.
 
-def get_timestepCycleSet_from_dataset(dataset, feature_list, timestep):
-    timestep_cycle_set_from_dataset = {}
-    for feature in feature_list:
-        feature_dataset = dataset[feature]
-        split_data_list = []
-        for data in feature_dataset:
-            split_data_list.append(get_timestepCycleSet_from_dataframe(data, timestep))
-        timestep_cycle_set_from_dataset[feature] = split_data_list
-    
-    return timestep_cycle_set_from_dataset
+    Args:
+        dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
+        timestep_criteria (dictionary) : TimeStep criteria infromation
+        
+    Example:
+        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+        
+    Returns:
+        dictionary: Return value has measurements as keys and split result as values. 
+                    split result composed of dataframes divided according to each label of timestep.
+    """
+    split_dataset_by_timestep = {}
+    for ms_name in dataset:
+        data = dataset[ms_name]
+        if not(data.empty):
+            split_data_by_timestep_dict = get_split_data_by_timestep_from_dataframe(data, timestep)
+            split_dataset_by_timestep[ms_name] = split_data_by_timestep_dict
+
+    return split_dataset_by_timestep

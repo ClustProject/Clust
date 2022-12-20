@@ -1,4 +1,3 @@
-
 import pandas as pd
 from more_itertools import locate
 
@@ -9,19 +8,24 @@ sys.path.append("..")
 sys.path.append("../..")
 sys.path.append("../../..")
 from Clust.clust.transformation.splitDataByCondition import holiday
-from Clust.clust.transformation.splitDataByCycle.cycleModule import CycleData
 
 def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
     """
-    설정된 시간에 따라 일하는 시간과 일하지 않는 시간의 정보를 "Working" column에 추가하는 함수
+    A function that adds a "Working" column constructed according to the input working time.
 
-    - 데이터에 휴일 정보가 있다면 해당 Column의 이름은 "HoliDay" 로 지정한 후에 파라미터에 입력해야한다.
-    - 데이터에 휴일 정보가 없다면 휴일을 생성하는 make_holiday_column 함수를 활용하여 휴일정보를 생성
-    - 설정된 working_start, working_end 범위 외의 시간과 휴일을 일하지 않는 시간으로 정의
-    - 데이터 시간 정보의 주기가 1시간 이하일때 사용
+    - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
+      If there is no holiday information in the data, the function automatically creates it.
+    - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
 
+    Args:
+        data (dataframe) : Time series data
+        workingtime_criteria (dictionary) : Working time criteria information
+        
+    Example:
+        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
+    
     Returns:
-        Working Feature 정보를 포함한 데이터
+        dataframe : Time sereis data with "Working" column    
     """
     if "HoliDay" not in data.columns: 
         data = holiday.get_holiday_feature(data)
@@ -49,35 +53,50 @@ def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'l
     
     return data
 
-def get_workingCycleSet_from_dataframe(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
-    # Get data with timestep feature
+def get_split_data_by_workingtime_from_dataframe(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
+    """
+    Split the data by working/notworking.
+
+    Args:
+        data (dataframe): Time series data
+        workingtime_criteria (dictionary) : Working time criteria information
+        
+    Example:
+        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
+
+    Returns:
+        dictionary: Return value composed of dataframes divided according to each label of working and notworking.
+    """
+    # Get data with working feature
     data = get_working_feature(data, workingtime_criteria)
     
-    # Get Split Cycle Data By Day
-    cycle_dataset_by_hour = CycleData().getHourCycleSet(data,1,False)
+    # Split Data by Working time
+    split_data_by_working = {}
+    split_data_by_working["working"] = data["working" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
+    split_data_by_working["notworking"] = data["notworking" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
     
-    # Get Split WorkingTime Dataset
-    working_data_list = []
-    notworking_data_list = []
+    return split_data_by_working
     
-    for cycle_data in cycle_dataset_by_hour:
-        if "working" in cycle_data["Working"][0]:
-            cycle_data = cycle_data.drop(["Day", "Holiday", "Working"], axis=1)
-            working_data_list.append(cycle_data)
-        else:
-            cycle_data = cycle_data.drop(["Day", "Holiday", "Working"], axis=1)
-            notworking_data_list.append(cycle_data)
+def get_split_data_by_workingtime_from_dataset(dataset, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
+    """
+    Split Data Set by working/notworking.
+
+    Args:
+        dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
+        workingtime_criteria (dictionary) : Working time criteria information
+        
+    Example:
+        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
     
-    workingtime_cycle_set = {"working":working_data_list, "notworking":notworking_data_list}
-    return workingtime_cycle_set
-    
-def get_workingCycleSet_from_dataset(dataset, feature_list, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
-    workingtime_cycle_set_from_dataset = {}
-    for feature in feature_list:
-        feature_dataset = dataset[feature]
-        split_data_list = []
-        for data in feature_dataset:
-            split_data_list.append(get_workingCycleSet_from_dataframe(data, workingtime_criteria))
-        workingtime_cycle_set_from_dataset[feature] = split_data_list
-    
-    return workingtime_cycle_set_from_dataset
+    Returns:
+        dictionary: Return value has measurements as keys and split result as values. 
+                    split result composed of dataframes divided according to each label of working and notworking.
+    """
+    split_dataset_by_working = {}
+    for ms_name in dataset:
+        data = dataset[ms_name]
+        if not(data.empty):
+            split_data_by_working_dict = get_split_data_by_workingtime_from_dataframe(data, workingtime_criteria)
+            split_dataset_by_working[ms_name] = split_data_by_working_dict
+
+    return split_dataset_by_working

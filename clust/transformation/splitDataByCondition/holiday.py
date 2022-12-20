@@ -3,7 +3,6 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from Clust.clust.transformation.splitDataByCycle.cycleModule import CycleData
 
 def get_holiday_feature(data):
     """
@@ -34,7 +33,7 @@ def get_holiday_feature(data):
 
     return data
 
-def get_holidayCycleSet_from_dataframe(data):
+def get_split_data_by_holiday_from_dataframe(data):
     """
     Split the data by holiday/non-holiday.
 
@@ -42,32 +41,34 @@ def get_holidayCycleSet_from_dataframe(data):
         data (dataframe): Time series data
 
     Returns:
-        _type_: _description_
+        dictionary: Return value composed of dataframes divided according to each label of holiday and notholiday.
     """
     # Get data with holiday feature
     data = get_holiday_feature(data)
     
-    # Get Split Cycle Data By Day
-    cycle_dataset_by_day = CycleData().getDayCycleSet(data,1,False)
+    # Split Data by Holiday
+    split_data_by_holiday = {}
+    split_data_by_holiday["holiday"] = data["holiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
+    split_data_by_holiday["notholiday"] = data["notholiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
     
-    # Get Split holiday&notholiday Dataset
-    holiday_data_list = []
-    notholiday_data_list = []
-    for cycle_data in cycle_dataset_by_day:
-        if "holiday" in cycle_data["Holiday"][0]:
-            cycle_data = cycle_data.drop(["Day", "Holiday"], axis=1)
-            holiday_data_list.append(cycle_data)
-        else:
-            cycle_data = cycle_data.drop(["Day", "Holiday"], axis=1)
-            notholiday_data_list.append(cycle_data)
-    
-    holiday_cycle_set = {"holiday":holiday_data_list, "notholiday":notholiday_data_list}
-    return holiday_cycle_set
+    return split_data_by_holiday
 
-def get_holidayCycleSet_from_dataset(dataset, feature_list):
-    holiday_cycle_set_from_dataset = {}
-    for feature in feature_list:
-        feature_dataset = dataset[feature]
-        holiday_cycle_set_from_dataset[feature] = list(map(get_holidayCycleSet_from_dataframe, feature_dataset))
+def get_split_data_by_holiday_from_dataset(dataset):
+    """
+    Split Data Set by holiday/non-holiday.
+
+    Args:
+        dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
     
-    return holiday_cycle_set_from_dataset
+    Returns:
+        dictionary: Return value has measurements as keys and split result as values. 
+                    split result composed of dataframes divided according to each label of holiday and notholiday.
+    """
+    split_dataset_by_holiday = {}
+    for ms_name in dataset:
+        data = dataset[ms_name]
+        if not(data.empty):
+            split_data_by_holiday_dict = get_split_data_by_holiday_from_dataframe(data)
+            split_dataset_by_holiday[ms_name] = split_data_by_holiday_dict
+
+    return split_dataset_by_holiday
