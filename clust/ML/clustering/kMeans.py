@@ -1,4 +1,4 @@
-from tqdm.autonotebook import tqdm
+from tqdm.autonotebook import tqdm 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -78,6 +78,8 @@ class KMeans():
             for xx in X[y == yi]:
                 ax[yi].plot(xx.ravel(), "k-", alpha=.2)
             ax[yi].plot(model.cluster_centers_[yi].ravel(), "r-")
+        plt.show()
+        
 
     def get_oneCluster_result(self, data, n_clusters, method):
         """
