@@ -1,4 +1,4 @@
-def manufacture_db_data_for_min_max_limit(db_client, db_name) :    
+def get_min_max_info_from_bucketMeta(db_client, db_name) :    
 
     """
     db에서 데이터를 가져와 민맥스 만들고 리턴하는 함수 
@@ -24,7 +24,7 @@ def manufacture_db_data_for_min_max_limit(db_client, db_name) :
         
     return data_min_max_limit
 
-def update_old_dict_to_new_dict(oldDict, newDict) :   
+def update_old_dict_with_new_dict(oldDict, newDict) :   
     """
     기존 Dict를 새로운 Dict로 업데이트하는 함수
 
