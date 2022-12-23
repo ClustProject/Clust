@@ -6,10 +6,8 @@ class errorToNaN():
         # dataRangeInfoManager 대신에 limit_min_max 값을  outlier_param의 값으로 받아들이도록 수정해야 함.
         pass
 
-    
-
-    def getDataWithCertainNaN(self, data, CertainParam):
-        from Clust.clust.ingestion.mongo import customModules
+    def getDataWithCertainNaN(self, data, CertainParam):  
+        
         self.limit_min_max = CertainParam['data_min_max_limit']   
 
         if CertainParam['flag'] ==True:  

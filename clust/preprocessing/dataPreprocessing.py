@@ -92,9 +92,50 @@ class DataPreprocessing():
             
         """
         from Clust.clust.preprocessing.errorDetection import errorToNaN
+
+        #todo : 버킷명 받아와야 함!
+        db_name = 'air_indoor_유치원'
+        outlier_param['certainErrorToNaN']['data_min_max_limit'] =  DataPreprocessing.get_data_min_max_limit(db_name)
+
         self.datawithMoreCertainNaN = errorToNaN.errorToNaN().getDataWithCertainNaN(data, outlier_param['certainErrorToNaN'])
         self.datawithMoreUnCertainNaN = errorToNaN.errorToNaN().getDataWithUncertainNaN(self.datawithMoreCertainNaN, outlier_param['unCertainErrorToNaN'])
         return self.datawithMoreCertainNaN, self.datawithMoreUnCertainNaN
+
+    def get_data_min_max_limit(self, db_name) :
+        """
+            원하는 bucket의 meta 정보에서 
+            민맥스 데이터를 추출하고(old),
+
+            사용자가 원하는 민맥스 값이 있다면(new)
+            추출한 민맥스 데이터를(old) 업데이트 한 뒤
+
+            리턴해주는 함수
+
+            Args:
+                db_name (String)
+
+            Returns:
+                data_min_max_limit (Dict) : {
+                    "max_num":{...}, "min_num":{...}
+                }   
+    
+        """
+        from Clust.clust.ingestion.mongo import customModules
+        from Clust.clust.ingestion.mongo import mongo_Client
+        from setting import influx_setting_KETI as ins
+        db_client = mongo_Client.mongoClient(ins.CLUSTMetaInfo2)
+    
+        #사용자가 원하는 민맥스
+        min_max_from_user ={"max_num":{"Humidity" : 700,"Temperature" : 700}, 
+                            "min_num":{'RichHumidity':-70, 'comp_temp':-70}
+                        }
+
+    
+        min_max_from_db = customModules.manufacture_db_data_for_min_max_limit(db_client, db_name)
+                                                                 
+        data_min_max_limit = customModules.update_old_dict_to_new_dict(min_max_from_db, min_max_from_user)
+
+        return data_min_max_limit
 
     def get_imputedData(self, data, imputation_param):
         """ Get imputed data

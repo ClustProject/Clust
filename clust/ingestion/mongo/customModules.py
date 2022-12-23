@@ -1,5 +1,5 @@
-def manufacture_min_max_limit(db_client, db_name) :    
-         
+def manufacture_db_data_for_min_max_limit(db_client, db_name) :    
+
     """
     db에서 데이터를 가져와 민맥스 만들고 리턴하는 함수 
 
@@ -13,7 +13,6 @@ def manufacture_min_max_limit(db_client, db_name) :
         }   
     
     """
-
 
     bucket_meta = db_client.get_document_by_table('bucket', 'meta_info', db_name)        
     data_min_max_limit ={"max_num":{}, "min_num":{}}    
