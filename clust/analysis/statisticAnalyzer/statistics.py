@@ -64,27 +64,28 @@ class StatisticsAnalysis():
         data_cut = pd.DataFrame()
         countbyfeaturelabel_result_dict = {}
         
-        for column_info in base_meta["columnInformation"]:
-            column = column_info["columnName"]
-            if "columnLevelCriteria" not in column_info.keys():
-                countbyfeaturelabel_result_dict[column] = ["None"]
-                
-            else:
-                if column in self.data.columns:                  
-
-                    data_cut[column] = pd.cut(x=self.data[column], 
-                                        bins=column_info["columnLevelCriteria"]["step"],
-                                        labels=column_info["columnLevelCriteria"]["label"])
-                    labelcount = dict(data_cut[column].value_counts())
-                    label_dict = {}
-                    label_ls = []
+        if "columnInformation" in base_meta.keys():
+            for column_info in base_meta["columnInformation"]:
+                column = column_info["columnName"]
+                if "columnLevelCriteria" not in column_info.keys():
+                    countbyfeaturelabel_result_dict[column] = ["None"]
                     
-                    for n in range(len(labelcount)):
-                        label_dict["value"] = int(labelcount[list(labelcount.keys())[n]])
-                        label_dict["name"] = list(labelcount.keys())[n]
-                        label_ls.append(label_dict.copy())
+                else:
+                    if column in self.data.columns:                  
 
-                    countbyfeaturelabel_result_dict[column] = label_ls
+                        data_cut[column] = pd.cut(x=self.data[column], 
+                                            bins=column_info["columnLevelCriteria"]["step"],
+                                            labels=column_info["columnLevelCriteria"]["label"])
+                        labelcount = dict(data_cut[column].value_counts())
+                        label_dict = {}
+                        label_ls = []
+                        
+                        for n in range(len(labelcount)):
+                            label_dict["value"] = int(labelcount[list(labelcount.keys())[n]])
+                            label_dict["name"] = list(labelcount.keys())[n]
+                            label_ls.append(label_dict.copy())
+
+                        countbyfeaturelabel_result_dict[column] = label_ls
 
                 
 
