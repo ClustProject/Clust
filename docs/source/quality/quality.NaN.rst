@@ -3,7 +3,7 @@ quality.NaN
 
 quality.interface
 ------------------------------
-.. automodule:: clust.quality.NaN.clean_feature_data
+.. automodule:: clust.quality.NaN.cleanData
    :members:
    :undoc-members:
    :show-inheritance:

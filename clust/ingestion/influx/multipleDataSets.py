@@ -44,7 +44,8 @@ def get_all_msdata_in_bucket(start_time, end_time, db_client, bucket_name):
     dataSet ={}
     for ms_name in ms_list:
         data = db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
-        dataSet[ms_name] = data
+        if len(data)>0:
+            dataSet[ms_name] = data
 
     return dataSet
 

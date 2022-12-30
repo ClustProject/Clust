@@ -40,7 +40,9 @@ class CleanData:
         nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
         MDP = dataPreprocessing.DataPreprocessing()
         imputed_data= MDP.get_imputedData(nan_removed_data, self.imputation_param)
-        
+
+        print(len(data.columns), "--->", len(imputed_data.columns))
+
         return imputed_data
 
 
