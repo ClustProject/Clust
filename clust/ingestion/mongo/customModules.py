@@ -17,10 +17,12 @@ def get_min_max_info_from_bucketMeta(db_client, db_name) :
     bucket_meta = db_client.get_document_by_table('bucket', 'meta_info', db_name)        
     data_min_max_limit ={"max_num":{}, "min_num":{}}    
     
-    for x in bucket_meta[0]['columnInformation'] :
-        columnName  = x['columnName']
-        data_min_max_limit['max_num'][columnName] = x['max']
-        data_min_max_limit['min_num'][columnName] = x['min']
+    if len(bucket_meta) != 0 :
+        if ('columnInformation' in bucket_meta[0]) :
+            for x in bucket_meta[0]['columnInformation'] :
+                columnName  = x['columnName']
+                data_min_max_limit['max_num'][columnName] = x['max']
+                data_min_max_limit['min_num'][columnName] = x['min']
         
     return data_min_max_limit
 
