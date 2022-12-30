@@ -14,22 +14,14 @@ class SomClustering():
     def __init__ (self, feature_dataset, feature_datasetName, x=None, y=None):
 
         self.feature_datasetName = feature_datasetName
-        self.seriesData_SS_series = self.input_transform(feature_dataset)
-
+        self.seriesData_SS_series = feature_dataset
         self.som_x = x
         self.som_y = y
-
+        self.data_num = len(feature_datasetName)
+        self.data_length = (feature_dataset.shape[1])
+        
         self.center_type = 'dtw_barycenter_averaging'
 
-    def get_xy(self, input_length):
-        x = y = math.ceil(math.sqrt(math.sqrt(input_length)))
-        return x, y
-
-    def input_transform(self, dataset):
-        from Clust.clust.transformation.general import basicTransform
-        seriesData_SS_DF = basicTransform.scalingSmoothingDF(dataset, ewm_parameter=0.3 )
-        seriesData_SS_series = basicTransform.DFSetToSeries(seriesData_SS_DF)
-        return seriesData_SS_series
 
     def saveModel(self, som, model_file_address):
         with open(model_file_address, 'wb') as outfile:
@@ -44,9 +36,9 @@ class SomClustering():
     def train(self):
         result = {}
         if self.som_x is None:
-            self.som_x, self.som_y = self.get_xy(len(self.seriesData_SS_series))
+            self.som_x = self.som_y = math.ceil(math.sqrt(math.sqrt(len(self.seriesData_SS_series))))
 
-        som = MiniSom(self.som_x, self.som_y,len(self.seriesData_SS_series[0]), sigma=0.3, learning_rate = 0.1)
+        som = MiniSom(self.som_x, self.som_y, self.data_length, sigma=0.3, learning_rate = 0.1)
         som.random_weights_init(self.seriesData_SS_series)
         som.train(self.seriesData_SS_series, 50000)
         # Returns the mapping of the winner nodes and inputs

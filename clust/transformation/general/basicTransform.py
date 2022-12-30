@@ -12,28 +12,6 @@ def get_corrMatrix(data):
     corr_matrix = data.corr(method='pearson').values.tolist()
     return corr_matrix
 
-def scalingSmoothingDF(dataSet, ewm_parameter):
-    """
-    Data can be scaled and smoothed by this function.
-
-    Args:
-        dataset (dictionary): input dataset
-        ewm_parameter (float): parameter for ewm function
-
-    Returns:
-        dataframe: ssDataSet - scale and smoothed dataframeSet
-    """
-    ssDataSet=[]
-    from sklearn.preprocessing import MinMaxScaler
-    for i in range(len(dataSet)):
-        value = dataSet[i]
-        value= value.ewm(com=ewm_parameter).mean()
-        scaler = MinMaxScaler()
-       # seriesData_SS_series.append(value.reshape(len(value)))
-        df = pd.DataFrame(scaler.fit_transform(value), columns=[dataSet[i].columns], index = dataSet[i].index)
-        ssDataSet.append(df)
-    return ssDataSet
-
 def DFSetToSeries(dataSet):
     seriesData =[]
     for i in range(len(dataSet)):

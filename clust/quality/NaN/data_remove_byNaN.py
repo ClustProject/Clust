@@ -47,7 +47,7 @@ class DataRemoveByNaNStatus():
         if len(data)>0:
             data = self.removeNaNDataByTotalNaNLimitNum(totalNanLimitNum, data)
             if len(data.columns)>0:
-                data = self.removeNaNDataByConsecutiveNaNLimitNum(ConsecutiveNanLimitNum, data)            
+                data = self.removeNaNDataByConsecutiveNaNLimitNum(ConsecutiveNanLimitNum, data)         
         return data
     
     def removeNaNDataByRatio(self, data, ConsecutiveNanLimitRatio, totalNanLimitRatio):
@@ -73,7 +73,7 @@ class DataRemoveByNaNStatus():
         for column_name in data.columns:
             columnNaNCount = columnNaNCountSet[column_name]
             if totalNanLimitNum < columnNaNCount:
-                data = data.drop(column_name,axis=1)
+                data = data.drop(column_name, axis=1)
         return data
     
     def removeNaNDataByConsecutiveNaNLimitNum(self, ConsecutiveNanLimitNum, data):

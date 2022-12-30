@@ -10,24 +10,20 @@ from Clust.clust.preprocessing import dataPreprocessing
 # - one dataFrame: getOneCleanDataSetByFeature
 
 class CleanFeatureData:
-    def __init__(self, feature_list, frequency):
+    def __init__(self, frequency):
         """
+        - Clean Data by each column
+        - Delete bad quality column
+        - recover column with moderate quality by NaNInfoCleanData partameter (use linear imputation)
+        
         """
-        self.feature_list = feature_list
         self.frequency = frequency
-
-        self.refine_param = {
-            "removeDuplication":{"flag":True},
-            "staticFrequency":{"flag":True, "frequency":frequency}
-        }
-        self.certainParam= {"flag":True}
-
         self.imputation_param = {
                 "flag":True,
                 "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
                 "totalNonNanRatio":5
         }
-
+    """
     def getMultipleCleanDataSetsByDF(self, dataSet, NanInfoForCleanData) :
         """
         This funtion can work by only num type of NaNInfoForCleanData
@@ -51,14 +47,11 @@ class CleanFeatureData:
 
         """
 
-        self.refinedDataSet={}
         self.FilteredImputedDataSet = {}
 
         ms_list = dataSet.keys()
         for ms_name in ms_list:
             data = dataSet[ms_name]
-            refinedData, DataWithMoreNaN = self._getPreprocessedData(data)
-            self.refinedDataSet[ms_name] = refinedData
             
             if len(data)>0:  
                 totalNanRowCount = DataWithMoreNaN.isnull().any(axis=1).sum()
@@ -72,9 +65,9 @@ class CleanFeatureData:
                         imputedData = dataPreprocessing.DataPreprocessing().get_imputedData(DataWithMoreNaN, self.imputation_param)
                         self.FilteredImputedDataSet[ms_name] = imputedData     
                      
-        return self.refinedDataSet, self.FilteredImputedDataSet
+        return self.FilteredImputedDataSet
 
-
+    """
     def getMultipleCleanDataSetsByFeature(self, dataSet, NanInfoForCleanData, duration=None) :
         """
         - refinedDataSet, refinedDataSetName: 간단한 cleaning 진행한 데이터셋
@@ -96,37 +89,14 @@ class CleanFeatureData:
             ...               'end_time' : "2021-02-04 00:00:00" }
 
         """
+        self.imputed_data_set = pd.DataFrame()
 
-        self.refinedDataSet={}
-        self.refinedDataSetName={}
-        self.NaNRemovedDataSet={}
-        self.ImputedDataSet = {}
-        self.ImputedDataSetName={}
-        for feature in self.feature_list:
-            self.refinedDataSet[feature]=[]
-            self.refinedDataSetName[feature]=[]
-            self.NaNRemovedDataSet[feature]=[]
-            self.ImputedDataSet[feature] = []
-            self.ImputedDataSetName[feature]=[]
-
-        ms_list = dataSet.keys()
-        for ms_name in ms_list:
-            #print("=======",ms_name,"=======")
-            data = dataSet[ms_name]
-            refinedData, NaNRemovedData, ImputedData, finalFlag  = self.getOneCleanDataSetByFeature(data, NanInfoForCleanData, duration)
-            for feature in self.feature_list:
-                if feature in data.columns:
-                    if finalFlag[feature]==-1:
-                        pass
-                    else: ## final_flag = 0 , 1
-                        self.refinedDataSet[feature].append(refinedData[[feature]])
-                        self.refinedDataSetName[feature].append(ms_name)
-                        if finalFlag[feature] == 1:
-                            self.NaNRemovedDataSet[feature].append(NaNRemovedData[[feature]])
-                            self.ImputedDataSet[feature].append(ImputedData[[feature]])
-                            self.ImputedDataSetName[feature].append(ms_name)
+        for column_name in list(dataSet.columns):
+            data = dataSet[[column_name]]
+            imputed_data  = self.getOneCleanDataSetByFeature(data, NanInfoForCleanData, duration)
+            self.imputed_data_set = pd.concat([self.imputed_data_set, imputed_data], axis=1)
                     
-        return self.refinedDataSet, self.refinedDataSetName, self.NaNRemovedDataSet, self.ImputedDataSetName, self.ImputedDataSet
+        return self.imputed_data_set
 
 
     def getOneCleanDataSetByFeature(self, data, NanInfoForCleanData, duration=None) :
@@ -151,63 +121,27 @@ class CleanFeatureData:
             ...               'end_time' : "2021-02-04 00:00:00" }
 
         """
-
+        """
         if duration:
-            data = self._setDataWithSameDuration(data, duration)
-        refinedData, DataWithMoreNaN = self._getPreprocessedData(data)
+            data = self._get_multipleDF_sameDuration(data, duration)
+        """
 
-        finalFlag = {}
-        NaNRemovedData = {}
-        ImputedData = {}
         DRN = data_remove_byNaN.DataRemoveByNaNStatus()
-        NaNRemovedData = DRN.removeNaNData(DataWithMoreNaN, NanInfoForCleanData)
-        ImputedData = NaNRemovedData.copy()
-              
-        for feature in self.feature_list:
-            finalFlag[feature] = -1
-            if (feature in data.columns) and (len(data[feature]) >0) and ( data[feature].isna().sum() != len(data[feature])): # refined_data 가 존재하고, 기존 data에 feature(column)이 속해 있을 때
-                finalFlag[feature] = 0
-                if feature in NaNRemovedData.columns: # NaN의 limit을 넘은 컬럼 삭제 후, 컬럼이 남아있으면
-                    NaNRemovedData_feature = NaNRemovedData[[feature]]
-                    finalFlag[feature] = 1
-                    MDP = dataPreprocessing.DataPreprocessing()
-                    ImputedData[feature] = MDP.get_imputedData(NaNRemovedData_feature, self.imputation_param)
-            else:
-                finalFlag[feature] = -1
+        nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
+        MDP = dataPreprocessing.DataPreprocessing()
+        imputed_data= MDP.get_imputedData(nan_removed_data, self.imputation_param)
         
-        return refinedData, NaNRemovedData, ImputedData, finalFlag
+        return imputed_data
 
-    
-    def _getPreprocessedData(self, data):
-        """
-        This function produced cleaner data with parameter
 
-        Args:
-            dataSet (dictionary):  input Data to be handled
-
-        Returns:
-            dataframe: refinedData, dataWithMoreNaN
-        """
-        refined_data = pd.DataFrame()
-        datawithMoreCertainNaN = pd.DataFrame()
-        
-        if len(data)>0:
-            #1. Preprocessing (Data Refining/Static Frequency/OutlierDetection)
-            MDP = dataPreprocessing.DataPreprocessing()
-            refined_data = MDP.get_refinedData(data, self.refine_param)
-            from Clust.clust.preprocessing.errorDetection.errorToNaN import errorToNaN 
-            datawithMoreCertainNaN = errorToNaN().getDataWithCertainNaN(refined_data, self.certainParam)
-        
-        return refined_data, datawithMoreCertainNaN
-
-                
+    """             
     # self.query_start_time, self.query_end_time 문제 이슈
-    def _setDataWithSameDuration(self, data, duration):
+    def _get_multipleDF_sameDuration(self, data, duration):
         # Make Data with Full Duration [query_start_time ~ query_end_time]
         
         start_time =duration['start_time']
         end_time = duration['end_time']
-        # print("setDataWithSameDuration", start_time, end_time)
+        # print("get_multipleDF_sameDuration", start_time, end_time)
         if len(data)>0:
             #2. Make Full Data(query Start ~ end) with NaN
             data.index = data.index.tz_localize(None) # 지역정보 없이 시간대만 가져오기
@@ -217,4 +151,4 @@ class CleanFeatureData:
             data = new_data.join(data) # new_data에 data를 덮어쓴다
         return data
 
-        
+    """

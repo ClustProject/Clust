@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import numpy as np
 import plotly.graph_objs as go
 from plotly.offline import iplot
 def Plot_OneCloumnData(df, y_columnName, title):
@@ -42,7 +42,7 @@ def plot_all_feature_data(data):
     plot_features = data[plot_cols]
     _ = plot_features.plot(subplots=True)
     plt.legend()
-    plt.show()
+    return plt
 
 
 def plot_all_feature_data_one_pic(data):
@@ -50,10 +50,10 @@ def plot_all_feature_data_one_pic(data):
     plt.legend()
     plt.show()
     
-def plot_all_feature_data_two_columns(data):
+def plot_all_feature_data_two_columns(data, width, height):
 
     import math
-    fig, axes = plt.subplots(nrows=int(math.ceil(len(data.columns)/2)), ncols=2, dpi=130, figsize=(10, 8))
+    fig, axes = plt.subplots(nrows=int(math.ceil(len(data.columns)/2)), ncols=2, dpi=130, figsize=(width, height))
     for i, ax in enumerate(axes.flatten()):
         if i<len(data.columns):
             temp = data[data.columns[i]]
@@ -64,8 +64,14 @@ def plot_all_feature_data_two_columns(data):
             ax.spines['top'].set_alpha(0)
             ax.tick_params(labelsize=6)
     plt.tight_layout()
+    return plt
  
-
+def plot_all_column_data_inSubPlot(data, fig_width, fig_height, fig_width_num = 4):
+    column_num = len(data.columns)
+    fig_height_num = int(np.ceil(column_num/fig_width_num))
+    data.plot(subplots=True, layout=(fig_height_num, fig_width_num), figsize=(fig_width, fig_height))
+    plt.show()
+    
 
 def show3Dgraph(data, colorData):
     """ 

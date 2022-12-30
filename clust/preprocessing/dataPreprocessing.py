@@ -196,6 +196,30 @@ class DataProcessing(DataPreprocessing):
         'datawithMoreUnCertainNaN':datawithMoreUnCertainNaN, 'imputed_data':imputed_data}
         return result
 
+    def all_preprocessing_finalResult(self, input_data):
+        """ Produces partial Processing data depending on process_param
+
+        Args:
+            input_data (DataFrame): input data
+            
+        Returns:
+            json: New Dataframe after preprocessing according to the process_param
+        
+        Example:
+
+            >>> output = DataProcessing(process_param).all_preprocessing(data)
+            
+        """
+        ###########
+        refined_data = self.get_refinedData(input_data, self.refine_param)
+        ###########
+        datawithMoreCertainNaN, datawithMoreUnCertainNaN = self.get_errorToNaNData(refined_data, self.outlier_param)
+        ###########
+        imputed_data = self.get_imputedData(datawithMoreUnCertainNaN, self.imputation_param)
+        ###########
+        result = imputed_data
+        return result
+
     ## Get Multiple output
     def multiDataset_all_preprocessing(self, multiple_dataset):
         """ Produces multiple DataFrame Processing result depending on process_param
@@ -204,7 +228,7 @@ class DataProcessing(DataPreprocessing):
             input_data (json): multiple_dataset - (having DataFrame value) 
             
         Returns:
-            json: json having New Dataframe after preprocessing according to the process_param
+            json: json having New Dataframe after preprocessing according to the process_param  (having only final result)
         
         Example:
 
@@ -212,6 +236,6 @@ class DataProcessing(DataPreprocessing):
         """
         output={}
         for key in list(multiple_dataset.keys()):
-            output[key] = self.all_preprocessing(multiple_dataset[key])
+            output[key] = self.all_preprocessing_finalResult(multiple_dataset[key])
         return output
 

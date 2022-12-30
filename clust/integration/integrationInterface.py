@@ -134,7 +134,7 @@ class IntegrationInterface():
         imputed_datas = {}
         print("integrationStart")
         for key in multiple_dataset.keys():
-            imputed_datas[key]=(multiple_dataset[key]["imputed_data"])
+            imputed_datas[key]=(multiple_dataset[key])
         if integrationMethod=="meta":
             result = self.getIntegratedDataSetByMeta(imputed_datas, integration_freq_sec, partial_data_info)
         elif integrationMethod=="ML":
