@@ -8,6 +8,11 @@ def get_only_numericData_in_ms(db_client, intDataInfo):
     Args:
         db_client (string): db_client (instance of influxClient class): instance to get data from influx DB
         intDataInfo (dict): intDataInfo
+            example>>> intDataInfo = {"db_info":
+                       [{"db_name":"INNER_AIR","measurement":"HS1","start":str(start),"end":str(end)},
+                     {"db_name":"OUTDOOR_AIR","measurement":"sangju","start":str(start),"end":str(end)},
+                     {"db_name":"OUTDOOR_WEATHER","measurement":"sangju","start":str(start),"end":str(end)}]}
+
     
     Returns:
         Dictionary: MSdataset
@@ -23,9 +28,7 @@ def get_only_numericData_in_ms(db_client, intDataInfo):
             if "tag_value" in dbinfo.keys():
                 tag_key = dbinfo['tag_key']
                 tag_value = dbinfo['tag_value']
-        
-        
-        # TODO Only Numeric Data
+
         import numpy as np
         multiple_dataset=db_client.get_data_by_time(dbinfo['start'], dbinfo['end'], db_name, ms_name, tag_key, tag_value)
         MSdataSet[i]  =  multiple_dataset.select_dtypes(include=np.number)

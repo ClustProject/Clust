@@ -68,37 +68,3 @@ def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
         result=model.fit_predict(data)
     return result
 
-
-
-def get_somResultSet_by_features(series_data_set, series_data_set_name, xnum, ynum):
-    fig_width = 30
-    fig_height = 30
-    fig_width_num = 4
-    """
-    get som result by all features, and show result graph
-    Args:
-        series_data_set(dict) :input series dataset, keys: feature_name, values: series data of a specific feature
-        series_data_set_name(dict) : series dataset name:keys feaure_name, values: name of a series data
-        xnum(int): xnum of som clustering
-        ynum(int): ynum of som clustering
-        
-    Returns:
-        resultSet(pd.DataFrame):result-> index: bucket_name, columns: feature_name_list, value: clustering number of each bucket based on feature  
-    """
-    resultSet = pd.DataFrame()
-    feature_list = list(series_data_set.keys())
-    for feature_name in feature_list:
-        print(feature_name)
-        feature_dataset= series_data_set[feature_name]
-        feature_datasetName = series_data_set_name[feature_name]
-        plt = plot_seriesDataSet.groupSeriesFig(fig_width, fig_height, feature_dataset, feature_datasetName, feature_name, fig_width_num )
-        feature_dataset= series_data_set[feature_name]
-        feature_datasetName = series_data_set_name[feature_name]
-        somV= SomClustering(feature_dataset, feature_datasetName, xnum, ynum)
-        result = somV.train()
-        resultSet[feature_name] = pd.DataFrame.from_dict(result, orient='index')
-        figdata, figdata2= somV.make_figs()
-        plt.show()
-    return resultSet
-
-    

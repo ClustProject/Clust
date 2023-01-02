@@ -19,14 +19,14 @@ def preprocessing_smoothing_scaling(data, ewm_parameter=0.3):
     scaler = MinMaxScaler()
     data = pd.DataFrame(scaler.fit_transform(data), columns=list(data.columns), index = data.index)      
     return data
+    
 
-
-def preprocessing_basic_for_clust_multiDataSet(dataSet, mongo_client, db_name, timedelta_frequency_sec):
+def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max_from_db, timedelta_frequency_sec):
     """
         simple preprocessing with multiple dataset
     Args:
         dataSet (dictionary consisting of multiple dataFrame): original data
-        mongo_client (mongo instance): instance of meta
+        min_max_from_db (mongo instance): min max information of data
         db_name (string): db_name of data
         timedelta_frequency_sec (timedelta): frequency information
         dataSet (dictionary consisting of multiple dataFrame): original
@@ -35,14 +35,8 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, mongo_client, db_name, t
         dataSet_pre (dictionary consisting of multiple dataFrame): preprocessed dataSet, each dataframe has same length, same frequency without certain error
 
     """
+
     # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
-
-    from Clust.clust.ingestion.mongo import customModules
-    
-    #db에서 가져온 데이터로 만든 민맥스
-    
-    min_max_from_db = customModules.get_min_max_info_from_bucketMeta(mongo_client, db_name)
-
     #필수적인 오류 데이터에 대해서 NaN 처리함
     from Clust.clust.preprocessing.dataPreprocessing import DataProcessing
     CertainParam= {'flag': True, 'data_min_max_limit':min_max_from_db}
