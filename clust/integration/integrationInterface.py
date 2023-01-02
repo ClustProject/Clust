@@ -6,7 +6,7 @@ sys.path.append("../../..")
 import datetime
 from Clust.clust.integration.meta import partialDataInfo
 from Clust.clust.preprocessing import dataPreprocessing
-from Clust.clust.ingestion.influx import multipleDataSets
+from Clust.clust.ingestion.influx import ms_data
 from Clust.clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
@@ -91,7 +91,7 @@ class IntegrationInterface():
         
         """
         ## multiple dataset
-        multiple_dataset  = multipleDataSets.get_onlyNumericDataSets(db_client, intDataInfo)
+        multiple_dataset  = ms_data.get_only_numericData_in_ms(db_client, intDataInfo)
         ## get integrated data
         result = self.multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
 

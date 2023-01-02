@@ -9,9 +9,9 @@ ingestion.influx_Client_v2
    :undoc-members:
    :show-inheritance:
 
-ingestion.multipleDataSets
+ingestion.bucket_data
 ------------------------------
-.. automodule:: clust.ingestion.influx.multipleDataSets
+.. automodule:: clust.ingestion.influx.bucket_data
    :members:
    :undoc-members:
    :show-inheritance:
