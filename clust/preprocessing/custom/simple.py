@@ -11,6 +11,7 @@ def preprocessing_smoothing_scaling(data, ewm_parameter=0.3):
         data (dataFrame): input data
         ewm_parameter (float, optional): emw parameter. Defaults to 0.3.
 
+
     Returns:
         data (dataFrame): preprocessed result
     """
@@ -24,14 +25,14 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, mongo_client, db_name, t
     """
         simple preprocessing with multiple dataset
     Args:
-        dataSet (dictionary consisting of multiple dataFrame): original
+        dataSet (dictionary consisting of multiple dataFrame): original data
         mongo_client (mongo instance): instance of meta
         db_name (string): db_name of data
         timedelta_frequency_sec (timedelta): frequency information
         dataSet (dictionary consisting of multiple dataFrame): original
 
     Returns:
-        dataSet_pre (dictionary consisting of multiple dataFrame): preprocessed dataSet
+        dataSet_pre (dictionary consisting of multiple dataFrame): preprocessed dataSet, each dataframe has same length, same frequency without certain error
 
     """
     # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
