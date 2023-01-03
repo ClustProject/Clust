@@ -1,12 +1,13 @@
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from influxdb import InfluxDBClient,DataFrameClient
+from influxdb import InfluxDBClient, DataFrameClient
 import pandas as pd
 
 UTC_Style = '%Y-%m-%dT%H:%M:%SZ'
 Korean_Style = '%Y-%m-%dT%H:%M:%S'
 index_columnName= 'time' 
+
 class influxClient():
     """
     basic influx DB connection

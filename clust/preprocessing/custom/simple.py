@@ -21,15 +21,13 @@ def preprocessing_smoothing_scaling(data, ewm_parameter=0.3):
     return data
     
 
-def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max_from_db, timedelta_frequency_sec):
+def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequency_sec):
     """
         simple preprocessing with multiple dataset
     Args:
         dataSet (dictionary consisting of multiple dataFrame): original data
-        min_max_from_db (mongo instance): min max information of data
-        db_name (string): db_name of data
+        min_max (dict): min max information of data
         timedelta_frequency_sec (timedelta): frequency information
-        dataSet (dictionary consisting of multiple dataFrame): original
 
     Returns:
         dataSet_pre (dictionary consisting of multiple dataFrame): preprocessed dataSet, each dataframe has same length, same frequency without certain error
@@ -39,7 +37,7 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max_from_db, timedel
     # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
     #필수적인 오류 데이터에 대해서 NaN 처리함
     from Clust.clust.preprocessing.dataPreprocessing import DataProcessing
-    CertainParam= {'flag': True, 'data_min_max_limit':min_max_from_db}
+    CertainParam= {'flag': True, 'data_min_max_limit':min_max}
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
     outlier_param ={
         "certainErrorToNaN":CertainParam, 

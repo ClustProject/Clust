@@ -11,7 +11,7 @@ def get_all_msData_in_bucketList(bucket_list, db_client, start_time, end_time, n
         db_client: influx DB client
         start_time(datetime): start time of Data
         end_time(datetime): end time of Data
-        new_bucket_list: default =None, new bucket name list
+        new_bucket_list (string array): default =None, new bucket name list
             example>>
                 start_time = pd.to_datetime("2021-09-12 00:00:00")
                 end_time = pd.to_datetime("2021-09-19 00:00:00")
