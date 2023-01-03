@@ -1,16 +1,20 @@
 import pandas as pd
 def get_oneDF_with_oneFeature_from_multipleDF(dataSet, feature_name, duration=None, frequency = None):
     """
-    1) choose only one column value from each data of dataSet a
+    1) choose only one column value from each data of dataSet
     2) make one dataFrame.
     
     Args:
-        dataSet (dictionary of DataFrame) : key = dataName, value = data(dataFrame)
+        dataSet (dictionary of DataFrame) : key = dataName, value = data(dataFrame) (Each data has must same length)
         feature_name(string): feature name of data
+        durtaion (dict):
+        frequency (timedelta):
         
     Return:
         newDF (dataFrame): new DataFrame
     """
+
+    
     newDF = pd.DataFrame()
     for data_name in dataSet:
         data = dataSet[data_name]

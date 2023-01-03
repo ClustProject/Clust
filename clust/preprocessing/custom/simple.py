@@ -24,6 +24,7 @@ def preprocessing_smoothing_scaling(data, ewm_parameter=0.3):
 def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequency_sec):
     """
         simple preprocessing with multiple dataset
+        Output multiple data (value of dataSet) -> same length, same description frequency, no certain error
     Args:
         dataSet (dictionary consisting of multiple dataFrame): original data
         min_max (dict): min max information of data
