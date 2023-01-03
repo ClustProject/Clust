@@ -4,6 +4,6 @@ Clust: tool
    :maxdepth: 2
    :caption: Contents:
 
-   tool/tool.plot_graph
+   tool/tool.plot
    
    tool/tool.stats_table

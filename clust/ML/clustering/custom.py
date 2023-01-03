@@ -13,7 +13,7 @@ def get_clustering_result_from_dataSet(data_set, feature_name, min_max, timedelt
     from Clust.clust.preprocessing.custom.simple import preprocessing_smoothing_scaling
     data = preprocessing_smoothing_scaling(data, ewm_parameter=0.3)
 
-    from Clust.clust.tool.plot_graph import plot_features
+    from Clust.clust.tool.plot import plot_features
     plot_features.plot_all_column_data_inSubPlot(data, fig_width, fig_height, fig_width_num = 4)
     
     from Clust.clust.ML.clustering.interface import clusteringByMethod
