@@ -68,11 +68,11 @@ def preprocessing_basic_for_clust_oneData(data, mongo_client, db_name, timedelta
     """
     # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
 
-    from Clust.clust.ingestion.mongo import customModules
+    from Clust.clust.meta.metaDataManager import bucketMeta
     
     #db에서 가져온 데이터로 만든 민맥스
     
-    min_max_from_db = customModules.get_min_max_info_from_bucketMeta(mongo_client, db_name)
+    min_max_from_db = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client, db_name)
 
     #필수적인 오류 데이터에 대해서 NaN 처리함
     from Clust.clust.preprocessing.dataPreprocessing import DataProcessing

@@ -16,8 +16,7 @@ clust/
   │       ├── ms_data - (문/완료)   
   │       └── bucket_data - (문/완료) 
   │   ├── mongo (진행중)
-  │       ├── customModules.py 
-  │       └── mongo_Client.py 
+  │       └── mongoClient.py 
   │   ├── DatatoCSV
   │   └── CSVtoInflux
   │
@@ -28,6 +27,7 @@ clust/
   │
   ├── meta
   │   ├── metaDataManager
+  │       └── bucketMeta.py 
   │   ├── metaFormatCheck
   │   └── metaGenerator
   │
