@@ -4,6 +4,8 @@ import pandas as pd
 from Clust.clust.ML.clustering.somClustering import SomClustering
 from Clust.clust.ML.clustering import plot_seriesDataSet
 
+
+
 def clusteringByMethod(data, model, x=None, y=None):
     """ 
     make clustering result of multiple dataset 
