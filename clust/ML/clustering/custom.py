@@ -1,4 +1,4 @@
-def get_clustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForClenData, fig_width, fig_height):
+def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForClenData, fig_width, fig_height):
 
     """_customized clustering function_ 
         1) preprocessing for making one DF
@@ -41,7 +41,15 @@ def get_clustering_result_from_dataSet(data_set, feature_name, min_max, timedelt
     from Clust.clust.tool.plot import plot_features
     plot_features.plot_all_column_data_inSubPlot(data, fig_width, fig_height, fig_width_num = 4)
     
-    from Clust.clust.ML.clustering.interface import clusteringByMethod
-    result, figdata, figdata2 = clusteringByMethod(data, 'som',  2, 2)
+    parameter ={
+        "method":"som",
+        "param" : {"epochs":50000,
+                "som_x":2,
+                    "som_y":2,
+                    "neighborhood_function":"gaussian",
+                    "activation_distance":"euclidean"}}
 
-    return result, figdata, figdata2
+    from Clust.clust.ML.clustering.interface import clusteringByMethod
+    result, figdata, = clusteringByMethod(data, parameter)
+
+    return result, figdata

@@ -20,9 +20,9 @@ def get_min_max_info_from_bucketMeta(db_client, db_name) :
     if len(bucket_meta) != 0 :
         if ('columnInformation' in bucket_meta[0]) :
             for x in bucket_meta[0]['columnInformation'] :
-                columnName  = x['columnName']
-                data_min_max_limit['max_num'][columnName] = x['max']
-                data_min_max_limit['min_num'][columnName] = x['min']
+                column_name  = x['columnName']
+                data_min_max_limit['max_num'][column_name] = x['max']
+                data_min_max_limit['min_num'][column_name] = x['min']
         
     return data_min_max_limit
 
@@ -31,8 +31,8 @@ def update_old_dict_with_new_dict(oldDict, newDict) :
     기존 Dict를 새로운 Dict로 업데이트하는 함수
 
     Args:
-        oldDict (Dict) 
-        newDict (Dict) 
+        oldDict (Dict) :원 Dict
+        newDict (Dict) :Old key와 동일 Key값이 있는 경우 업데이트 하고, 새로운 Key 값이 있는 경우 생성한다.
 
     Returns:
         oldDict (Dict) : updated data

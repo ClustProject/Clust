@@ -1,14 +1,5 @@
-from sklearn.cluster import DBSCAN
-import pandas as pd
-
-from Clust.clust.ML.clustering.somClustering import SomClustering
-from Clust.clust.ML.clustering import plot_seriesDataSet
-
-
-
-def clusteringByMethod(data, model, x=None, y=None):
-    """ 
-    make clustering result of multiple dataset 
+def clusteringByMethod(data, parameter):
+    """ make clustering result of multiple dataset 
 
     Retrieves rows pertaining to the given keys from the Table instance
     represented by table_handle.  String keys will be UTF-8 encoded.
@@ -31,20 +22,45 @@ def clusteringByMethod(data, model, x=None, y=None):
                    b'ICW0W2000014': '6'... }
     """
 
-    result =None
-    figdata=None
-    figdata2=None
-    if (len(data.columns)>0):
-        if model =="som":
-            data_series = data.to_numpy().transpose()
-            data_name = list(data.columns)
-            somV= SomClustering(data_series, data_name, 2, 2)
-            result = somV.train()
-            figdata, figdata2= somV.make_figs()
-    
-    return result, figdata, figdata2
+    from Clust.clust.tool.plot.util import plt_to_image
+    from Clust.clust.ML.clustering.som import Som
+    result = None
+    figdata = None
+    param = parameter['param']
+    model_name = parameter['method']
 
+    if (len(data.columns) > 0):
+        if model_name == "som":
+            som_i = Som(param)   
+            data_series = som_i.make_input_data(data)
+            data_name = list (data.columns)
+            som_model = som_i.train(data_series)
+                    
+            """
+            file_name = "model.pkl"
+            #important code for external usage
+            som_i.save_model(file_name)
+            model = som_i.load_model(file_name)
+            
+            som_c = Som(param) 
+            som_c.set_model(model)
+            
+            """
+            som_c = som_i
+            win_map = som_c.get_win_map(data_series)
+            result = som_c.get_clustering_result(data_series)
+            result_dic = som_c.get_result_dic(data_name, result)
+            
+            plt1 = som_c.plot_ts_by_label()
+            plt1.show()
+            figdata = plt_to_image(plt1)
+            
+            plt2 = som_c.plot_label_histogram()
+            plt2.show()
+        
+        return result_dic, figdata
 
+from sklearn.cluster import DBSCAN
 def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
     """ 
     Clustering
@@ -65,8 +81,8 @@ def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
 
     """
 
-    if method =="DBSCAN":
-        model = DBSCAN(min_samples= minPts)
-        result=model.fit_predict(data)
+    if method == "DBSCAN":
+        model = DBSCAN(min_samples = minPts)
+        result = model.fit_predict(data)
     return result
 

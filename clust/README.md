@@ -27,7 +27,7 @@ clust/
   │
   ├── meta
   │   ├── metaDataManager
-  │       └── bucketMeta.py 
+  │       └── bucketMeta.py (소/완료) - (문/검완료)
   │   ├── metaFormatCheck
   │   └── metaGenerator
   │

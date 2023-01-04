@@ -1,3 +1,6 @@
+# TODO JW 언제 쓰이는지 잘 모르겠으나, 제가 나중에 수정하도록 하겠습니다.
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 def groupSeriesFig(data, title, fig_width, fig_height, fig_width_num = 4):
