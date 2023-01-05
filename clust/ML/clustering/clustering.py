@@ -21,6 +21,10 @@ class Clustering:
     # TODO overriding
     def make_input_data(self, data):
         """make input data for clustering. 
+        Args:
+            data(np.dataFrame): input data
+        Return:
+            series_data(series): transformed data for training, and prediction
 
         """
         series_data = data.to_numpy().transpose()
@@ -45,7 +49,7 @@ class train:
         
         """
         with open(model_file_address, 'wb') as outfile:
-            pickle.dump(self.som, outfile)
+            pickle.dump(self.model, outfile)
 
 
     # TODO overriding
@@ -61,8 +65,6 @@ class train:
         """
         pass
     
-    
-
 
 class test:
     """Clustering Super Class"""

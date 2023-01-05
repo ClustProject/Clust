@@ -1,71 +1,93 @@
-from Clust.clust.ML.clustering.clustering import Clustering 
-
-
 from tqdm.autonotebook import tqdm 
 import numpy as np
 import pandas as pd
+from Clust.clust.ML.clustering.clustering import Clustering, train, test
 import matplotlib.pyplot as plt
-seed = 0
-np.random.seed(seed)
-
-
-parameter={
-    "method":"kMeans", 
-    "param":{}
-}
-
-class KKMeans():
-    
-    def __init__(self):
-        pass
+from tslearn.clustering import TimeSeriesKMeans
+class KMeansTrain(train, Clustering):   
+    def __init__(self, param):
         
-    # TODO
-    def get_km_model(self, n_clusters, method, max_iter = 10):
         """
-        get basic KMeans model by parameters
+        Args:
+        param(dict): parameter for clustering
+            >>> param = {"n_clusters":3,
+                        "metric":"euclidean"}
+        """
+        super().__init__(param)
+
+
+    def interpret_param(self, param):
+        """interpret_clustering parameter, overriding from super class
+        
+        """
+        self.n_clusters = param.get('n_clusters')
+        self.metric = param.get('metric')
+
+    def train(self, data):
+        """ train miniSom amd return miniSom instance
+        Args:
+            data(series):input data
+        
+        Return:
+            som (MiniSom instnace): MiniSom result instance
+        """
+        seed = 0
+        np.random.seed(seed)
+        self.model = TimeSeriesKMeans(n_clusters=self.n_clusters, metric = self.metric, random_state=seed)
+        self.model.fit(data)
+
+    # New Function
+    def search_best_n_clust(self, data, max_clusters):
+        """
+        - get multiple cluster result. 
+            1) get cluster labels 2) make silhouette and distortion score matrics
         
         Args:
-            n_clusters(int): Number of clusters to form.
-            method (string): {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
-                Metric to be used for both cluster assignment and barycenter computation. If “dtw”, DBA is used for barycenter computation.
-            max_iter(int): Maximum number of iterations of the k-means algorithm for a single run. Default = 10
-              
+            data (numpy.ndarray): data to be clustered
+            max_clusters(int): Max number of clusters to form.
+            method (string): k-means method {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
+            
         Returns:
-            km: (class tslearn.clustering.TimeSeriesKMeans)
-            
-        """
-        from tslearn.clustering import TimeSeriesKMeans
-        if method =='euclidean':
-            km = TimeSeriesKMeans(n_clusters=n_clusters, 
-                                    metric = method, 
-                                    max_iter=max_iter, 
-                                    verbose=True, 
-                                    random_state=seed)
+            cluster_labels (numpy.ndarray): clustering result
+            metric (dataFrame): dataframe with silhouette_score and distortion_score
 
-        elif method =='dtw':
-            #max_iter_barycenter : int (default: 100), Number of iterations for the barycenter computation process. 
-            #Only used if metric=”dtw” or metric=”softdtw”.
-            km = TimeSeriesKMeans(n_clusters=n_clusters, 
-                                    metric=method, 
-                                    max_iter= max_iter, 
-                                    max_iter_barycenter=max_iter, 
-                                    verbose=True, 
-                                    random_state=seed, 
-                                    n_init=2)
-        elif method == 'softdtw':
-            km = TimeSeriesKMeans(n_clusters=n_clusters, 
-                                    metric=method, 
-                                    max_iter = max_iter, 
-                                    verbose=True, 
-                                    random_state=seed, 
-                                    metric_params={"gamma": .01})
-        else:
-            km = TimeSeriesKMeans(n_clusters=n_clusters, max_iter=max_iter, verbose=True, random_state=seed)
-        
-        return km
+        """
+        seed = 0
+        np.random.seed(seed)
+        from sklearn.metrics import silhouette_score
+        silhouette = []
+        clusters_range = range(2, max_clusters)
+        for n_clusters in tqdm(clusters_range):
+            model = TimeSeriesKMeans(n_clusters=n_clusters, metric = self.metric, random_state=seed)
+            label = model.fit_transform(data)
+            print(label)
+            silhouette_avg = silhouette_score(data, label)
+            silhouette.append([n_clusters, silhouette_avg, model.inertia_])
+        metric = pd.DataFrame(silhouette, columns=['n_clusters', "silhouette_score", "distortion_score"])
+        metric = metric.set_index('n_clusters')
+        return metric
+
+
+class KMeansTest(test, Clustering):   
+    def predict(self, data):
+        """make winner_node (self.win_map) and get calustering label
+
+        Args:
+            data(series):data
             
+        Return:
+            cluster_map(array): cluster map result of input data
+            >>> example> [1, 2, 0]
+        """
+
+        # return dataframe
+        #label = []
         
-    def show_clustering_result(self, n_clusters, X, y, method, model):
+        label = self.model.predict(data)
+
+        return label
+
+    def plot_ts_by_label(self, n_clusters, X, y, method, model):
         """
         Show clustering result 
         
@@ -88,54 +110,8 @@ class KKMeans():
             for xx in X[y == yi]:
                 ax[yi].plot(xx.ravel(), "k-", alpha=.2)
             ax[yi].plot(model.cluster_centers_[yi].ravel(), "r-")
-        plt.show()
-        
 
-    def get_oneCluster_result(self, data, n_clusters, method):
-        """
-        - get one cluster result. 
-            1) make model 2) get cluster_label 3) show result by label
-        
-        Args:
-            data (numpy.ndarray): data to be clustered
-            n_clusters(int): number of clusters to form.
-            method (string): k-means method {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
-            
-        Returns:
-            model: (class tslearn.clustering.TimeSeriesKMeans) :kmeans Model
-            cluster_labels (numpy.ndarray): cluster_labels (numpy.ndarray): clustering result
+        return plt
 
-        """
-
-        model = self.get_km_model(n_clusters, method)
-        cluster_labels = model.fit_predict(data)
-        self.show_clustering_result(n_clusters, data, cluster_labels, method, model)
-
-        return model, cluster_labels
-
-    def get_multipleCluster_result(self, data, max_clusters, method):
-        """
-        - get multiple cluster result. 
-            1) get cluster labels 2) make silhouette and distortion score matrics
-        
-        Args:
-            data (numpy.ndarray): data to be clustered
-            max_clusters(int): Max number of clusters to form.
-            method (string): k-means method {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
-            
-        Returns:
-            cluster_labels (numpy.ndarray): clustering result
-            metric (dataFrame): dataframe with silhouette_score and distortion_score
-
-        """
-        
-        from sklearn.metrics import silhouette_score
-        silhouette = []
-        clusters_range = range(2, max_clusters)
-        for n_clusters in tqdm(clusters_range):
-            model, cluster_labels = self.get_oneCluster_result(data, n_clusters, method)
-            silhouette_avg = silhouette_score(data, cluster_labels)
-            silhouette.append([n_clusters, silhouette_avg, model.inertia_])
-        metric = pd.DataFrame(silhouette, columns=['n_clusters', "silhouette_score", "distortion_score"])
-        metric = metric.set_index('n_clusters')
-        return cluster_labels, metric
+    def plot_label_histogram(self, som_x, som_y):
+        pass
