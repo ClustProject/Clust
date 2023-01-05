@@ -50,6 +50,6 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
                     "activation_distance":"euclidean"}}
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod
-    result, figdata, = clusteringByMethod(data, parameter)
+    result, figdata= clusteringByMethod(data, parameter)
 
     return result, figdata

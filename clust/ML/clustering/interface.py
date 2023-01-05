@@ -23,7 +23,7 @@ def clusteringByMethod(data, parameter):
     """
 
     from Clust.clust.tool.plot.util import plt_to_image
-    from Clust.clust.ML.clustering.som import Som
+    from Clust.clust.ML.clustering.som import SomTrain, SomTest
     result = None
     figdata = None
     param = parameter['param']
@@ -31,31 +31,41 @@ def clusteringByMethod(data, parameter):
 
     if (len(data.columns) > 0):
         if model_name == "som":
-            som_i = Som(param)   
+            som_i = SomTrain(param) 
+            # 1. 데이터 준비
             data_series = som_i.make_input_data(data)
-            data_name = list (data.columns)
-            som_model = som_i.train(data_series)
-                    
+            data_name = list(data.columns)
+            # 2. Train
+            som_i.train(data_series)
+            model = som_i.model
             """
-            file_name = "model.pkl"
             #important code for external usage
-            som_i.save_model(file_name)
-            model = som_i.load_model(file_name)
-            
-            som_c = Som(param) 
-            som_c.set_model(model)
-            
+            # 3. model save 
+            file_name = "model.pkl"
+            SomTrain.save_model(file_name)
             """
-            som_c = som_i
-            win_map = som_c.get_win_map(data_series)
-            result = som_c.get_clustering_result(data_series)
-            result_dic = som_c.get_result_dic(data_name, result)
+
+            #5. Test
+            """
+            #important code for external usage
+            #4. model Load
+            file_name = "model.pkl"
+            model = som_t.load_model(file_name)
+            """
+            som_t = SomTest()
+            som_t.set_model(model)
+
+            # TODO Hard Coding 삭제해야함 (som_x, som_y 를 인풋으로 넣으면 안됨)
+            som_x = 2
+            som_y = 2
+            result = som_t.predict(data_series, som_y) 
+            result_dic = som_t.get_dict_from_two_array(data_name, result)
             
-            plt1 = som_c.plot_ts_by_label()
+            plt1 = som_t.plot_ts_by_label(som_x, som_y)
             plt1.show()
             figdata = plt_to_image(plt1)
             
-            plt2 = som_c.plot_label_histogram()
+            plt2 = som_t.plot_label_histogram(som_x, som_y)
             plt2.show()
         
         return result_dic, figdata
@@ -66,6 +76,7 @@ def ClusteringByMinPoints(data, minPts=3, method = "DBSCAN"):
     Clustering
 
     Args:
+
         data (DataFrame): input data
         minPts (integer): minimum points for clusting(3)
         method (string): Clustering Method(["DBSCAN"])
