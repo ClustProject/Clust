@@ -39,7 +39,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
 
     # 5. clustering
     from Clust.clust.tool.plot import plot_features
-    plot_features.plot_all_column_data_inSubPlot(data, fig_width, fig_height, fig_width_num = 4)
+    plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)
     
     parameter ={
         "method":"som",
