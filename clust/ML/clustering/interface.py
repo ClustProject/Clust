@@ -55,7 +55,7 @@ def clusteringByMethod(data, parameter):
             som_t = SomTest()
             som_t.set_model(model)
 
-            # TODO Hard Coding 삭제해야함 (som_x, som_y 를 인풋으로 넣으면 안됨)
+            # TODO Hard Coding 삭제해야함 (som_x, som_y 를 인풋으로 넣으면 안됨, minsiSom 참고 바람)
             som_x = 2
             som_y = 2
             result = som_t.predict(data_series, som_y) 
@@ -68,6 +68,10 @@ def clusteringByMethod(data, parameter):
             plt2 = som_t.plot_label_histogram(som_x, som_y)
             plt2.show()
         
+        if model_name == "kMeans":
+            # TODO kMeans
+            # kMenas 테스트 코드 참고
+            pass
         return result_dic, figdata
 
 from sklearn.cluster import DBSCAN
