@@ -5,8 +5,7 @@ def plot_correlation_chart(data):
     Plot Correlation Chart
 
     Args:
-        data (dataFrame): data
-        
+        data (dataFrame): input data 
     """
     import seaborn as sns
     corr = data.corr()
