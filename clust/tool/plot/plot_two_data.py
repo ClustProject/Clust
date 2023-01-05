@@ -5,7 +5,9 @@ from plotly.offline import *
 
 def plot_predictions(df_result):
     """
-    
+    Args:
+        df_result (dataFrame): input data 
+        
     Example:
     
         >>> baseline = go.Scatter(
