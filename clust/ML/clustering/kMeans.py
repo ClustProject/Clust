@@ -57,10 +57,12 @@ class KMeansTrain(train, Clustering):
         from sklearn.metrics import silhouette_score
         silhouette = []
         clusters_range = range(2, max_clusters)
+        kMeeans_t = KMeansTest()
         for n_clusters in tqdm(clusters_range):
             model = TimeSeriesKMeans(n_clusters=n_clusters, metric = self.metric, random_state=seed)
-            label = model.fit_transform(data)
-            print(label)
+            label = model.fit_predict(data)
+            plt = kMeeans_t.plot_ts_by_label(n_clusters, data, label, self.metric, model)
+            plt.show()
             silhouette_avg = silhouette_score(data, label)
             silhouette.append([n_clusters, silhouette_avg, model.inertia_])
         metric = pd.DataFrame(silhouette, columns=['n_clusters', "silhouette_score", "distortion_score"])
@@ -101,7 +103,6 @@ class KMeansTest(test, Clustering):
         """
         custom_xlim = [0, X.shape[1]]
         custom_ylim = [X.min(), X.max()]
-        print(custom_xlim, custom_ylim)
         fig, ax = plt.subplots(1, n_clusters, figsize=(20, 3))
         fig.suptitle("k_means:" + method, y=1.08)
         plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
