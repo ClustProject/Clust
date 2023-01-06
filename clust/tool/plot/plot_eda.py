@@ -18,13 +18,13 @@ def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
     """
     pass
 
-def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
+def show_one_feature_data_based_on_two_times(data, time_criteria):
     """
     A function that visualizes the amount of change in a specific feature of one data as a heatmap based on two time standards.
 
     Args:
         data (dataframe): Input data
-        feature (string): A column of data as one of column name to be shown
+        #feature (string): A column of data as one of column name to be shown
         time_criteria (dictionary): The time frequency of the x-axis and y-axis of the graph
                                     
 
@@ -45,7 +45,7 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
     # split data by y_frequency
     feature_cycle = re.findall('\D+', y_frequency)[0]
     feature_cycle_times = int(re.findall('\d+', y_frequency)[0])
-    split_dataset = dataByCycle.getCycleselectDataFrame(data[[feature]], feature_cycle, feature_cycle_times, downsampling_freq)
+    split_dataset = dataByCycle.getCycleselectDataFrame(data, feature_cycle, feature_cycle_times, downsampling_freq)
 
     # get heatmap x-axis, y-axis value
     x = list(range(1,len(split_dataset[0])+1))
@@ -54,12 +54,11 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
     # get heatmap z(data) value
     z = []
     for split_data in split_dataset:
-        z.append(split_data[feature].values.tolist())
+        z.append(split_data.values.tolist())
     
     fig = go.Figure(data = go.Heatmap(z=z, x=x, y=y, hoverongaps=False))
 
     fig.update_layout(
-        title = feature,
         xaxis = dict(
             tickmode = 'array',
             tickvals = x,
