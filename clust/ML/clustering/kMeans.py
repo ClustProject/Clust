@@ -16,7 +16,7 @@ class KMeansTrain(train, Clustering):
         super().__init__(param)
 
 
-    def interpret_param(self, param):
+    def _interpret_param(self, param):
         """interpret_clustering parameter, overriding from super class
         
         """
@@ -72,7 +72,7 @@ class KMeansTrain(train, Clustering):
 
 class KMeansTest(test, Clustering):   
     def predict(self, data):
-        """make winner_node (self.win_map) and get calustering label
+        """get calustering label
 
         Args:
             data(series):data

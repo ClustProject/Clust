@@ -1,4 +1,4 @@
-def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForClenData, fig_width, fig_height):
+def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForCleanData, fig_width, fig_height):
 
     """_customized clustering function_ 
         1) preprocessing for making one DF
@@ -13,7 +13,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
         min_max (dict):전처리 중 outlier 제거를 위해 활용할 min, max 값
         timedelta_frequency_min (timedelta): 데이터의 기술 주기
         duration (dict): 데이터의 유효한 시간 구간
-        NanInfoForClenData (dict) : 데이터 퀄러티 체크를 위한 정보
+        NanInfoForCleanData (dict) : 데이터 퀄러티 체크를 위한 정보
         fig_width (int): 최종 결과 그림을 위한 크기 정보 
         fig_height (int): 최종 결과 그림을 위한 크기 정보
 
@@ -31,7 +31,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     # 3. quality check
     from Clust.clust.quality.NaN import cleanData
     CMS = cleanData.CleanData()
-    data = CMS.get_cleanData_by_removing_column(data_DF, NanInfoForClenData) 
+    data = CMS.get_cleanData_by_removing_column(data_DF, NanInfoForCleanData) 
 
     # 4. preprocessing for clustering
     from Clust.clust.preprocessing.custom.simple import preprocessing_smoothing_scaling

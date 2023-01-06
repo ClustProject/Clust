@@ -27,7 +27,7 @@ clust/
   │
   ├── meta
   │   ├── metaDataManager
-  │       └── bucketMeta.py (소/완료) - (문/검완료)
+  │       └── bucketMeta.py (소/완료) - (문/검토 완료)
   │   ├── metaFormatCheck
   │   └── metaGenerator
   │
@@ -35,9 +35,9 @@ clust/
   │   ├── clustering
   │       ├── custom.py
   │       ├── interface.py
-  │       ├── cluetring.py :Algorithm (문/완료) - (김/검토)
-  │       ├── kMeans.py    :Algorithm (문/완료) - (김/검토)
-  │       ├── som.py       :Algorithm (문/완료) - (김/검토)
+  │       ├── cluetring.py :Algorithm (문/완료) - (김/일반화 진행중)
+  │       ├── kMeans.py    :Algorithm (문/완료) - (김/일반화 진행중)
+  │       ├── som.py       :Algorithm (문/완료) - (김/일반화 진행중)
   │       ├── etc.py       :Algorithm (문/완료) 
   │       └── util.py
   │   └── model

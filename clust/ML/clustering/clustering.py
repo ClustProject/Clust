@@ -5,17 +5,17 @@ class Clustering:
     def __init__(self):
         pass
 
-    def get_dict_from_two_array(self, input_name, label_result):
+    def get_dict_from_two_array(self, input_key, input_value):
         """make dictionary from two array (key array, value array)
 
         Args:
-            input_name (array): input name of data
-            label_result (array): clustering result 
+            input_key (array): input array for key
+            input_value (array): input array for value
 
         Returns:
-            dict_result(dict): dictionary type result -> key: nput_name, value: label
+            dict_result(dict): dictionary type result -> key: input_key, value: input_value
         """
-        dict_result = dict(zip(input_name, label_result))
+        dict_result = dict(zip(input_key, input_value))
         return dict_result
 
     # TODO overriding
@@ -38,8 +38,8 @@ class train:
 
         Args:
             param (dict): parameter for clustering by specific clustering methods
-        """
-        self.interpret_param(param)
+        """  
+        self._interpret_param(param)
 
     def save_model(self, model_file_address):
         """ save model: dafult file type is pickle
@@ -53,7 +53,7 @@ class train:
 
 
     # TODO overriding
-    def interpret_param(self, param):
+    def _interpret_param(self, param):
         """ interpret_clustering parameter. Each method should define interpret_param module.
         
         """
@@ -94,7 +94,7 @@ class test:
 
     ## TODO overriding
     def predict(self, data):
-        """make winner_node (self.win_map) and get calustering label
+        """get calustering label
 
         Args:
             data(series):data
@@ -115,8 +115,11 @@ class test:
         pass
     
 
-    def plot_label_histogram(self):
+    def plot_label_histogram(self, label):
         """ plot histogram result with clustered result
+        
+        Args:
+            label(array): label result by
 
         """
         pass

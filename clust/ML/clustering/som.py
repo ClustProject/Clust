@@ -20,7 +20,7 @@ class SomTrain(train, Clustering):
         """
         super().__init__(param)
         
-    def interpret_param(self, param):
+    def _interpret_param(self, param):
         """interpret_clustering parameter, overriding from super class
         
         """
@@ -54,7 +54,7 @@ class SomTest(test, Clustering):
     #---------------Test Code
     # TODO som_y를 인풋에서 제외 시켜야함
     def predict(self, data, som_y):
-        """make winner_node (self.win_map) and get calustering label
+        """make winner_node and get calustering label
 
         Args:
             data(series):data
