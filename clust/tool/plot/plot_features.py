@@ -44,6 +44,7 @@ def plot_all_feature_data(data):
     plot_features = data[plot_cols]
     _ = plot_features.plot(subplots=True)
     plt.legend()
+    return plt
 
 
 def plot_all_feature_data_one_pic(data):

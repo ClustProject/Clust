@@ -14,5 +14,6 @@ def plot_correlation_chart(data):
     heat_map = plt.gcf()
     ax.set_ylim(bottom+0.5, top-0.5)
     heat_map.set_size_inches(10, 6)
-    plt.show()
+    
+    return plt
     
