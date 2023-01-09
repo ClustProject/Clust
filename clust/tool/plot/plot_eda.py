@@ -85,28 +85,26 @@ def show_one_data_distribution_of_two_feature(data, feature_list):
         feature_list (string): columns of data as two of column name to be shown
     """
     
-    
-    x_feature = feature_list[0]
-    y_feature = feature_list[1]
-    
-    fig = go.Figure(
-        data=go.Scatter(
-            y = data[y_feature], # y축 값 sepal_length 값에 따라 배치
-            x = data[x_feature],
-            mode='markers', # Scatter Plot을 그리기 위해 Markers 
-            marker=dict(    # Marker에 대한 세부적은 설정을 지정
-                size=20,    # 점 크기
-                #color=data[x_feature], # 색깔 값을 petal_length에 따라 변하도록 설정 
-                colorscale='Viridis', # one of plotly colorscales
-                showscale=True,  # colorscales 보여줌
-                line_width=1, # 마커 라인 두께 설정
+    try:
+        x_feature = feature_list[0]
+        y_feature = feature_list[1]
+        
+        fig = go.Figure(
+            data=go.Scatter(
+                y = data[y_feature], # y축 값 sepal_length 값에 따라 배치
+                x = data[x_feature],
+                mode='markers', # Scatter Plot을 그리기 위해 Markers 
+                marker=dict(    # Marker에 대한 세부적은 설정을 지정
+                    size=10,    # 점 크기
+                    line_width=1, # 마커 라인 두께 설정
+                )
             )
         )
-    )
-    fig.update_layout(title='Iris Data')
-    fig.show()
-    
-    # fig = px.scatter(data, x=x_feature, y=y_feature)
-    # fig.show()
-    
-    #py.iplot(fig)
+        fig.update_layout(
+            title='distribution of {} and {}'.format(x_feature, y_feature),
+            xaxis_title = "{} Feature".format(x_feature),
+            yaxis_title = "{} Feature".format(y_feature)
+            )
+        fig.show()
+    except:
+        print("Data is None")
