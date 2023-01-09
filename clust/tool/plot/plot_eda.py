@@ -12,12 +12,16 @@ from Clust.clust.transformation.sampling.data_up_down import DataUpDown
 
 def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
     """
-    
     Args:
-        data (dataframe): Input data
+        dataset (dictionary of dataframe): Input dataset
         feature (string): A column of data as one of column name to be shown
     """
-    pass
+    layout = go.Layout(title = feature)
+    fig = go.Fiqure(layout = layout)
+    for data_name in dataset.keys():
+        trace = go.Box(y = dataset[data_name][feature], name = data_name)
+        fig.add_trace(trace)
+    fig.show()
 
 def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
     """
