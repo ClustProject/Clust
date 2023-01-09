@@ -17,7 +17,7 @@ def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
         feature (string): A column of data as one of column name to be shown
     """
     layout = go.Layout(title = feature)
-    fig = go.Fiqure(layout = layout)
+    fig = go.Figure(layout = layout)
     for data_name in dataset.keys():
         trace = go.Box(y = dataset[data_name][feature], name = data_name)
         fig.add_trace(trace)
@@ -43,6 +43,9 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
     string_time = re.findall('\D', x_frequency)[0]
     numeric_time = re.findall('\d+', x_frequency)[0]
     downsampling_freq = numeric_time+string_time
+
+    if re.findall('\D+', x_frequency)[0] == "Min":
+        downsampling_freq = downsampling_freq.lower()
 
     # down sampling by donwsampling_freq (x_frequency)
     data = DataUpDown().data_down_sampling(data, downsampling_freq)
