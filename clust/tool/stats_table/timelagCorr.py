@@ -70,7 +70,7 @@ class TimeLagCorr():
         """
         return datax.corr(datay.shift(lag))
 
-    def get_max_index_and_values(self, data:pd.DataFrame)-> pd.DataFrame:
+    def get_absmax_index_and_values(self, data):
         """get dataframe with max cross correlation values and its index
 
         Args:
@@ -86,7 +86,7 @@ class TimeLagCorr():
         
         max_position_value = pd.DataFrame(index = data.columns, columns =['value', 'index'])
         for column in data.columns:
-            index_num = data.idxmax()[column]
+            index_num = data.abs().idxmax()[column]
             max_position_value.loc[column, "index"] = index_num
             max_position_value.loc[column, "value"] = data.loc [index_num, column]
 
