@@ -1,10 +1,13 @@
 from tqdm.autonotebook import tqdm 
 import numpy as np
 import pandas as pd
-from Clust.clust.ML.clustering.clustering import Clustering, train, test
+from Clust.clust.ML.clustering.clustering_YK import Clustering, Train, Test
 import matplotlib.pyplot as plt
 from tslearn.clustering import TimeSeriesKMeans
-class KMeansTrain(train, Clustering):   
+import pickle
+
+
+class KMeansTrain(Clustering, Train):   
     def __init__(self, param):
         
         """
@@ -13,8 +16,8 @@ class KMeansTrain(train, Clustering):
             >>> param = {"n_clusters":3,
                         "metric":"euclidean"}
         """
-        super().__init__(param)
-
+        super().__init__()
+        self._interpret_param(param)
 
     def _interpret_param(self, param):
         """interpret_clustering parameter, overriding from super class
@@ -32,6 +35,10 @@ class KMeansTrain(train, Clustering):
         np.random.seed(seed)
         self.model = TimeSeriesKMeans(n_clusters=self.n_clusters, metric = self.metric, random_state=seed)
         self.model.fit(data)
+
+    def save_model(self, model_file_path):
+        with open(model_file_path, 'wb') as outfile:
+            pickle.dump(self.model, outfile)
 
     # New Function
     def search_best_n_clust(self, data, max_clusters):
@@ -54,11 +61,11 @@ class KMeansTrain(train, Clustering):
         from sklearn.metrics import silhouette_score
         silhouette = []
         clusters_range = range(2, max_clusters)
-        kMeeans_t = KMeansTest()
+        kMeans_t = KMeansTest()
         for n_clusters in tqdm(clusters_range):
             model = TimeSeriesKMeans(n_clusters=n_clusters, metric = self.metric, random_state=seed)
             label = model.fit_predict(data)
-            plt = kMeeans_t.plot_ts_by_label(n_clusters, data, label, self.metric, model)
+            plt = kMeans_t.plot_ts_by_label(n_clusters, data, label, self.metric, model)
             plt.show()
             silhouette_avg = silhouette_score(data, label)
             silhouette.append([n_clusters, silhouette_avg, model.inertia_])
@@ -67,7 +74,20 @@ class KMeansTrain(train, Clustering):
         return metric
 
 
-class KMeansTest(test, Clustering):   
+class KMeansTest(Clustering, Test):
+    def __init__(self):
+        super().__init__()
+
+    def load_model(self, model_file_path):
+        """ overriding
+        """
+        # load model
+        with open(model_file_path, 'rb') as infile:
+            model = pickle.load(infile)
+
+        # set model
+        self.set_model(model)
+
     def predict(self, data):
         """get calustering label
 
@@ -79,14 +99,17 @@ class KMeansTest(test, Clustering):
             >>> example> [1, 2, 0]
         """
 
+        self.X = data
+
         # return dataframe
         #label = []
         
         label = self.model.predict(data)
+        self.y = label
 
         return label
 
-    def plot_ts_by_label(self, n_clusters, X, y, method, model):
+    def plot_ts_by_label(self):
         """
         Show clustering result 
         
@@ -98,18 +121,34 @@ class KMeansTest(test, Clustering):
             model: (class tslearn.clustering.TimeSeriesKMeans) :kmeans Model
 
         """
-        custom_xlim = [0, X.shape[1]]
-        custom_ylim = [X.min(), X.max()]
+        n_clusters = self.model.cluster_centers_.shape[0]
+
+        custom_xlim = [0, self.X.shape[1]]
+        custom_ylim = [self.X.min(), self.X.max()]
         fig, ax = plt.subplots(1, n_clusters, figsize=(20, 3))
-        fig.suptitle("k_means:" + method, y=1.08)
+        fig.suptitle("k_means:" + self.model.metric, y=1.08)
         plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
         for yi in range(n_clusters):
-            ax[yi].set_title('Clust '+str(yi))
-            for xx in X[y == yi]:
+            ax[yi].set_title('Clust '+str(yi+1))
+            for xx in self.X[self.y == yi]:
                 ax[yi].plot(xx.ravel(), "k-", alpha=.2)
-            ax[yi].plot(model.cluster_centers_[yi].ravel(), "r-")
+            ax[yi].plot(self.model.cluster_centers_[yi].ravel(), "r-")
 
         return plt
 
-    def plot_label_histogram(self, som_x, som_y):
-        pass
+    def plot_label_histogram(self):
+        """ overriding
+        """
+        n_clusters = self.model.cluster_centers_.shape[0]
+        label = self.y
+
+        cluster_c = [0 for i in range(n_clusters)]
+        cluster_n = [f"Cluster {i+1}" for i in range(n_clusters)]
+
+        for i in range(len(label)):
+            cluster_c[label[i]] += 1
+        
+        plt.title("Cluster Distribution for K-Means")
+        plt.bar(cluster_n, cluster_c)
+
+        return plt
