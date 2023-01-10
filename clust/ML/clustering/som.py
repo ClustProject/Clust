@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from Clust.clust.ML.clustering.clustering import Clustering, train, test
+from Clust.clust.ML.clustering.clustering import Clustering, Train, Test
 from minisom import MiniSom 
 from tslearn.barycenters import dtw_barycenter_averaging
 import math
 #plt.switch_backend('Agg')
 
-class SomTrain(train, Clustering):   
+
+class SomTrain(Clustering, Train):   
     def __init__(self, param):
         
         """
@@ -18,7 +19,8 @@ class SomTrain(train, Clustering):
                              "activation_distance":"euclidean",
                              "epochs":5000}
         """
-        super().__init__(param)
+        super().__init__()
+        self._interpret_param(param)
         
     def _interpret_param(self, param):
         """interpret_clustering parameter, overriding from super class
@@ -50,11 +52,12 @@ class SomTrain(train, Clustering):
         self.model.train(data, self.epochs)
 
 
-class SomTest(test, Clustering):   
-    #---------------Test Code
-    # TODO som_y를 인풋에서 제외 시켜야함
-    def predict(self, data, som_y):
-        """make winner_node and get calustering label
+class SomTest(Clustering, Test):
+    def __init__(self):
+        super().__init__()
+
+    def predict(self, data):
+        """make winner_node (self.win_map) and get clustering label
 
         Args:
             data(series):data
@@ -70,15 +73,11 @@ class SomTest(test, Clustering):
         
         for idx in range(len(data)):
             winner_node = self.model.winner(data[idx])
-            label.append(str(winner_node[0]*som_y+winner_node[1]+1))
+            label.append(str(winner_node[0]*len(self.model._neigy)+winner_node[1]+1))
 
         return label
 
-    # TODO plot이 win_map에 의해 그려지도록 되어있지만, 되도록 data (series) 와 Result(array) 에 의해서 그려지도록 하는게 맞음
-    # input을 data_series, label_result로 그리도록 (self.win_map 사용해도 되긴함)
-    # input에서 som_x, som_y 삭제해야함
-
-    def plot_ts_by_label(self, som_x, som_y):
+    def plot_ts_by_label(self):
         """ overriding
         """
         win_map = self.win_map
@@ -108,8 +107,8 @@ class SomTest(test, Clustering):
             size_y = math.ceil(len(win_map)/size_x)
             fig, axs = plt.subplots(size_y,size_x,figsize=(25,25))
             cnt = 0
-            for x in range(som_x):
-                for y in range(som_y):
+            for x in range(len(self.model._neigx)):
+                for y in range(len(self.model._neigy)):
                     cluster = (x,y)
                     if cluster in win_map.keys():
                         if(size_y==1): pos = cnt
@@ -122,32 +121,28 @@ class SomTest(test, Clustering):
                             axs[pos].plot(dtw_barycenter_averaging(np.vstack(win_map[cluster])),c="red") 
                         else:
                             axs[pos].plot(np.average(np.vstack(win_map[cluster]),axis=0),c="red")
-                        cluster_number = x*som_y+y+1
+                        cluster_number = x*len(self.model._neigy)+y+1
                         axs[pos].set_title(f"Cluster {cluster_number}")
 
         fig.suptitle('Clusters')
         
         return plt
 
-    # TODO plot이 win_map에 의해 그려지도록 되어있지만, 되도록 data와 Result에 의해서 그려지도록 하는게 맞음
-    # input을 data_series, label_result로 그리도록 (self.win_map 사용해도 되긴함)
-    # input에서 som_x, som_y 삭제해야함
-
-    def plot_label_histogram(self, som_x, som_y):
+    def plot_label_histogram(self):
         """ overriding
         """
         win_map = self.win_map
         
         cluster_c = []
         cluster_n = []
-        for x in range(som_x):
-            for y in range(som_y):
+        for x in range(len(self.model._neigx)):
+            for y in range(len(self.model._neigy)):
                 cluster = (x,y)
                 if cluster in win_map.keys():
                     cluster_c.append(len(win_map[cluster]))
                 else:
                     cluster_c.append(0)
-                cluster_number = x*som_y+y+1
+                cluster_number = x*len(self.model._neigy)+y+1
                 cluster_n.append(f"Cluster {cluster_number}")
         plt.title("Cluster Distribution for SOM")
         plt.bar(cluster_n,cluster_c)

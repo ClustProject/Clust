@@ -30,7 +30,8 @@ class Clustering:
         series_data = data.to_numpy().transpose()
         return series_data
 
-class train:
+
+class Train:
     """Clustering Train Super Class"""
 
     def __init__(self, param):
@@ -41,14 +42,14 @@ class train:
         """  
         self._interpret_param(param)
 
-    def save_model(self, model_file_address):
+    def save_model(self, model_file_path):
         """ save model: dafult file type is pickle
         
         Args:
-            model_file_address(str) : model_file_address
+            model_file_path(str) : model_file_path
         
         """
-        with open(model_file_address, 'wb') as outfile:
+        with open(model_file_path, 'wb') as outfile:
             pickle.dump(self.model, outfile)
 
 
@@ -66,22 +67,23 @@ class train:
         pass
     
 
-class test:
+class Test:
     """Clustering Super Class"""
 
     def __init__(self):
         pass
     
 
-    def load_model(self, model_file_address):
+    def load_model(self, model_file_path):
         """ load model: : dafult file type is pickle
         Args:
-            model_file_address(str) : model_file_address
+            model_file_path(str) : model_file_path
         
         """
-        with open(model_file_address, 'rb') as infile:
-            self.model = pickle.load(infile)
-        return self.model
+        with open(model_file_path, 'rb') as infile:
+            model = pickle.load(infile)
+        
+        self.set_model(model)
     
     def set_model(self, model):
         """ set new model

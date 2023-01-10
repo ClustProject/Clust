@@ -39,17 +39,29 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
 
     # 5. clustering
     from Clust.clust.tool.plot import plot_features
-    plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)
+    # plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)
     
 
-    # TODO YK Kim
-    parameter ={
-        "method":"som",
-        "param" : {"epochs":50000,
-                "som_x":2,
-                    "som_y":2,
-                    "neighborhood_function":"gaussian",
-                    "activation_distance":"euclidean"}}
+    # SOM
+    parameter = {
+        "method": "som",
+        "param": {
+            "epochs":50000,
+            "som_x":2,
+            "som_y":2,
+            "neighborhood_function":"gaussian",
+            "activation_distance":"euclidean"
+        }
+    }
+    
+    # K-Means
+    # parameter = {
+    #     "method": "kmeans",
+    #     "param": {
+    #         "n_clusters": 3,
+    #         "metric": "euclidean"
+    #     }
+    # }
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod
     result, figdata= clusteringByMethod(data, parameter)
