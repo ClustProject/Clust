@@ -23,7 +23,7 @@ def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
         fig.add_trace(trace)
     fig.show()
 
-def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
+def show_one_feature_data_based_on_two_times(data, feature, time_criteria, sampling_flag = True):
     """
     A function that visualizes the amount of change in a specific feature of one data as a heatmap based on two time standards.
 
@@ -42,13 +42,14 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
     # get down samping frequency
     string_time = re.findall('\D', x_frequency)[0]
     numeric_time = re.findall('\d+', x_frequency)[0]
-    downsampling_freq = numeric_time+string_time
-
-    if re.findall('\D+', x_frequency)[0] == "Min":
-        downsampling_freq = downsampling_freq.lower()
+    downsampling_freq = None
 
     # down sampling by donwsampling_freq (x_frequency)
-    data = DataUpDown().data_down_sampling(data, downsampling_freq)
+    if sampling_flag:
+        downsampling_freq = numeric_time+string_time
+        if re.findall('\D+', x_frequency)[0] == "Min":
+            downsampling_freq = downsampling_freq.lower()
+        data = DataUpDown().data_down_sampling(data, downsampling_freq)
 
     try:
         # split data by y_frequency
@@ -81,6 +82,7 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria):
             ))
 
         fig.show()
+        return split_dataset
     except ZeroDivisionError:
         print("The duration of the data is less than {}.".format(y_frequency))
 
