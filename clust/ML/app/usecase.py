@@ -1,4 +1,6 @@
-def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForCleanData, fig_width, fig_height):
+# Clust/KETIAppTestCode/KWeather2nd/20-01, 20-02, 20-03 Clust/clust/example/4-1, 4-2 테스트 코드와 관련 있음
+# 서버의 dataDomainExploration.py도 연결
+def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NanInfoForCleanData):
 
     """_customized clustering function_ 
         1) preprocessing for making one DF
@@ -42,11 +44,14 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     # plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)
     
 
+    
+    """
     # SOM
+    """
     parameter = {
         "method": "som",
         "param": {
-            "epochs":50000,
+            "epochs":5000,
             "som_x":2,
             "som_y":2,
             "neighborhood_function":"gaussian",
@@ -54,16 +59,20 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
         }
     }
     
+    """
     # K-Means
-    # parameter = {
-    #     "method": "kmeans",
-    #     "param": {
-    #         "n_clusters": 3,
-    #         "metric": "euclidean"
-    #     }
-    # }
+    parameter = {
+         "method": "kmeans",
+         "param": {
+             "n_clusters": 3,
+             "metric": "euclidean"
+         }
+    }
+    """
+
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod
-    result, figdata= clusteringByMethod(data, parameter)
+    model_path = "model.pkl"
+    result, figdata= clusteringByMethod(data, parameter, model_path)
 
     return result, figdata

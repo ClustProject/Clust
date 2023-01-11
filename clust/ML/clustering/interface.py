@@ -1,11 +1,19 @@
-def clusteringByMethod(data, parameter):
+from Clust.clust.tool.plot.util import plt_to_image
+from Clust.clust.ML.clustering.som import SomTrain, SomTest
+from Clust.clust.ML.clustering.kMeans import KMeansTrain, KMeansTest
+from Clust.clust.ML.tool.data import DF_to_series
+from Clust.clust.ML.tool.model import load_pickle_model, save_pickle_model
+
+#TODO 나중에 수정해야함 전반적인 구조들과 스트럭쳐
+
+def clusteringByMethod(data, parameter, model_path):
     """ make clustering result of multiple dataset 
 
     Retrieves rows pertaining to the given keys from the Table instance
     represented by table_handle.  String keys will be UTF-8 encoded.
 
     Args:
-        data (dataFrame): list of multiple dataframe inputs to be clustered
+        data (dataFrame): list of multiple dataframe inputs to be clustered (each column : individual data, index : time sequence data)
         model(int): clust model name to be applied modelList = ['som']
         x(int): x length
         y(int): y length
@@ -22,10 +30,6 @@ def clusteringByMethod(data, parameter):
                    b'ICW0W2000014': '6'... }
     """
 
-    from Clust.clust.tool.plot.util import plt_to_image
-    from Clust.clust.ML.clustering.som import SomTrain, SomTest
-    from Clust.clust.ML.clustering.kMeans import KMeansTrain, KMeansTest
-
     result = None
     figdata = None
     param = parameter['param']
@@ -35,32 +39,34 @@ def clusteringByMethod(data, parameter):
         # Train/Test 클래스 생성
         # 모델 저장/로드 경로
         if model_name == "som":
-            clust_train = SomTrain(param)
+            clust_train = SomTrain()
+            clust_train.set_param(param)
             clust_test = SomTest()
-            save_path = "./som.pkl"
-            load_path = "./som.pkl"
         elif model_name == "kmeans":
-            clust_train = KMeansTrain(param)
+            clust_train = KMeansTrain()
+            clust_train.set_param(param)
             clust_test = KMeansTest()
-            save_path = "./km.pkl"
-            load_path = "./km.pkl"
 
         # 1. 데이터 준비
-        data_series = clust_train.make_input_data(data)
+        data_series = DF_to_series(data)
         data_name = list(data.columns)
 
-        # 2. train
+        # 2. Train
+        clust_train.set_param(param)
         clust_train.train(data_series)
 
         # 3. model save
-        clust_train.save_model(save_path)
+        save_pickle_model(clust_train.model, model_path)
 
         # 4. model load
-        clust_test.load_model(load_path)
+        model = load_pickle_model(model_path)
+        
 
         # 5. test (predict)
+        clust_test.set_model(model)
+        from Clust.clust.ML.tool import util
         result = clust_test.predict(data_series)
-        result_dic = clust_test.get_dict_from_two_array(data_name, result)
+        result_dic = util.get_dict_from_two_array(data_name, result)
 
         # plot time series style
         plt1 = clust_test.plot_ts_by_label()
@@ -70,5 +76,9 @@ def clusteringByMethod(data, parameter):
         # plot historgram
         plt2 = clust_test.plot_label_histogram()
         plt2.show()
+        figdata2 = plt_to_image(plt2)
         
         return result_dic, figdata
+
+
+

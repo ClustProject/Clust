@@ -1,14 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from Clust.clust.ML.clustering.clustering import Clustering, Train, Test
+from Clust.clust.ML.clustering.clustering import Train, Test
 from minisom import MiniSom 
 from tslearn.barycenters import dtw_barycenter_averaging
 import math
 #plt.switch_backend('Agg')
 
 
-class SomTrain(Clustering, Train):   
-    def __init__(self, param):
+class SomTrain(Train):   
+    def __init__(self):
         
         """
         Args:
@@ -20,9 +20,8 @@ class SomTrain(Clustering, Train):
                              "epochs":5000}
         """
         super().__init__()
-        self._interpret_param(param)
         
-    def _interpret_param(self, param):
+    def set_param(self, param):
         """interpret_clustering parameter, overriding from super class
         
         """
@@ -52,7 +51,7 @@ class SomTrain(Clustering, Train):
         self.model.train(data, self.epochs)
 
 
-class SomTest(Clustering, Test):
+class SomTest(Test):
     def __init__(self):
         super().__init__()
 

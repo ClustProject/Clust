@@ -17,8 +17,6 @@ def make_count_report_byBucket(resultSet, bucket_list, saveFlag = True):
     """
     result_count ={}
     result_percent ={}   
-    plt.rcParams['figure.figsize']=(20, 10)
-    plt.legend(prop={'size': 10})
         
     feature_list = list(resultSet.columns)
     for feature_name in feature_list:

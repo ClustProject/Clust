@@ -1,26 +1,22 @@
 from tqdm.autonotebook import tqdm 
 import numpy as np
 import pandas as pd
-from Clust.clust.ML.clustering.clustering import Clustering, Train, Test
+from Clust.clust.ML.clustering.clustering import Train, Test
 import matplotlib.pyplot as plt
 from tslearn.clustering import TimeSeriesKMeans
+seed = 0
+np.random.seed(seed)
 
+class KMeansTrain(Train):   
+    def __init__(self):
+        super().__init__()
 
-class KMeansTrain(Clustering, Train):   
-    def __init__(self, param):
-        
+    def set_param(self, param):
         """
         Args:
         param(dict): parameter for clustering
             >>> param = {"n_clusters":3,
                         "metric":"euclidean"}
-        """
-        super().__init__()
-        self._interpret_param(param)
-
-    def _interpret_param(self, param):
-        """interpret_clustering parameter, overriding from super class
-        
         """
         self.n_clusters = param.get('n_clusters')
         self.metric = param.get('metric')
@@ -35,41 +31,8 @@ class KMeansTrain(Clustering, Train):
         self.model = TimeSeriesKMeans(n_clusters=self.n_clusters, metric = self.metric, random_state=seed)
         self.model.fit(data)
 
-    # New Function
-    def search_best_n_clust(self, data, max_clusters):
-        """
-        - get multiple cluster result. 
-            1) get cluster labels 2) make silhouette and distortion score matrics
-        
-        Args:
-            data (numpy.ndarray): data to be clustered
-            max_clusters(int): Max number of clusters to form.
-            method (string): k-means method {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
-            
-        Returns:
-            cluster_labels (numpy.ndarray): clustering result
-            metric (dataFrame): dataframe with silhouette_score and distortion_score
 
-        """
-        seed = 0
-        np.random.seed(seed)
-        from sklearn.metrics import silhouette_score
-        silhouette = []
-        clusters_range = range(2, max_clusters)
-        kMeans_t = KMeansTest()
-        for n_clusters in tqdm(clusters_range):
-            model = TimeSeriesKMeans(n_clusters=n_clusters, metric = self.metric, random_state=seed)
-            label = model.fit_predict(data)
-            plt = kMeans_t.plot_ts_by_label(n_clusters, data, label, self.metric, model)
-            plt.show()
-            silhouette_avg = silhouette_score(data, label)
-            silhouette.append([n_clusters, silhouette_avg, model.inertia_])
-        metric = pd.DataFrame(silhouette, columns=['n_clusters', "silhouette_score", "distortion_score"])
-        metric = metric.set_index('n_clusters')
-        return metric
-
-
-class KMeansTest(Clustering, Test):
+class KMeansTest(Test):
     def __init__(self):
         super().__init__()
 
@@ -137,3 +100,46 @@ class KMeansTest(Clustering, Test):
         plt.bar(cluster_n, cluster_c)
 
         return plt
+
+
+def search_best_n_clust(data, param):
+    """
+    - get multiple cluster result. (n_cluster = 2 ~ param['n_cluster])
+        1) get cluster labels 2) make silhouette and distortion score matrics
+    
+    Args:
+        data (numpy.ndarray): data to be clustered
+        max_cluster_num(int): Max number of clusters to form.     
+        
+    Returns:
+        metric (dataFrame): dataframe with silhouette_score and distortion_score
+
+    """
+    from sklearn.metrics import silhouette_score
+    silhouette = []
+    max_clusters = param['n_clusters']
+    clusters_range = range(2, max_clusters)
+    
+    for n_clusters in tqdm(clusters_range):
+        param['n_clusters'] = n_clusters
+        clust_train = KMeansTrain()
+        clust_train.set_param(param)
+        clust_train.train(data)
+
+        clust_test = KMeansTest() 
+        clust_test.set_model(clust_train.model)
+        
+        result = clust_test.predict(data)
+        plt = clust_test.plot_ts_by_label()
+        plt.show()
+
+        silhouette_avg = silhouette_score(data, result)
+        silhouette.append([n_clusters, silhouette_avg, clust_train.model.inertia_])
+
+    metric = pd.DataFrame(silhouette, columns=['n_clusters', "silhouette_score", "distortion_score"])
+    metric = metric.set_index('n_clusters')
+    
+    return metric
+
+
+    
