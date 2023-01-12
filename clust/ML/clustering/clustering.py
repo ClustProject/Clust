@@ -1,7 +1,7 @@
 class Train:
     """Clustering Train Super Class"""
 
-    def __init__(self, param=None):
+    def __init__(self):
         """ param interpretation
 
         Args:
@@ -18,11 +18,13 @@ class Train:
         """  
         pass
     
-    def train(self):
+    def train(self, data):
         """training model Each method should define
-
+        Args:
+            data (series): input data for training
         """
         pass
+
     
 
 class Test:
@@ -63,11 +65,8 @@ class Test:
         pass
     
 
-    def plot_label_histogram(self, label):
+    def plot_label_histogram(self):
         """ plot histogram result with clustered result
-        
-        Args:
-            label(array): label result by
 
         """
         pass
