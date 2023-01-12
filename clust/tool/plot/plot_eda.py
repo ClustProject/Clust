@@ -56,32 +56,33 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria, sampl
         feature_cycle = re.findall('\D+', y_frequency)[0]
         feature_cycle_times = int(re.findall('\d+', y_frequency)[0])
         split_dataset = dataByCycle.getCycleselectDataFrame(data[[feature]], feature_cycle, feature_cycle_times, downsampling_freq)
-
-        # get heatmap x-axis, y-axis value
-        x = list(range(1,len(split_dataset[0])+1))
-        y = list(range(1, len(split_dataset)+1))
-
-        # get heatmap z(data) value
-        z = []
-        for split_data in split_dataset:
-            z.append(split_data[feature].values.tolist())
         
-        fig = go.Figure(data = go.Heatmap(z=z, x=x, y=y, hoverongaps=False))
+        if split_dataset:
+            # get heatmap x-axis, y-axis value
+            x = list(range(1,len(split_dataset[0])+1))
+            y = list(range(1, len(split_dataset)+1))
 
-        fig.update_layout(
-            title = feature,
-            xaxis = dict(
-                tickmode = 'array',
-                tickvals = x,
-                ticktext = [str(num)+string_time for num in x]
-            ),
-            yaxis = dict(
-                tickmode = 'array',
-                tickvals = y,
-                ticktext = [str(num)+feature_cycle for num in y]
-            ))
+            # get heatmap z(data) value
+            z = []
+            for split_data in split_dataset:
+                z.append(split_data[feature].values.tolist())
+            
+            fig = go.Figure(data = go.Heatmap(z=z, x=x, y=y, hoverongaps=False))
 
-        fig.show()
+            fig.update_layout(
+                title = feature,
+                xaxis = dict(
+                    tickmode = 'array',
+                    tickvals = x,
+                    ticktext = [str(num)+string_time for num in x]
+                ),
+                yaxis = dict(
+                    tickmode = 'array',
+                    tickvals = y,
+                    ticktext = [str(num)+feature_cycle for num in y]
+                ))
+
+            fig.show()
         return split_dataset
     except ZeroDivisionError:
         print("The duration of the data is less than {}.".format(y_frequency))

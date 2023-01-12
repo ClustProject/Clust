@@ -18,7 +18,7 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
         frequency (int): frequency (option)
     
     Returns:
-        List: Cycle Data
+        List: Cycle Data, or None
     """
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': frequency}}
     output_data = DataPreprocessing().get_refinedData(query_data, refine_param)
@@ -50,12 +50,15 @@ def getCycleSelectDataSet(query_data, feature_cycle, feature_cycle_times, freque
         frequency (int): frequency (option)
     
     Returns:
-        Dictionary: Cycle DataSet
+        Dictionary: Cycle DataSet, or None
     """
     data_list = getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency)
-    dataSet = {}
-    for data_slice in data_list:
-        index_name = data_slice.index[0].strftime('%Y-%m-%d %H:%M:%S')
-        dataSet[index_name] = data_slice
+    if data_list:
+        dataSet = {}
+        for data_slice in data_list:
+            index_name = data_slice.index[0].strftime('%Y-%m-%d %H:%M:%S')
+            dataSet[index_name] = data_slice
+    else:
+        dataSet = None
 
     return dataSet

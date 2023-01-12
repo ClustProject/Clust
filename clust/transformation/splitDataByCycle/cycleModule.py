@@ -65,24 +65,27 @@ class CycleData():
         # hour_calcul = int((hour_end - hour_start).days*24 + ((hour_end - hour_start).seconds/3600) +1)
         # hour_count = math.ceil(hour_calcul / num)
 
-        hour_count = int((len(data[hour_start:hour_end])/(hour_freq_count*num))) +1
+        if hour_freq_count != 0:
+            hour_count = int((len(data[hour_start:hour_end])/(hour_freq_count*num))) +1
 
-        dataFrameCollectionResult = []
-        for i in range(hour_count):
-            dataframe_num_hour = data[hour_start:hour_stop]
-            if len(dataframe_num_hour) != hour_freq_count*num:
-                if FullCycle == True and len(dataframe_num_hour) != 0:
-                    dataFrameCollectionResult.append(dataframe_num_hour)
+            dataFrameCollectionResult = []
+            for i in range(hour_count):
+                dataframe_num_hour = data[hour_start:hour_stop]
+                if len(dataframe_num_hour) != hour_freq_count*num:
+                    if FullCycle == True and len(dataframe_num_hour) != 0:
+                        dataFrameCollectionResult.append(dataframe_num_hour)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                dataFrameCollectionResult.append(dataframe_num_hour)
-                       
-            hour_start = hour_stop + timedelta(seconds=1)
-            hour_stop = hour_start + timedelta(hours=num) - timedelta(seconds=1)
+                    dataFrameCollectionResult.append(dataframe_num_hour)
+                        
+                hour_start = hour_stop + timedelta(seconds=1)
+                hour_stop = hour_start + timedelta(hours=num) - timedelta(seconds=1)
 
-            if hour_start + timedelta(hours=num) > hour_end:
-                hour_stop = hour_end
+                if hour_start + timedelta(hours=num) > hour_end:
+                    hour_stop = hour_end
+        else:
+            dataFrameCollectionResult = None
 
         return dataFrameCollectionResult
 
@@ -120,34 +123,36 @@ class CycleData():
 
         day_freq_count = len(data[day_start:day_one_stop])
         day_last_count = len(data[day_last_front:day_last])
-
+        
         # 첫 주기의 데이터 개수와 마지막 주기의 데이터 개수가 다를 시 day_end 값 수정
         if day_freq_count != day_last_count:
             day_end = day_last - timedelta(hours=day_last.hour, minutes=day_last.minute, seconds=day_last.second+1)
         else:
             day_end = day_last
+        if day_freq_count != 0:
+            day_count = int((len(data[day_start:day_end])/(day_freq_count*num))) +1
 
-        day_count = int((len(data[day_start:day_end])/(day_freq_count*num))) +1
-
-        # 일 단위로 자른 데이터를 주기에 맞춰 dataframe에 저장 후, dataFrameCollectionResult에 append
-        dataFrameCollectionResult = []
-        for i in range(day_count):
-            dataframe_num_day = data[day_start:day_stop]
-            if len(dataframe_num_day) != day_freq_count*num:
-                if FullCycle == True and len(dataframe_num_day) != 0:
-                    dataFrameCollectionResult.append(dataframe_num_day)
+            # 일 단위로 자른 데이터를 주기에 맞춰 dataframe에 저장 후, dataFrameCollectionResult에 append
+            dataFrameCollectionResult = []
+            for i in range(day_count):
+                dataframe_num_day = data[day_start:day_stop]
+                if len(dataframe_num_day) != day_freq_count*num:
+                    if FullCycle == True and len(dataframe_num_day) != 0:
+                        dataFrameCollectionResult.append(dataframe_num_day)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                dataFrameCollectionResult.append(dataframe_num_day)
-                       
-            # 저장한 마지막 데이터 범위(23:59:59)에서 1초 추가하여 다음날(00:00:00)로 변경
-            day_start = day_stop + timedelta(seconds=1)
-            day_stop = day_start + timedelta(days=num) - timedelta(seconds=1)
+                    dataFrameCollectionResult.append(dataframe_num_day)
+                        
+                # 저장한 마지막 데이터 범위(23:59:59)에서 1초 추가하여 다음날(00:00:00)로 변경
+                day_start = day_stop + timedelta(seconds=1)
+                day_stop = day_start + timedelta(days=num) - timedelta(seconds=1)
 
-            # 끝 데이터가 day_end보다 클 시, 원본 데이터의 마지막 날을 넘어가므로 day_end를 day_stop 값으로 설정
-            if day_start + timedelta(days=num) > day_end:
-                day_stop = day_end
+                # 끝 데이터가 day_end보다 클 시, 원본 데이터의 마지막 날을 넘어가므로 day_end를 day_stop 값으로 설정
+                if day_start + timedelta(days=num) > day_end:
+                    day_stop = day_end
+        else:
+            dataFrameCollectionResult = None
 
         return dataFrameCollectionResult
 
@@ -192,25 +197,28 @@ class CycleData():
         else:
             week_end = week_last
 
-        # week_count = math.ceil( ((week_end - week_start).days/7) / num)
-        week_count = int((len(data[week_start:week_end])/(week_freq_count*num))) +1
+        if week_freq_count != 0:
+            # week_count = math.ceil( ((week_end - week_start).days/7) / num)
+            week_count = int((len(data[week_start:week_end])/(week_freq_count*num))) +1
 
-        dataFrameCollectionResult = []
-        for i in range(week_count):
-            dataframe_num_week = data[week_start:week_stop]
-            if len(dataframe_num_week) != week_freq_count*num:
-                if FullCycle == True and len(dataframe_num_week) != 0:
-                    dataFrameCollectionResult.append(dataframe_num_week)
+            dataFrameCollectionResult = []
+            for i in range(week_count):
+                dataframe_num_week = data[week_start:week_stop]
+                if len(dataframe_num_week) != week_freq_count*num:
+                    if FullCycle == True and len(dataframe_num_week) != 0:
+                        dataFrameCollectionResult.append(dataframe_num_week)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                dataFrameCollectionResult.append(dataframe_num_week)
-                       
-            week_start = week_stop + timedelta(seconds=1)
-            week_stop = week_start + timedelta(weeks=num) - timedelta(seconds=1)
+                    dataFrameCollectionResult.append(dataframe_num_week)
+                        
+                week_start = week_stop + timedelta(seconds=1)
+                week_stop = week_start + timedelta(weeks=num) - timedelta(seconds=1)
 
-            if week_start + timedelta(weeks=num) > week_end:
-                week_stop = week_end
+                if week_start + timedelta(weeks=num) > week_end:
+                    week_stop = week_end
+        else:
+            dataFrameCollectionResult = None
 
         return dataFrameCollectionResult
 
@@ -267,25 +275,27 @@ class CycleData():
             month_end = month_last_end
         else:
             month_end = month_last
+        if month_freq_count != 0:
+            dataFrameCollectionResult = []
+            for i in range(month_count):
+                dataframe_num_month = data[month_start:month_stop]
+                month_calcul = (month_stop.year - month_start.year)*12 + (month_stop.month - month_start.month) + 1
 
-        dataFrameCollectionResult = []
-        for i in range(month_count):
-            dataframe_num_month = data[month_start:month_stop]
-            month_calcul = (month_stop.year - month_start.year)*12 + (month_stop.month - month_start.month) + 1
-
-            if month_calcul != month_freq_count:
-                if FullCycle == True and len(dataframe_num_month) != 0:
-                    dataFrameCollectionResult.append(dataframe_num_month)
+                if month_calcul != month_freq_count:
+                    if FullCycle == True and len(dataframe_num_month) != 0:
+                        dataFrameCollectionResult.append(dataframe_num_month)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                dataFrameCollectionResult.append(dataframe_num_month)
+                    dataFrameCollectionResult.append(dataframe_num_month)
 
-            month_start = month_stop + timedelta(seconds=1)
-            month_stop = month_start + relativedelta(months=num) - timedelta(seconds=1)
+                month_start = month_stop + timedelta(seconds=1)
+                month_stop = month_start + relativedelta(months=num) - timedelta(seconds=1)
 
-            if month_start + relativedelta(months=num) > month_end:
-                month_stop = month_end      
+                if month_start + relativedelta(months=num) > month_end:
+                    month_stop = month_end
+        else:
+            dataFrameCollectionResult = None
 
         return dataFrameCollectionResult
 
@@ -348,23 +358,27 @@ class CycleData():
         else:
             year_end = year_last
 
-        dataFrameCollectionResult = []
-        for i in range(year_count):
-            dataframe_num_year = data[year_start:year_stop]
-            year_calcul = (year_stop.year - year_start.year) + 1
+        if year_freq_count != 0:
+            dataFrameCollectionResult = []
+            for i in range(year_count):
+                dataframe_num_year = data[year_start:year_stop]
+                year_calcul = (year_stop.year - year_start.year) + 1
 
-            if year_calcul != year_freq_count:
-                if FullCycle == True and len(dataframe_num_year) != 0:
-                    dataFrameCollectionResult.append(dataframe_num_year)
+                if year_calcul != year_freq_count:
+                    if FullCycle == True and len(dataframe_num_year) != 0:
+                        dataFrameCollectionResult.append(dataframe_num_year)
+                    else:
+                        pass
                 else:
-                    pass
-            else:
-                dataFrameCollectionResult.append(dataframe_num_year)
+                    dataFrameCollectionResult.append(dataframe_num_year)
 
-            year_start = year_stop + timedelta(seconds=1)
-            year_stop = year_start + relativedelta(years=num) - timedelta(seconds=1)
+                year_start = year_stop + timedelta(seconds=1)
+                year_stop = year_start + relativedelta(years=num) - timedelta(seconds=1)
 
-            if year_start + relativedelta(years=num) > year_end:
-                year_stop = year_end
+                if year_start + relativedelta(years=num) > year_end:
+                    year_stop = year_end
 
+        else:
+            dataFrameCollectionResult = None
+            
         return dataFrameCollectionResult
