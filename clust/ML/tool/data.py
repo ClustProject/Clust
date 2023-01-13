@@ -8,3 +8,5 @@ def DF_to_series(data):
     """
     series_data = data.to_numpy().transpose()
     return series_data
+
+

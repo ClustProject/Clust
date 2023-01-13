@@ -23,9 +23,8 @@ class Train:
         Args:
             data (series): input data for training
         """
+        
         pass
-
-    
 
 class Test:
     """Clustering Super Class"""

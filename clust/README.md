@@ -31,16 +31,19 @@ clust/
   │   ├── metaFormatCheck
   │   └── metaGenerator
   │
-  ├── ML
-  │   ├── clustering
-  │       ├── custom.py
-  │       ├── interface.py
-  │       ├── cluetring.py :Algorithm (문/완료) - (김/일반화 진행중)
-  │       ├── kMeans.py    :Algorithm (문/완료) - (김/일반화 진행중)
-  │       ├── som.py       :Algorithm (문/완료) - (김/일반화 진행중)
-  │       ├── etc.py       :Algorithm (문/완료) 
-  │       └── util.py
-  │   └── model
+  ├── ML
+  │   ├── app
+  │       ├── usecase.py : 응용 어플리케이션을 위함
+  │   ├── clustering
+  │       ├── interface.py :clustering 모듈을 활용하기 위한 인터페이스 
+  │       ├── cluetring.py :train, test를 위한 추상화 클래스 기술
+  │       ├── kMeans.py    :clustering algorithm 1
+  │       ├── som.py       :clustering algorithm 2
+  │       └── etc.py       :clustering algorithm 3 (모듈화 어려운)
+  │   └── tool
+  │       ├── data.py      : ML 인풋 데이터 처리 관련 모듈
+  │       ├── model.py     : ML 모델 입출력 관련 모듈
+  │       └── util.py      : ML 데이터/모델 이외 관련 공통 모듈
   │
   ├── preprocessing
   │   ├── custom
@@ -58,8 +61,8 @@ clust/
   │   └── etc   
   │
   └── transformation
-      ├── entropy
-      ├── featureExtension
+      ├── entropy : Entropy를 위한 테스트 코드 (TBD)
+      ├── featureExtension :
       ├── featureReduction
       ├── general
       ├── purpose
