@@ -35,13 +35,13 @@ class LSTMData():
     def __init__(self):
         pass
     
-    def getTorchLoader(self, X_arr, y_arr, batch_size):
-        features = torch.Tensor(X_arr)
-        targets = torch.Tensor(y_arr)
-        dataSet = TensorDataset(features, targets)
-        loader = DataLoader(dataSet, batch_size=batch_size, shuffle=False, drop_last=True)
-        print("features shape:", features.shape, "targets shape: ", targets.shape)
-        return dataSet, loader
+    # def getTorchLoader(self, X_arr, y_arr, batch_size):
+    #     features = torch.Tensor(X_arr)
+    #     targets = torch.Tensor(y_arr)
+    #     dataSet = TensorDataset(features, targets)
+    #     loader = DataLoader(dataSet, batch_size=batch_size, shuffle=False, drop_last=True)
+    #     print("features shape:", features.shape, "targets shape: ", targets.shape)
+    #     return dataSet, loader
 
 
     def transformXyArr(self, data, transformParameter, CleanParam=True):

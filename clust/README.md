@@ -44,6 +44,38 @@ clust/
   │       ├── data.py      : ML 인풋 데이터 처리 관련 모듈
   │       ├── model.py     : ML 모델 입출력 관련 모듈
   │       └── util.py      : ML 데이터/모델 이외 관련 공통 모듈
+  │   └── common
+  │       │   └── common
+  │       │       ├── p1_integratedDataSaving.py
+  │       │       ├── p2_dataSelection.py
+  │       │       ├── p3_training.py
+  │       │       └── p4_testing.py
+  │       ├── trainer.py            : train abstract class
+  │       ├── inference.py          : inference abstract class
+  │       ├── model_manager.py      : model save 관련 모듈
+  │       ├── model_info.py         : model 저장하기 위한 path function
+  │       └── model_path_setting.py : 각 model 별 path name 설정
+  │   └── brits
+  │       ├── brits_model.py    : brits model 관련 class, 모듈
+  │       ├── brits_trainer.py  : brits train class
+  │       ├── train.py          : brits training class
+  │       └── inference.py      : brits inference class
+  │   └── forecasting
+  │       │   └── models    : forecasting 관련 사용 model
+  │       ├── train.py      : forecasting train class
+  │       ├── test.py       : forecasting test 모듈
+  │       ├── inference.py  : forecasting inference class
+  │       └── optimizer.py  : forecasting train optimization class
+  │   └── regression
+  │       │   └── models    : regression 관련 사용 model
+  │       ├── train.py      : regression train class
+  │       ├── test.py       : regression test 모듈
+  │       └── inference.py  : regression inference class
+  │   └── classification
+  │       │   └── models    : classification 관련 사용 model
+  │       ├── train.py      : classification train class
+  │       ├── test.py       : classification test 모듈
+  │       └── inference.py  : classification inference class
   │
   ├── preprocessing
   │   ├── custom

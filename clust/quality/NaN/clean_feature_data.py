@@ -23,9 +23,9 @@ class CleanFeatureData:
                 "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
                 "totalNonNanRatio":5
         }
-    """z
+    """
     def getMultipleCleanDataSetsByDF(self, dataSet, NanInfoForCleanData) :
-        """
+        
         This funtion can work by only num type of NaNInfoForCleanData
 
         Args:
@@ -45,7 +45,7 @@ class CleanFeatureData:
         Returns:
             Dict: self.refinedDataSet, self.FilteredImputedDataSet
 
-        """
+        
 
         self.FilteredImputedDataSet = {}
 

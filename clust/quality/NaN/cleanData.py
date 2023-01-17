@@ -35,7 +35,6 @@ class CleanData:
                 "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
                 "totalNonNanRatio":5
         }
-
         DRN = data_remove_byNaN.DataRemoveByNaNStatus()
         nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
         MDP = dataPreprocessing.DataPreprocessing()
