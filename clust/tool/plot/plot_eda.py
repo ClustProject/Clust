@@ -23,14 +23,16 @@ def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
         fig.add_trace(trace)
     fig.show()
 
-def show_one_feature_data_based_on_two_times(data, feature, time_criteria, sampling_flag = True):
+def show_one_feature_data_based_on_two_times(data, feature, time_criteria, min_max, sampling_flag = True):
     """
     A function that visualizes the amount of change in a specific feature of one data as a heatmap based on two time standards.
 
     Args:
         data (dataframe): Input data
-        #feature (string): A column of data as one of column name to be shown
+        feature (string): A column of data as one of column name to be shown
         time_criteria (dictionary): The time frequency of the x-axis and y-axis of the graph
+        min_max(dict):전처리 중 outlier 제거를 위해 활용할 min, max 값
+        sampling_flag (bool) : 입력 데이터의 빈도와 탐색하고 싶은 데이터의 기준 빈도가 같아서 빈도 다운 샘플링이 필요 없는 경우 False를 입력
                                     
 
     Example:
@@ -67,7 +69,7 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria, sampl
             for split_data in split_dataset:
                 z.append(split_data[feature].values.tolist())
             
-            fig = go.Figure(data = go.Heatmap(z=z, x=x, y=y, hoverongaps=False))
+            fig = go.Figure(data = go.Heatmap(z=z, x=x, y=y, zmin = min_max["min_num"][feature], zmax = min_max["max_num"][feature], hoverongaps=False, colorbar={"title":feature}))
 
             fig.update_layout(
                 title = feature,
