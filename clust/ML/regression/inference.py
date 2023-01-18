@@ -1,15 +1,14 @@
 import sys
 import torch
 import numpy as np
-import torch.nn as nn
 
 sys.path.append("..")
 sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.metrics import mean_absolute_error, mean_squared_error 
-from Clust.clust.ML.common.inference import Inference
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
+from Clust.clust.ML.common.inference import Inference
 from Clust.clust.ML.common import model_manager
 
 
@@ -31,7 +30,6 @@ class RegressionModelTestInference(Inference):
         """
 
         """
-        self.param = param
         self.batch_size = param['batch_size']
         self.device = param['device']
 
@@ -64,28 +62,14 @@ class RegressionModelTestInference(Inference):
         print("\nStart testing data\n")
         test_loader = self._get_test_loader()
         # load best model
-        load_model = model_manager.load_pickle_model(model_path[0])
-        model.load_state_dict(load_model)
+        model = model_manager.load_pickle_model(model_path)
+        # model.load_state_dict(load_model)
 
         # get prediction and accuracy
         pred, trues, mse, mae = self._test(model, test_loader)
         print(f'** Performance of test dataset ==> MSE = {mse}, MAE = {mae}')
         print(f'** Dimension of result for test dataset = {pred.shape}')
         return pred, trues, mse, mae
-
-
-
-    def _check_win_dim(self):
-        if 'windowNum' in self.param.keys():
-            windowNum = self.param['windowNum']
-        else:
-            windowNum = 0
-
-        if 'dim' in self.param.keys():
-            dim = self.param['dim']
-        else:
-            dim = None
-        return windowNum, dim
 
 
 
@@ -98,8 +82,8 @@ class RegressionModelTestInference(Inference):
         """
         x_data = np.array(self.X)
         y_data = self.y
-        testData= TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
-        test_loader = DataLoader(testData, batch_size=self.batch_size, shuffle=True)
+        test_data= TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
         return test_loader
 
 
@@ -152,3 +136,17 @@ class RegressionModelTestInference(Inference):
         return preds, trues, mse, mae
 
     
+
+
+
+    # def _check_win_dim(self):
+    #     if 'windowNum' in self.param.keys():
+    #         windowNum = self.param['windowNum']
+    #     else:
+    #         windowNum = 0
+
+    #     if 'dim' in self.param.keys():
+    #         dim = self.param['dim']
+    #     else:
+    #         dim = None
+    #     return windowNum, dim

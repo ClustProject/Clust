@@ -1,6 +1,8 @@
 import sys
 sys.path.append("../")
-from Clust.clust.ML.common import p3_training as p3
+sys.path.append("../../")
+
+from Clust.clust.ML.common.common import p3_training as p3
 import pandas as pd 
 
 def getScaledTestData(data, scalerFilePath, scalerParam):

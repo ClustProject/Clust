@@ -63,7 +63,7 @@ class mongoClient():
 
         return document_list
 
-        
+
     def get_document_by_json(self, db_name, collection_name, search):
         """
         

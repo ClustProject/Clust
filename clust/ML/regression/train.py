@@ -43,7 +43,7 @@ class RegressionML(Trainer):
         """
         Set param
         """
-
+        print(param)
         self.parameter = param
         self.n_epochs = param['n_epochs']
         self.device = param['device']

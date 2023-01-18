@@ -2,11 +2,11 @@ class Inference():
     def __init__(self):
         pass
         
-    def set_param(self):
+    def set_param(self, param):
         pass
 
-    def set_data(self):
+    def set_data(self, data):
         pass
 
-    def get_result(self):
+    def get_result(self, model, model_path):
         pass
