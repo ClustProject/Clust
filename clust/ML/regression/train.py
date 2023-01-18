@@ -62,7 +62,7 @@ class RegressionML(Trainer):
 
         ## TODO 아래 코드 군더더기 저럴 필요 없음 어짜피 이 함수는 Train을 넣으면 Train, Valid 나누는 함수로 고정시키 때문에
         # train/validation 데이터셋 구축
-        self.datasets = self._get_dataset(train_x, train_y, val_x, val_y)
+        self._set_train_val(train_x, train_y, val_x, val_y)
 
     
     def get_model(self, model_name):
@@ -137,9 +137,9 @@ class RegressionML(Trainer):
         """
 
         # train/validation DataLoader 구축
-        train_set, valid_set = self.datasets[0], self.datasets[1]
-        self.train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
-        self.valid_loader = DataLoader(valid_set, batch_size=self.batch_size, shuffle=True)
+        
+        self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
+        self.valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
 
         print("Start training model")
 
@@ -155,14 +155,15 @@ class RegressionML(Trainer):
         # return self.model
     
 
-    def _get_dataset(self, train_x, train_y, val_x, val_y):
+    def _set_train_val(self, train_x, train_y, val_x, val_y):
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
             x_data = np.array(dataset[0])
             y_data = dataset[1]
             datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
+        
+        self.train_set, self.valid_set = self.datasets[0], self.datasets[1]
 
-        return datasets
 
 
     def _train_model(self, model, dataloaders, criterion, num_epochs, optimizer, device):
