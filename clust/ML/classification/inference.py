@@ -10,7 +10,7 @@ from Clust.clust.ML.common.inference import Inference
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 
 
-class ClassificationModelTestInference(Inference):
+class ClassificationInference(Inference):
     def __init__(self):
         """
         """

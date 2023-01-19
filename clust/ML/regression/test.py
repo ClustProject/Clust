@@ -2,13 +2,18 @@ import sys
 sys.path.append("../")
 sys.path.append("../../")
 
+from Clust.clust.ML.common import model_manager
 from Clust.clust.ML.common.common import p2_dataSelection as p2
 from Clust.clust.ML.common.common import p4_testing as p4
-from Clust.clust.ML.regression.train import RegressionML as RML
-from Clust.clust.ML.regression.inference import RegressionModelTestInference as RTI
+from Clust.clust.ML.regression.train import RegressionTrain as RML
+from Clust.clust.ML.regression.inference import RegressionInference as RTI
 from Clust.clust.tool.stats_table import metrics
 
 
+
+
+
+# Test
 def get_test_result(dataName_X, dataName_y, DataMeta, ModelMeta, dataFolderPath, windowNum=0, db_client=None):
 
     dataSaveMode_X = DataMeta[dataName_X]["integrationInfo"]["DataSaveMode"]
@@ -24,7 +29,7 @@ def get_test_result(dataName_X, dataName_y, DataMeta, ModelMeta, dataFolderPath,
     target = ModelMeta["target"]
     scalerParam = ModelMeta["scalerParam"]
     model_method = ModelMeta["model_method"]
-    ModelMeta["trainParameter"]['batch_size'] = 1
+    # ModelMeta["trainParameter"]['batch_size'] = 1
     trainParameter = ModelMeta["trainParameter"]
 
 
@@ -40,17 +45,18 @@ def get_test_result(dataName_X, dataName_y, DataMeta, ModelMeta, dataFolderPath,
 
 
 
+# Test
+def get_result_metrics(trainParameter, test_x, test_y, model_method, target, model_file_path, scalerParam, scaler_y, windowNum=0):
 
-def get_result_metrics(trainParameter, test_x, test_y, model_method, target, modelFilePath, scalerParam, scaler_y, windowNum=0):
-
-    rml = RML()
-    rml.set_param(trainParameter)
-    model = rml.get_model(model_method)
+    # rml = RML()
+    # rml.set_param(trainParameter)
+    # model = rml.set_model(model_method)
 
     ri = RTI()
     ri.set_param(trainParameter)
     ri.set_data(test_x, test_y, windowNum)
-    pred, trues, mse, mae =  ri.get_result(model, modelFilePath)
+    model = model_manager.load_pickle_model(model_file_path)
+    pred, trues =  ri.get_result(model)
 
     df_result = p4.getPredictionDFResult(pred, trues, scalerParam, scaler_y, featureList= target, target_col = target[0])
     df_result.index = test_y.index

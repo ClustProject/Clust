@@ -4,7 +4,7 @@ sys.path.append("../")
 sys.path.append("../../")
 from multiprocessing import freeze_support
 
-class Trainer():
+class Train():
     def __init__(self, param=None):
         """
         param interpretation
@@ -20,19 +20,16 @@ class Trainer():
         """  
         pass
 
-    def set_data(self):
-        """
-        Data interpretation
-        """
-        pass
 
-    def get_model(self, model_name):
+    def set_model(self, model_method):
         """ 
-        Get Model
+        param interpretation
 
+        Args:
+            
         """  
         pass
-    
+
     def train(self):
         """
         training model Each method should define

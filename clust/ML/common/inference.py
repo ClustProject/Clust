@@ -8,5 +8,5 @@ class Inference():
     def set_data(self, data):
         pass
 
-    def get_result(self, model, model_path):
+    def get_result(self, model):
         pass

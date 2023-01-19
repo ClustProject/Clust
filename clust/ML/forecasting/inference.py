@@ -5,9 +5,9 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 # from torch.utils.data import DataLoader
 from Clust.clust.ML.common.inference import Inference
 from Clust.clust.transformation.purpose.machineLearning import  LSTMData
-from Clust.clust.ML.forecasting.train import RNNStyleModelTrainer as RModel
+from Clust.clust.ML.forecasting.train import ForecastingTrain as RModel
 
-class RNNStyleModelInfernce(Inference):
+class ForecastingInfernce(Inference):
     # For small data without answer
     def __init__(self):
         """

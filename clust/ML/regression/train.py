@@ -8,24 +8,17 @@ import random
 from torch.utils.data import DataLoader
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
-from Clust.clust.ML.common.trainer import Trainer
-from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.common.train import Train
 from Clust.clust.ML.regression.models.fc import FC
 from Clust.clust.ML.regression.models.rnn import RNN_model
 from Clust.clust.ML.regression.models.cnn_1d import CNN_1D
 from Clust.clust.ML.regression.models.lstm_fcn import LSTM_FCNs
 
-class RegressionML(Trainer):
+class RegressionTrain(Train):
     
     def __init__(self):
         """
-        Set initial parameter and model name for training
 
-        :param model_name: Model Name
-        :type model_name: String
-        
-        :param parameter: parameter
-        :type parameter: Dictionary
         """
 
         # seed 고정
@@ -43,7 +36,6 @@ class RegressionML(Trainer):
         """
         Set param
         """
-        print(param)
         self.parameter = param
         self.n_epochs = param['n_epochs']
         self.device = param['device']
@@ -60,20 +52,15 @@ class RegressionML(Trainer):
         self.parameter['input_size'] = train_x.shape[1]
         self.parameter['seq_len']  = train_x.shape[2] # seq_length
 
-        ## TODO 아래 코드 군더더기 저럴 필요 없음 어짜피 이 함수는 Train을 넣으면 Train, Valid 나누는 함수로 고정시키 때문에
-        # train/validation 데이터셋 구축
         self._set_train_val(train_x, train_y, val_x, val_y)
 
-    
-    def get_model(self, model_name):
-        """
-        Build model and return initialized model for selected model_name
 
-        :return: initialized model
-        :rtype: model
+    def set_model(self, model_method):
+        """
+
         """
         # build initialized model
-        if model_name == 'LSTM_rg':
+        if model_method == 'LSTM_rg':
             self.init_model = RNN_model(
                 rnn_type='lstm',
                 input_size=self.parameter['input_size'],
@@ -82,7 +69,7 @@ class RegressionML(Trainer):
                 bidirectional=self.parameter['bidirectional'],
                 device=self.parameter['device']
             )
-        elif model_name == 'GRU_rg':
+        elif model_method == 'GRU_rg':
             self.init_model = RNN_model(
                 rnn_type='gru',
                 input_size=self.parameter['input_size'],
@@ -91,7 +78,7 @@ class RegressionML(Trainer):
                 bidirectional=self.parameter['bidirectional'],
                 device=self.parameter['device']
             )
-        elif model_name == 'CNN_1D_rg':
+        elif model_method == 'CNN_1D_rg':
             self.init_model = CNN_1D(
                 input_channels=self.parameter['input_size'],
                 input_seq=self.parameter['seq_len'],
@@ -101,14 +88,14 @@ class RegressionML(Trainer):
                 padding=self.parameter['padding'],
                 drop_out=self.parameter['drop_out']
             )
-        elif model_name == 'LSTM_FCNs_rg':
+        elif model_method == 'LSTM_FCNs_rg':
             self.init_model = LSTM_FCNs(
                 input_size=self.parameter['input_size'],
                 num_layers=self.parameter['num_layers'],
                 lstm_drop_p=self.parameter['lstm_drop_out'],
                 fc_drop_p=self.parameter['fc_drop_out']
             )
-        elif model_name == 'FC_rg':
+        elif model_method == 'FC_rg':
             self.init_model = FC(
                 representation_size=self.parameter['input_size'],
                 drop_out=self.parameter['drop_out'],
@@ -116,28 +103,15 @@ class RegressionML(Trainer):
             )
         else:
             print('Choose the model correctly')
-        return self.init_model
 
 
     def train(self):
         """
         Train model and return best model
 
-        :param init_model: initialized model
-        :type init_model: model
-
-        :param modelFilePath: model file path to be saved
-        :type modelFilePath: string
-
-        :param num_epochs: number of epochs
-        :type modelFilePath: integer
-
-        :return: best trained model
-        :rtype: model
         """
 
         # train/validation DataLoader 구축
-        
         self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
         self.valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
 
@@ -151,9 +125,12 @@ class RegressionML(Trainer):
         optimizer = optim.Adam(init_model.parameters(), lr=self.parameter['lr'])
         
         model = self._train_model(init_model, dataloaders_dict, criterion, self.n_epochs, optimizer, self.device)
-        model_manager.save_pickle_model(model)
-        # return self.model
-    
+
+        return model
+
+
+
+
 
     def _set_train_val(self, train_x, train_y, val_x, val_y):
         datasets = []
@@ -162,9 +139,8 @@ class RegressionML(Trainer):
             y_data = dataset[1]
             datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
         
-        self.train_set, self.valid_set = self.datasets[0], self.datasets[1]
-
-
+        self.train_set, self.valid_set = datasets[0], datasets[1]
+        
 
     def _train_model(self, model, dataloaders, criterion, num_epochs, optimizer, device):
         """
@@ -257,55 +233,3 @@ class RegressionML(Trainer):
         # validation loss가 가장 낮았을 때의 best model 가중치를 불러와 best model을 구축함
         model.load_state_dict(best_model_wts)
         return model     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # def _transform_data(self, train_x, train_y, val_x, val_y, windowNum = 0):
-    #     train_x, train_y = transDFtoNP(train_x, train_y, windowNum)
-    #     val_x, val_y = transDFtoNP(val_x, val_y, windowNum)
-
-    #     self.parameter['input_size'] = train_x.shape[1]
-    #     self.parameter['seq_len']  = train_x.shape[2] # seq_length
-
-    #     ## TODO 아래 코드 군더더기 저럴 필요 없음 어짜피 이 함수는 Train을 넣으면 Train, Valid 나누는 함수로 고정시키 때문에
-    #     # train/validation 데이터셋 구축
-    #     datasets = []
-    #     for dataset in [(train_x, train_y), (val_x, val_y)]:
-    #         x_data = np.array(dataset[0])
-    #         y_data = dataset[1]
-    #         datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
-
-    #     self.datasets = datasets
-        
-
-
-##------------------------------------------------------------------------------------------------------------
-    # def _train_save_model(self, best_model, best_model_path):
-    #     """
-    #     Save the best trained model
-
-    #     :param best_model: best trained model
-    #     :type best_model: model
-
-    #     :param best_model_path: path for saving model
-    #     :type best_model_path: str
-    #     """
-
-    #     # save model
-    #     torch.save(best_model.state_dict(), best_model_path[0])
-
-    
-    

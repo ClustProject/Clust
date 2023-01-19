@@ -16,10 +16,9 @@ from Clust.clust.ML.classification.models.lstm_fcn import LSTM_FCNs
 from Clust.clust.ML.classification.models.cnn_1d import CNN_1D
 from Clust.clust.ML.classification.models.rnn import RNN_model
 from Clust.clust.ML.classification.models.fc import FC
-from Clust.clust.ML.common.trainer import Trainer
-from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.common.train import Train
 
-class ClassificationML(Trainer):
+class ClassificationTrain(Train):
     def __init__(self):
         # seed 고정
         random_seed = 42
@@ -61,33 +60,31 @@ class ClassificationML(Trainer):
         
         ## TODO 아래 코드 군더더기 저럴 필요 없음 어짜피 이 함수는 Train을 넣으면 Train, Valid 나누는 함수로 고정시키 때문에
         # train/validation 데이터셋 구축
-        self.datasets = self._get_dataset(train_x, train_y, val_x, val_y)
-        
+        self._set_train_val(train_x, train_y, val_x, val_y)
+    
 
-    def get_model(self, model_name):
+    def set_model(self, model_method):
         """
         Build model and return initialized model for selected model_name
         """
-        self.model_name = model_name
-        if model_name == 'LSTM_cf':
+        model_method = model_method
+        if model_method == 'LSTM_cf':
             self.parameter["rnn_type"] = 'lstm'
-        elif self.model_name == 'GRU_cf':
+        elif self.model_method == 'GRU_cf':
             self.parameter["rnn_type"] = 'gru'
         
         # build initialized model
-        if (model_name == 'LSTM_cf') | (self.model_name == "GRU_cf"):
+        if (model_method == 'LSTM_cf') | (self.model_method == "GRU_cf"):
             self.init_model = RNN_model(**self.parameter)
-        elif model_name == 'CNN_1D_cf':
+        elif model_method == 'CNN_1D_cf':
             self.init_model = CNN_1D(**self.parameter)
-        elif model_name == 'LSTM_FCNs_cf':
+        elif model_method == 'LSTM_FCNs_cf':
             self.init_model = LSTM_FCNs(**self.parameter)
-        elif model_name == 'FC_cf':
+        elif model_method == 'FC_cf':
             self.init_model = FC(**self.parameter)
         else:
             print('Choose the model correctly')
-            
-        return self.init_model
-    
+
 
     def train(self):
         """
@@ -110,20 +107,22 @@ class ClassificationML(Trainer):
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(init_model.parameters(), lr=self.parameter['lr'])
         
-        model, timeElapsed = self._train_model(init_model, dataloaders_dict, criterion, self.n_epochs, optimizer, self.device)
-        model_manager.save_pickle_model(model)
-        
-        # return self.best_model, self.timeElapsed
+        model = self._train_model(init_model, dataloaders_dict, criterion, self.n_epochs, optimizer, self.device)
+
+        return model
         
 
-    def _get_dataset(self, train_x, train_y, val_x, val_y):
+
+
+
+    def _set_train_val(self, train_x, train_y, val_x, val_y):
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
             x_data = np.array(dataset[0])
             y_data = dataset[1]
             datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
-
-        return datasets
+        
+        self.train_set, self.valid_set = datasets[0], datasets[1]
 
 
         
@@ -225,6 +224,6 @@ class ClassificationML(Trainer):
 
         # validation loss가 가장 낮았을 때의 best model 가중치를 불러와 best model을 구축함
         model.load_state_dict(best_model_wts)
-        return model, timeElapsed
+        return model
 
 
