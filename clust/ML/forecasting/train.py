@@ -23,11 +23,11 @@ class ForecastingTrain(Train):
 
     def set_param(self, param):
         """
-        Set Parameter
+        Set Parameter for transform, train
 
         Args:
-        param(dict): parameter for clustering
-            >>> param = {"transformParameter":{},
+        param(dict): parameter for transtrom, train
+            >>> param = {"transform_parameter":{},
                          "cleanParam":"clean",
                          "batch_size":16,
                          "model_parameter":{},
@@ -44,7 +44,12 @@ class ForecastingTrain(Train):
 
     def set_data(self, train, val):
         """
-        Set Data
+        transform data for train
+
+        Args:
+            train (dataframe): train data
+            val (dataframe): validation data
+
         """
         LSTMD = LSTMData()
         self.trainX_arr, self.trainy_arr = LSTMD.transformXyArr(train, self.transform_parameter, self.clean_param)
@@ -52,6 +57,12 @@ class ForecastingTrain(Train):
 
 
     def set_model(self, model_method):
+        """
+        
+
+        Args:
+            model_method (string): model method name
+        """
         # super().get_model(model_method)
         if (model_method == 'rnn'):
             self.init_model = RNNModel(**self.model_parameter)
@@ -63,8 +74,10 @@ class ForecastingTrain(Train):
 
     def train(self):
         """
-        Training
-        
+        Train and return model
+
+        Returns:
+            model: train model
         """
         train_DataSet, train_loader = self._get_torch_loader(self.trainX_arr, self.trainy_arr)
         val_DataSet, val_loader = self._get_torch_loader(self.valX_arr, self.valy_arr)
@@ -88,6 +101,9 @@ class ForecastingTrain(Train):
 
 
     def _get_torch_loader(self, X_arr, y_arr):
+        """
+        
+        """
         features = torch.Tensor(X_arr)
         targets = torch.Tensor(y_arr)
         dataSet = TensorDataset(features, targets)

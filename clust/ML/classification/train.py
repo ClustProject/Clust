@@ -34,7 +34,14 @@ class ClassificationTrain(Train):
 
     def set_param(self, param):
         """
-        Set param
+        Set Parameter for train
+
+        Args:
+        param(dict): parameter for train
+            >>> param = { "device":"cpu",
+                         "batch_size":16,
+                         "num_classes":,
+                         "n_epochs":10,}
         """
         self.parameter = param
         self.n_epochs = param['n_epochs']
@@ -44,7 +51,14 @@ class ClassificationTrain(Train):
 
     def set_data(self, train_x, train_y, val_x, val_y, windowNum=0):
         """
-        Set param
+        transform data for train
+
+        Args:
+            train_x (dataframe): train X data
+            train_y (dataframe): train y data
+            val_x (dataframe): validation X data
+            val_y (dataframe): validation y data
+            windowNum (integer) : window size
         """
         
         dim = 3
@@ -65,7 +79,10 @@ class ClassificationTrain(Train):
 
     def set_model(self, model_method):
         """
-        Build model and return initialized model for selected model_name
+        
+
+        Args:
+            model_method (string): model method name
         """
         model_method = model_method
         if model_method == 'LSTM_cf':
@@ -88,10 +105,10 @@ class ClassificationTrain(Train):
 
     def train(self):
         """
-        Train model and return best model
+        Train and return model
 
-        :return: best trained model
-        :rtype: model
+        Returns:
+            model: train model
         """
 
         train_set, valid_set = self.datasets[0], self.datasets[1]
@@ -116,6 +133,9 @@ class ClassificationTrain(Train):
 
 
     def _set_train_val(self, train_x, train_y, val_x, val_y):
+        """
+        
+        """
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
             x_data = np.array(dataset[0])

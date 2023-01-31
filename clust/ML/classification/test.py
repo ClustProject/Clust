@@ -1,60 +1,121 @@
-import os
 import sys
-import pandas as pd
+import torch
+import torch.nn as nn
+import numpy as np
+sys.path.append("..")
+sys.path.append("../..")
 
-sys.path.append("../")
+from sklearn.metrics import mean_absolute_error, mean_squared_error 
+from Clust.clust.ML.common.inference import Inference
+from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 
-from sklearn.metrics import classification_report
-from Clust.clust.ML.common.common import p2_dataSelection as p2
-from Clust.clust.ML.common.common import p4_testing as p4
-from Clust.clust.ML.classification.train import ClassificationML as CML
-from Clust.clust.ML.classification.inference import ClassificationModelTestInference as CTI
 
-def getTestResult(dataName_X, dataName_y, modelName, DataMeta, ModelMeta, dataFolderPath, device, windowNum=0, db_client=None):
-    dataSaveMode_X = DataMeta[dataName_X]["integrationInfo"]["DataSaveMode"]
-    dataSaveMode_y = DataMeta[dataName_y]["integrationInfo"]["DataSaveMode"]
-    dataX = p2.getSavedIntegratedData(dataSaveMode_X, dataName_X, dataFolderPath)
-    datay = p2.getSavedIntegratedData(dataSaveMode_y, dataName_y, dataFolderPath)
+class ClassificationTest(Inference):
+    def __init__(self):
+        """
+        """
+        super().__init__()
+        
+
+    def set_param(self, param):
+        """
+
+        """
+        self.batch_size = param['batch_size']
+        self.device = param['device']
+
+
+    def set_data(self, X, y, windowNum= 0, dim=None):
+        """
+
+        """
+        self.X, self.y = transDFtoNP(X, y, windowNum, dim)
+
+
     
-    X_scalerFilePath = ModelMeta[modelName]['files']['XScalerFile']["filePath"]
-    y_scalerFilePath = ModelMeta[modelName]['files']['yScalerFile']["filePath"]
-    modelFilePath = ModelMeta[modelName]['files']['modelFile']["filePath"]
+    def get_result(self, model):
+        
+        print("\nStart testing data\n")
+        test_loader = self._get_test_loader()
+        
+        # load best model
+        
+        # get prediction and accuracy
+        preds, probs, trues, acc = self._test(model, test_loader)
+        print(f'** Performance of test dataset ==> PROB = {probs}, ACC = {acc}')
+        print(f'** Dimension of result for test dataset = {preds.shape}')
+        return preds, probs, trues, acc
 
-    featureList = ModelMeta[modelName]["featureList"]
-    target = ModelMeta[modelName]["target"]
-    scalerParam = ModelMeta[modelName]["scalerParam"]
-    model_method = ModelMeta[modelName]["model_method"]
-    trainParameter = ModelMeta[modelName]["trainParameter"]
+
+
+    def _get_test_loader(self):
+        """
+        getTestLoader
+
+        :return: test_loader
+        :rtype: DataLoader
+        """
+
+        x_data = np.array(self.X)
+        y_data = self.y
+        test_data = torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_loader = torch.utils.data.DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
+
+        return test_loader
+
+
+
+
+    def _test(self, model, test_loader):
+        """
+        Predict classes for test dataset based on the trained model
+
+        :return: predicted classes
+        :rtype: numpy array
+
+        :return: prediction probabilities
+        :rtype: numpy array
+
+        :return: test accuracy
+        :rtype: float
+        """
+        model.eval()   # 모델을 validation mode로 설정
+        
+        # test_loader에 대하여 검증 진행 (gradient update 방지)
+        with torch.no_grad():
+            corrects = 0
+            total = 0
+            preds = []
+            probs = []
+            trues = []
+            for inputs, labels in test_loader:
+                inputs = inputs.to(self.device)
+                labels = labels.to(self.device, dtype=torch.long)
+
+                model.to(self.device)
     
-    dim = None
-    if model_method == "FC_cf":
-        dim = 2
-    
-    # Scaling Test Input
+                # forwinputs = inputs.to(device)ard
+                # input을 model에 넣어 output을 도출
+                outputs = model(inputs)
+                prob = outputs
+                prob = nn.Softmax(dim=1)(prob)
 
-    test_x, scaler_X = p4.getScaledTestData(dataX[featureList], X_scalerFilePath, scalerParam)
-    test_y, scaler_y = p4.getScaledTestData(datay[target], y_scalerFilePath, scalerParam)# No Scale
-    # test_y = datay[target] # for classification
+                # output 중 최댓값의 위치에 해당하는 class로 예측을 수행
+                _, pred = torch.max(outputs, 1)
+                
+                # batch별 정답 개수를 축적함
+                corrects += torch.sum(pred == labels.data)
+                total += labels.size(0)
 
-    # 4. Testing
-    batch_size=1
-    scalerParam="noScale" # for classification
-    df_result, result_metrics, acc = getResultMetrics(test_x, test_y, model_method, target, modelFilePath, scalerParam, scaler_y, trainParameter, batch_size, device, windowNum, dim)
-    return df_result, result_metrics, acc
+                preds.extend(pred.detach().cpu().numpy()) 
+                probs.extend(prob.detach().cpu().numpy())
+                trues.extend(labels.detach().cpu().numpy())
 
-
-def getResultMetrics(test_x, test_y, model_method, target, modelFilePath, scalerParam, scaler_y, trainParameter, batch_size, device, windowNum=0, dim= None):
-    cml = CML(model_method, trainParameter)
-    model = cml.getModel()
-
-    ci = CTI(test_x, test_y, batch_size, device)
-    ci.transInputDFtoNP(windowNum, dim)
-    pred, prob, trues, acc = ci.get_result(model, modelFilePath)
-    result_metrics = classification_report(trues, pred, output_dict = True)
-    
-    df_result = p4.getPredictionDFResult(pred, trues, scalerParam, scaler_y, featureList= target, target_col = target[0])
-    df_result.index = test_y.index
-    
-    return df_result, result_metrics, acc
-
- 
+            preds = np.array(preds)
+            probs = np.array(probs)
+            trues = np.array(trues)
+            
+            acc = (corrects.double() / total).item()
+        
+        return preds, probs, trues, acc
+        

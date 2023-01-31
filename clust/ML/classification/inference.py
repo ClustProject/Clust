@@ -7,7 +7,7 @@ sys.path.append("../..")
 
 from sklearn.metrics import mean_absolute_error, mean_squared_error 
 from Clust.clust.ML.common.inference import Inference
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
+from Clust.clust.transformation.type.DFToNPArray import transDFtoNP2
 
 
 class ClassificationInference(Inference):
@@ -16,6 +16,7 @@ class ClassificationInference(Inference):
         """
         super().__init__()
         
+
     def set_param(self, param):
         """
 
@@ -23,27 +24,31 @@ class ClassificationInference(Inference):
         self.batch_size = param['batch_size']
         self.device = param['device']
 
-    def set_data(self, X, y):
+
+    def set_data(self, X, windowNum= 0, dim=None):
         """
 
         """
-        self.X = X
-        self.y = y
-        self._transform_data(self.X, self.y)
-
-    def get_result(self):
-        pass
-
-    def test(self):
-        pass
+        self.X, self.y = transDFtoNP2(X, windowNum, dim)
 
 
-    def _transform_data(self, windowNum= 0, dim=None):
-        self.X, self.y = transDFtoNP(self.X, self.y, windowNum, dim)
+    
+    def get_result(self, model):
+        
+        print("\nStart testing data\n")
+        test_loader = self._get_test_loader()
+        
+        # load best model
+        
+        # get prediction and accuracy
+        preds, probs, trues, acc = self._test(model, test_loader)
+        print(f'** Performance of test dataset ==> PROB = {probs}, ACC = {acc}')
+        print(f'** Dimension of result for test dataset = {preds.shape}')
+        return preds, probs, trues, acc
 
 
 
-    def get_test_loader(self):
+    def _get_test_loader(self):
         """
         getTestLoader
 
@@ -52,39 +57,15 @@ class ClassificationInference(Inference):
         """
 
         x_data = np.array(self.X)
-        y_data = self.y
         test_data = torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
         test_loader = torch.utils.data.DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
+
         return test_loader
 
-    
-    def get_result(self, init_model, best_model_path):
-        
-        print("\nStart testing data\n")
-        self.test_loader = self.get_testLoader()
-        
-        # load best model
-        init_model.load_state_dict(torch.load(best_model_path[0], map_location=self.device))
-        
-        # get prediction and accuracy
-        preds, probs, trues, acc = self.test(init_model, self.test_loader)
-        print(f'** Performance of test dataset ==> PROB = {probs}, ACC = {acc}')
-        print(f'** Dimension of result for test dataset = {preds.shape}')
-        return preds, probs, trues, acc
-    
-    def get_inferenceResult(self, init_model, best_model_path):
-        
-        print("\nStart testing data\n")
 
-        # load best model
-        init_model.load_state_dict(torch.load(best_model_path[0], self.test_loader))
-        
-        # get prediction and accuracy
-        preds, probs, trues, acc = self.test(init_model, self.test_loader)
-        
-        return preds
-    
-    def test(self, model, test_loader):
+
+
+    def _test(self, model, test_loader):
         """
         Predict classes for test dataset based on the trained model
 

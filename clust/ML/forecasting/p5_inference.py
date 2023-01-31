@@ -18,6 +18,7 @@ def inference(input, trainParameter, model_method, modelFilePath, scalerParam, s
     Inference.setModel(trainParameter, model_method, modelFilePath)
     inference_result = Inference.get_result()
     print(inference_result)
+    
     if scalerParam =='scale':
         baseDFforInverse = pd.DataFrame(columns=featureList, index=range(1))
         baseDFforInverse[target_col] = inference_result[0]

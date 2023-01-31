@@ -34,7 +34,13 @@ class RegressionTrain(Train):
 
     def set_param(self, param):
         """
-        Set param
+        Set Parameter for train
+
+        Args:
+        param(dict): parameter for train
+            >>> param = { "device":"cpu",
+                         "batch_size":16,
+                         "n_epochs":10,}
         """
         self.parameter = param
         self.n_epochs = param['n_epochs']
@@ -44,7 +50,14 @@ class RegressionTrain(Train):
 
     def set_data(self, train_x, train_y, val_x, val_y, windowNum=0):
         """
-        Set param
+        transform data for train
+
+        Args:
+            train_x (dataframe): train X data
+            train_y (dataframe): train y data
+            val_x (dataframe): validation X data
+            val_y (dataframe): validation y data
+            windowNum (integer) : window size
         """
         train_x, train_y = transDFtoNP(train_x, train_y, windowNum)
         val_x, val_y = transDFtoNP(val_x, val_y, windowNum)
@@ -57,7 +70,10 @@ class RegressionTrain(Train):
 
     def set_model(self, model_method):
         """
+        
 
+        Args:
+            model_method (string): model method name
         """
         # build initialized model
         if model_method == 'LSTM_rg':
@@ -107,8 +123,10 @@ class RegressionTrain(Train):
 
     def train(self):
         """
-        Train model and return best model
+        Train and return model
 
+        Returns:
+            model: train model
         """
 
         # train/validation DataLoader 구축
