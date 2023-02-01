@@ -84,6 +84,7 @@ class ClassificationInference(Inference):
 
     def _get_loader(self):
         """
+        get inference data loader
 
         Returns:
             inference_loader (DataLoader) : data loader
@@ -98,6 +99,7 @@ class ClassificationInference(Inference):
 
     def _inference(self, model, inference_loader):
         """
+        get prediction data
 
         Args:
             model (model) : load train model

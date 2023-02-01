@@ -85,8 +85,8 @@ class ForecastingTrain(Train):
         Returns:
             model: train model
         """
-        train_DataSet, train_loader = self._get_torch_loader(self.trainX_arr, self.trainy_arr)
-        val_DataSet, val_loader = self._get_torch_loader(self.valX_arr, self.valy_arr)
+        train_loader = self._get_torch_loader(self.trainX_arr, self.trainy_arr)
+        val_loader = self._get_torch_loader(self.valX_arr, self.valy_arr)
 
         weight_decay = 1e-6
         learning_rate = 1e-3
@@ -104,8 +104,6 @@ class ForecastingTrain(Train):
 
 
 
-
-
     def _get_torch_loader(self, X_arr, y_arr):
         """
         
@@ -113,7 +111,7 @@ class ForecastingTrain(Train):
         features = torch.Tensor(X_arr)
         targets = torch.Tensor(y_arr)
         dataSet = TensorDataset(features, targets)
-        loader = DataLoader(dataSet, batch_size=self.batch_size, shuffle=False, drop_last=True)
+        training_loader = DataLoader(dataSet, batch_size=self.batch_size, shuffle=False, drop_last=True)
         print("features shape:", features.shape, "targets shape: ", targets.shape)
 
-        return dataSet, loader
+        return training_loader

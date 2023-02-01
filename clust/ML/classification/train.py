@@ -79,7 +79,7 @@ class ClassificationTrain(Train):
 
     def set_model(self, model_method):
         """
-        
+        Build model and return initialized model for selected model_name
 
         Args:
             model_method (string): model method name
@@ -111,15 +111,14 @@ class ClassificationTrain(Train):
             model: train model
         """
 
-        self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
-        self.valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
 
         print("Start training model")
         
+        train_loader, valid_loader = self._get_torch_loader()
         # train model
         init_model = self.init_model.to(self.device)
         
-        dataloaders_dict = {'train': self.train_loader, 'val': self.valid_loader}
+        dataloaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(init_model.parameters(), lr=self.parameter['lr'])
         
@@ -129,6 +128,16 @@ class ClassificationTrain(Train):
         
 
 
+    def _get_torch_loader(self):
+        """
+        
+        """
+
+        # TensorDataset 로 train, val 데이터를 합친 뒤 dataloader하는 방법은?
+        train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
+        valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
+
+        return train_loader, valid_loader
 
 
     def _set_train_val(self, train_x, train_y, val_x, val_y):
