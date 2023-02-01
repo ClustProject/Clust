@@ -1,52 +1,42 @@
+import torch
+import numpy as np
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
-import sys
-sys.path.append("../")
-
-from Clust.clust.ML.common.common import p2_dataSelection as p2
-from Clust.clust.ML.common.common import p4_testing as p4
-from Clust.clust.tool.stats_table import metrics
+# from torch.utils.data import DataLoader
+from Clust.clust.ML.common.inference import Inference
+from Clust.clust.transformation.purpose.machineLearning import  LSTMData
+from Clust.clust.ML.forecasting.train import ForecastingTrain as RModel
 
 
-def getTestValues(test, trainParameter, transformParameter, model_method, modelFilePath, cleanParam):
-    from KETIToolDL.PredictionTool.RNNStyleModel.inference import RNNStyleModelTestInference
-    TestInference = RNNStyleModelTestInference()
-    TestInference.setTestData(test, transformParameter, cleanParam)
-    TestInference.setModel(trainParameter, model_method, modelFilePath)
-    predictions, values = TestInference.get_result()
-
-    return predictions, values
-
-def getTestResult(dataName, modelName, DataMeta, ModelMeta, dataRoot, db_client):
-
-    dataSaveMode = DataMeta[dataName]["integrationInfo"]["DataSaveMode"]
-    data = p2.getSavedIntegratedData(dataSaveMode, dataName, dataRoot, db_client)
-
-    scalerFilePath = ModelMeta[modelName]['files']['scalerFile']["filePath"]
-    modelFilePath = ModelMeta[modelName]['files']['modelFile']["filePath"]
-    featureList = ModelMeta[modelName]["featureList"]
-    cleanTrainDataParam = ModelMeta[modelName]["cleanTrainDataParam"]
-    scalerParam = ModelMeta[modelName]["scalerParam"]
-    integration_freq_sec = ModelMeta[modelName]['trainDataInfo']["integration_freq_sec"]
-    NaNProcessingParam = ModelMeta[modelName]['NaNProcessingParam']
-    trainParameter = ModelMeta[modelName]["trainParameter"]
-    transformParameter = ModelMeta[modelName]["transformParameter"]
-    model_method = ModelMeta[modelName]["model_method"]
-    target_col = ModelMeta[modelName]["transformParameter"]["target_col"]
-
-    test, scaler = p4.getScaledTestData(data[featureList], scalerFilePath, scalerParam)
+class RNNStyleModelTestInference(Inference):
+    # For TestData with answer
+    def __init__(self):
+        self.batch_size = 1
     
-    test = p4.getCleandData(test, cleanTrainDataParam, integration_freq_sec, NaNProcessingParam)
-    
-    prediction, values = getTestValues(test, trainParameter, transformParameter, model_method, modelFilePath, cleanTrainDataParam)
-    df_result = p4.getPredictionDFResult(prediction, values, scalerParam, scaler, featureList, target_col)
-    df_result.index = test[(transformParameter['future_step']+transformParameter['past_step']-1):].index
+    def setModel(self, trainParameter, model_method, modelFilePath):
+        IM= RModel()
+        IM.setTrainParameter(trainParameter)
+        IM.getModel(model_method)
+        self.infModel = IM.model
+        self.infModel.load_state_dict(torch.load(modelFilePath[0]))
 
-    """
-    df_result = p4.refineData(df_result)
-    
-    df_result.index = test.index
-    """
-    result_metrics =  metrics.calculate_metrics_df(df_result)
+    def setTestData(self, test, transformParameter, cleanParam):
+        self.input_dim = len(transformParameter['feature_col'])
+        LSTMD = LSTMData()
+        testX_arr, testy_arr = LSTMD.transformXyArr(test, transformParameter, cleanParam)
+        self.test_DataSet, self.test_loader = LSTMD.getTorchLoader(testX_arr, testy_arr, self.batch_size)
+        #test_loader_one = DataLoader(test_DataSet, batch_size=1, shuffle=False, drop_last=True)
 
-    return df_result, result_metrics
 
+    def get_result(self):
+        with torch.no_grad():
+            predictions = []
+            values = []
+            for x_test, y_test in self.test_loader:
+                x_test = x_test.view([self.batch_size, -1, self.input_dim]).to(device)
+                y_test = y_test.to(device)
+                self.infModel.eval()
+                yhat = self.infModel(x_test)
+                predictions.append(yhat.to('cpu').detach().numpy().ravel()[0])
+                values.append(y_test.to('cpu').detach().numpy().ravel()[0])
+        return predictions, values

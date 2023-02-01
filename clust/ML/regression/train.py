@@ -5,7 +5,7 @@ import numpy as np
 import time
 import copy
 import random
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 from Clust.clust.ML.common.train import Train
@@ -38,9 +38,20 @@ class RegressionTrain(Train):
 
         Args:
         param(dict): parameter for train
-            >>> param = { "device":"cpu",
-                         "batch_size":16,
-                         "n_epochs":10,}
+
+
+        Example:
+
+            >>> param = { 'num_layers': 2, 
+            ...           hidden_size': 64, 
+            ...            'dropout': 0.1,
+            ...            'bidirectional': True,
+            ...            "lr":0.0001,
+            ...            "device":"cpu",
+            ...            "batch_size":16,
+            ...            "n_epochs":10    }
+            
+
         """
         self.parameter = param
         self.n_epochs = param['n_epochs']
@@ -48,19 +59,19 @@ class RegressionTrain(Train):
         self.batch_size = param['batch_size']
 
 
-    def set_data(self, train_x, train_y, val_x, val_y, windowNum=0):
+    def set_data(self, train_x, train_y, val_x, val_y, window_num=0):
         """
-        transform data for train
+        set train, val data & transform data for training
 
         Args:
             train_x (dataframe): train X data
             train_y (dataframe): train y data
             val_x (dataframe): validation X data
             val_y (dataframe): validation y data
-            windowNum (integer) : window size
+            window_num (integer) : window size
         """
-        train_x, train_y = transDFtoNP(train_x, train_y, windowNum)
-        val_x, val_y = transDFtoNP(val_x, val_y, windowNum)
+        train_x, train_y = transDFtoNP(train_x, train_y, window_num)
+        val_x, val_y = transDFtoNP(val_x, val_y, window_num)
 
         self.parameter['input_size'] = train_x.shape[1]
         self.parameter['seq_len']  = train_x.shape[2] # seq_length
@@ -70,10 +81,10 @@ class RegressionTrain(Train):
 
     def set_model(self, model_method):
         """
-        
+        Build model and return initialized model for selected model_name
 
         Args:
-            model_method (string): model method name
+            model_method (string): model method name  
         """
         # build initialized model
         if model_method == 'LSTM_rg':
@@ -123,7 +134,7 @@ class RegressionTrain(Train):
 
     def train(self):
         """
-        Train and return model
+        Train model and return model
 
         Returns:
             model: train model
@@ -138,11 +149,11 @@ class RegressionTrain(Train):
         # train model
         init_model = self.init_model.to(self.device)
 
-        dataloaders_dict = {'train': self.train_loader, 'val': self.valid_loader}
+        data_loaders_dict = {'train': self.train_loader, 'val': self.valid_loader}
         criterion = nn.MSELoss()
         optimizer = optim.Adam(init_model.parameters(), lr=self.parameter['lr'])
         
-        model = self._train_model(init_model, dataloaders_dict, criterion, self.n_epochs, optimizer, self.device)
+        model = self._train_model(init_model, data_loaders_dict, criterion, self.n_epochs, optimizer, self.device)
 
         return model
 
@@ -151,36 +162,40 @@ class RegressionTrain(Train):
 
 
     def _set_train_val(self, train_x, train_y, val_x, val_y):
+        """
+        set train, validation data to torch
+
+        Args:
+            train_x (dataframe): train X data
+            train_y (dataframe): train y data
+            val_x (dataframe): validation X data
+            val_y (dataframe): validation y data
+
+        """
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
             x_data = np.array(dataset[0])
             y_data = dataset[1]
-            datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
+            datasets.append(TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
         
         self.train_set, self.valid_set = datasets[0], datasets[1]
         
 
-    def _train_model(self, model, dataloaders, criterion, num_epochs, optimizer, device):
+    def _train_model(self, model, data_loaders, criterion, num_epochs, optimizer, device):
         """
         Train the model
 
-        :param model: initialized model
-        :type model: model
+        Args:
+            model (dataframe): initialized model
+            data_loaders (dictionary): train & validation data loaders
+            criterion (criterion): loss function for training
+            num_epochs (integer): the number of train epochs
+            optimizer (optimizer): optimizer used in training
+            device (string): device
 
-        :param dataloaders: train & validation dataloaders
-        :type dataloaders: dictionary
+        Returns:
+            model (model) : trained model
 
-        :param criterion: loss function for training
-        :type criterion: criterion
-
-        :param num_epochs: the number of train epochs
-        :type num_epochs: int
-
-        :param optimizer: optimizer used in training
-        :type optimizer: optimizer
-
-        :return: trained model
-        :rtype: model
         """
 
         since = time.time()
@@ -206,7 +221,7 @@ class RegressionTrain(Train):
                 running_total = 0
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
-                for inputs, labels in dataloaders[phase]:
+                for inputs, labels in data_loaders[phase]:
                     inputs = inputs.to(device)
                     labels = labels.to(device, dtype=torch.float)
                     

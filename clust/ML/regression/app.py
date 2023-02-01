@@ -73,9 +73,9 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     preds = ri.get_result(model)
 
     if scaler_param =='scale':
-        baseDFforInverse = pd.DataFrame(columns=target, index=range(len(preds)))
-        baseDFforInverse[target] = preds
-        prediction_result = pd.DataFrame(sacler_y.inverse_transform(baseDFforInverse), columns=target, index=baseDFforInverse.index)
+        base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
+        base_df_for_inverse[target] = preds
+        prediction_result = pd.DataFrame(sacler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
     else:
         prediction_result = pd.DataFrame(columns=target, index=range(len(preds)))
 

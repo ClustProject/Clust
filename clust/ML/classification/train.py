@@ -49,7 +49,7 @@ class ClassificationTrain(Train):
         self.device = param['device']
         self.batch_size = param['batch_size']
 
-    def set_data(self, train_x, train_y, val_x, val_y, windowNum=0):
+    def set_data(self, train_x, train_y, val_x, val_y, window_num=0):
         """
         transform data for train
 
@@ -58,15 +58,15 @@ class ClassificationTrain(Train):
             train_y (dataframe): train y data
             val_x (dataframe): validation X data
             val_y (dataframe): validation y data
-            windowNum (integer) : window size
+            window_num (integer) : window size
         """
         
         dim = 3
         # if self.model_name == "FC_cf":
         #    dim = 2
         if type(train_x) !=  np.ndarray:
-            train_x, train_y = transDFtoNP(train_x, train_y, windowNum, dim)
-            val_x, val_y = transDFtoNP(val_x, val_y, windowNum, dim)
+            train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
+            val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
 
         self.parameter['input_size'] = train_x.shape[1]
         if dim != 2:
@@ -91,7 +91,7 @@ class ClassificationTrain(Train):
             self.parameter["rnn_type"] = 'gru'
         
         # build initialized model
-        if (model_method == 'LSTM_cf') | (self.model_method == "GRU_cf"):
+        if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
             self.init_model = RNN_model(**self.parameter)
         elif model_method == 'CNN_1D_cf':
             self.init_model = CNN_1D(**self.parameter)
@@ -111,9 +111,8 @@ class ClassificationTrain(Train):
             model: train model
         """
 
-        train_set, valid_set = self.datasets[0], self.datasets[1]
-        self.train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
-        self.valid_loader = DataLoader(valid_set, batch_size=self.batch_size, shuffle=True)
+        self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
+        self.valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
 
         print("Start training model")
         

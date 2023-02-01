@@ -6,13 +6,8 @@ sys.path.append("..")
 sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
-from sklearn.metrics import mean_absolute_error, mean_squared_error 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, transDFtoNP2
 from Clust.clust.ML.common.inference import Inference
-from Clust.clust.ML.common.common import p2_dataSelection as p2
-from Clust.clust.ML.common.common import p4_testing as p4
-from Clust.clust.ML.common import model_manager
-from Clust.clust.tool.stats_table import metrics
 
 
 class RegressionInference(Inference):
@@ -25,18 +20,55 @@ class RegressionInference(Inference):
 
     def set_param(self, param):
         """
+        Set Parameter for Inference
 
+        Args:
+        param(dict): train parameter
+
+
+        Example:
+
+            >>> param = { 'num_layers': 2, 
+            ...            'hidden_size': 64, 
+            ...            'dropout': 0.1,
+            ...            'bidirectional': True,
+            ...            "lr":0.0001,
+            ...            "device":"cpu",
+            ...            "batch_size":16,
+            ...            "n_epochs":10    }
         """
         self.batch_size = param['batch_size']
         self.device = param['device']
 
-    def set_data(self, X, windowNum=0):
+
+    def set_data(self, data, windowNum=0):
         """
+        set data for inference & transform data
+
+        Args:
+            data (dataframe): Test or Inference data
+            window_num (integer) : window size
+    
+
+        Example:
+
+        >>> set_data(test_X, window_num)
+        ...         test_X : inference data
+        ...         window_num : window size
+
         """  
-        self.X = transDFtoNP2(X, windowNum)
+        self.X = transDFtoNP2(data, windowNum)
+
 
     def get_result(self, model):
         """
+        Predict RegresiionResult based on model result
+
+        Args:
+            model (model) : load trained model
+
+        Returns:
+            preds (ndarray) : Inference result data
 
         """
 
@@ -44,18 +76,17 @@ class RegressionInference(Inference):
 
         get_loader = self._get_loader()
         preds= self._inference(model, get_loader)
-        print(preds)
         print(f'** Dimension of result for test dataset = {preds.shape}')
 
         return preds
 
 
 
-
-
     def _get_loader(self):
         """
 
+        Returns:
+            test_loader (DataLoader) : data loader
         """
         x_data = np.array(self.X)
         test_data = torch.Tensor(x_data)
@@ -66,6 +97,12 @@ class RegressionInference(Inference):
     def _inference(self, model, test_loader):
         """
 
+        Args:
+            model (model): load trained model
+            test_loader (DataLoader) : data loader
+
+        Returns:
+            preds (ndarray) : Inference result data
         """
 
         model.eval()   # 모델을 validation mode로 설정

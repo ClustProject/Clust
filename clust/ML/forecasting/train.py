@@ -26,25 +26,31 @@ class ForecastingTrain(Train):
         Set Parameter for transform, train
 
         Args:
-        param(dict): parameter for transtrom, train
-            >>> param = {"transform_parameter":{},
-                         "cleanParam":"clean",
-                         "batch_size":16,
-                         "model_parameter":{},
-                         "n_epochs":10,}
+        param(dict): parameter for train
+
+
+        Example:
+
+            >>> param = { "cleanParam":"clean",
+            ...           "batch_size":16,
+            ...           "n_epochs":10,
+            ...           "transform_parameter":{ "future_step": 1, "past_step": 24, "feature_col": ["COppm"], "target_col": "COppm"},
+            ...           "train_parameter": {'input_dim': 3, 'hidden_dim' : 256, 'layer_dim' : 3,
+            ...                                'output_dim' : 1, 'dropout_prob' : 0.2}   }
+
         """
-        # Data 처리
+
         self.parameter = param
         self.n_epochs = param['n_epochs']
         self.batch_size = param['batch_size']
         self.clean_param = param['clean_param']
-        self.model_parameter = param['model_parameter']
+        self.train_parameter = param['train_parameter']
         self.transform_parameter = param['transform_parameter']
 
 
     def set_data(self, train, val):
         """
-        transform data for train
+        set train, val data & transform data for training
 
         Args:
             train (dataframe): train data
@@ -58,23 +64,23 @@ class ForecastingTrain(Train):
 
     def set_model(self, model_method):
         """
-        
+        Build model and return initialized model for selected model_name
 
         Args:
-            model_method (string): model method name
+            model_method (string): model method name  
         """
-        # super().get_model(model_method)
+
         if (model_method == 'rnn'):
-            self.init_model = RNNModel(**self.model_parameter)
+            self.init_model = RNNModel(**self.train_parameter)
         elif model_method == 'lstm':
-            self.init_model = LSTMModel(**self.model_parameter)
+            self.init_model = LSTMModel(**self.train_parameter)
         elif model_method == 'gru':
-            self.init_model = GRUModel(**self.model_parameter)
+            self.init_model = GRUModel(**self.train_parameter)
 
 
     def train(self):
         """
-        Train and return model
+        Train model and return model
 
         Returns:
             model: train model
@@ -91,7 +97,7 @@ class ForecastingTrain(Train):
         optimizer = optim.Adam(self.init_model.parameters(), lr=learning_rate, weight_decay=weight_decay)
         opt = Optimization(model=self.init_model, loss_fn=loss_fn, optimizer=optimizer)
 
-        model = opt.train(train_loader, val_loader, batch_size=self.batch_size, n_epochs=self.n_epochs, n_features=self.model_parameter['input_dim'])
+        model = opt.train(train_loader, val_loader, batch_size=self.batch_size, n_epochs=self.n_epochs, n_features=self.train_parameter['input_dim'])
         opt.plot_losses()
 
         return model

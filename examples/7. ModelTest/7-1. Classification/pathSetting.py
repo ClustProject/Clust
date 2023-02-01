@@ -1,7 +1,9 @@
 import sys, os
 
+sys.path.append("../")
 sys.path.append("../../")
-sys.path.append("../../..")
+sys.path.append("../../../")
+sys.path.append("../../../../")
 
 from Clust.setting import influx_setting_KETI as ins
 from Clust.clust.ingestion.influx import influx_Client_v2 as influx_Client

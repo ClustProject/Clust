@@ -65,17 +65,19 @@ clust/
   │       ├── train.py      : forecasting train class
   │       ├── test.py       : forecasting test 모듈
   │       ├── inference.py  : forecasting inference class
+  │       ├── app.py        : test & inference application
   │       └── optimizer.py  : forecasting train optimization class
   │   └── regression
   │       │   └── models    : regression 관련 사용 model
   │       ├── train.py      : regression train class
-  │       ├── test.py       : regression test 모듈
-  │       └── inference.py  : regression inference class
+  │       ├── inference.py  : regression inference class
+  │       └── app.py        : test & inference application
   │   └── classification
   │       │   └── models    : classification 관련 사용 model
   │       ├── train.py      : classification train class
   │       ├── test.py       : classification test 모듈
-  │       └── inference.py  : classification inference class
+  │       ├── inference.py  : classification inference class
+  │       └── app.py        : test & inference application
   │
   ├── preprocessing
   │   ├── custom

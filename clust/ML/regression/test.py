@@ -25,6 +25,22 @@ class RegressionTest(Inference):
 
     def set_param(self, param):
         """
+        Set Parameter for Test
+
+        Args:
+        param(dict): train parameter
+
+
+        Example:
+
+            >>> param = { 'num_layers': 2, 
+            ...            'hidden_size': 64, 
+            ...            'dropout': 0.1,
+            ...            'bidirectional': True,
+            ...            "lr":0.0001,
+            ...            "device":"cpu",
+            ...            "batch_size":16,
+            ...            "n_epochs":10    }
 
         """
         self.batch_size = param['batch_size']
@@ -33,13 +49,37 @@ class RegressionTest(Inference):
 
     def set_data(self, X, y, windowNum=0):
         """
+        set data for test & transform data
+
+        Args:
+            test_X (dataframe): Test X data
+            test_y (dataframe): Test y data
+            window_num (integer) : window size
+
+
+        Example:
+
+            >>> set_data(test_X, test_y, window_num)
+            ...         test_X : test X data
+            ...         test_y : test y data
+            ...         window_num : window size
+
         """  
         self.X, self.y = transDFtoNP(X, y, windowNum)
 
 
     def get_result(self, model):
         """
+        Predict RegresiionResult based on model result
 
+        Args:
+            model (model) : load train model
+
+        Returns:
+            preds (ndarray) : prediction data
+            trues (ndarray) : original data
+            mse (float) : mean square error
+            mae (float) : mean absolute error
         """
 
         print("\nStart testing data\n")
@@ -57,6 +97,8 @@ class RegressionTest(Inference):
     def _get_loader(self):
         """
 
+        Returns:
+            test_loader (DataLoader) : data loader
         """
         x_data = np.array(self.X)
         y_data = self.y
@@ -68,7 +110,17 @@ class RegressionTest(Inference):
 
     def _test(self, model, test_loader):
         """
+        Predict RegresiionResult for test dataset based on the trained model
 
+        Args:
+            model (model): load trained model
+            test_loader (DataLoader) : data loader
+
+        Returns:
+            preds (ndarray) : prediction data
+            trues (ndarray) : original data
+            mse (float) : mean square error
+            mae (float) : mean absolute error
         """
 
         model.eval()   # 모델을 validation mode로 설정

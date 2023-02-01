@@ -3,7 +3,7 @@ sys.path.append("../")
 sys.path.append("../..")
 from Clust.clust.ML.common import model_path_setting
 
-def get_model_file_path(trainDataPathList, method):
+def get_model_file_path(train_data_path_list, method):
     """ get fullModelFilePath
     Ths function makes fullModelFilePath list.
     trainDataPathList and other paths obtained by method can be used for creating fullModelFilePath.
@@ -21,18 +21,18 @@ def get_model_file_path(trainDataPathList, method):
         >>>  trainMethod ='brits'
         >>>  modelFilePath = MI.getModelFilePath(trainDataPathList, self.trainMethod)
     """ 
-    modelInfoList = model_path_setting.myModelInfoList
-    modelInfo = modelInfoList[method]
+    model_info_list = model_path_setting.my_model_info_list
+    model_info = model_info_list[method]
     
-    modelFullPath =modelInfo['modelRootPath']+modelInfo['modelInfoPath']+trainDataPathList
-    modelFolderPath=''
-    for addfolder in modelFullPath:
-        modelFolderPath = os.path.join(modelFolderPath, addfolder)
+    model_full_path =model_info['model_root_path']+model_info['model_info_path']+train_data_path_list
+    model_folder_path=''
+    for add_folder in model_full_path:
+        model_folder_path = os.path.join(model_folder_path, add_folder)
 
-    if not os.path.exists(modelFolderPath):
-        os.makedirs(modelFolderPath)
+    if not os.path.exists(model_folder_path):
+        os.makedirs(model_folder_path)
     
-    modelFilePath=[]
-    for i, model_name in enumerate(modelInfo['modelFileNames']):
-        modelFilePath.append(os.path.join(modelFolderPath, model_name))
-    return modelFilePath
+    model_file_path=[]
+    for i, model_name in enumerate(model_info['model_file_names']):
+        model_file_path.append(os.path.join(model_folder_path, model_name))
+    return model_file_path
