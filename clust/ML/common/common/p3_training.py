@@ -6,21 +6,25 @@ from Clust.clust.ML.common.common import p1_integratedDataSaving as p1
 from Clust.clust.quality.NaN import cleanData
 import pandas as pd
 
-"""
 def deleteLowQualityTrainValidationData(train, val, cleanTrainDataParam, integration_freq_sec, NaNProcessingParam):
-
+    print("------", NaNProcessingParam)
     if cleanTrainDataParam =='Clean':
         import datetime
         # TODO integration_freq sec  사용을 안하는데 추후 문제될 수 있으니 확인해봐야 함
-        timedelta_frequency_sec = datetime.timedelta(seconds= integration_freq_sec)
+        #timedelta_frequency_sec = datetime.timedelta(seconds= integration_freq_sec)
         # 3. quality check
-        train = cleanNaNDF(train, NaNProcessingParam, timedelta_frequency_sec)
-        val = cleanNaNDF(val, NaNProcessingParam, timedelta_frequency_sec)
+        NanInfoForCleanData = NaNProcessingParam['NanInfoForCleanData']
+        print("------", NanInfoForCleanData)
+        from Clust.clust.quality.NaN import cleanData
+        CMS = cleanData.CleanData()
+        train = CMS.get_cleanData_by_removing_column(train, NanInfoForCleanData) 
+        val = CMS.get_cleanData_by_removing_column(val, NanInfoForCleanData) 
 
     else:
         pass
     return train, val
-"""
+
+    
 def getTrainValData(data, featureList, scalerRootPath, splitRatio, scalerParam, scaleMethod ='minmax', mode = None, windows=None):
     trainval, scalerFilePath = getScaledData(scalerParam, scalerRootPath, data[featureList], scaleMethod)
     from Clust.clust.transformation.purpose import machineLearning as ML

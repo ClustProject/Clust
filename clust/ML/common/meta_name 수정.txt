@@ -1,0 +1,83 @@
+< chage meta name >
+soon...
+
+modelName = model_name
+modelVersion = model_version
+trainDataInfo = train_data_info
+
+dataInfo = data_info
+
+processParam = process_param
+            - removeDuplication = remove_duplication
+            - staticFrequency = static_frequency
+            - certainErrorToNaN = certain_error_to_nan
+            - totalNonNanRatio = total_non_nan_ratio
+
+integration_freq_sec
+
+cleanParam = clean_param
+DataSaveMode = data_save_mode
+featureList = feature_list
+
+trainDataType = train_data_type
+
+target
+
+trainDataType = train_data_type
+modelPurpose = model_purpose
+
+model_method
+
+modelTags = model_tags
+
+cleanTrainDataParam = clean_train_data_param
+
+NaNProcessingParam = nan_processing_param
+            - NanInfoForCleanData = nan_info_for_clean_data
+            - ConsecutiveNanLimit = consevutive_nan_limit
+            - totalNaNLimit = total_nan_limit
+
+trainDataName = train_data_name
+
+trainParameter = train_parameter
+
+scalerParam = scaler_param
+
+filePath = file_path 
+          - X_scaler_file
+          - y_scaler_file
+
+
+modelInfoMeta ={
+    "author":"KETI",
+    "modelName": model_name,
+    "modelVersion":0.1,
+    "trainDataInfo":trainDataInfo,
+    "featureList":featureListX,
+    "target":featureListy,
+    "trainDataType":trainDataType,
+    "modelPurpose":modelPurpose,
+    "model_method":model_method,
+    "modelTags":modelTags,
+    "cleanTrainDataParam":cleanTrainDataParam,
+    "NaNProcessingParam":NaNProcessingParam,
+    "trainDataName":[dataName_X,dataName_y],
+    "trainParameter":ctrain.parameter,
+    "scalerParam":scalerParam,
+    "files":{
+        "modelFile":{
+            "fileName":"model.pth",
+            "filePath":modelFilePath
+        },
+        "XScalerFile":{
+            "fileName":"scaler.pkl",
+            "filePath":X_scalerFilePath       
+        },
+        "yScalerFile":{
+            "fileName":"scaler.pkl",
+            "filePath":y_scalerFilePath       
+        }
+    },
+    "trainParameter":trainParameter,
+    "n_epochs":n_epochs
+}

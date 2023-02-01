@@ -101,6 +101,9 @@ class LSTMData():
             return Clean_X, Clean_y
 
     
+
+
+
 """
 아래 코드 쓰이는가?
 """

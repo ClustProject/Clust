@@ -5,7 +5,7 @@ import numpy as np
 sys.path.append("..")
 sys.path.append("../..")
 
-from sklearn.metrics import mean_absolute_error, mean_squared_error 
+from torch.utils.data import TensorDataset, DataLoader
 from Clust.clust.ML.common.inference import Inference
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 
@@ -19,6 +19,22 @@ class ClassificationTest(Inference):
 
     def set_param(self, param):
         """
+        Set Parameter for Test
+
+        Args:
+        param(dict): train parameter
+
+
+        Example:
+
+            >>> param = { 'num_layers': 2, 
+            ...            'hidden_size': 64, 
+            ...            'dropout': 0.1,
+            ...            'bidirectional': True,
+            ...            "lr":0.0001,
+            ...            "device":"cpu",
+            ...            "batch_size":16,
+            ...            "n_epochs":10    }
 
         """
         self.batch_size = param['batch_size']
@@ -27,6 +43,21 @@ class ClassificationTest(Inference):
 
     def set_data(self, X, y, windowNum= 0, dim=None):
         """
+        set data for test & transform data
+
+        Args:
+            test_X (dataframe): Test X data
+            test_y (dataframe): Test y data
+            window_num (integer) : window size
+            dim (integer) : dimension
+
+        Example:
+
+            >>> set_data(test_X, test_y, window_num)
+            ...         test_X : test X data
+            ...         test_y : test y data
+            ...         window_num : window size
+            ...         dim : dimension
 
         """
         self.X, self.y = transDFtoNP(X, y, windowNum, dim)
@@ -34,7 +65,19 @@ class ClassificationTest(Inference):
 
     
     def get_result(self, model):
+        """
+        Predict RegresiionResult based on model result
+
+        Args:
+            model (model) : load train model
+
+        Returns:
+            preds (ndarray) : prediction data
+            probs (ndarray) : prediction probabilities
+            trues (ndarray) : original data
+            acc (float) : test accuracy
         
+        """
         print("\nStart testing data\n")
         test_loader = self._get_test_loader()
         
@@ -44,22 +87,23 @@ class ClassificationTest(Inference):
         preds, probs, trues, acc = self._test(model, test_loader)
         print(f'** Performance of test dataset ==> PROB = {probs}, ACC = {acc}')
         print(f'** Dimension of result for test dataset = {preds.shape}')
+
         return preds, probs, trues, acc
 
 
 
     def _get_test_loader(self):
         """
-        getTestLoader
+        get TestLoader
 
-        :return: test_loader
-        :rtype: DataLoader
+        Returns:
+            test_loader (DataLoader) : data loader
         """
 
         x_data = np.array(self.X)
         y_data = self.y
-        test_data = torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
-        test_loader = torch.utils.data.DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
+        test_data = TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
 
         return test_loader
 
@@ -70,14 +114,15 @@ class ClassificationTest(Inference):
         """
         Predict classes for test dataset based on the trained model
 
-        :return: predicted classes
-        :rtype: numpy array
+        Args:
+            model (model) : load train model
+            test_loader (DataLoader) : data loader
 
-        :return: prediction probabilities
-        :rtype: numpy array
-
-        :return: test accuracy
-        :rtype: float
+        Returns:
+            preds (ndarray) : prediction data
+            probs (ndarray) : prediction probabilities
+            trues (ndarray) : original data
+            acc (float) : test accuracy
         """
         model.eval()   # 모델을 validation mode로 설정
         

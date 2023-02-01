@@ -1,0 +1,128 @@
+classification
+
+model_info_meta ={
+    "author":"KETI",
+    "model_name": model_name,
+    "model_version":0.1,
+    "train_data_info":train_data_info,
+    "feature_list":feature_list_X,
+    "target":feature_list_y
+    "train_data_type":train_data_type,
+    "model_purpose":model_purpose,
+    "model_method":model_method,
+    "model_tags":model_tags,
+    "clean_train_data_param":clean_train_data_param,
+    nan_processing_param= {
+        "feature_cycle":'Day',
+        "feature_cycle_times":1,
+        "nan_info_clean_data":{'type':'num', 'consecutive_nan_limit':3, 'total_nan_limit':30000}
+    },
+    "train_data_name":[dataName_X,dataName_y],
+    "train_parameter":ctrain.parameter,
+    "scaler_param":scalerParam,
+    "files":{
+        "model_file":{
+            "file_name":"model.pth",
+            "file_path":modelFilePath
+        },
+        "X_scaler_file":{
+            "file_name":"scaler.pkl",
+            "file_path":X_scalerFilePath       
+        },
+        "y_scaler_file":{
+            "file_name":"scaler.pkl",
+            "file_path":y_scalerFilePath       
+        }
+    },
+    "n_epochs":n_epochs
+}
+
+
+
+nan_processing_param= {
+    "feature_cycle":'Day',
+    "feature_cycle_times":1,
+    "nan_info_clean_data":{'type':'num', 'consecutive_nan_limit':3, 'total_nan_limit':30000}}
+
+
+
+
+
+forecasting
+
+model_info_meta ={
+    "train_data_info":train_data_info,
+    "model_name":model_name,
+    "feature_list":transform_parameter["feature_col"],
+    "train_data_type":trainDataType,
+    "modelPurpose":modelPurpose,
+    "model_method":model_method,
+    "model_tags":model_tags,
+    "clean_train_data_param":clean_mode,
+    "nan_processing_param":nan_processing_param,
+    "train_data_name":datasetName,
+    "transform_parameter":transform_parameter,
+    "scaler_param":scaler_param,
+    "files":{
+        "model_file":{
+            "file_name":"model.pth",
+            "file_path":model_file_path
+        },
+        "scaler_file":{
+            "file_name":"scaler.pkl",
+            "file_path":scaler_file_path       
+        }
+    },
+    "train_parameter":train_parameter
+
+}
+
+
+
+
+
+
+
+
+regression
+
+modelInfoMeta ={
+    "author":"KETI",
+    "model_name": model_name,
+    "model_version":0.1,
+    "train_data_info":train_data_info,
+    "feature_list":feature_list_X,
+    "target":feature_list_y,
+    "train_data_type":train_data_type,
+    "model_purpose":model_purpose,
+    "model_method":model_method,
+    "model_tags":model_tags,
+    "clean_train_data_param":clean_train_data_param,
+    "nan_processing_param":nan_processing_param,
+    "train_data_name":[dataName_X,dataName_y],
+    "train_parameter":rml.parameter,
+    "scaler_param":scaler_param,
+    "files":{
+        "model_file":{
+            "file_name":"model.pth",
+            "file_path":modelFilePath
+        },
+        "X_scaler_file":{
+            "file_name":"scaler.pkl",
+            "file_path":X_scalerFilePath       
+        },
+        "y_scaler_file":{
+            "file_name":"scaler.pkl",
+            "file_path":y_scalerFilePath       
+        }
+    },
+    "n_epochs":n_epochs
+}
+
+
+
+
+
+
+
+

@@ -2,48 +2,43 @@ import pandas as pd
 import sys
 sys.path.append("../")
 
-from KETIToolDL.CLUSTTool.common import p4_testing as p4
 from Clust.clust.tool.stats_table import metrics
+from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.common.common import p2_dataSelection as p2
+from Clust.clust.ML.common.common import p4_testing as p4
+from Clust.clust.ML.forecasting.test import ForecasatingTest as FT
+from Clust.clust.ML.forecasting.inference import ForecastingInfernce as FI
 
-def getTestValues(test, trainParameter, transformParameter, model_method, modelFilePath, cleanParam):
-    from KETIToolDL.PredictionTool.RNNStyleModel.inference import RNNStyleModelTestInference
-    TestInference = RNNStyleModelTestInference()
-    TestInference.setTestData(test, transformParameter, cleanParam)
-    TestInference.setModel(trainParameter, model_method, modelFilePath)
-    predictions, values = TestInference.get_result()
 
-    return predictions, values
+def get_test_result(data_name, data_meta, model_meta, data_folder_name, db_client=None):
 
-def getTestResult(dataName, modelName, DataMeta, ModelMeta, dataRoot, db_client):
-
-    dataSaveMode = DataMeta[dataName]["integrationInfo"]["DataSaveMode"]
-    data = p2.getSavedIntegratedData(dataSaveMode, dataName, dataRoot, db_client)
-
-    scalerFilePath = ModelMeta[modelName]['files']['scalerFile']["filePath"]
-    modelFilePath = ModelMeta[modelName]['files']['modelFile']["filePath"]
-    featureList = ModelMeta[modelName]["featureList"]
-    cleanTrainDataParam = ModelMeta[modelName]["cleanTrainDataParam"]
-    scalerParam = ModelMeta[modelName]["scalerParam"]
-    integration_freq_sec = ModelMeta[modelName]['trainDataInfo']["integration_freq_sec"]
-    NaNProcessingParam = ModelMeta[modelName]['NaNProcessingParam']
-    trainParameter = ModelMeta[modelName]["trainParameter"]
-    transformParameter = ModelMeta[modelName]["transformParameter"]
-    model_method = ModelMeta[modelName]["model_method"]
-    target_col = ModelMeta[modelName]["transformParameter"]["target_col"]
-
-    test, scaler = p4.getScaledTestData(data[featureList], scalerFilePath, scalerParam)
+    data_save_mode = data_meta[data_name]["integrationInfo"]["DataSaveMode"]
+    data = p2.getSavedIntegratedData(data_save_mode, data_name, data_folder_name)
     
-    test = p4.getCleandData(test, cleanTrainDataParam, integration_freq_sec, NaNProcessingParam)
-    
-    prediction, values = getTestValues(test, trainParameter, transformParameter, model_method, modelFilePath, cleanTrainDataParam)
-    df_result = p4.getPredictionDFResult(prediction, values, scalerParam, scaler, featureList, target_col)
-    df_result.index = test[(transformParameter['future_step']+transformParameter['past_step']-1):].index
+    scaler_file_path = model_meta['files']['scalerFile']["filePath"]
+    model_file_path = model_meta['files']['modelFile']["filePath"]
 
-    """
-    df_result = p4.refineData(df_result)
-    
-    df_result.index = test.index
-    """
+    feature_list = model_meta["featureList"]
+    target_col = model_meta['transformParameter']["target_col"]
+    scaler_param = model_meta["scalerParam"]
+    model_method = model_meta["model_method"]
+    train_parameter = model_meta["trainParameter"]
+    transform_parameter = model_meta["transformParameter"]
+    integration_freq_sec = model_meta['trainDataInfo']["integration_freq_sec"]
+    clean_train_data_param = model_meta["cleanTrainDataParam"] 
+    nan_processing_param = model_meta['NaNProcessingParam']
+
+    test_data, scaler = p4.getScaledTestData(data[feature_list], scaler_file_path, scaler_param)
+    clean_test_data = p4.getCleandData(test_data, clean_train_data_param, integration_freq_sec, nan_processing_param)
+
+    ft = FT()
+    ft.set_param(model_meta)
+    ft.set_data(clean_test_data)
+    model = model_manager.load_pickle_model(model_file_path)
+    preds, trues = ft.get_result(model)
+
+    df_result = p4.getPredictionDFResult(preds, trues, scaler_param, scaler, feature_list, target_col)
+    df_result.index = test_data[(transform_parameter['future_step']+transform_parameter['past_step']-1):].index
     result_metrics =  metrics.calculate_metrics_df(df_result)
 
     return df_result, result_metrics
@@ -51,29 +46,38 @@ def getTestResult(dataName, modelName, DataMeta, ModelMeta, dataRoot, db_client)
 
 
 
+def get_inference_result(data, model_meta):
 
-def inference(input, trainParameter, model_method, modelFilePath, scalerParam, scalerFilePath, featureList, target_col):
-    inputDF = pd.DataFrame(input, columns = featureList)
-    # 4.Inference Data Preparation
-    inputData, scaler = p4.getScaledTestData(inputDF[featureList], scalerFilePath, scalerParam)
+    scaler_file_path = model_meta['files']['scalerFile']["filePath"]
+    model_file_path = model_meta['files']['modelFile']["filePath"]
 
-    # 5. Inference
-    from KETIToolDL.PredictionTool.RNNStyleModel.inference import RNNStyleModelInfernce
-    Inference = RNNStyleModelInfernce()
-    input_DTensor = Inference.getTensorInput(inputData)
-    Inference.setData(input_DTensor)
+    feature_list = model_meta["featureList"]
+    target_col = model_meta['transformParameter']["target_col"]
+    scaler_param = model_meta["scalerParam"]
+    past_step = model_meta['transformParameter']['past_step']
 
-    Inference.setModel(trainParameter, model_method, modelFilePath)
-    inference_result = Inference.get_result()
-    print(inference_result)
-    
-    if scalerParam =='scale':
-        baseDFforInverse = pd.DataFrame(columns=featureList, index=range(1))
-        baseDFforInverse[target_col] = inference_result[0]
-        prediction_inverse = pd.DataFrame(scaler.inverse_transform(baseDFforInverse), columns=featureList, index=baseDFforInverse.index)
-        result = prediction_inverse[target_col].values[0]
+    feature_data = data[feature_list]
+    step_data = feature_data[-past_step:][feature_list].values
+    df_data = pd.DataFrame(step_data, columns = feature_list)
+
+    input_data, scaler = p4.getScaledTestData(df_data[feature_list], scaler_file_path, scaler_param)
+
+    fi = FI()
+    fi.set_param(model_meta)
+    fi.set_data(input_data)
+    model = model_manager.load_pickle_model(model_file_path)
+    preds = fi.get_result(model)
+
+
+    if scaler_param =='scale':
+        base_df_for_inverse= pd.DataFrame(columns=feature_list, index=range(len(preds)))
+        base_df_for_inverse[target_col] = preds
+        inverse_result = pd.DataFrame(scaler.inverse_transform(base_df_for_inverse), columns=feature_list, index=base_df_for_inverse.index)
+        target_data = inverse_result[target_col]
+        prediction_result = pd.DataFrame(data={target_col: target_data}, index=range(len(preds)))
+        
     else:
-        result = inference_result[0][0]
+        prediction_result = pd.DataFrame(data={target_col: preds}, index=range(len(preds)))
 
-    return result
 
+    return prediction_result

@@ -59,24 +59,21 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     model_method = model_meta["model_method"]
     train_parameter = model_meta["trainParameter"]
 
-    print(feature_list)
-    print(target)
-
     # Scaling Test Input
-    test_X, scaler_X = p4.getScaledTestData(data_X[feature_list], X_scaler_file_path, scaler_param)
-    sacler_y = p4.getScalerFromFile(y_scaler_file_path)
+    input_X, scaler_X = p4.getScaledTestData(data_X[feature_list], X_scaler_file_path, scaler_param)
+    scaler_y = p4.getScalerFromFile(y_scaler_file_path)
 
     ri = RI()
     ri.set_param(train_parameter)
-    ri.set_data(test_X, window_num)
+    ri.set_data(input_X, window_num)
     model = model_manager.load_pickle_model(model_file_path)
     preds = ri.get_result(model)
 
     if scaler_param =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
         base_df_for_inverse[target] = preds
-        prediction_result = pd.DataFrame(sacler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
+        prediction_result = pd.DataFrame(scaler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
     else:
-        prediction_result = pd.DataFrame(columns=target, index=range(len(preds)))
+        prediction_result = pd.DataFrame(data={"value": preds}, index=range(len(preds)))
 
     return prediction_result

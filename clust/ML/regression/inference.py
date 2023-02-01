@@ -23,7 +23,7 @@ class RegressionInference(Inference):
         Set Parameter for Inference
 
         Args:
-        param(dict): train parameter
+            param(dict): train parameter
 
 
         Example:
@@ -46,7 +46,7 @@ class RegressionInference(Inference):
         set data for inference & transform data
 
         Args:
-            data (dataframe): Test or Inference data
+            data (dataframe): Inference data
             window_num (integer) : window size
     
 
@@ -74,9 +74,9 @@ class RegressionInference(Inference):
 
         print("\nStart testing data\n")
 
-        get_loader = self._get_loader()
-        preds= self._inference(model, get_loader)
-        print(f'** Dimension of result for test dataset = {preds.shape}')
+        inference_loader = self._get_loader()
+        preds= self._inference(model, inference_loader)
+        print(f'** Dimension of result for inference dataset = {preds.shape}')
 
         return preds
 
@@ -86,15 +86,15 @@ class RegressionInference(Inference):
         """
 
         Returns:
-            test_loader (DataLoader) : data loader
+            inference_loader (DataLoader) : data loader
         """
         x_data = np.array(self.X)
-        test_data = torch.Tensor(x_data)
-        test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
+        inference_data = torch.Tensor(x_data)
+        inference_loader = DataLoader(inference_data, batch_size=self.batch_size, shuffle=True)
 
-        return test_loader
+        return inference_loader
 
-    def _inference(self, model, test_loader):
+    def _inference(self, model, inference_loader):
         """
 
         Args:
@@ -110,7 +110,7 @@ class RegressionInference(Inference):
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds = []
-            for inputs in test_loader:
+            for inputs in inference_loader:
                 model.to(self.device)
                 
                 # forward

@@ -100,9 +100,7 @@ class RegressionTest(Inference):
         Returns:
             test_loader (DataLoader) : data loader
         """
-        x_data = np.array(self.X)
-        y_data = self.y
-        test_data= TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_data= TensorDataset(torch.Tensor(self.X), torch.Tensor(self.y))
         test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
 
         return test_loader
