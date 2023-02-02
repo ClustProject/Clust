@@ -131,7 +131,7 @@ class ForecasatingTest(Inference):
                 trues.extend(y_test.detach().numpy())
 
         preds = np.array(preds).reshape(-1)
-        preds = np.array(preds).reshape(-1)
+        trues = np.array(trues).reshape(-1)
         
         return preds, trues
 

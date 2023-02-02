@@ -7,7 +7,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"{device}" " is available.")
 
 
-class Optimization:
+class Optimization():
     """Optimization is a helper class that allows training, validation, prediction.
 
     Optimization is a helper class that takes model, loss function, optimizer function
