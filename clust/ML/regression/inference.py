@@ -6,7 +6,7 @@ sys.path.append("..")
 sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, transDFtoNP2
+from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf
 from Clust.clust.ML.common.inference import Inference
 
 
@@ -41,7 +41,7 @@ class RegressionInference(Inference):
         self.device = param['device']
 
 
-    def set_data(self, data, windowNum=0):
+    def set_data(self, data, window_num=0):
         """
         set data for inference & transform data
 
@@ -57,7 +57,7 @@ class RegressionInference(Inference):
         ...         window_num : window size
 
         """  
-        self.X = transDFtoNP2(data, windowNum)
+        self.data = trans_df_to_np_inf(data, window_num)
 
 
     def get_result(self, model):
@@ -88,7 +88,7 @@ class RegressionInference(Inference):
         Returns:
             inference_loader (DataLoader) : data loader
         """
-        x_data = np.array(self.X)
+        x_data = np.array(self.data)
         inference_data = torch.Tensor(x_data)
         inference_loader = DataLoader(inference_data, batch_size=self.batch_size, shuffle=True)
 

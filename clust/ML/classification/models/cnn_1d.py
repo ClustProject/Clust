@@ -4,14 +4,14 @@ import torch.optim as optim
 def calculate_output_length(seq_len, kernel_size, stride=1, padding=0, dilation=1):
     return (seq_len + 2 * padding - dilation * (kernel_size - 1) - 1) // stride + 1
 
-class CNN_1D(nn.Module):
+class CNN1D(nn.Module):
     def __init__(self, input_size, output_channels, kernel_size, stride, padding, drop_out, seq_len, num_classes, **extra_model_param):
         """
 
         Args:
             input_size (int): input_size는 input_channels 를 의미
         """
-        super(CNN_1D, self).__init__()
+        super(CNN1D, self).__init__()
         # 첫 번째 1-dimensional convolution layer 구축
         self.layer1 = nn.Sequential(
             nn.Conv1d(input_size, 32, kernel_size = kernel_size, stride = stride, padding = padding),

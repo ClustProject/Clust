@@ -29,7 +29,7 @@ class Train():
         pass
 
 
-    def set_data(self, data, window_num=0):
+    def set_data(self, data):
         """
         set train, val data & transform data for training
 
@@ -46,6 +46,7 @@ class Train():
             ... val_X : validation X data
             ... val_y : validation y data
             ... window_num : window size
+            ... dim : dimention
 
         """
         pass

@@ -7,7 +7,7 @@ sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
 from sklearn.metrics import mean_absolute_error, mean_squared_error 
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, transDFtoNP2
+from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np
 from Clust.clust.ML.common.inference import Inference
 from Clust.clust.ML.common.common import p2_dataSelection as p2
 from Clust.clust.ML.common.common import p4_testing as p4
@@ -47,7 +47,7 @@ class RegressionTest(Inference):
         self.device = param['device']
 
 
-    def set_data(self, X, y, windowNum=0):
+    def set_data(self, test_X, test_y, window_num=0):
         """
         set data for test & transform data
 
@@ -65,7 +65,7 @@ class RegressionTest(Inference):
             ...         window_num : window size
 
         """  
-        self.X, self.y = transDFtoNP(X, y, windowNum)
+        self.test_X, self.test_y = trans_df_to_np(test_X, test_y, window_num)
 
 
     def get_result(self, model):
@@ -100,7 +100,7 @@ class RegressionTest(Inference):
         Returns:
             test_loader (DataLoader) : data loader
         """
-        test_data= TensorDataset(torch.Tensor(self.X), torch.Tensor(self.y))
+        test_data= TensorDataset(torch.Tensor(self.test_X), torch.Tensor(self.test_y))
         test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
 
         return test_loader

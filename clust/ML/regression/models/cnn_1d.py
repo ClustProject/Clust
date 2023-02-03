@@ -2,9 +2,9 @@ import torch.nn as nn
 def calculate_output_length(input_seq, kernel_size, stride=1, padding=0, dilation=1):
     return (input_seq + 2 * padding - dilation * (kernel_size - 1) - 1) // stride + 1
 
-class CNN_1D(nn.Module):
+class CNN1D(nn.Module):
     def __init__(self, input_channels, output_channels, kernel_size, stride, padding, drop_out, input_seq):
-        super(CNN_1D, self).__init__()
+        super(CNN1D, self).__init__()
         # 첫 번째 1-dimensional convolution layer 구축
         self.layer1 = nn.Sequential(
             nn.Conv1d(input_channels, 32, kernel_size = kernel_size, stride = stride, padding = padding),

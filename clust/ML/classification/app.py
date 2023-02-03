@@ -87,11 +87,6 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     model = model_manager.load_pickle_model(model_file_path)
     preds =  ci.get_result(model)
 
-    print("=================================================================")
-    print(target)
-    print(preds)
-
-    print(type(preds))
 
     if scaler_param =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))

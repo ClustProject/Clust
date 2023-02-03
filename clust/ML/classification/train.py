@@ -7,14 +7,14 @@ import random
 import time
 import copy
 import datetime
-from torch.utils.data import DataLoader
+from torch.utils.data import TensorDataset, DataLoader
 sys.path.append("..")
 sys.path.append("../..")
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
-from Clust.clust.ML.classification.models.lstm_fcn import LSTM_FCNs
-from Clust.clust.ML.classification.models.cnn_1d import CNN_1D
-from Clust.clust.ML.classification.models.rnn import RNN_model
+from Clust.clust.ML.classification.models.lstm_fcn import LSTMFCNs
+from Clust.clust.ML.classification.models.cnn_1d import CNN1D
+from Clust.clust.ML.classification.models.rnn import RNNModel
 from Clust.clust.ML.classification.models.fc import FC
 from Clust.clust.ML.common.train import Train
 
@@ -72,9 +72,8 @@ class ClassificationTrain(Train):
         if dim != 2:
             self.parameter['seq_len']  = train_x.shape[2] # seq_length
         
-        ## TODO 아래 코드 군더더기 저럴 필요 없음 어짜피 이 함수는 Train을 넣으면 Train, Valid 나누는 함수로 고정시키 때문에
-        # train/validation 데이터셋 구축
-        self._set_train_val(train_x, train_y, val_x, val_y)
+        self.train_x, self.train_y = train_x, train_y
+        self.val_x, self.val_y = val_x, val_y
     
 
     def set_model(self, model_method):
@@ -92,11 +91,11 @@ class ClassificationTrain(Train):
         
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
-            self.init_model = RNN_model(**self.parameter)
+            self.init_model = RNNModel(**self.parameter)
         elif model_method == 'CNN_1D_cf':
-            self.init_model = CNN_1D(**self.parameter)
+            self.init_model = CNN1D(**self.parameter)
         elif model_method == 'LSTM_FCNs_cf':
-            self.init_model = LSTM_FCNs(**self.parameter)
+            self.init_model = LSTMFCNs(**self.parameter)
         elif model_method == 'FC_cf':
             self.init_model = FC(**self.parameter)
         else:
@@ -114,7 +113,7 @@ class ClassificationTrain(Train):
 
         print("Start training model")
         
-        train_loader, valid_loader = self._get_torch_loader()
+        train_loader, valid_loader = self._get_torch_loader(self.train_x, self.train_y, self.val_x, self.val_y)
         # train model
         init_model = self.init_model.to(self.device)
         
@@ -128,19 +127,7 @@ class ClassificationTrain(Train):
         
 
 
-    def _get_torch_loader(self):
-        """
-        
-        """
-
-        # TensorDataset 로 train, val 데이터를 합친 뒤 dataloader하는 방법은?
-        train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
-        valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
-
-        return train_loader, valid_loader
-
-
-    def _set_train_val(self, train_x, train_y, val_x, val_y):
+    def _get_torch_loader(self, train_x, train_y, val_x, val_y):
         """
         
         """
@@ -148,9 +135,16 @@ class ClassificationTrain(Train):
         for dataset in [(train_x, train_y), (val_x, val_y)]:
             x_data = np.array(dataset[0])
             y_data = dataset[1]
-            datasets.append(torch.utils.data.TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
+            datasets.append(TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
         
-        self.train_set, self.valid_set = datasets[0], datasets[1]
+        train_set, valid_set = datasets[0], datasets[1]
+
+        # TensorDataset 로 train, val 데이터를 합친 뒤 dataloader하는 방법은?
+        train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
+        valid_loader = DataLoader(valid_set, batch_size=self.batch_size, shuffle=True)
+
+        return train_loader, valid_loader
+
 
 
         

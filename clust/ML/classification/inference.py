@@ -7,7 +7,7 @@ sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
 from Clust.clust.ML.common.inference import Inference
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP2
+from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf
 
 
 class ClassificationInference(Inference):
@@ -40,7 +40,7 @@ class ClassificationInference(Inference):
         self.device = param['device']
 
 
-    def set_data(self, data_X, window_num= 0, dim=None):
+    def set_data(self, data, window_num= 0, dim=None):
         """
         set data for test & transform data
 
@@ -57,7 +57,7 @@ class ClassificationInference(Inference):
             ...         window_num : window size
             ...         dim : dimension
         """
-        self.X = transDFtoNP2(data_X, window_num, dim)
+        self.data = trans_df_to_np_inf(data, window_num, dim)
 
     
     def get_result(self, model):
@@ -90,11 +90,11 @@ class ClassificationInference(Inference):
             inference_loader (DataLoader) : data loader
         """
 
-        x_data = np.array(self.X)
+        x_data = np.array(self.data)
         inference_data = torch.Tensor(x_data)
         inference_loader = DataLoader(inference_data, batch_size=self.batch_size, shuffle=True)
 
-        return inference_loader
+        return inference_loader 
 
 
     def _inference(self, model, inference_loader):

@@ -20,10 +20,10 @@ class SELayer(nn.Module):
         return x * y.expand_as(x)
 
 
-class LSTM_FCNs(nn.Module):
+class LSTMFCNs(nn.Module):
     def __init__(self, *, n_time = 128, input_size, num_lstm_out=64, num_layers,
                 conv1_nf=128, conv2_nf=128, conv3_nf=16, lstm_drop_p=0.8, fc_drop_p=0.3):
-        super(LSTM_FCNs, self).__init__()
+        super(LSTMFCNs, self).__init__()
         self.n_time = n_time
         self.num_features = input_size
 

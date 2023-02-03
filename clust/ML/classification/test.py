@@ -7,7 +7,7 @@ sys.path.append("../..")
 
 from torch.utils.data import TensorDataset, DataLoader
 from Clust.clust.ML.common.inference import Inference
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
+from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np
 
 
 class ClassificationTest(Inference):
@@ -60,7 +60,7 @@ class ClassificationTest(Inference):
             ...         dim : dimension
 
         """
-        self.X, self.y = transDFtoNP(X, y, windowNum, dim)
+        self.test_X, self.test_y = trans_df_to_np(X, y, windowNum, dim)
 
 
     
@@ -100,8 +100,8 @@ class ClassificationTest(Inference):
             test_loader (DataLoader) : data loader
         """
 
-        x_data = np.array(self.X)
-        y_data = self.y
+        x_data = np.array(self.test_X)
+        y_data = self.test_y
         test_data = TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
         test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
 

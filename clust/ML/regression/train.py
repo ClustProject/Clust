@@ -10,9 +10,9 @@ from torch.utils.data import DataLoader, TensorDataset
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 from Clust.clust.ML.common.train import Train
 from Clust.clust.ML.regression.models.fc import FC
-from Clust.clust.ML.regression.models.rnn import RNN_model
-from Clust.clust.ML.regression.models.cnn_1d import CNN_1D
-from Clust.clust.ML.regression.models.lstm_fcn import LSTM_FCNs
+from Clust.clust.ML.regression.models.rnn import RNNModel
+from Clust.clust.ML.regression.models.cnn_1d import CNN1D
+from Clust.clust.ML.regression.models.lstm_fcn import LSTMFCNs
 
 class RegressionTrain(Train):
     
@@ -70,13 +70,11 @@ class RegressionTrain(Train):
             val_y (dataframe): validation y data
             window_num (integer) : window size
         """
-        train_x, train_y = transDFtoNP(train_x, train_y, window_num)
-        val_x, val_y = transDFtoNP(val_x, val_y, window_num)
+        self.train_x, self.train_y = transDFtoNP(train_x, train_y, window_num)
+        self.val_x, self.val_y = transDFtoNP(val_x, val_y, window_num)
 
         self.parameter['input_size'] = train_x.shape[1]
         self.parameter['seq_len']  = train_x.shape[2] # seq_length
-
-        self._set_train_val(train_x, train_y, val_x, val_y)
 
 
     def set_model(self, model_method):
@@ -88,7 +86,7 @@ class RegressionTrain(Train):
         """
         # build initialized model
         if model_method == 'LSTM_rg':
-            self.init_model = RNN_model(
+            self.init_model = RNNModel(
                 rnn_type='lstm',
                 input_size=self.parameter['input_size'],
                 hidden_size=self.parameter['hidden_size'],
@@ -97,7 +95,7 @@ class RegressionTrain(Train):
                 device=self.parameter['device']
             )
         elif model_method == 'GRU_rg':
-            self.init_model = RNN_model(
+            self.init_model = RNNModel(
                 rnn_type='gru',
                 input_size=self.parameter['input_size'],
                 hidden_size=self.parameter['hidden_size'],
@@ -106,7 +104,7 @@ class RegressionTrain(Train):
                 device=self.parameter['device']
             )
         elif model_method == 'CNN_1D_rg':
-            self.init_model = CNN_1D(
+            self.init_model = CNN1D(
                 input_channels=self.parameter['input_size'],
                 input_seq=self.parameter['seq_len'],
                 output_channels=self.parameter['output_channels'],
@@ -116,7 +114,7 @@ class RegressionTrain(Train):
                 drop_out=self.parameter['drop_out']
             )
         elif model_method == 'LSTM_FCNs_rg':
-            self.init_model = LSTM_FCNs(
+            self.init_model = LSTMFCNs(
                 input_size=self.parameter['input_size'],
                 num_layers=self.parameter['num_layers'],
                 lstm_drop_p=self.parameter['lstm_drop_out'],
@@ -141,15 +139,14 @@ class RegressionTrain(Train):
         """
 
         # train/validation DataLoader 구축
-        self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
-        self.valid_loader = DataLoader(self.valid_set, batch_size=self.batch_size, shuffle=True)
 
+        train_loader, valid_loader = self._get_torch_loader(self.train_x, self.train_y, self.val_x, self.val_y)
         print("Start training model")
 
         # train model
         init_model = self.init_model.to(self.device)
 
-        data_loaders_dict = {'train': self.train_loader, 'val': self.valid_loader}
+        data_loaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.MSELoss()
         optimizer = optim.Adam(init_model.parameters(), lr=self.parameter['lr'])
         
@@ -159,9 +156,7 @@ class RegressionTrain(Train):
 
 
 
-
-
-    def _set_train_val(self, train_x, train_y, val_x, val_y):
+    def _get_torch_loader(self, train_x, train_y, val_x, val_y):
         """
         set train, validation data to torch
 
@@ -177,8 +172,13 @@ class RegressionTrain(Train):
             x_data = np.array(dataset[0])
             y_data = dataset[1]
             datasets.append(TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
-        
-        self.train_set, self.valid_set = datasets[0], datasets[1]
+
+        train_set, val_set = datasets[0], datasets[1]
+
+        train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
+        val_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
+
+        return train_loader, val_loader
         
 
     def _train_model(self, model, data_loaders, criterion, num_epochs, optimizer, device):
