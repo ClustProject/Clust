@@ -3,7 +3,7 @@ import os
 # 
 
 ## 2. DataSelection
-def getSavedIntegratedData(data_save_mode, data_name, data_folder_path=None, db_name=None, db_client = None):
+def get_saved_integrated_data(data_save_mode, data_name, data_folder_path=None, db_name=None, db_client = None):
     if data_save_mode =='CSV':
         file_name = os.path.join(data_folder_path, data_name +'.csv')
         try:

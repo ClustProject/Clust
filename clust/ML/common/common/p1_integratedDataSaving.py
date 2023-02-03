@@ -4,43 +4,43 @@ import json
 
 sys.path.append("../../")
 sys.path.append("../../..")
+from Clust.clust.transformation.general.dataScaler import encode_hash_style
 
 # 1. IntegratedDataSaving
 # JH TODO 아래 코드에 대한 주석 작성
 # JH TODO Influx Save Load 부분 작성 보완해야함
 
-def getListMerge(infoList):
-    MergedName = ''
-    for info in infoList:
-        MergedName = MergedName+info+'_'
-    return MergedName
+def get_list_merge(info_list):
+    mergerd_name = ''
+    for info in info_list:
+        mergerd_name = mergerd_name+info+'_'
+    return mergerd_name
 
 
-def getNewDataName(processParam, dataInfo, integration_freq_sec, cleanParam, DataSaveMode, startTime, endTime):
-    from Clust.clust.transformation.general.dataScaler import encodeHashStyle
-    dataDescriptionInfo = encodeHashStyle(getListMerge([str(processParam), str(dataInfo), str(integration_freq_sec), cleanParam, DataSaveMode]))
-    timeIntervalInfo = encodeHashStyle(getListMerge([startTime, endTime]))
-    dataName = dataDescriptionInfo+'_'+timeIntervalInfo
-    return dataName
+def getNewDataName(process_param, data_info, integration_freq_sec, clean_param, data_save_mode, start_time, end_time):
+    data_description_info = encode_hash_style(get_list_merge([str(process_param), str(data_info), str(integration_freq_sec), clean_param, data_save_mode]))
+    time_interval_info = encode_hash_style(get_list_merge([start_time, end_time]))
+    data_name = data_description_info+'_'+time_interval_info
+    return data_name
 
 
-def saveCSVData(dataFolderPath, dataName, data):
-    if not os.path.exists(dataFolderPath):
-        os.makedirs(dataFolderPath)
+def save_csv_data(data_folder_path, data_name, data):
+    if not os.path.exists(data_folder_path):
+        os.makedirs(data_folder_path)
 
-    fileName = os.path.join(dataFolderPath, dataName + '.csv')
-    data.to_csv(fileName)
-    return fileName
-
-
-def saveInfluxData(dbName, dataName, data, db_client):
-    db_name = dbName
-    ms_name = dataName
-    db_client.write_db(db_name, ms_name, data)
+    file_name = os.path.join(data_folder_path, data_name + '.csv')
+    data.to_csv(file_name)
+    return file_name
 
 
-def getProcessParam(cleanParam):
-    if cleanParam == "Clean":
+def save_influx_data(db_name, data_name, data, db_client):
+    bk_name = db_name
+    ms_name = data_name
+    db_client.write_db(bk_name, ms_name, data)
+
+
+def get_process_param(clean_param):
+    if clean_param == "Clean":
         refine_param = {
             "removeDuplication": {"flag": True},
             "staticFrequency": {"flag": True, "frequency": None}
@@ -114,58 +114,57 @@ def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integrati
     return data
 
 
-def writeJsonData(jsonFilePath, Data):
-    if os.path.isfile(jsonFilePath):
+def writeJsonData(json_file_path, data):
+    if os.path.isfile(json_file_path):
         pass
     else:
-        directory = os.path.dirname(jsonFilePath)
+        directory = os.path.dirname(json_file_path)
         if not os.path.exists(directory):
             os.makedirs(directory)
-        with open(jsonFilePath, 'w') as f:
+        with open(json_file_path, 'w') as f:
+            json_data = {}
+            json.dump(json_data, f, indent=2)
+            print("New json file is created from data.json file")
+
+    with open(json_file_path, 'w') as outfile:
+        outfile.write(json.dumps(data, ensure_ascii=False))
+
+
+def read_json_data(json_file_path):
+
+    if os.path.isfile(json_file_path):
+        pass
+    else:
+        directory = os.path.dirname(json_file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(json_file_path, 'w') as f:
             data = {}
             json.dump(data, f, indent=2)
             print("New json file is created from data.json file")
 
-    with open(jsonFilePath, 'w') as outfile:
-        outfile.write(json.dumps(Data, ensure_ascii=False))
+    if os.path.isfile(json_file_path):
+        with open(json_file_path, 'r') as json_file:
+            json_data = json.load(json_file)
+    return json_data
 
 
-def readJsonData(jsonFilePath):
+def saveJsonMeta(data_meta_path, data_name, process_param, dataInfo, integration_freq_sec, start_time, end_time, clean_param, data_save_mode):
 
-    if os.path.isfile(jsonFilePath):
-        pass
-    else:
-        directory = os.path.dirname(jsonFilePath)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        with open(jsonFilePath, 'w') as f:
-            data = {}
-            json.dump(data, f, indent=2)
-            print("New json file is created from data.json file")
+    data_mata = read_json_data(data_meta_path)
 
-    if os.path.isfile(jsonFilePath):
-        with open(jsonFilePath, 'r') as json_file:
-            jsonData = json.load(json_file)
-    return jsonData
+    data_info = {}
+    data_info["startTime"] = start_time
+    data_info["endTime"] = end_time
+    data_info["dataInfo"] = dataInfo
+    data_info["processParam"] = process_param
+    data_info["integration_freq_sec"] = integration_freq_sec
+    data_info["cleanParam"] = clean_param
+    data_info["DataSaveMode"] = data_save_mode
+    data_mata[data_name] = {}
+    data_mata[data_name]["integrationInfo"] = data_info
 
-
-def saveJsonMeta(DataMetaPath, dataName, processParam, dataInfo, integration_freq_sec, startTime, endTime, cleanParam, DataSaveMode):
-
-    DataMeta = readJsonData(DataMetaPath)
-
-    DataInfo = {}
-    DataInfo["startTime"] = startTime
-    DataInfo["endTime"] = endTime
-    DataInfo["dataInfo"] = dataInfo
-    DataInfo["processParam"] = processParam
-    DataInfo["integration_freq_sec"] = integration_freq_sec
-    DataInfo["cleanParam"] = cleanParam
-    DataInfo["DataSaveMode"] = DataSaveMode
-    DataMeta[dataName] = {}
-    DataMeta[dataName]["integrationInfo"] = DataInfo
-
-    writeJsonData(DataMetaPath, DataMeta)
-
+    writeJsonData(data_meta_path, data_mata)
 
 
 
@@ -176,23 +175,22 @@ def saveJsonMeta(DataMetaPath, dataName, processParam, dataInfo, integration_fre
 # ----------------------------------------------------------------------------------------------
 # new functions
 
-def save_json_meta(mongodb_client, dataName, processParam, dataInfo, integration_freq_sec, startTime, endTime, cleanParam, DataSaveMode):
+def save_json_meta(mongodb_client, data_name, process_param, data_info, integration_freq_sec, start_time, end_time, clean_param, data_save_mode):
 
-    meta_data = readJsonData(mongodb_client)
+    meta_data = read_json_data(mongodb_client)
 
     meta_info = {}
-    meta_info["startTime"] = startTime
-    meta_info["endTime"] = endTime
-    meta_info["dataInfo"] = dataInfo
-    meta_info["processParam"] = processParam
+    meta_info["startTime"] = start_time
+    meta_info["endTime"] = end_time
+    meta_info["dataInfo"] = data_info
+    meta_info["processParam"] = process_param
     meta_info["integration_freq_sec"] = integration_freq_sec
-    meta_info["cleanParam"] = cleanParam
-    meta_info["DataSaveMode"] = DataSaveMode
-    meta_data[dataName] = {}
-    meta_data[dataName]["integrationInfo"] = meta_info
+    meta_info["cleanParam"] = clean_param
+    meta_info["DataSaveMode"] = data_save_mode
+    meta_data[data_name] = {}
+    meta_data[data_name]["integrationInfo"] = meta_info
 
     save_meta_data(mongodb_client, meta_data)
-
 
 
 def save_meta_data(mongodb_client, meta_data):

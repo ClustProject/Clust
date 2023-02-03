@@ -57,7 +57,7 @@ class ForecasatingTest(Inference):
 
         """
         LSTMD = LSTMData()
-        self.testX_arr, self.testy_arr = LSTMD.transformXyArr(data, self.transform_parameter, self.clean_param )
+        self.testX_arr, self.testy_arr = LSTMD.transform_Xy_arr(data, self.transform_parameter, self.clean_param )
 
 
 

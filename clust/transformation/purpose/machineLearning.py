@@ -2,32 +2,32 @@ from torch.utils.data import TensorDataset, DataLoader
 import torch
 import numpy as np
 
-def splitDataByRatio(data, splitRatio, mode=None, windows=None):
+def split_data_by_ratio(data, split_ratio, mode=None, windows=None):
         """
         Split Data By Ratio. It usually makes train/validation data and train/test data
         """
         if mode == "Classification": # Xdata Freq : 11분 15초 / ydata Freq : 1 Days
             data_date = np.unique(data.index.date)
-            length1 = int(len(data_date)*splitRatio)
+            length1 = int(len(data_date)*split_ratio)
             data1, data2 = data[:str(data_date[length1])], data[str(data_date[length1+1]):]
         elif mode == "windows_split": # 입력 windows 를 기준으로 split
             import math
-            roundNum = math.ceil(len(data)/windows)
+            round_num = math.ceil(len(data)/windows)
     
             data_date = []
-            for i in range(roundNum):
+            for i in range(round_num):
                 try:
                     data_date.append(data.iloc[[(i+1)*windows-1]].index)
                 except IndexError: # 결합 데이터의 길이가 공통 기간으로 기준 삼을 경우 y class data와 끝 시간이 일치하지 않은 경우 (Classification)
                     print("data length : ",len(data), " but  {} th windows index : ".format(i), (i+1)*windows-1)
                     data_date.append(data.iloc[[len(data)-1]].index)
 
-            length1 = int(len(data_date) * splitRatio)
+            length1 = int(len(data_date) * split_ratio)
             data1 = data[:str(data_date[length1-1][0])]
             data2 = data[len(data1):]
             
         else:
-            length1=int(len(data)*splitRatio)
+            length1=int(len(data)*split_ratio)
             data1, data2 = data[:length1], data[length1:]
         return data1, data2
 
@@ -44,26 +44,26 @@ class LSTMData():
     #     return dataSet, loader
 
 
-    def transformXyArr(self, data, transformParameter, CleanParam=True):
+    def transform_Xy_arr(self, data, transformParameter, clean_param=True):
         feature_col= transformParameter["feature_col"]
         target_col= transformParameter["target_col"]
         future_step= transformParameter["future_step"]
         past_step= transformParameter["past_step"]
-        if CleanParam==True:
+        if clean_param==True:
             pass
         else:
             data = data.interpolate(method='linear').dropna()
-        self.dataX, self.datay = self._splitXy(data, feature_col, target_col)
-        dataX_, datay_ = self._adaptXyByTargetInfo(self.dataX, self.datay, future_step )
-        self.dataX_arr, self.datay_arr  = self._getCleanXy(dataX_, datay_, past_step, CleanParam)
+        self.dataX, self.datay = self._split_Xy(data, feature_col, target_col)
+        dataX_, datay_ = self._adapt_Xy_By_target_info(self.dataX, self.datay, future_step )
+        self.dataX_arr, self.datay_arr  = self._get_clean_Xy(dataX_, datay_, past_step, clean_param)
         return self.dataX_arr, self.datay_arr
 
-    def _splitXy(self, data, X_col, y_col):
+    def _split_Xy(self, data, X_col, y_col):
         X = data[X_col]
         y = data[[y_col]]
         return X, y
 
-    def _adaptXyByTargetInfo(self, X, y, future_num, method='step'):
+    def _adapt_Xy_By_target_info(self, X, y, future_num, method='step'):
         data_X= X[:-future_num]
         if method=='step':
             if future_num ==0:
@@ -72,7 +72,7 @@ class LSTMData():
                 data_y = y[future_num:]
         return data_X, data_y
 
-    def _getCleanXy(self, X, y, past_step, CleanParam):
+    def _get_clean_Xy(self, X, y, past_step, clean_param):
             """
             If clean param is True -> get only data without NaN
             Clean Param is False -> get all data after linear interpolation
@@ -84,7 +84,7 @@ class LSTMData():
             for i in range(len(X)- past_step+1):
                 seq_x = X[i:i+past_step].values
                 seq_y = y.iloc[[i+past_step-1]].values
-                if CleanParam == True:
+                if clean_param == True:
                     if np.isnan(seq_x).any() | np.isnan(seq_y).any():
                         Nan_num=Nan_num+1
                     else:

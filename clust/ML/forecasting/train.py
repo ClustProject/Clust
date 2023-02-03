@@ -43,9 +43,9 @@ class ForecastingTrain(Train):
         self.parameter = param
         self.n_epochs = param['n_epochs']
         self.batch_size = param['batch_size']
-        self.clean_param = param['clean_param']
-        self.train_parameter = param['train_parameter']
-        self.transform_parameter = param['transform_parameter']
+        self.clean_param = param['cleanParam']
+        self.train_parameter = param['trainParameter']
+        self.transform_parameter = param['transformParameter']
 
 
     def set_data(self, train, val):
@@ -58,8 +58,8 @@ class ForecastingTrain(Train):
 
         """
         LSTMD = LSTMData()
-        self.trainX_arr, self.trainy_arr = LSTMD.transformXyArr(train, self.transform_parameter, self.clean_param)
-        self.valX_arr, self.valy_arr = LSTMD.transformXyArr(val, self.transform_parameter, self.clean_param)
+        self.trainX_arr, self.trainy_arr = LSTMD.transform_Xy_arr(train, self.transform_parameter, self.clean_param)
+        self.valX_arr, self.valy_arr = LSTMD.transform_Xy_arr(val, self.transform_parameter, self.clean_param)
 
 
     def set_model(self, model_method):

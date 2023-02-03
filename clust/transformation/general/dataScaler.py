@@ -65,7 +65,7 @@ class DataScaler():
 
         """
         scaler_list = self.readJson(self.scalerListJsonFilePath)
-        encoded_scaler_list = encodeHashStyle(self.scale_columns)
+        encoded_scaler_list = encode_hash_style(self.scale_columns)
         self.scalerFilePath = os.path.join(self.rootPath, self.scaling_method, encoded_scaler_list, "scaler.pkl")
         return scaler_list, encoded_scaler_list
 
@@ -245,7 +245,7 @@ class DataInverseScaler():
         """
         
         self.scale_columns = column_list
-        encoded_scaler_list = encodeHashStyle(column_list)
+        encoded_scaler_list = encode_hash_style(column_list)
         self.scalerFilePath = os.path.join(self.rootPath, self.scaling_method, encoded_scaler_list, "scaler.pkl")
         print(self.scalerFilePath)
 
@@ -285,14 +285,14 @@ class DataInverseScaler():
         self.inverseScaledData= pd.DataFrame(inverseScaledData, index =self.dataToBeScaled.index, columns =self.dataToBeScaled.columns) 
         return self.inverseScaledData
 
-def encodeHashStyle(text):
+def encode_hash_style(text):
     import hashlib
     hash_object = hashlib.md5(str(text).encode('utf-8'))
     hashedText= hash_object.hexdigest()
     return hashedText
 
 
-def getScaledData(data, feature_col_list, scalerRootpath, scale_method):
+def get_scaled_data(data, feature_col_list, scalerRootpath, scale_method):
     """This method makes scaled data.
 
         This function finds scaler based and scale numpy array.

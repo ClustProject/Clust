@@ -15,8 +15,8 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
 
     data_save_mode_X = data_meta[data_name_X]["integrationInfo"]["DataSaveMode"]
     data_save_mode_y = data_meta[data_name_y]["integrationInfo"]["DataSaveMode"]
-    data_X = p2.getSavedIntegratedData(data_save_mode_X, data_name_X, data_folder_path)
-    data_y = p2.getSavedIntegratedData(data_save_mode_y, data_name_y, data_folder_path)
+    data_X = p2.get_saved_integrated_data(data_save_mode_X, data_name_X, data_folder_path)
+    data_y = p2.get_saved_integrated_data(data_save_mode_y, data_name_y, data_folder_path)
     
     X_scaler_file_path = model_meta['files']['XScalerFile']["filePath"]
     y_scaler_file_path = model_meta['files']['yScalerFile']["filePath"]
@@ -29,8 +29,8 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
     train_parameter = model_meta["trainParameter"]
 
     # Scaling Test Input
-    test_X, scaler_X = p4.getScaledTestData(data_X[feature_list], X_scaler_file_path, scaler_param)
-    test_y, scaler_y = p4.getScaledTestData(data_y[target], y_scaler_file_path, scaler_param)
+    test_X, scaler_X = p4.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
+    test_y, scaler_y = p4.get_scaled_test_data(data_y[target], y_scaler_file_path, scaler_param)
 
     rt = RT()
     rt.set_param(train_parameter)
@@ -38,7 +38,7 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
     model = model_manager.load_pickle_model(model_file_path)
     preds, trues, mse, mae = rt.get_result(model)
 
-    df_result = p4.getPredictionDFResult(preds, trues, scaler_param, scaler_y, featureList= target, target_col = target[0])
+    df_result = p4.get_prediction_df_result(preds, trues, scaler_param, scaler_y, featureList= target, target_col = target[0])
     result_metrics =  metrics.calculate_metrics_df(df_result)
 
     return df_result, result_metrics
@@ -60,8 +60,8 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     train_parameter = model_meta["trainParameter"]
 
     # Scaling Test Input
-    input_X, scaler_X = p4.getScaledTestData(data_X[feature_list], X_scaler_file_path, scaler_param)
-    scaler_y = p4.getScalerFromFile(y_scaler_file_path)
+    input_X, scaler_X = p4.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
+    scaler_y = p4.get_scaler_file(y_scaler_file_path)
 
     ri = RI()
     ri.set_param(train_parameter)

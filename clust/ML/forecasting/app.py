@@ -13,7 +13,7 @@ from Clust.clust.ML.forecasting.inference import ForecastingInfernce as FI
 def get_test_result(data_name, data_meta, model_meta, data_folder_name, db_client=None):
 
     data_save_mode = data_meta[data_name]["integrationInfo"]["DataSaveMode"]
-    data = p2.getSavedIntegratedData(data_save_mode, data_name, data_folder_name)
+    data = p2.get_saved_integrated_data(data_save_mode, data_name, data_folder_name)
     
     scaler_file_path = model_meta['files']['scalerFile']["filePath"]
     model_file_path = model_meta['files']['modelFile']["filePath"]
@@ -28,8 +28,8 @@ def get_test_result(data_name, data_meta, model_meta, data_folder_name, db_clien
     clean_train_data_param = model_meta["cleanTrainDataParam"] 
     nan_processing_param = model_meta['NaNProcessingParam']
 
-    test_data, scaler = p4.getScaledTestData(data[feature_list], scaler_file_path, scaler_param)
-    clean_test_data = p4.getCleandData(test_data, clean_train_data_param, integration_freq_sec, nan_processing_param)
+    test_data, scaler = p4.get_scaled_test_data(data[feature_list], scaler_file_path, scaler_param)
+    clean_test_data = p4.get_cleand_data(test_data, clean_train_data_param, integration_freq_sec, nan_processing_param)
 
     ft = FT()
     ft.set_param(model_meta)
@@ -37,7 +37,7 @@ def get_test_result(data_name, data_meta, model_meta, data_folder_name, db_clien
     model = model_manager.load_pickle_model(model_file_path)
     preds, trues = ft.get_result(model)
 
-    df_result = p4.getPredictionDFResult(preds, trues, scaler_param, scaler, feature_list, target_col)
+    df_result = p4.get_prediction_df_result(preds, trues, scaler_param, scaler, feature_list, target_col)
     df_result.index = test_data[(transform_parameter['future_step']+transform_parameter['past_step']-1):].index
     result_metrics =  metrics.calculate_metrics_df(df_result)
 
@@ -60,7 +60,7 @@ def get_inference_result(data, model_meta):
     step_data = feature_data[-past_step:][feature_list].values
     df_data = pd.DataFrame(step_data, columns = feature_list)
 
-    input_data, scaler = p4.getScaledTestData(df_data[feature_list], scaler_file_path, scaler_param)
+    input_data, scaler = p4.get_scaled_test_data(df_data[feature_list], scaler_file_path, scaler_param)
 
     fi = FI()
     fi.set_param(model_meta)
