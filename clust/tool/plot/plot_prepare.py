@@ -1,4 +1,6 @@
-
+############################################
+# echart 및 matplot 그래프 생성에 필요한 모듈  
+############################################
 import os
 
 class plot_modules():
@@ -18,7 +20,7 @@ class plot_modules():
                     dataInfo: Array(3), …
                 }
             ```
-
+            
             # Returns
             * json         
 

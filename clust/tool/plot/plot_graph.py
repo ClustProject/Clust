@@ -13,6 +13,7 @@ def plot_heatmap(data):
         
     """
     import seaborn as sns
+    data = data.corr()
     
     ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.columns.values, annot =True, annot_kws ={'size': 8})
     bottom, top = ax.get_ylim() 
