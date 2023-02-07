@@ -60,10 +60,10 @@ class plot_modules():
             from Clust.clust.integration.integrationInterface import IntegrationInterface
             dataIntegrated = IntegrationInterface().multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
             
-            dataSet = dataIntegrated[feature_compared]
+            dataSet_df = dataIntegrated[feature_compared]
             
 
-            return dataSet
+            return dataSet_df
 
         def check_path(directory, file_name) :               
         
