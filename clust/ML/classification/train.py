@@ -12,7 +12,7 @@ sys.path.append("..")
 sys.path.append("../..")
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
-from Clust.clust.ML.classification.models.lstm_fcn import LSTMFCNs
+from Clust.clust.ML.classification.models.lstm_fcns import LSTMFCNs
 from Clust.clust.ML.classification.models.cnn_1d import CNN1D
 from Clust.clust.ML.classification.models.rnn import RNNModel
 from Clust.clust.ML.classification.models.fc import FC

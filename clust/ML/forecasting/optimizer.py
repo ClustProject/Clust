@@ -117,6 +117,13 @@ class Optimization:
         return self.model
         #torch.save(self.model.state_dict(), model_path)
 
+
+
+
+
+
+
+
     def evaluate(self, test_loader, batch_size=1, n_features=1):
         """The method evaluate performs the model evaluation
 

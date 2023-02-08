@@ -285,6 +285,11 @@ class DataInverseScaler():
         self.inverseScaledData= pd.DataFrame(inverseScaledData, index =self.dataToBeScaled.index, columns =self.dataToBeScaled.columns) 
         return self.inverseScaledData
 
+
+
+
+
+
 def encode_hash_style(text):
     import hashlib
     hash_object = hashlib.md5(str(text).encode('utf-8'))

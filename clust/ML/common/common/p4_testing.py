@@ -21,10 +21,10 @@ def get_scaler_file(scaler_file_path):
 
 def get_scaled_data(data, scaler, scaler_param):
     if scaler_param=='scale':
-        scaledD = pd.DataFrame(scaler.transform(data), index = data.index, columns = data.columns)
+        scaled_data = pd.DataFrame(scaler.transform(data), index = data.index, columns = data.columns)
     else:
-        scaledD = data.copy()
-    return scaledD
+        scaled_data = data.copy()
+    return scaled_data
 
 def get_prediction_df_result(predictions, values, scaler_param, scaler, feature_list, target_col):
     print(scaler_param)

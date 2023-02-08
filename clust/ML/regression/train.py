@@ -12,7 +12,7 @@ from Clust.clust.ML.common.train import Train
 from Clust.clust.ML.regression.models.fc import FC
 from Clust.clust.ML.regression.models.rnn import RNNModel
 from Clust.clust.ML.regression.models.cnn_1d import CNN1D
-from Clust.clust.ML.regression.models.lstm_fcn import LSTMFCNs
+from Clust.clust.ML.regression.models.lstm_fcns import LSTMFCNs
 
 class RegressionTrain(Train):
     
