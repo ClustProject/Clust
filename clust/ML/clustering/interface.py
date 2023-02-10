@@ -46,7 +46,7 @@ def clusteringByMethod(data, parameter, model_path):
             clust_train = KMeansTrain()
             clust_train.set_param(param)
             clust_test = KMeansTest()
-
+        print("start..........................")
         # 1. 데이터 준비
         data_series = DF_to_series(data)
         data_name = list(data.columns)
@@ -66,8 +66,12 @@ def clusteringByMethod(data, parameter, model_path):
         clust_test.set_model(model)
         from Clust.clust.ML.tool import util
         result = clust_test.predict(data_series)
-        result_dic = util.get_dict_from_two_array(data_name, result)
 
+        from sklearn.metrics import calinski_harabasz_score
+        score = calinski_harabasz_score(data_series, result)
+        print("Score:", score)
+        result_dic = util.get_dict_from_two_array(data_name, result)
+        
         # plot time series style
         plt1 = clust_test.plot_ts_by_label()
         plt1.show()
