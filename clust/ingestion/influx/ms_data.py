@@ -18,6 +18,7 @@ def get_only_numericData_in_ms(db_client, intDataInfo):
         Dictionary: MSdataset
     """
     
+
     MSdataSet ={}
     for i, dbinfo in enumerate(intDataInfo['db_info']):
         db_name = dbinfo['db_name']
@@ -33,5 +34,7 @@ def get_only_numericData_in_ms(db_client, intDataInfo):
         multiple_dataset=db_client.get_data_by_time(dbinfo['start'], dbinfo['end'], db_name, ms_name, tag_key, tag_value)
         MSdataSet[i]  =  multiple_dataset.select_dtypes(include=np.number)
         MSdataSet[i].index.name ='datetime'
+
+    
 
     return MSdataSet

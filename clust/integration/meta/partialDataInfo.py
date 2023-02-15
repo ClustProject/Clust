@@ -71,7 +71,7 @@ class PartialData():
         """
         self.freq_check_length= 3
         self.partial_data_set = partial_data_set
-        self.column_meta={}
+        self.column_meta = {}
         self.column_meta['overlap_duration'] = self._get_partial_data_set_start_end(integration_duration)
         self.column_meta['column_characteristics'] = self._get_partial_data_freqeuncy_list(self.freq_check_length)
         self.partial_frequency_info = self._get_partial_data_frequency_info()

@@ -169,6 +169,7 @@ class DataProcessing(DataPreprocessing):
             result = self.get_imputedData(input_data, self.imputation_param)
         elif flag == 'all':
             result = self.all_preprocessing(input_data)
+            
         return result
 
     def all_preprocessing(self, input_data):

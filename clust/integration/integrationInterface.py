@@ -107,13 +107,16 @@ class IntegrationInterface():
         4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
 
         Args:
-            process_param (json): Refine Frequency를 하기 위한 Preprocessing Parameter
-            integration_param (json): Integration을 위한 method, transformParam이 담긴 Parameter
+            process_param (Dict) : Refine Frequency를 하기 위한 Preprocessing Parameter
+            integration_param (Dict) : Integration을 위한 method, transformParam이 담긴 Parameter
+            multiple_dataset (Dict) :
             
         Returns:
             DataFrame: integrated_data
     
         """
+
+        
 
         integration_duration = integration_param["integration_duration"]
         partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
@@ -144,6 +147,9 @@ class IntegrationInterface():
         else:
             result = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
         print("integrationEnd")
+
+        
+
         return result
 
     def getIntegratedDataSetByML(self, data_set, transform_param, overlap_duration):
@@ -195,6 +201,7 @@ class IntegrationInterface():
         data_it = data_integration.DataIntegration(data_set)
         
         re_frequency = datetime.timedelta(seconds= integration_freq_sec)
+
         integratedDataSet = data_it.dataIntegrationByMeta(re_frequency, partial_data_info.column_meta)
         
         return integratedDataSet 
