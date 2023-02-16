@@ -9,17 +9,18 @@ class TimeLagCorr():
         
         """
         pass
+
     
-    def df_timelag_crosscorr(self, dataSet:pd.DataFrame, column:str, lag_number:int)-> pd.DataFrame:
+    def df_timelag_crosscorr(self, dataSet, column, lag_number:int):
         """Calculate timelag crosscorrelation for dataframe input
 
         Args:
-            dataSet: Input DataSet to be calculated
-            column: reference one column name
-            lag_number: max range to investigate time difference (-lag_number ~ lag_number)
+            dataSet(DataFrame): Input DataSet to be calculated
+            column(string): reference one column name
+            lag_number(int): max range to investigate time difference (-lag_number ~ lag_number)
 
         Returns:
-            cross-correlation dataFrame result with time_lag index:
+            (dataFrame) cross-correlation dataFrame result with time_lag index:
             index = time_lag
             columns = columns
             value = cross-correlation values

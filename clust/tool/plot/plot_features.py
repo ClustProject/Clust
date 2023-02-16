@@ -33,21 +33,10 @@ def plot_one_cloumn_data(df, y_columnName, title):
     fig = dict(data=data, layout=layout)
     iplot(fig)  
 
-def plot_all_feature_data(data):
-    """
-    This function plots all column data by index. graphs are lines.
-
-    Args:
-        data (dataFrame): input dataframe
-    """
-    plot_cols = data.columns
-    plot_features = data[plot_cols]
-    _ = plot_features.plot(subplots=True)
-    plt.legend()
-    return plt
 
 
-def plot_all_feature_data_one_pic(data):
+
+def plot_all_feature_line_chart_one_pic(data):
     """
     This function plots all column data by index in one figure. A graph is line.
 
@@ -58,7 +47,7 @@ def plot_all_feature_data_one_pic(data):
     plt.legend()
     plt.show()
     
-def plot_all_feature_data_two_columns(data, width, height):
+def plot_all_feature_line_chart_two_columns(data, width, height):
     """
     This function plots all column data by index, two features per row. A graph is line.
 

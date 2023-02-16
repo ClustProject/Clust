@@ -35,18 +35,19 @@ def get_integated_multi_ms(data_param, db_client):
         _type_: _description_
     """
     
-    ms_array        = data_param['ms_array']
+    ms_list_info        = data_param['ms_list_info']
     start_time          = data_param['start_time']
     end_time            = data_param['end_time']
     integration_freq_sec = int(data_param['integration_freq_min']) * 60 
     
+
     #TODO 추후 이부분 외부 입력 받도록
     integration_param = get_integration_param(integration_freq_sec)
     process_param = get_general_process_param()
     
 
     from Clust.clust.integration.utils import param
-    intDataInfo = param.makeIntDataInfoSet(ms_array, start_time, end_time) 
+    intDataInfo = param.makeIntDataInfoSet(ms_list_info, start_time, end_time) 
     from Clust.clust.ingestion.influx import ms_data
     multiple_dataset  = get_only_numericData_in_ms(db_client, intDataInfo)  
     
@@ -54,7 +55,40 @@ def get_integated_multi_ms(data_param, db_client):
     from Clust.clust.integration.integrationInterface import IntegrationInterface
     dataIntegrated = IntegrationInterface().multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
     
+    if data_param['feature_list']:
+        dataIntegrated = dataIntegrated[data_param['feature_list']]
+    
     return dataIntegrated
+
+def get_integated_multi_ms_and_one_bucket(data_param, db_client):
+    """1개의 특정 bucket에 있는 모든 ms (multiple ms in bucket) 와 고정된 다른 ms (ms_list_info) 들을 복합하여 데이터를 준비함, feature_list 가 명시되었다면 명시된 feature_list와 관련한 데이터만 전달
+
+    Args:
+        data_param (_type_): data_param 
+        db_client (_type_): influx db client
+
+    Returns:
+        _type_: _description_
+    """
+    
+    data_org        = data_param['data_org']
+    bucket_name         = data_param['bucket_name']
+    start_time          = data_param['start_time']
+    end_time            = data_param['end_time']
+    integration_freq_sec = int(data_param['integration_freq_min']) * 60 
+    bucket_dataSet={}
+    
+    ms_list = db_client.measurement_list(bucket_name) #ms_name
+    for ms_name in ms_list:
+        dataInfo = data_org
+        dataInfo = data_org + [[bucket_name, ms_name]] 
+        data_param['ms_list_info'] = dataInfo
+        dataIntegrated = get_integated_multi_ms(data_param, db_client)
+        if data_param['feature_list']:
+            dataIntegrated = dataIntegrated[data_param['feature_list']]
+        bucket_dataSet[ms_name]= dataIntegrated
+    
+    return bucket_dataSet
 
 
 def get_only_numericData_in_ms(db_client, intDataInfo):
