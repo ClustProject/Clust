@@ -46,7 +46,7 @@ def get_analysis_by_data_set(analysis_method, analysis_param, df_set):
         }
         
         """
-        df_analysis = da.get_multiple_max_correlation_value_table_with_lag(analysis_param, df)
+        df_analysis = da.get_multiple_max_correlation_value_table_with_lag(analysis_param, df_set)
         # 출력은 절대값으로
         df_analysis = df_analysis.apply(pd.to_numeric)
         
@@ -58,7 +58,7 @@ def get_analysis_by_data_set(analysis_method, analysis_param, df_set):
         }
         
         """
-        df_analysis = da.get_multiple_max_correlation_index_table_with_lag(analysis_param, df)
+        df_analysis = da.get_multiple_max_correlation_index_table_with_lag(analysis_param, df_set)
         df_analysis = df_analysis.apply(pd.to_numeric).abs()
     
         

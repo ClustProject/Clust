@@ -10,6 +10,18 @@ from Clust.clust.transformation.splitDataByCycle import dataByCycle
 from Clust.clust.transformation.sampling.data_up_down import DataUpDown
 
 
+def get_graph_data(graph_format, graph_type, df):
+    from Clust.clust.tool.plot import plot_echart, plot_image
+    
+    if graph_format =='web':
+        result = plot_echart.get_echart_json_result(graph_type, df) # return echart style json
+    else result =='img': 
+        result = plot_image.get_img_graph_result(graph_type, df) # ' Rest API 출력으로 image 파일을 확인할 수 있도록 (파일저장후 전달만 있을까요? 보내고 정보는 날려버리면 좋겠는데        
+    return result
+    
+    
+    
+########################### 아래 그래프들 모두 정리해야함########################################################### JISU 코드인듯
 def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
     """
     Args:
