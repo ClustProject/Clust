@@ -1,4 +1,42 @@
-import pandas as pd
+import sys
+sys.path.append("../")
+sys.path.append("../../")
+
+from Clust.clust.ingestion.influx import ms_data
+
+# TODO 여기 JW 대대적으로 수정해야 합니다.
+def get_data_result(data_ingestion_type, db_client, data_ingestion_param) : 
+        """조건에 맞게 데이터를 정합함
+
+        Args:
+            data_ingestion_type (string): ["multiMS", "multiMs_MsinBucket"]
+            db_client (db_client): influxDB에서 데이터를 인출하기 위한 client
+            data_ingestion_param (_type_):data_ingestion_type에 따른 인출을 위해 필요한 parameter
+
+        Returns:
+            pd.DataFrame or dictionary of pd.DataFrame : 단일 dataframe 혹은 dataframe을 value로 갖는 dictionary
+        """
+        
+        # data_param 하위에 'feature_list' key가 유효한 경우 한번더 필터링
+        result_df = ['multiMS']
+        result_df_set = ['multiMS_MSinBucket']
+        
+            
+        # Step 1. get all dataset
+        if data_ingestion_type == "multiMS":
+            # result(dataframe)
+            result = get_integated_multi_ms(data_ingestion_param, db_client)
+            
+        elif data_ingestion_type == "multiMs_MsinBucket":
+            # result(dictionary of dataframe value)
+            result = get_integated_multi_ms_and_one_bucket(data_ingestion_param, db_client)
+        else:
+            # result(dataframe)
+            result = get_integated_multi_ms(data_ingestion_param, db_client)
+        
+        return result
+
+    
 
 def get_integated_multi_ms(data_param, db_client):
     """ get integrated numeric data with multiple MS data
@@ -30,7 +68,6 @@ def get_integated_multi_ms(data_param, db_client):
 
     from Clust.clust.integration.utils import param
     intDataInfo = param.makeIntDataInfoSet(ms_list_info, start_time, end_time) 
-    from Clust.clust.ingestion.influx import ms_data
     multiple_dataset  = get_only_numericData_in_ms(db_client, intDataInfo)  
     
     # data Integration
