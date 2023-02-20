@@ -49,7 +49,7 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
     elif analysis_method == 'max_correlation_value_index_with_lag':
         df_analysis = da.get_max_correlation_table_with_lag(analysis_param, input_df) 
         
-    return df_analysis
+    return df_analysisget_multiple_max_correlation_index_table_with_lag
 
 def get_analysis_by_data_set(analysis_method, analysis_param, input_df_set):
     """ input이 dataframe일 경우 분석을 수행하는 함수
