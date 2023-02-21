@@ -10,7 +10,6 @@ sys.path.append("../..")
 from torch.utils.data import TensorDataset, DataLoader
 from Clust.clust.ML.common.train import Train
 from Clust.clust.ML.common.inference import Inference
-from Clust.clust.ML.forecasting.optimizer import Optimization
 from Clust.clust.transformation.purpose.machineLearning import LSTMData
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
