@@ -28,6 +28,7 @@ def get_integated_multi_ms(data_param, db_client):
     process_param = get_general_process_param()
     
 
+    # data Integration ingestion
     from Clust.clust.integration.utils import param
     intDataInfo = param.makeIntDataInfoSet(ms_list_info, start_time, end_time) 
     from Clust.clust.ingestion.influx import ms_data
@@ -59,7 +60,7 @@ def get_integated_multi_ms_and_one_bucket(data_param, db_client):
     }
     
     Returns:
-        pd.dataFrame: integrated data
+        dictionary: integrated data
     """
     
     data_org        = data_param['data_org']
