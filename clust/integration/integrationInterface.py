@@ -6,7 +6,7 @@ sys.path.append("../../..")
 import datetime
 from Clust.clust.integration.meta import partialDataInfo
 from Clust.clust.preprocessing import dataPreprocessing
-from Clust.clust.ingestion.influx import ms_data
+from Clust.clust.ingestion.influx import df_set_data
 from Clust.clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
@@ -32,11 +32,10 @@ class IntegrationInterface():
             
         Example:
 
-        >>> intDataInfo = { "db_info":[ 
-        ...     {"db_name":"farm_inner_air", "measurement":"HS1", "start":start_time, "end":end_time},
-        ...     {"db_name":"farm_outdoor_weather_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
-        ...     {"db_name":"farm_outdoor_air_clean", "measurement":"gunwi", "start":start_time, "end":end_time},
-        ... ]} 
+        >>> ingestion_param = {'ms_list_info': [['life_indoor_environment', 'humidityTrain_10min'], ['life_indoor_environment', 'temperatureTrain_10min'],
+            ['weather_outdoor_environment', 'belgiumChieverseAirportTrain_10min']],
+            'start_time': '2016-01-11',
+            'end_time': '2016-04-15'}
 
         >>> process_param 
         ... refine_param = {
@@ -91,7 +90,7 @@ class IntegrationInterface():
         
         """
         ## multiple dataset
-        multiple_dataset  = ms_data.get_only_numericData_in_ms(db_client, intDataInfo)
+        multiple_dataset  = df_set_data.DfSetData(db_client).get_result("multi_numeric_ms_list", intDataInfo)
         ## get integrated data
         result = self.multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
 

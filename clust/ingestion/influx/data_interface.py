@@ -2,13 +2,13 @@ import sys
 sys.path.append("../")
 sys.path.append("../../")
 
-from Clust.clust.ingestion.influx import dfData, dfSetData
+from Clust.clust.ingestion.influx import df_data, df_set_data
 
 def get_data_result(ingestion_type, db_client, param) : 
         """조건에 맞게 데이터를 정합함
 
         Args:
-            ingestion_type (string): ["multiMS", "multiMs_MsinBucket"]
+            ingestion_type (string): ["multi_ms_integration", "multiMs_MsinBucket"]
             db_client (db_client): influxDB에서 데이터를 인출하기 위한 client
             param (_type_):ingestion_type에 따른 인출을 위해 필요한 parameter
 
@@ -17,13 +17,13 @@ def get_data_result(ingestion_type, db_client, param) :
         """
         
         # data_param 하위에 'feature_list' key가 유효한 경우 한번더 필터링
-        df_out_list = ['multiMS']
-        df_set_out_list = ['multiMs_MsinBucket']
+        df_out_list = ['multi_ms_integration']
+        df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration']
         
         
         if ingestion_type in df_out_list:
-            result = df_Data.dfData(ingestion_type, param, db_client)
+            result = df_data.dfData(db_client).get_result(ingestion_type, param)
         elif ingestion_type in df_set_out_list:
-            result = df_Set_data.DfSetData(ingestion_type, param, db_client)
+            result = df_set_data.DfSetData(db_client).get_result(ingestion_type, param)
         
         return result
