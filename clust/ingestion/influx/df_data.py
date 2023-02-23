@@ -40,20 +40,19 @@ class DfData():
         Args:
             ingestion_param (dict): ingestion_param 
 
-        >>> ingestion_param = {
-            'ms_list_info':,
-            'start_time':,
-            'end_time':
-            
-            'integration_freq_min:,
-            
-            'feature_list:[]
-        }
+        >>> ingestion_param = 
+        {
+        'start_time': '2021-09-05 00:00:00', 
+        'end_time': '2021-09-11 00:00:00', 
+        'integration_freq_min': 60, 
+        'feature_list': ['CO2', out_PM10', 'out_PM25'], 
+        'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]}
+
+
         Returns:
             pd.dataFrame: integrated data
             
         """
-        
         
         integration_freq_sec = int(ingestion_param['integration_freq_min']) * 60 
         integration_param = get_integration_param(integration_freq_sec)

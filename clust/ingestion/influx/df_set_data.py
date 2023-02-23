@@ -34,6 +34,9 @@ class DfSetData():
         elif ingestion_type == "multi_ms_one_enumerated_ms_in_bucket_integration":
             result = self.multi_ms_one_enumerated_ms_in_bucket_integration(self.ingestion_param, self.process_param)
             
+        elif ingestion_type == "all_ms_in_one_bucket":
+            result = self.all_ms_in_one_bucket(self.ingestion_param)
+            
         return result
     
     def multi_numeric_ms_list(self, ingestion_param):
@@ -41,11 +44,18 @@ class DfSetData():
         Get only numeric ms data list by ingestion_param without any preprocessing
         Args:    
             ingestion_param (dict): intDataInfo or ingestion_param
-        
+            
+        >>> ingestion_param ={
+        'start_time': '2021-09-05 00:00:00', 
+        'end_time': '2021-09-11 00:00:00', 
+        'integration_freq_min': 60, 
+        'feature_list': ['CO2', 'out_PM25'], 
+        'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
+            
         Returns:
             Dictionary: MSdataset
         """
-        # 여기서 ingestion_param이 순수 ingestion param일 수도 있고 결합된 형태일 수도 있어서.. 모두 수정하기가 어려워 아래에 관련한 부분에 대한 처리 코드를 임시적으로 넣었음
+        # 여기서 ingestion_param이 순수 ingestion param일 수도 있고 intDataInfo 형태일 수도 있어서.. 모두 수정하기가 어려워 아래에 관련한 부분에 대한 처리 코드를 임시적으로 넣었음
         if 'ms_list_info' in ingestion_param.keys():
             ms_list_info        = ingestion_param['ms_list_info']
             start_time          = ingestion_param['start_time']
@@ -82,19 +92,17 @@ class DfSetData():
             ingestion_param (dict): ingestion_param 
             process_param (dict): preprocessing parameter
 
-        >>> ingestion_param = {
-            'data_org':,
-            'bucket_name': , 
-            'start_time':,
-            'end_time':,
-            'integration_freq_min:,
-            'feature_list:[]
-        }
-        
+        >>> ingestion_param = 
+        {'bucket_name': 'air_indoor_modelSchool', 
+        'data_org': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul']], 
+        'start_time': '2021-09-05 00:00:00', 
+        'end_time': '2021-09-11 00:00:00', 
+        'integration_freq_min': 60, 
+        'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
+
         Returns:
             dictionary: integrated data
         """
-        
         data_org        = ingestion_param['data_org']
         bucket_name         = ingestion_param['bucket_name']
         start_time          = ingestion_param['start_time']
@@ -113,6 +121,34 @@ class DfSetData():
             bucket_dataSet[ms_name]= dataIntegrated
         
         return bucket_dataSet
+    
+    def all_ms_in_one_bucket(self, ingestion_param):
+        """
+        It returns dataSet from all MS of a speicific DB(Bucket) from start_time to end_time
+
+        Args:
+            db_client: influx DB client
+            influxClient class): instance to get data from influx DB
+        
+        Returns:
+            dataSet (dictionary): returned dataset ----> {"data1_name":DF1, "data2_name:DF2......}
+        """
+        bucket_name = ingestion_param['bucket_name']
+        start_time = ingestion_param['start_time'] 
+        end_time = ingestion_param['end_time']
+
+        ms_list = self.db_client.measurement_list(bucket_name)
+        dataSet ={}
+        for ms_name in ms_list:
+            data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
+            if len(data)>0:
+                if 'feature_list'in ingestion_param.keys():
+                    feature_list= ingestion_param['feature_list'] 
+                    data = data[feature_list]
+                dataSet[ms_name] = data
+
+        return dataSet
+
 
 
 
