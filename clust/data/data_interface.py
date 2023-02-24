@@ -2,7 +2,7 @@ import sys
 sys.path.append("../")
 sys.path.append("../../")
 
-from Clust.clust.ingestion.influx import df_data, df_set_data
+from Clust.clust.data import df_data, df_set_data
 
 def get_data_result(ingestion_type, db_client, param) : 
         """조건에 맞게 데이터를 정합함
@@ -18,7 +18,9 @@ def get_data_result(ingestion_type, db_client, param) :
         
         # data_param 하위에 'feature_list' key가 유효한 경우 한번더 필터링
         df_out_list = ['multi_ms_integration']
-        df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration']
+        df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration',
+                           'multi_numeric_ms_list',
+                           'all_ms_in_one_bucket', 'all_ms_in_multiple_bucket']
         
         
         if ingestion_type in df_out_list:
