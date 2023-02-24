@@ -3,7 +3,6 @@ sys.path.append("../")
 sys.path.append("../../")
 sys.path.append("../../../")
 
-from Clust.clust.ML.common import model_info as MI
 from Clust.clust.ML.common import model_path_setting
 import pickle
 

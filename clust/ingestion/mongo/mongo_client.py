@@ -52,7 +52,14 @@ class MongoClient():
 
     def get_all_document(self, db_name, collection_name):
         """
-        
+        Get All Document(meta data) list of specific Database, Collection
+
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+
+        Returns:
+            List: document list   
         """
         database = self.DBClient.get_database(db_name)
         cursor = database[collection_name].find()
@@ -68,7 +75,15 @@ class MongoClient():
 
     def get_document_by_json(self, db_name, collection_name, search):
         """
-        
+        Get Document(meta data) list of specific Database, Collection
+
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+            search (json): {'':''}
+
+        Returns:
+            List: document list
         """
         database = self.DBClient.get_database(db_name)
         cursor = database[collection_name].find(search)
@@ -84,7 +99,15 @@ class MongoClient():
 
     def get_document_by_table(self, db_name, collection_name, table_name):
         """
-        
+        Get Document(meta data) list of specific Database, Collection
+
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+            table_name (string): table name
+
+        Returns:
+            List: document list
         """
         database = self.DBClient.get_database(db_name)
         table_Info = {'table_name': table_name}
@@ -106,22 +129,44 @@ class MongoClient():
 
 ## ------------------------------ Create & Insert Function ------------------------------
     def insert_document(self, db_name, collection_name, document):
+        """
+        save data to mongodb
+
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+            document (json): {'':''}
+        """
         database = self.DBClient[db_name]
         collection = database[collection_name]
 
         collection.insert_one(document)
-        print("Success")
+        print("========== Data Svae Success ==========")
         
 
     # TODO update function 수정 예정
-    # def update_document(self, db_name, collection_name, document):
-    #     database = self.DBClient[db_name]
-    #     collection = database[collection_name]
+    def update_document(self, db_name, collection_name, target, update_data):
+        """
+        update data in mongodb
 
-    #     collection.update_one({"_id":"aa"}, {"$set":document})
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+            target (json): {'':''}
+            update_data (json): {'':''}
+        """
+        database = self.DBClient[db_name]
+        collection = database[collection_name]
 
+        if self.get_document_by_json(db_name, collection_name, target) is None:
+            print("========== Data None ==========")
+        else:
+            collection.update_one(target, {"$set":update_data})
+            print("========== Data Update Success ==========")
 
-    #     collection.update_many({}, {"$set":document})
+        
+
+        # collection.update_many({}, {"$set":document})
 
 
 
@@ -184,26 +229,7 @@ class MongoClient():
 
 
 
-
-
-
-
-
         # if limit == None:
         #     cursor = db[collec_name].find()
         # else:
         #     cursor = db[collec_name].find().limit(limit)
-
-if __name__ == "__main__":
-
-    test = MongoClient(ins.CLUSTMetaInfo2)
-
-    print("================================ get_DBList ==========================================\n")
-    # aa = test.get_DBList()
-    # print(aa)
-
-    db_name = 'test'
-    collection_name = 'abcdef'
-    aaa = test.get_all_document(db_name, collection_name)
-    print(type(aaa))
-    print(aaa)
