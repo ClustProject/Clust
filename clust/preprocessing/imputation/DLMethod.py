@@ -1,6 +1,9 @@
 import pandas as pd
 import os
 
+from Clust.clust.ML.tool import model
+from Clust.clust.ML.brits import inference
+
 class DLImputation():
     def __init__ (self, data, method, parameter):
         self.method = method
@@ -19,9 +22,7 @@ class DLImputation():
                 trainDataPathList = self.trainDataPathList
                 trainDataPathList.append(column_name)
                 ## Path
-                from KETIToolDL import modelInfo
-                MI = modelInfo.ModelFileManager()
-                modelFilePath = MI.getModelFilePath(trainDataPathList, self.method)
+                modelFilePath = model.get_model_path(trainDataPathList, self.method)
                 result = britsColumnImputation(self.data[[column_name]], column_name, modelFilePath)
                 result[column_name] = result
         ### Define Another Imputation 
@@ -33,7 +34,6 @@ class DLImputation():
 def britsColumnImputation(data, column_name, modelPath):
     print(modelPath[0])
     if os.path.isfile(modelPath[0]):
-        from KETIToolDL.PredictionTool.Brits import inference
         n =300
         dataset = [data[[column_name]][i:i+n] for i in range(0, len(data), n)]
         result = pd.DataFrame()

@@ -73,8 +73,8 @@ class RegressionTrain(Train):
         self.train_x, self.train_y = transDFtoNP(train_x, train_y, window_num)
         self.val_x, self.val_y = transDFtoNP(val_x, val_y, window_num)
 
-        self.parameter['input_size'] = train_x.shape[1]
-        self.parameter['seq_len']  = train_x.shape[2] # seq_length
+        self.parameter['input_size'] = self.train_x.shape[1]
+        self.parameter['seq_len']  = self.train_x.shape[2] # seq_length
 
 
     def set_model(self, model_method):

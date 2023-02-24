@@ -15,8 +15,6 @@ def get_model_file_path(train_data_path_list, method):
     :type method: str
 
     example
-        >>>  from KETIToolDL import modelInfo
-        >>>  MI = modelInfo.ModelFileManager()
         >>>  trainDataPathList =['DBName', 'MSName', 'columnName' ]
         >>>  trainMethod ='brits'
         >>>  modelFilePath = MI.getModelFilePath(trainDataPathList, self.trainMethod)

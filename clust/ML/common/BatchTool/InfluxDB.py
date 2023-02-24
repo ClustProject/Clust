@@ -3,6 +3,8 @@ sys.path.append(".")
 sys.path.append("..")
 sys.path.append("../..")
 
+from Clust.clust.ML.tool import model
+
 class BatchTraining():
     """
     BatchTraining for Influx DB
@@ -20,7 +22,7 @@ class BatchTraining():
         set setTrainer
 
         **Example**::
-            >>> from KETIToolDL.TrainTool.trainer import BritsTrainer
+            >>> from Clust.clust.ML.brits.train import BrisTrainer
             >>> Brits = BritsTrainer()
             >>> modelTrainParameter = None
             >>> Brits.setTrainParameter(modelTrainParameter)
@@ -83,9 +85,7 @@ class BatchTraining():
                 
         for column_name in df.columns: 
             trainDataPathList = [db_name, ms_name, column_name]#, str(bind_params)]
-            from KETIToolDL import modelInfo
-            MI = modelInfo.ModelFileManager()
-            modelFilePath = MI.getModelFilePath(trainDataPathList, self.trainMethod)
+            modelFilePath = model.get_model_path(trainDataPathList, self.trainMethod)
 
             self.trainer.trainModel(df[[column_name]],  modelFilePath)
     

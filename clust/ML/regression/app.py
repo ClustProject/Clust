@@ -38,7 +38,7 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
     model = model_manager.load_pickle_model(model_file_path)
     preds, trues, mse, mae = rt.get_result(model)
 
-    df_result = p4.get_prediction_df_result(preds, trues, scaler_param, scaler_y, featureList= target, target_col = target[0])
+    df_result = p4.get_prediction_df_result(preds, trues, scaler_param, scaler_y, feature_list= target, target_col = target[0])
     result_metrics =  metrics.calculate_metrics_df(df_result)
 
     return df_result, result_metrics

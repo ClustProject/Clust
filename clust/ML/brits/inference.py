@@ -1,17 +1,17 @@
 
 import torch
 import os
-from KETIToolDL.TrainTool.Brits import Brits_model
+from Clust.clust.ML.brits import brits_model
 import copy 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
-from KETIToolDL.PredictionTool.inference import Inference
+from Clust.clust.ML.common import inference
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 
-class BritsInference(Inference):
+class BritsInference(inference):
     def __init__(self, data, column_name, model_path):
         self.inputData = data
         self.column_name = column_name
@@ -22,11 +22,11 @@ class BritsInference(Inference):
         if os.path.isfile(self.model_path[0]):
             print("Brits Model exists")
             print(self.model_path[0])
-            loaded_model = Brits_model.Brits_i(108, 1, 0, len(output), device).to(device)
+            loaded_model = brits_model.Brits_i(108, 1, 0, len(output), device).to(device)
             loaded_model.load_state_dict(copy.deepcopy(torch.load(self.model_path[1], device)))
             
-            Brits_model.makedata(output, self.model_path[0])
-            data_iter = Brits_model.get_loader(self.model_path[0], batch_size=64)
+            brits_model.makedata(output, self.model_path[0])
+            data_iter = brits_model.get_loader(self.model_path[0], batch_size=64)
             
             result = self.predict_result(loaded_model, data_iter, device, output)
             result_list = result.tolist()
@@ -51,7 +51,7 @@ class BritsInference(Inference):
         model.eval()
         imputations = []
         for idx, data in enumerate(data_iter):
-            data = Brits_model.to_var(data, device)
+            data = brits_model.to_var(data, device)
             ret = model.run_on_batch(data, None)
             eval_masks = ret['eval_masks'].data.cpu().numpy()
             imputation = ret['imputations'].data.cpu().numpy()

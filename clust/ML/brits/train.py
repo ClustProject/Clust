@@ -6,7 +6,7 @@ import torch.optim as optim
 import numpy as np
 from tqdm import tqdm
 
-from KETIToolDL.TrainTool.Brits import Brits_model
+from Clust.clust.ML.brits import brits_model
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 class BritsTraining():
@@ -21,10 +21,10 @@ class BritsTraining():
         np.random.seed(0)
         print(self.inputData)
      
-        Brits_model.makedata(self.inputData, self.json_path)
-        data_iter = Brits_model.get_loader(self.json_path, batch_size=64)
+        brits_model.makedata(self.inputData, self.json_path)
+        data_iter = brits_model.get_loader(self.json_path, batch_size=64)
         length = len(self.inputData)
-        model = Brits_model.Brits_i(108, 1, 0, length, device).to(device)
+        model = brits_model.Brits_i(108, 1, 0, length, device).to(device)
         
         # Brits_model.Brits_i(hidden_state_dim, impute_weight, label_weight, length, device)
 
@@ -36,7 +36,7 @@ class BritsTraining():
         for i in progress:
             total_loss = 0.0
             for idx, data in enumerate(data_iter):
-                data = Brits_model.to_var(data, device)
+                data = brits_model.to_var(data, device)
                 ret = model.run_on_batch(data, optimizer, i)
                 total_loss += ret["loss"]
             loss_graphic.append(total_loss.tolist())

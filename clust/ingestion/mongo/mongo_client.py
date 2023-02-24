@@ -2,12 +2,14 @@ import pymongo
 import os, sys
 import json
 from bson.json_util import dumps, loads
+
 sys.path.append("../")
 sys.path.append("../../")
 sys.path.append("../../../")
+
 from Clust.setting import influx_setting_KETI as ins
 
-class mongoClient():
+class MongoClient():
 
     def __init__(self,mongo_setting):
         self.mongo_setting = mongo_setting
@@ -15,7 +17,7 @@ class mongoClient():
 
 
 ## ------------------------------ Get Function ------------------------------
-    def get_DBList(self):
+    def get_db_List(self):
         """
         Get All Mongo Database List
 
@@ -32,7 +34,7 @@ class mongoClient():
         return db_list
 
 
-    def get_CollectionList(self, db_name):
+    def get_collection_list(self, db_name):
         """
         Get All Collection list of specific Database
 
@@ -111,15 +113,15 @@ class mongoClient():
         print("Success")
         
 
+    # TODO update function 수정 예정
+    # def update_document(self, db_name, collection_name, document):
+    #     database = self.DBClient[db_name]
+    #     collection = database[collection_name]
 
-    def update_document(self, db_name, collection_name, document):
-        database = self.DBClient[db_name]
-        collection = database[collection_name]
-
-        collection.update_one({"_id":"aa"}, {"$set":document})
+    #     collection.update_one({"_id":"aa"}, {"$set":document})
 
 
-        collection.update_many({}, {"$set":document})
+    #     collection.update_many({}, {"$set":document})
 
 
 
@@ -194,7 +196,7 @@ class mongoClient():
 
 if __name__ == "__main__":
 
-    test = mongoClient(ins.CLUSTMetaInfo2)
+    test = MongoClient(ins.CLUSTMetaInfo2)
 
     print("================================ get_DBList ==========================================\n")
     # aa = test.get_DBList()

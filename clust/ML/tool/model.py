@@ -7,7 +7,7 @@ from Clust.clust.ML.common import model_info as MI
 from Clust.clust.ML.common import model_path_setting
 import pickle
 
-def get_model_file_path(train_data_path_list, method):
+def get_model_path(train_data_path_list, method):
     """ get fullModelFilePath
     Ths function makes fullModelFilePath list.
     trainDataPathList and other paths obtained by method can be used for creating fullModelFilePath.
@@ -19,8 +19,6 @@ def get_model_file_path(train_data_path_list, method):
     :type method: str
 
     example
-        >>>  from KETIToolDL import modelInfo
-        >>>  MI = modelInfo.ModelFileManager()
         >>>  trainDataPathList =['DBName', 'MSName', 'columnName' ]
         >>>  trainMethod ='brits'
         >>>  modelFilePath = MI.getModelFilePath(trainDataPathList, self.trainMethod)
@@ -48,7 +46,7 @@ def get_model_file_path(train_data_path_list, method):
 # BUT, 해당 함수를 실행해야지만 model_file_path 값 할당 ---> 너무 종속적이다, 대안 고려
 def get_model_file_path(train_data_path_list, model_method):
     global model_file_path
-    model_file_path_list = MI.get_model_file_path(train_data_path_list, model_method)
+    model_file_path_list = get_model_path(train_data_path_list, model_method)
     model_file_path = ''.join(model_file_path_list)
     print(model_file_path)
 
@@ -65,6 +63,7 @@ def save_pickle_model(model, model_file_path):
     """
     with open(model_file_path, 'wb') as outfile:
         pickle.dump(model, outfile)
+
 
 def load_pickle_model(model_file_path):
     """ load model: : dafult file type is pickle
