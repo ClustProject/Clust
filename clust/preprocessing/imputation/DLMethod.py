@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 from Clust.clust.ML.tool import model
-from Clust.clust.ML.brits import inference
+from Clust.clust.ML.test_sota.brits import inference
 
 class DLImputation():
     def __init__ (self, data, method, parameter):

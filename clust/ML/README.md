@@ -10,9 +10,13 @@
       ├── som.py       :clustering algorithm 2
       └── etc.py       :clustering algorithm 3 (모듈화 어려운)
   └── tool
-      ├── data.py      : ML 인풋 데이터 처리 관련 모듈
-      ├── model.py     : ML 모델 입출력 관련 모듈
-      └── util.py      : ML 데이터/모델 이외 관련 공통 모듈
+      ├── clean.py                  : data clean 관련 모듈
+      ├── data.py                   : data get, transform 관련 모듈 
+      ├── meta.py                   : meta data 사용 관련 모듈
+      ├── model_path_setting.py     : model별 path 위치 관련 정보
+      ├── model.py                  : model 저장 관련 모듈
+      ├── scaler.py                 : scaling 관련 모듈
+      └── util.py                   : ML 데이터/모델 이외 관련 공통 모듈
   └── common
       │   └── common
       │       ├── p1_integratedDataSaving.py
@@ -39,13 +43,13 @@
       ├── fc_regression.py          : FC model regression inference class
       ├── lstm_fcns_regression.py   : LSTM FCNs model regression inference class
       ├── rnn_regression.py         : RNN model regression inference class
-      └── app.py        : test & inference application
+      └── app.py                    : test & inference application
   └── classification
       ├── cnn_1d_classification.py      : 1D CNN model classification train & Test & Inference class
       ├── fc_classification.py          : FC model classification inference class
       ├── lstm_fcns_classification.py   : LSTM FCNs model classification inference class
       ├── rnn_classification.py         : RNN model classification inference class
-      └── app.py        : test & inference application
+      └── app.py                        : test & inference application
 
 ```
 
