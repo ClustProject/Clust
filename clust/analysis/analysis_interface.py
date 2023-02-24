@@ -18,12 +18,12 @@ def get_analysis_result(analysis_method, analysis_param, input):
     """
     
     # 가능한 분석 기법
-    get_analysis_by_data_list = ["original", 'correlation', 'max_correlation_value_index_with_lag'] #dataframe input
-    get_analysis_by_data_set_list = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag'] #dictionary input
+    analysis_by_data_list = ["original", 'correlation', 'max_correlation_value_index_with_lag'] #dataframe input
+    analysis_by_data_set_list = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag'] #dictionary input
     
-    if analysis_method in get_analysis_by_data_list:
+    if analysis_method in analysis_by_data_list:
         df_analysis = get_analysis_by_data(analysis_method, analysis_param, input)
-    elif analysis_method in get_analysis_by_data_set_list:
+    elif analysis_method in analysis_by_data_set_list:
         df_analysis = get_analysis_by_data_set(analysis_method, analysis_param, input)
         
     return df_analysis
