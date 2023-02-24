@@ -9,12 +9,15 @@ clust/
   │   ├── timeAnalyzer
   │   └── bucketReport.py
   │
+  ├── data
+  │   ├── data_interface - (문/완료)   
+  │   ├── df_set_data - (문/완료)   
+  │   └── df_data - (문/완료) 
+  │
   ├── ingestion
   │   └── influx (진행중)
   │       ├── influx_client.py - (이)정리 필요  
-  │       ├── influx_client_v2.py - (이)수정 필요  
-  │       ├── df_set_data - (문/완료)   
-  │       └── bucket_data - (문/완료) 
+  │       └──  influx_client_v2.py - (이)수정 필요  
   │   ├── mongo (진행중)
   │       └── mongoClient.py 
   │   ├── DatatoCSV

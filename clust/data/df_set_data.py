@@ -2,7 +2,7 @@ import sys
 sys.path.append("../")
 sys.path.append("../../")
 
-from Clust.clust.ingestion.influx import df_data
+from Clust.clust.data import df_data
 class DfSetData():
     def __init__(self, db_client):
         """This class makes dataframe style data based on ingestion type, and param
@@ -36,6 +36,9 @@ class DfSetData():
             
         elif ingestion_type == "all_ms_in_one_bucket":
             result = self.all_ms_in_one_bucket(self.ingestion_param)
+        
+        elif ingestion_type == "all_ms_in_multiple_bucket":
+            result = self.all_ms_in_multiple_bucket(self.ingestion_param)
             
         return result
     
@@ -46,12 +49,12 @@ class DfSetData():
             ingestion_param (dict): intDataInfo or ingestion_param
             
         >>> ingestion_param ={
-        'start_time': '2021-09-05 00:00:00', 
-        'end_time': '2021-09-11 00:00:00', 
-        'integration_freq_min': 60, 
-        'feature_list': ['CO2', 'out_PM25'], 
-        'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
-            
+            'start_time': '2021-09-05 00:00:00', 
+            'end_time': '2021-09-11 00:00:00', 
+            'integration_freq_min': 60, 
+            'feature_list': ['CO2', 'out_PM25'], 
+            'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
+        }
         Returns:
             Dictionary: MSdataset
         """
@@ -127,8 +130,7 @@ class DfSetData():
         It returns dataSet from all MS of a speicific DB(Bucket) from start_time to end_time
 
         Args:
-            db_client: influx DB client
-            influxClient class): instance to get data from influx DB
+            ingestion_param(dictionary): bucket_name, start_time, end_time  + feature_list(optional)
         
         Returns:
             dataSet (dictionary): returned dataset ----> {"data1_name":DF1, "data2_name:DF2......}
@@ -149,6 +151,37 @@ class DfSetData():
 
         return dataSet
 
+    def all_ms_in_multiple_bucket(self, ingestion_param):
+    
+        """
+        - get all ms dataset in bucket_list (duration: start_time ~ end_time)
+        - if new_bucket_list is not None,  change bucket_list name
+
+        Args:
+            ingestion_param (dictionary): array of multiple bucket name 
+        
+        Return:
+            dataSet(dict of pd.DataFrame): new DataSet : key name  ===> msName + bucketName
+        """
+        bucket_list        = ingestion_param['bucket_list']
+        start_time          = ingestion_param['start_time']
+        end_time            = ingestion_param['end_time']
+        
+        if 'new_bucket_name_list' in ingestion_param.keys():
+            new_bucket_list = ingestion_param['new_bucket_list']
+        else:
+            new_bucket_list = bucket_list
+
+        data_set = {}
+        for idx, bucket_name in enumerate(bucket_list):
+            # data exploration start
+            ingestion_param['bucket_name'] = bucket_name
+            dataSet_indi = self.all_ms_in_one_bucket(ingestion_param)
+            print(bucket_name, " length:", len(dataSet_indi))
+            dataSet_indi = {f'{k}_{new_bucket_list[idx]}': v for k, v in dataSet_indi.items()}
+            data_set.update(dataSet_indi)
+
+        return data_set
 
 
 
