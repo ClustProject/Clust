@@ -51,7 +51,6 @@ class DfSetData():
         >>> ingestion_param ={
             'start_time': '2021-09-05 00:00:00', 
             'end_time': '2021-09-11 00:00:00', 
-            'integration_freq_min': 60, 
             'feature_list': ['CO2', 'out_PM25'], 
             'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
         }
