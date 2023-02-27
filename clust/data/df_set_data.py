@@ -69,9 +69,10 @@ class DfSetData():
         ##############################################################################################################################################
         
         MSdataSet ={}
-        for i, dbinfo in enumerate(intDataInfo['db_info']):
+        for dbinfo in intDataInfo['db_info']:
             db_name = dbinfo['db_name']
             ms_name = dbinfo['measurement']
+            data_name = db_name + "_" + ms_name
             tag_key =None
             tag_value =None 
             if "tag_key" in dbinfo.keys():
@@ -81,8 +82,9 @@ class DfSetData():
 
             import numpy as np
             multiple_dataset=self.db_client.get_data_by_time(dbinfo['start'], dbinfo['end'], db_name, ms_name, tag_key, tag_value)
-            MSdataSet[i]  =  multiple_dataset.select_dtypes(include=np.number)
-            MSdataSet[i].index.name ='datetime'
+            if not(multiple_dataset.empty):
+                MSdataSet[data_name]  =  multiple_dataset.select_dtypes(include=np.number)
+                MSdataSet[data_name].index.name ='datetime'
 
         return MSdataSet
     
