@@ -168,7 +168,7 @@ class DfSetData():
         start_time          = ingestion_param['start_time']
         end_time            = ingestion_param['end_time']
         
-        if 'new_bucket_name_list' in ingestion_param.keys():
+        if 'new_bucket_list' in ingestion_param.keys():
             new_bucket_list = ingestion_param['new_bucket_list']
         else:
             new_bucket_list = bucket_list
