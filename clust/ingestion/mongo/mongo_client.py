@@ -17,7 +17,7 @@ class MongoClient():
 
 
 ## ------------------------------ Get Function ------------------------------
-    def get_db_List(self):
+    def get_db_list(self):
         """
         Get All Mongo Database List
 
@@ -145,7 +145,7 @@ class MongoClient():
         
 
     # TODO update function 수정 예정
-    def update_document(self, db_name, collection_name, target, update_data):
+    def update_one_document(self, db_name, collection_name, target, update_data):
         """
         update data in mongodb
 
@@ -158,17 +158,31 @@ class MongoClient():
         database = self.DBClient[db_name]
         collection = database[collection_name]
 
-        if self.get_document_by_json(db_name, collection_name, target) is None:
+        if self.get_document_by_json(db_name, collection_name, target) == []:
             print("========== Data None ==========")
         else:
             collection.update_one(target, {"$set":update_data})
             print("========== Data Update Success ==========")
 
-        
 
-        # collection.update_many({}, {"$set":document})
+    def update_all_document(self, db_name, collection_name, target, update_data):
+        """
+        update data in mongodb
 
+        Args:
+            db_name (string): databse
+            collection_name (string): collection
+            target (json): {'':''}
+            update_data (json): {'':''}
+        """
+        database = self.DBClient[db_name]
+        collection = database[collection_name]
 
+        if self.get_document_by_json(db_name, collection_name, target) == []:
+            print("========== Data None ==========")
+        else:
+            collection.update_many(target, {"$set":update_data})
+            print("========== Data Update Success ==========")
 
 
 
