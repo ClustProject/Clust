@@ -9,7 +9,7 @@ import numpy as np
 #warnings.simplefilter("ignore", MissingPivotFunction)
 
 UTC_Style = '%Y-%m-%dT%H:%M:%SZ'
-class influxClient():
+class InfluxClient():
     """
     Influx DB 2.0 Connection
 

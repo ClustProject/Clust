@@ -8,7 +8,7 @@ UTC_Style = '%Y-%m-%dT%H:%M:%SZ'
 Korean_Style = '%Y-%m-%dT%H:%M:%S'
 index_columnName= 'time' 
 
-class influxClient():
+class InfluxClient():
     """
     basic influx DB connection
 

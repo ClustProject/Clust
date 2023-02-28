@@ -1,4 +1,4 @@
-def update_model_meta_data(mongodb_client, model_meta):
+def save_model_meta_data(mongodb_client, model_meta):
     db_name = 'model'
     collection_name = 'meta'
     mongodb_client.insert_document(db_name, collection_name, model_meta)

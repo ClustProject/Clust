@@ -26,7 +26,7 @@ class analysisMSMetaGenerator():
         >>>>>>>>> functionList example : None or ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
         
         :param influx_instance: instance to get data from influx DB
-        :type influx_instance: instance of influxClient class
+        :type influx_instance: instance of InfluxClient class
 
         :param mongo_instance: instance url to get meta data from mongo DB
         :type mongo_instance: string

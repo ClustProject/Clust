@@ -2,9 +2,9 @@ ingestion.influx
 =================================
 
 
-ingestion.influx_Client_v2
+ingestion.influx_client_v2
 ------------------------------
-.. automodule:: clust.ingestion.influx.influx_Client_v2
+.. automodule:: clust.ingestion.influx.influx_client_v2
    :members:
    :undoc-members:
    :show-inheritance:

@@ -22,7 +22,7 @@ class Collector():
         :type collect_parameter : dictionary
         
         :param db_client: instance to get data from influx DB
-        :type db_client: instance of influxClient class
+        :type db_client: instance of InfluxClient class
         
         >>> collect_parameter = {
                 "uploadType" : upload_type,

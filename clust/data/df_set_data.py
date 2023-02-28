@@ -8,7 +8,7 @@ class DfSetData():
         """This class makes dataframe style data based on ingestion type, and param
 
         Args:
-            db_client (string): db_client (instance of influxClient class): instance to get data from influx DB
+            db_client (string): db_client (instance of InfluxClient class): instance to get data from influx DB
         """
         self.db_client = db_client
     

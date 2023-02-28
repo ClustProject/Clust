@@ -111,7 +111,7 @@ class ReadData():
         :type measurement_name: string
 
         :param influx_instance: influx_instance
-        :type influx_instance: instance of influxClient class
+        :type influx_instance: instance of InfluxClient class
 
         :returns: 결과 데이터
         :rtype: dataframe 
@@ -137,7 +137,7 @@ class ReadData():
         :type measurement_name: string
 
         :param influx_instance: influx_instance
-        :type influx_instance: instance of influxClient class
+        :type influx_instance: instance of InfluxClient class
 
         :returns: 결과 데이터
         :rtype: dataframe 
