@@ -7,7 +7,7 @@ sys.path.append("../..")
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from Clust.clust.ML.brits.train import BritsTraining
+from Clust.clust.ML.test_sota.brits.train import BritsTraining
 from Clust.clust.ML.common.train import Train
 
 

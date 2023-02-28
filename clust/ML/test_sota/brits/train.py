@@ -6,7 +6,7 @@ import torch.optim as optim
 import numpy as np
 from tqdm import tqdm
 
-from Clust.clust.ML.brits import brits_model
+from Clust.clust.ML.test_sota.brits import brits_model
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 class BritsTraining():

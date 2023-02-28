@@ -1,7 +1,7 @@
 
 import torch
 import os
-from Clust.clust.ML.brits import brits_model
+from Clust.clust.ML.test_sota.brits import brits_model
 import copy 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
