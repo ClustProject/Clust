@@ -19,7 +19,7 @@ clust/
   │       ├── influx_client.py - (이)정리 필요  
   │       └──  influx_client_v2.py - (이)수정 필요  
   │   ├── mongo (진행중)
-  │       └── mongoClient.py 
+  │       └── mongo_client.py 
   │   ├── DatatoCSV
   │   └── CSVtoInflux
   │

@@ -19,7 +19,7 @@ class InfluxClient():
         if "db_name" in self.influx_setting:
             self.switch_DB(self.influx_setting['db_name'])
        
-    def get_DBList(self):
+    def get_db_list(self):
         """
         get all db List according to the influx setting
         *remove the 1st useless name (defalut information)*
@@ -111,7 +111,7 @@ class InfluxClient():
         self.DBClient.switch_database(db_name)
 
         
-    def get_fieldList(self, db_name, ms_name):
+    def get_field_list(self, db_name, ms_name):
         """
         Get :guilabel:`all feature(field)` list of the specific measurement.
 
@@ -317,7 +317,7 @@ class InfluxClient():
         return df
 
 
-    def get_datafront_by_num(self, number, db_name, ms_name, tag_key=None, tag_value=None):
+    def get_data_front_by_num(self, number, db_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`first N number` data from the specific measurement
         
@@ -347,7 +347,7 @@ class InfluxClient():
         return df
 
 
-    def get_dataend_by_num(self, number, db_name, ms_name, tag_key=None, tag_value=None):
+    def get_data_end_by_num(self, number, db_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`last N number` data from the specific measurement
 
@@ -414,9 +414,9 @@ class InfluxClient():
         """
         if tag_key:
             if tag_value:
-                data = self.get_datafront_by_num(10,db_name, ms_name,tag_key, tag_value)
+                data = self.get_data_front_by_num(10,db_name, ms_name,tag_key, tag_value)
         else:
-            data = self.get_datafront_by_num(10,db_name, ms_name)
+            data = self.get_data_front_by_num(10,db_name, ms_name)
         from clust.preprocessing.refinement.frequency import RefineFrequency
         frequency = str(RefineFrequency().get_frequencyWith3DataPoints(data))
         print(frequency)

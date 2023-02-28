@@ -77,11 +77,11 @@ class BatchTraining():
         
         elif 'number' in self.dataIngestionParameter:
             number = self.dataIngestionParameter['number'] 
-            df = self.DBClient.get_datafront_by_num(number, db_name, ms_name)
+            df = self.DBClient.get_data_front_by_num(number, db_name, ms_name)
         
         else:
             number = 2000
-            df = self.DBClient.get_datafront_by_num(number, db_name, ms_name)
+            df = self.DBClient.get_data_front_by_num(number, db_name, ms_name)
                 
         for column_name in df.columns: 
             trainDataPathList = [db_name, ms_name, column_name]#, str(bind_params)]

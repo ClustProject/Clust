@@ -31,7 +31,7 @@ class InfluxClient():
         self.DBClient = InfluxDBClient(url=self.influx_setting["url"], token=self.influx_setting["token"], org=self.influx_setting["org"], timeout=30000_000)
 
 
-    def get_DBList(self):
+    def get_db_list(self):
         """
         get all bucket(Database) list
 
@@ -95,7 +95,7 @@ class InfluxClient():
 
         return ms_list
 
-    def get_fieldList(self, bk_name, ms_name, onlyFieldName= False):
+    def get_field_list(self, bk_name, ms_name, onlyFieldName= False):
         """
         get all field list of specific measurements
 
@@ -322,7 +322,7 @@ class InfluxClient():
 
         return data_frame
 
-    def get_datafront_by_num(self, number, bk_name, ms_name, tag_key=None, tag_value=None):
+    def get_data_front_by_num(self, number, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`first N number` data from the specific measurement
 
@@ -363,7 +363,7 @@ class InfluxClient():
 
         return data_frame
 
-    def get_dataend_by_num(self, number, bk_name, ms_name, tag_key=None, tag_value=None):
+    def get_data_end_by_num(self, number, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get the :guilabel:`last N number` data from the specific measurement
 
@@ -452,9 +452,9 @@ class InfluxClient():
 
         if tag_key:
             if tag_value:
-                data = self.get_datafront_by_num(10,bk_name, ms_name,tag_key, tag_value)
+                data = self.get_data_front_by_num(10,bk_name, ms_name,tag_key, tag_value)
         else:
-            data = self.get_datafront_by_num(10,bk_name, ms_name)
+            data = self.get_data_front_by_num(10,bk_name, ms_name)
         from Clust.clust.preprocessing.refinement.frequency import RefineFrequency
         result = str(RefineFrequency().get_frequencyWith3DataPoints(data))
         return result
@@ -636,7 +636,7 @@ class InfluxClient():
         """
 
         write_client = self.DBClient.write_api(write_options=WriteOptions(batch_size=10000))
-        if bk_name not in self.get_DBList():
+        if bk_name not in self.get_db_list():
             self.create_bucket(bk_name)
 
         write_client.write(bucket=bk_name, record=data_frame,data_frame_measurement_name=ms_name)
@@ -717,7 +717,7 @@ class InfluxClient():
         return tag_value
 
 
-    def get_fieldList_type(self, bk_name, ms_name, onlyFieldName= False):
+    def get_field_list_type(self, bk_name, ms_name, onlyFieldName= False):
         """
         Get Field List and Type by dictionary
 
