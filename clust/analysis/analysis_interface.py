@@ -42,7 +42,7 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
     TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것
     """
     da = dataAnalysis.DataAnalysis()
-    if analysis_method == 'origirnal':
+    if analysis_method == 'original':
         df_analysis = input_df
     elif analysis_method == 'correlation':
         df_analysis = input_df.corr()

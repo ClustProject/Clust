@@ -1,4 +1,4 @@
-def get_echart_json_result(self, graph_type, df):
+def get_echart_json_result(graph_type, df):
     if graph_type == 'heat_map' :            
         result_json = df.to_json()
         

@@ -8,8 +8,8 @@ def get_data_result(ingestion_type, db_client, param) :
         """조건에 맞게 데이터를 정합함
 
         Args:
-            ingestion_type (string): ["multi_ms_integration", "multiMs_MsinBucket"]
-            db_client (db_client): influxDB에서 데이터를 인출하기 위한 client
+            ingestion_type (_string_): ["multi_ms_integration", "multiMs_MsinBucket"]
+            db_client (_db_client_): influxDB에서 데이터를 인출하기 위한 client
             param (_type_):ingestion_type에 따른 인출을 위해 필요한 parameter
 
         Returns:
@@ -20,11 +20,11 @@ def get_data_result(ingestion_type, db_client, param) :
         df_out_list = ['multi_ms_integration']
         df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration',
                            'multi_numeric_ms_list',
-                           'all_ms_in_one_bucket', 'all_ms_in_multiple_bucket']
-        
+                           'all_ms_in_one_bucket', 'all_ms_in_multiple_bucket']        
         
         if ingestion_type in df_out_list:
             result = df_data.dfData(db_client).get_result(ingestion_type, param)
+            
         elif ingestion_type in df_set_out_list:
             result = df_set_data.DfSetData(db_client).get_result(ingestion_type, param)
         

@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 class PlotPlt():
     def plot_heatmap(self, data):
@@ -12,7 +13,11 @@ class PlotPlt():
             
         """
         import seaborn as sns    
-        
+              
+        # dict로 넘어오는 경우 대비
+        if( type(data) is dict) :
+            data = pd.DataFrame.from_dict([data])
+
         ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.columns.values, annot =True, annot_kws ={'size': 8})
         bottom, top = ax.get_ylim() 
         heat_map = plt.gcf()
@@ -49,7 +54,7 @@ class PlotPlt():
         return plt
         
         
-def img_graph_by_graph_type(graph_type, df):
+def img_graph_by_graph_type(graph_type, df, **pltParams):
     # TODO plt인 경우 바깥, 안에서 무분별하게 param을 설정하는 경우가 많은데. .이부분을 공부해서 어떻게 해야 원하는 사이즈로 이미지를 뽑을 수 있는지
     # # 그렇게 하려면 외부 변수를 어떤 식으로 받아들여야 하는지 정리 필요함
     pp = PlotPlt()
@@ -61,6 +66,11 @@ def img_graph_by_graph_type(graph_type, df):
     elif graph_type =='bar_chart':
         plt_ = pp.plot_bar_chart(df)  
     
-    return plt_
+    #TODO : 이미지화
+    from io import BytesIO
+    figfile = BytesIO()
+    plt_.savefig(figfile, format='png')
+
+    return figfile
  
  
