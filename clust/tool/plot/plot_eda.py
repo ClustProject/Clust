@@ -90,35 +90,3 @@ def show_one_feature_data_based_on_two_times(data, feature, time_criteria, min_m
         return split_dataset
     except ZeroDivisionError:
         print("The duration of the data is less than {}.".format(y_frequency))
-
-def show_one_data_distribution_of_two_feature(data, feature_list):
-    """
-    
-    Args:
-        data (dataframe): Input data
-        feature_list (string): columns of data as two of column name to be shown
-    """
-    
-    try:
-        x_feature = feature_list[0]
-        y_feature = feature_list[1]
-        
-        fig = go.Figure(
-            data=go.Scatter(
-                y = data[y_feature], # y축 값 sepal_length 값에 따라 배치
-                x = data[x_feature],
-                mode='markers', # Scatter Plot을 그리기 위해 Markers 
-                marker=dict(    # Marker에 대한 세부적은 설정을 지정
-                    size=10,    # 점 크기
-                    line_width=1, # 마커 라인 두께 설정
-                )
-            )
-        )
-        fig.update_layout(
-            title='distribution of {} and {}'.format(x_feature, y_feature),
-            xaxis_title = "{} Feature".format(x_feature),
-            yaxis_title = "{} Feature".format(y_feature)
-            )
-        fig.show()
-    except:
-        print("Data is None")

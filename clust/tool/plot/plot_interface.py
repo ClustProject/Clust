@@ -15,7 +15,3 @@ def get_graph_result(graph_format, graph_type, df):
         result = plot_image.get_img_graph_result(graph_type, df) #TODO: Rest API 출력으로 image 파일을 확인할 수 있도록 (파일저장후 전달만 있을까요? 보내고 정보는 날려버리면 좋겠는데        
     return result
     
-
-
-
-    

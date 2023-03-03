@@ -9,7 +9,7 @@ class DfData():
         """This class makes dataframe style data based on ingestion type, and param
 
         Args:
-            db_client (_type_): _description_
+            db_client (instance): influx db instance
         """
         self.db_client = db_client
         
@@ -26,13 +26,82 @@ class DfData():
         """
         # define param
         self.ingestion_param = ingestion_param
-        self.process_param = check_process_param(process_param)
+        self.process_param = get_default_process_param(process_param)
         
         # get result
         if ingestion_type == "multi_ms_integration":
             result = self.multi_ms_integration(self.ingestion_param)  
+        elif ingestion_type == "ms_by_num":
+            result = self.ms_by_num(self.ingestion_param) 
+        elif ingestion_type == "ms_by_days":
+            result = self.ms_by_days(self.ingestion_param) 
+        elif ingestion_type == "ms_by_time":
+            result = self.ms_by_time(self.ingestion_param) 
+        
+        if self.ingestion_param['feature_list']:
+            result = result[self.ingestion_param['feature_list']]
             
         return result
+    
+    def ms_by_days(self, ingestion_param):
+        """data by days 
+
+         Args:
+            ingestion_param (dict): ingestion_param 
+         >>> ingestion_param = {'db_name': 'air_indoor_경로당',
+            'ms_name': 'ICL1L2000234',
+            'end_time': '2021-06-30T00:00:00Z',
+            'days': '2000'}
+
+        Returns:
+            pd.dataFrame: result data
+        """
+        data = self.db_client.get_data_by_days(ingestion_param['end_time'], ingestion_param['days'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+
+        return data
+    
+    def ms_by_time(self, ingestion_param):
+        """data by time duration
+
+        Args:
+            ingestion_param (dict): ingestion_param 
+         >>> ingestion_param = {'db_name': 'air_indoor_경로당',
+            'ms_name': 'ICL1L2000234',
+            'start_time': '2021-05-30T00:00:00Z',
+            'end_time': '2021-06-30T00:00:00Z'}
+
+        Returns:
+            pd.dataFrame: result data
+        """
+        data = self.db_client.get_data_by_time(ingestion_param['start_time'], ingestion_param['end_time'], ingestion_param['db_name'], ingestion_param['ms_name'])
+        
+
+        return data
+    
+    def ms_by_num(self, ingestion_param):
+        """data by num 
+
+        Args:
+            ingestion_param (dict): ingestion_param 
+            
+        >>> ingestion_param = 
+            {'db_name': 'air_indoor_경로당',
+            'ms_name': 'ICL1L2000234',
+            'num': '2000',
+            'position': 'end' ----> 'end' or 'front'
+            }
+
+        Returns:
+            pd.dataFrame: result data
+        """
+        
+        if ingestion_param['position']=='end':
+            data = self.db_client.get_data_end_by_num(ingestion_param['num'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+        else:
+            data = self.db_client.get_data_front_by_num(ingestion_param['num'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+
+            
+        return data 
     
     def multi_ms_integration(self, ingestion_param):
         """ get integrated numeric data with multiple MS data integration: ms1+ms2+....+msN => DF
@@ -61,13 +130,10 @@ class DfData():
         from Clust.clust.integration.integrationInterface import IntegrationInterface
         dataIntegrated = IntegrationInterface().multipleDatasetsIntegration(self.process_param, integration_param, multiple_dataset)
         
-        if ingestion_param['feature_list']:
-            dataIntegrated = dataIntegrated[ingestion_param['feature_list']]
-        
         return dataIntegrated
             
             
-def check_process_param(process_param):
+def get_default_process_param(process_param):
     """Check and generate general preprocessing parameter (if not exists)
 
     Args:

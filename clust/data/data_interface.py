@@ -17,13 +17,13 @@ def get_data_result(ingestion_type, db_client, param) :
         """
         
         # data_param 하위에 'feature_list' key가 유효한 경우 한번더 필터링
-        df_out_list = ['multi_ms_integration']
+        df_out_list = ['ms_by_num', 'ms_by_days', 'ms_by_time', 'multi_ms_integration']
         df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration',
                            'multi_numeric_ms_list',
                            'all_ms_in_one_bucket', 'all_ms_in_multiple_bucket']        
         
         if ingestion_type in df_out_list:
-            result = df_data.dfData(db_client).get_result(ingestion_type, param)
+            result = df_data.DfData(db_client).get_result(ingestion_type, param)
             
         elif ingestion_type in df_set_out_list:
             result = df_set_data.DfSetData(db_client).get_result(ingestion_type, param)

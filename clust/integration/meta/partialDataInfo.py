@@ -79,10 +79,9 @@ class PartialData():
     
     def _get_partial_data_freqeuncy_list(self, freq_check_length):
     
-        data_length = len(self.partial_data_set)
         column_list={}
-        for i in range(data_length):
-            data = self.partial_data_set[i]
+        for i, key in enumerate(self.partial_data_set):
+            data =  self.partial_data_set[key]
             columns = data.columns
             for column in columns:
                 column_info = {"column_name":'', "column_frequency":'', "column_type":''}
@@ -110,9 +109,9 @@ class PartialData():
     def _get_partial_data_frequency_info(self):
         
         partialFreqList=[]
-        data_length = len(self.partial_data_set)
-        for i in range(data_length):
-            freq = self.get_df_freq_sec(self.partial_data_set[i], self.freq_check_length)
+        for i, key in enumerate(self.partial_data_set):
+            data =  self.partial_data_set[key]
+            freq = self.get_df_freq_sec(data, self.freq_check_length)
             partialFreqList.append(int(freq))
             
         frequency={}
@@ -136,9 +135,8 @@ class PartialData():
         start_list=[]
         end_list =[]
         duration={}
-        data_length = len(self.partial_data_set)
-        for i in range(data_length):
-            data =self.partial_data_set[i]
+        for i, key in enumerate(self.partial_data_set):
+            data =  self.partial_data_set[key]
             start = data.index[0]
             end = data.index[-1]
             start_list.append(start)
@@ -156,9 +154,9 @@ class PartialData():
     def _get_partial_data_type(self):
         numCols_list =[]
         catCols_list=[]
-        data_length = len(self.partial_data_set)
-        for i in range(data_length):
-            data =self.partial_data_set[i]
+        
+        for i, key in enumerate(self.partial_data_set):
+            data =  self.partial_data_set[key]
             numCols = data.select_dtypes("number").columns
             catCols = data.select_dtypes(include=["object", "bool", "category"]).columns
             numCols_list.extend(numCols.values)

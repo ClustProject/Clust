@@ -25,7 +25,7 @@ class DfSetData():
         """
         # define param
         self.ingestion_param = ingestion_param
-        self.process_param = df_data.check_process_param(process_param)
+        self.process_param = df_data.get_default_process_param(process_param)
         
         # get result
         if ingestion_type == "multi_numeric_ms_list": # general type
