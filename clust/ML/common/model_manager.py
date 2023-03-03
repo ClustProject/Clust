@@ -28,8 +28,8 @@ def get_model_file_path(train_data_path_list, model_method):
 
 
 # save model .pkl   
-def save_pickle_model(model):
-    with open(model_file_path, 'wb') as file:
+def save_pickle_model(model, save_path):
+    with open(save_path, 'wb') as file:
         pickle.dump(model, file)
 
 
