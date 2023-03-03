@@ -39,7 +39,7 @@ class BaseRegressionModel(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def create_dataloader(self) -> Any:
+    def create_trainloader(self) -> Any:
         pass
 
     @abc.abstractmethod

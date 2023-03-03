@@ -80,7 +80,7 @@ class RegressionTrain():
         """
 
         # TBD: input_size & seq_len?
-        self.train_loader, self.valid_loader = self.model.create_dataloader(self.batch_size, train_x, train_y, val_x, val_y, window_num)
+        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y, window_num)
         
         # self.params['input_size'] = input_size
         # self.params['seq_len'] = seq_len

@@ -205,7 +205,7 @@ class FCClust(BaseRegressionModel):
 
     # move to utils?
     # for train data
-    def create_dataloader(self, batch_size, train_x, train_y, val_x, val_y, window_num):
+    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y, window_num):
         """
         Create train/valid data loader for torch
 
