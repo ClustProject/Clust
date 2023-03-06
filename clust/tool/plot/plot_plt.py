@@ -45,7 +45,9 @@ class PlotPlt():
         return plt
     
     def plot_scatter(self, data):
-        """This function plots scatter chart
+        """This function plots scatter chart with only the front two columns
+        
+         
     
         Args:
             data (dataframe): Input data
