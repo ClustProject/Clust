@@ -87,10 +87,7 @@ class RegressionTrain():
 
     def train(self):
         """
-        Train model and return trained model
-
-        Returns:
-            model: trained model
+        Train the model
         """
         print("Start training model")
 
@@ -99,7 +96,10 @@ class RegressionTrain():
 
     def save_best_model(self, save_path):
         """
-        Save best model
+        Save the best model to save_path
+
+        Args:
+            save_path (string): path to save model
         """
         self.model.save_model(save_path)
 
