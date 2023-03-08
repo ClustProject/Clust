@@ -15,9 +15,15 @@ from Clust.clust.ML.regression_YK.models.cnn_1d import CNN1D
 
 
 class CNN1DClust(BaseRegressionModel):
+    """
+    CNN1D Regression model class
+    """
     def __init__(self, param):
         """
-        CNN1D Regression class
+        Init function of CNN1D regression class.
+
+        Args:
+            params (dict): parameters for building a CNN1D model
         """
         self.param = param
         # model 생성
@@ -33,10 +39,10 @@ class CNN1DClust(BaseRegressionModel):
 
     def train(self, param, train_loader, valid_loader, num_epochs, device):
         """
-        train method for RNNClust
+        train function for the regression task.
 
         Args:
-            param (dict): parameters for train
+            params (dict): parameters for train
             train_loader (Dataloader): train data loader
             valid_loader (Dataloader): validation data loader
             num_epochs (integer): the number of train epochs
@@ -117,17 +123,18 @@ class CNN1DClust(BaseRegressionModel):
 
     def test(self, param, test_loader, device):
         """
-        Predict RegressionResult for test dataset based on the trained model
+        Predict Regression result for test dataset based on the trained model
 
         Args:
-            test_loader (DataLoader) : data loader
-            device (string) : device for test
+            params (dict): parameters for test  # TBD
+            test_loader (DataLoader): data loader
+            device (string): device for test
 
         Returns:
-            preds (ndarray) : prediction data
-            trues (ndarray) : original data
-            mse (float) : mean square error
-            mae (float) : mean absolute error
+            preds (ndarray): prediction data
+            trues (ndarray): original data
+            mse (float): mean square error  # TBD
+            mae (float): mean absolute error    # TBD
         """
         self.model.eval()   # 모델을 validation mode로 설정
         
@@ -161,10 +168,12 @@ class CNN1DClust(BaseRegressionModel):
 
     def inference(self, param, inference_loader, device):
         """
+        Predict regression result for inference dataset based on the trained model
 
         Args:
-            model (model): load trained model
-            test_loader (DataLoader) : data loader
+            params (dict): parameters for inference     # TBD
+            inference_loader (DataLoader): inference data loader
+            device (string): device for inference
 
         Returns:
             preds (ndarray) : Inference result data
@@ -193,18 +202,27 @@ class CNN1DClust(BaseRegressionModel):
     def export_model(self):
         """
         export trained model 
+
+        Returns:
+            self.model (Object): current model object
         """
         return self.model
 
     def save_model(self, save_path):
         """
         save model to save_path
+
+        Args:
+            save_path (string): path to save model
         """
         model_manager.save_pickle_model(self.model, save_path)
 
     def load_model(self, model_file_path):
         """
         load model from model_file_path
+
+        Args:
+            model_file_path (string): path to load saved model
         """
         self.model = model_manager.load_pickle_model(model_file_path)
 
@@ -215,17 +233,16 @@ class CNN1DClust(BaseRegressionModel):
         Create train/valid data loader for torch
 
         Args:
-            batch_size (integer): 
+            batch_size (integer): batch size
             train_x (dataframe): train X data
             train_y (dataframe): train y data
             val_x (dataframe): validation X data
             val_y (dataframe): validation y data
+            window_num (integer): slice window number
 
         Returns:
-            train_loader (DataLoader):
-            val_loader (DataLoader):
-            input_size (integer):
-            seq_len (integer):
+            train_loader (DataLoader): train data loader
+            val_loader (DataLoader): validation data loader
         """
         train_x, train_y = transDFtoNP(train_x, train_y, window_num)
         val_x, val_y = transDFtoNP(val_x, val_y, window_num)
@@ -249,9 +266,16 @@ class CNN1DClust(BaseRegressionModel):
     # for test data
     def create_testloader(self, batch_size, test_x, test_y, window_num):
         """
+        Create test data loader for torch
 
+        Args:
+            batch_size (integer): batch size
+            test_x (dataframe): test X data
+            test_y (dataframe): test y data
+            window_num (integer): slice window number
+        
         Returns:
-            test_loader (DataLoader) : data loader
+            test_loader (DataLoader) : test data loader
         """
         test_x, test_y = trans_df_to_np(test_x, test_y, window_num)
 
@@ -263,9 +287,15 @@ class CNN1DClust(BaseRegressionModel):
     # for inference data
     def create_inferenceloader(self, batch_size, x_data, window_num):
         """
+        Create inference data loader for torch
 
+        Args:
+            batch_size (integer): batch size
+            x_data (dataframe): inference X data
+            window_num (integer): slice window number
+        
         Returns:
-            data (Array): input data for inference
+            inference_loader (DataLoader) : inference data loader
         """
         x_data = trans_df_to_np_inf(x_data, window_num)
 
