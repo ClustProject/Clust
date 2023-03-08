@@ -126,20 +126,19 @@ class DfData():
     def multi_ms_integration(self, ingestion_param):
         """ 
         # Description
-        get integrated numeric data with multiple MS data integration : ms1+ms2+....+msN => DF
+         get integrated numeric data with multiple MS data integration : ms1+ms2+....+msN => DF
 
         # Args
          * ingestion_param (_dict_) 
-        ```
-        >>> ingestion_param = 
-        {
-            'start_time': '2021-09-05 00:00:00', 
-            'end_time': '2021-09-11 00:00:00', 
-            'integration_freq_min': 60, 
-            'feature_list': ['CO2', out_PM10', 'out_PM25'], 
-            'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
-        }
-        ```
+         ```
+            ingestion_param = {
+                            'start_time': '2021-09-05 00:00:00', 
+                            'end_time': '2021-09-11 00:00:00', 
+                            'integration_freq_min': 60, 
+                            'feature_list': ['CO2', out_PM10', 'out_PM25'], 
+                            'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
+                        }
+         ```
 
         # Returns
          * integrated data (_pd.dataFrame_)
@@ -190,7 +189,7 @@ def get_default_process_param(process_param):
 def get_integration_param(integration_freq_sec) -> dict : 
     """
     # Description
-    Generate general integration parameter
+     Generate general integration parameter
 
     # Args
      * integration_freq_sec (_int_)
