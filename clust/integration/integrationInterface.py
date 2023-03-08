@@ -98,58 +98,58 @@ class IntegrationInterface():
     
     def multipleDatasetsIntegration(self, process_param, integration_param, multiple_dataset):
         """ 
-        dataSet과 Parameter에 따라 데이터를 병합하는 함수
+        # Description
+         dataSet과 Parameter에 따라 데이터를 병합하는 함수
 
-        1. 각 데이터셋이서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
-        2. 명확하게 정합 주기 값이 입력 없을 경우 최소공배수 주기를 설정함
-        3. 각 데이터들에 대한 Preprocessing  
-        4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
+         1. 각 데이터셋이서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
+         2. 명확하게 정합 주기 값이 입력 없을 경우 최소공배수 주기를 설정함
+         3. 각 데이터들에 대한 Preprocessing  
+         4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
 
-        Args:
-            process_param (Dict) : Refine Frequency를 하기 위한 Preprocessing Parameter
-            integration_param (Dict) : Integration을 위한 method, transformParam이 담긴 Parameter
-            multiple_dataset (Dict) :
+        # Args
+         * process_param (_Dict_) : Refine Frequency를 하기 위한 Preprocessing Parameter
+         * integration_param (_Dict_) : Integration을 위한 method, transformParam이 담긴 Parameter
+         * multiple_dataset (_Dict_)
             
-        Returns:
-            DataFrame: integrated_data
+        # Returns
+         * integrated_data (_pd.dataFrame_)
     
         """
-
-        
-
-        integration_duration = integration_param["integration_duration"]
-        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
-        overlap_duration = partial_data_info.column_meta["overlap_duration"]
-        integration_freq_sec = integration_param["integration_frequency"]
-        integrationMethod = integration_param['method']
+      
+        integration_duration    = integration_param["integration_duration"]
+        partial_data_info       = partialDataInfo.PartialData(multiple_dataset, integration_duration)
+        overlap_duration        = partial_data_info.column_meta["overlap_duration"]
+        integration_freq_sec    = integration_param["integration_frequency"]
+        integrationMethod       = integration_param['method']
 
         ## set refine frequency parameter
         if not integration_freq_sec:
             process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
 
         ## Preprocessing
-        partialP = dataPreprocessing.DataProcessing(process_param)
-        print("processingStart")
+        partialP = dataPreprocessing.DataProcessing(process_param)        
+        print("===processingStart===")
         multiple_dataset = partialP.multiDataset_all_preprocessing(multiple_dataset)
-        print("processingEnd")
+        print("===processingEnd===")
+       
         ## Integration
         imputed_datas = {}
-        print("integrationStart")
+        
+        print("===integrationStart===")
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key])
         if integrationMethod=="meta":
-            result = self.getIntegratedDataSetByMeta(imputed_datas, integration_freq_sec, partial_data_info)
+            integrated_data = self.getIntegratedDataSetByMeta(imputed_datas, integration_freq_sec, partial_data_info)
         elif integrationMethod=="ML":
-            result = self.getIntegratedDataSetByML(imputed_datas, integration_param['param'], overlap_duration)
+            integrated_data = self.getIntegratedDataSetByML(imputed_datas, integration_param['param'], overlap_duration)
         elif integrationMethod=="simple":
-            result = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
+            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
         else:
-            result = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
-        print("integrationEnd")
+            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
+        print("===integrationEnd===")
+       
 
-        
-
-        return result
+        return integrated_data
 
     def getIntegratedDataSetByML(self, data_set, transform_param, overlap_duration):
         """ 
