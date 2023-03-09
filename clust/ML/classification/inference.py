@@ -5,19 +5,21 @@ import numpy as np
 sys.path.append("..")
 sys.path.append("../..")
 
-from torch.utils.data import TensorDataset, DataLoader
-from Clust.clust.ML.common.inference import Inference
 from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf
 
+from Clust.clust.ML.classification.classification_model.cnn_1d_model import CNNModel
+from Clust.clust.ML.classification.classification_model.fc_model import FCModel
+from Clust.clust.ML.classification.classification_model.lstm_fcns_model import LSTMFCNsModel
+from Clust.clust.ML.classification.classification_model.rnn_model import RNNModel
 
-class ClassificationInference(Inference):
+class ClassificationInference():
     def __init__(self):
         """
         """
         super().__init__()
         
 
-    def set_param(self, param):
+    def set_param(self, params):
         """
         Set Parameter for Test
 
@@ -36,96 +38,66 @@ class ClassificationInference(Inference):
             ...            "batch_size":16,
             ...            "n_epochs":10    }
         """
-        self.batch_size = param['batch_size']
-        self.device = param['device']
+        self.params = params
+        self.batch_size = params['batch_size']
+        self.device = params['device']
 
-
-    def set_data(self, data, window_num= 0, dim=None):
+        
+    def set_model(self, model_method, model_file_path):
         """
-        set data for test & transform data
+        Set model and load weights from model file path
 
         Args:
-            data_X (dataframe): Test X data
+            model_method (string): model method name 
+            model_file_path (string): path for trained model  
+        """
+        model_method = model_method
+        if model_method == 'LSTM_cf':
+            self.params["rnn_type"] = 'lstm'
+        elif self.model_method == 'GRU_cf':
+            self.params["rnn_type"] = 'gru'
+        
+        # build initialized model
+        if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
+            self.model = RNNModel(**self.params)
+        elif model_method == 'CNN_1D_cf':
+            self.model = CNNModel(**self.params)
+        elif model_method == 'LSTM_FCNs_cf':
+            self.model = LSTMFCNsModel(**self.params)
+        elif model_method == 'FC_cf':
+            self.model = FCModel(**self.params)
+        else:
+            print('Choose the model correctly')
+
+        self.model.load_model(model_file_path)
+
+
+    def set_data(self, data, window_num=0, dim=None):
+        """
+        set data for inference & transform data
+
+        Args:
+            data (dataframe): Inference data
             window_num (integer) : window size
-            dim (integer) : dimension
+    
 
         Example:
 
-            >>> set_data(test_X, test_y, window_num)
-            ...         test_X : test X data
-            ...         test_y : test y data
-            ...         window_num : window size
-            ...         dim : dimension
-        """
-        self.data = trans_df_to_np_inf(data, window_num, dim)
+        >>> set_data(test_X, window_num)
+        ...         test_X : inference data
+        ...         window_num : window size
 
-    
-    def get_result(self, model):
-        """
-        Predict RegresiionResult based on model result
+        """  
+        self.inference_loader = self.model.create_inferenceloader(self.batch_size, data, window_num, dim)
 
-        Args:
-            model (model) : load train model
+    def inference(self):
+        """
+        inference model and return result
 
         Returns:
-            preds (ndarray) : prediction data
+            preds (ndarray): prediction data
         """
-        print("\nStart testing data\n")
-        inference_loader = self._get_loader()
-        
-        # get prediction and accuracy
-        preds = self._inference(model, inference_loader)
-        print(f'** Dimension of result for inference dataset = {preds.shape}')
+        print("\nStart inference\n")
+        preds = self.model.inference(self.params, self.inference_loader, self.device)
 
         return preds
-
-
-
-
-    def _get_loader(self):
-        """
-        get inference data loader
-
-        Returns:
-            inference_loader (DataLoader) : data loader
-        """
-
-        x_data = np.array(self.data)
-        inference_data = torch.Tensor(x_data)
-        inference_loader = DataLoader(inference_data, batch_size=self.batch_size, shuffle=True)
-
-        return inference_loader 
-
-
-    def _inference(self, model, inference_loader):
-        """
-        get prediction data
-
-        Args:
-            model (model) : load train model
-            inference_loader (DataLoader) : data loader
-
-        Returns:
-            preds (ndarray) : prediction data
-
-        """
-        model.eval()   # 모델을 validation mode로 설정
-        
-        # test_loader에 대하여 검증 진행 (gradient update 방지)
-        with torch.no_grad():
-            preds = []
-            for inputs in inference_loader:
-                model.to(self.device)
-                
-                # forward
-                # input을 model에 넣어 output을 도출
-                outputs = model(inputs)
-                _, pred = torch.max(outputs, 1)
-                
-                # 예측 값 및 실제 값 축적
-                preds.extend(pred.detach().cpu().numpy())
-
-        preds = np.array(preds)
-
-        return preds
-        

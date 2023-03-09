@@ -5,25 +5,15 @@ import json
 sys.path.append("../../")
 sys.path.append("../../..")
 from Clust.clust.transformation.general.dataScaler import encode_hash_style
+from Clust.clust.integration.integrationInterface import IntegrationInterface
+from Clust.clust.integration.utils import param
 
 # 1. IntegratedDataSaving
 # JH TODO 아래 코드에 대한 주석 작성
 # JH TODO Influx Save Load 부분 작성 보완해야함
 
-def get_list_merge(info_list):
-    mergerd_name = ''
-    for info in info_list:
-        mergerd_name = mergerd_name+info+'_'
-    return mergerd_name
 
-
-def getNewDataName(process_param, data_info, integration_freq_sec, clean_param, data_save_mode, start_time, end_time):
-    data_description_info = encode_hash_style(get_list_merge([str(process_param), str(data_info), str(integration_freq_sec), clean_param, data_save_mode]))
-    time_interval_info = encode_hash_style(get_list_merge([start_time, end_time]))
-    data_name = data_description_info+'_'+time_interval_info
-    return data_name
-
-
+# ============================== data 관련 ==============================
 def save_csv_data(data_folder_path, data_name, data):
     if not os.path.exists(data_folder_path):
         os.makedirs(data_folder_path)
@@ -39,6 +29,42 @@ def save_influx_data(db_name, data_name, data, db_client):
     db_client.write_db(bk_name, ms_name, data)
 
 
+def getData(db_client, dataInfo, integration_freq_sec, processParam, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
+    intDataInfo = param.makeIntDataInfoSet(dataInfo, startTime, endTime)
+
+    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+
+    data = IntegrationInterface().integrationByInfluxInfo(db_client, intDataInfo, processParam, integrationParam)
+
+    return data
+
+
+def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
+    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+    
+    data = IntegrationInterface().multipleDatasetsIntegration(processParam, integrationParam, dataSet)
+
+    return data
+
+
+
+# ============================== name 관련 ==============================
+def get_list_merge(info_list):
+    mergerd_name = ''
+    for info in info_list:
+        mergerd_name = mergerd_name+info+'_'
+    return mergerd_name
+
+
+def getNewDataName(process_param, data_info, integration_freq_sec, clean_param, data_save_mode, start_time, end_time):
+    data_description_info = encode_hash_style(get_list_merge([str(process_param), str(data_info), str(integration_freq_sec), clean_param, data_save_mode]))
+    time_interval_info = encode_hash_style(get_list_merge([start_time, end_time]))
+    data_name = data_description_info+'_'+time_interval_info
+    return data_name
+
+
+
+# ============================== parameter 관련 ==============================
 def get_process_param(clean_param):
     if clean_param == "Clean":
         refine_param = {
@@ -94,26 +120,9 @@ def getIntegrationParam(integration_freq_sec, integration_method, method_param, 
     return integration_param
 
 
-def getData(db_client, dataInfo, integration_freq_sec, processParam, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
-    from Clust.clust.integration.utils import param
-    intDataInfo = param.makeIntDataInfoSet(dataInfo, startTime, endTime)
-
-    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
-
-    from Clust.clust.integration.integrationInterface import IntegrationInterface
-    data = IntegrationInterface().integrationByInfluxInfo(db_client, intDataInfo, processParam, integrationParam)
-
-    return data
-
-def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
-    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
-    
-    from Clust.clust.integration.integrationInterface import IntegrationInterface
-    data = IntegrationInterface().multipleDatasetsIntegration(processParam, integrationParam, dataSet)
-
-    return data
 
 
+# ============================== json 관련 ==============================
 def writeJsonData(json_file_path, data):
     if os.path.isfile(json_file_path):
         pass
@@ -165,35 +174,3 @@ def saveJsonMeta(data_meta_path, data_name, process_param, dataInfo, integration
     data_mata[data_name]["integrationInfo"] = data_info
 
     writeJsonData(data_meta_path, data_mata)
-
-
-
-
-
-
-
-# ----------------------------------------------------------------------------------------------
-# new functions
-
-def save_json_meta(mongodb_client, data_name, process_param, data_info, integration_freq_sec, start_time, end_time, clean_param, data_save_mode):
-
-    meta_data = read_json_data(mongodb_client)
-
-    meta_info = {}
-    meta_info["startTime"] = start_time
-    meta_info["endTime"] = end_time
-    meta_info["dataInfo"] = data_info
-    meta_info["processParam"] = process_param
-    meta_info["integration_freq_sec"] = integration_freq_sec
-    meta_info["cleanParam"] = clean_param
-    meta_info["DataSaveMode"] = data_save_mode
-    meta_data[data_name] = {}
-    meta_data[data_name]["integrationInfo"] = meta_info
-
-    save_meta_data(mongodb_client, meta_data)
-
-
-def save_meta_data(mongodb_client, meta_data):
-    db_name = 'integration'
-    collection_name = 'meta'
-    mongodb_client.insert_document(db_name, collection_name, meta_data)
