@@ -13,23 +13,13 @@ def get_data_result(ingestion_type, db_client, param) :
          * ingestion_type (_str_)
         ```example        
         
-            ingestion_type = ['multi_ms_integration', 'ms_by_days', 'ms_by_time', 'ms_by_num']  
+            >>> ingestion_type = ['multi_ms_integration', 'ms_by_days', 'ms_by_time', 'ms_by_num']  
         ```
          * db_client (_db_client_) : influxDB에서 데이터를 인출하기 위한 client
          * param (_dict_) : ingestion_type에 따른 인출을 위해 필요한 parameter
         ```example
         
-            {
-                'integration_freq_min': '60'
-                ,'start_time': '2021-09-05 00:00:00'
-                ,'end_time': '2021-09-11 00:00:00'
-                ,'ms_list_info': [['air_indoor_modelSchool', 'ICW0W2000014'], 
-                                    ['air_outdoor_kweather', 'OC3CL200012'], 
-                                    ['air_outdoor_keti_clean', 'seoul']]
-                ,'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
-                        'out_h2s','out_humi', 'out_noise', 'out_temp',
-                        'out_ultraviolet_rays', 'out_PM10','out_PM25']
-            }
+           
         ```
 
         # Returns

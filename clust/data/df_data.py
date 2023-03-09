@@ -23,7 +23,25 @@ class DfData():
 
         # Args
          * ingestion_type (_str_): ingestion_type (method)
+         ```
+            >>> ingestion_type = ['multi_ms_integration', 'ms_by_days', 'ms_by_time', 'ms_by_num']  
+         ```
          * ingestion_param (_Dict_): ingestion parameter depending on ingestion_type
+         ```example
+
+            >>> ingestion_param = {
+                                    'integration_freq_min': '60', 
+                                    'start_time': '2021-09-05 00:00:00', 
+                                    'end_time': '2021-09-11 00:00:00', 
+                                    'ms_list_info': [['air_indoor_modelSchool', 'ICW0W2000014'], 
+                                                    ['air_outdoor_kweather', 'OC3CL200012'], 
+                                                    ['air_outdoor_keti_clean', 'seoul']],
+                                    'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
+                                                        'out_h2s','out_humi', 'out_noise', 'out_temp',
+                                                    'out_ultraviolet_rays', 'out_PM10','out_PM25']                                
+                                    }
+                              
+         ```
          * process_param (_Dict_, _optional_): data preprocessing paramter. Defaults to None.
 
         # Returns
@@ -46,6 +64,7 @@ class DfData():
             result = self.ms_by_time(self.ingestion_param) 
         
         if self.ingestion_param['feature_list']:
+           
             result = result[self.ingestion_param['feature_list']]
             
         return result
@@ -59,16 +78,22 @@ class DfData():
          * ingestion_param (_dict_) 
 
         ```         
-         >>> ingestion_param = {'db_name': 'air_indoor_경로당',
-                                'ms_name': 'ICL1L2000234',
-                                'end_time': '2021-06-30T00:00:00Z',
-                                'days': '2000'}
+         >>> ingestion_param = {
+                                    'days' : 1,                                     
+                                    'end_time': '2021-09-11 00:00:00', 
+                                    'db_name' : 'air_indoor_modelSchool',
+                                    'ms_name' : 'ICW0W2000014',
+                                    'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
+                                                        'out_h2s','out_humi', 'out_noise', 'out_temp',
+                                                    'out_ultraviolet_rays', 'out_PM10','out_PM25']                                
+                                    }
         ```
         
         # Returns
          * data (_pd.dataFrame_) : result data
 
         """
+        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         data = self.db_client.get_data_by_days(ingestion_param['end_time'], ingestion_param['days'], ingestion_param['db_name'], ingestion_param['ms_name']) 
 
         return data
@@ -81,17 +106,21 @@ class DfData():
         # Args
          * ingestion_param (_dict_) 
         ```            
-         >>> ingestion_param = {'db_name': 'air_indoor_경로당',
-                                'ms_name': 'ICL1L2000234',
-                                'start_time': '2021-05-30T00:00:00Z',
-                                'end_time': '2021-06-30T00:00:00Z'}
+         >>> ingestion_param = {
+                                'db_name' : 'air_indoor_modelSchool'
+                                , 'ms_name' : 'ICW0W2000014'
+                                , 'start_time': '2021-09-05 00:00:00'
+                                , 'end_time': '2021-09-11 00:00:00'
+                                , 'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]
+
+                            }
         ```
 
         # Returns
          * data (_pd.dataFrame_) : result data
 
         """
-
+        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         data = self.db_client.get_data_by_time(ingestion_param['start_time'], ingestion_param['end_time'], ingestion_param['db_name'], ingestion_param['ms_name'])
         
         return data
@@ -104,10 +133,13 @@ class DfData():
         # Args
          * ingestion_param (_dict_)
         ```
-        >>> ingestion_param = {'db_name': 'air_indoor_경로당',
-                            'ms_name': 'ICL1L2000234',
-                            'num': '2000',
-                            'position': 'end' ----> 'end' or 'front'
+        >>> ingestion_param = {
+                                'db_name' : 'air_indoor_modelSchool'
+                                , 'ms_name' : 'ICW0W2000014'
+                                , 'num' : 1 #ms_by_num
+                                , 'position' : 'end'
+                                , 'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]
+
                             }
         ```
 
@@ -115,7 +147,7 @@ class DfData():
          * data (_pd.dataFrame_) : result data
 
         """
-        
+        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         if ingestion_param['position']=='end':
             data = self.db_client.get_data_end_by_num(ingestion_param['num'], ingestion_param['db_name'], ingestion_param['ms_name']) 
         else:
@@ -131,13 +163,17 @@ class DfData():
         # Args
          * ingestion_param (_dict_) 
          ```
-            ingestion_param = {
-                            'start_time': '2021-09-05 00:00:00', 
-                            'end_time': '2021-09-11 00:00:00', 
-                            'integration_freq_min': 60, 
-                            'feature_list': ['CO2', out_PM10', 'out_PM25'], 
-                            'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul'], ['air_indoor_modelSchool', 'ICW0W2000011']]
-                        }
+            >>> ingestion_param = {
+                                    'integration_freq_min': '60', 
+                                    'start_time': '2021-09-05 00:00:00', 
+                                    'end_time': '2021-09-11 00:00:00', 
+                                    'ms_list_info': [['air_indoor_modelSchool', 'ICW0W2000014'], 
+                                                    ['air_outdoor_kweather', 'OC3CL200012'], 
+                                                    ['air_outdoor_keti_clean', 'seoul']],
+                                    'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
+                                                        'out_h2s','out_humi', 'out_noise', 'out_temp',
+                                                    'out_ultraviolet_rays', 'out_PM10','out_PM25']                                
+                                    }
          ```
 
         # Returns
