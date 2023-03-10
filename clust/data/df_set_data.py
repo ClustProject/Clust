@@ -206,7 +206,7 @@ class DfSetData():
 
             print(bucket_name, " length:", len(dataSet_indi))
 
-            dataSet_indi = {f'{k}_{new_bucket_list[idx]}': v for k, v in dataSet_indi.items()}
+            dataSet_indi = {f'{k}/{new_bucket_list[idx]}': v for k, v in dataSet_indi.items()}
             data_set.update(dataSet_indi)
 
         return data_set

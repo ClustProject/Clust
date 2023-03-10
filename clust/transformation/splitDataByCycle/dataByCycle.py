@@ -53,6 +53,30 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
         Dictionary: Cycle DataSet, or None
     """
     
+    def _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency):
+        """
+        get Cycle Data Set
+
+        Args:
+            data (dataframe ): query_data
+            feature_cycle (string): feature_cycle
+            feature_cycle_times (int): feature_cycle_times
+            frequency (int): frequency (option)
+        
+        Returns:
+            Dictionary: Cycle DataSet, or None
+        """
+        data_list = getCycleselectDataFrame(data, feature_cycle, feature_cycle_times, frequency)
+        if data_list:
+            dataSet = {}
+            for data_slice in data_list:
+                index_name = data_slice.index[0].strftime('%Y-%m-%d %H:%M:%S')
+                dataSet[index_name] = data_slice
+        else:
+            dataSet = None
+
+        return dataSet
+
     if isinstance(data_input, dict):
         # if data is dictionary
         result={}
@@ -60,7 +84,7 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
             data = data_input[data_name]
             split_data = _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency)
             if split_data:
-                result.update(dict((data_name+"_"+key, value) for key, value in split_data.items()))
+                result.update(dict((data_name+"/"+key, value) for key, value in split_data.items()))
         
     elif isinstance(data_input, pd.DataFrame):
         # if data is dataframe
@@ -68,26 +92,3 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
 
     return result
 
-def _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency):
-    """
-    get Cycle Data Set
-
-    Args:
-        data (dataframe ): query_data
-        feature_cycle (string): feature_cycle
-        feature_cycle_times (int): feature_cycle_times
-        frequency (int): frequency (option)
-    
-    Returns:
-        Dictionary: Cycle DataSet, or None
-    """
-    data_list = getCycleselectDataFrame(data, feature_cycle, feature_cycle_times, frequency)
-    if data_list:
-        dataSet = {}
-        for data_slice in data_list:
-            index_name = data_slice.index[0].strftime('%Y-%m-%d %H:%M:%S')
-            dataSet[index_name] = data_slice
-    else:
-        dataSet = None
-
-    return dataSet

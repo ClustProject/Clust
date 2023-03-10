@@ -30,51 +30,60 @@ def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24
         data.loc[data[(data.index.hour >= timestep[n])&(data.index.hour < timestep[n+1])].index, "TimeStep"] = timelabel[n]
     return data
 
-def get_split_data_by_timestep_from_dataframe(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
-    """
-    Split the data by TimeStep.
-
-    Args:
-        data (dataframe): Time series data
-        timestep_criteria (dictionary) : TimeStep criteria infromation
-        
-    Example:
-        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
-
-    Returns:
-        dictionary: Return value composed of dataframes divided according to each label of timestep.
-    """
-    # Get data with timestep feature
-    data = get_timestep_feature(data, timestep)
+def split_data_by_timestep(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
     
-    # Split Data by Timestep
-    split_data_by_timestep = {}
-    
-    for label in timestep["label"]:
-        split_data_by_timestep[label] = data[label == data["TimeStep"]].drop(["TimeStep"], axis=1)
-    
-    return split_data_by_timestep
+    def _split_data_by_timestep_from_dataframe(data, timestep):
+        """
+        Split the data by TimeStep.
 
-def get_split_data_by_timestep_from_dataset(dataset, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
-    """
-    Split Data Set by TimeStep.
+        Args:
+            data (dataframe): Time series data
+            timestep_criteria (dictionary) : TimeStep criteria infromation
+            
+        Example:
+            >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
 
-    Args:
-        dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
-        timestep_criteria (dictionary) : TimeStep criteria infromation
+        Returns:
+            dictionary: Return value composed of dataframes divided according to each label of timestep.
+        """
+        # Get data with timestep feature
+        data = get_timestep_feature(data, timestep)
         
-    Example:
-        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+        # Split Data by Timestep
+        split_data_by_timestep = {}
         
-    Returns:
-        dictionary: Return value has measurements as keys and split result as values. 
-                    split result composed of dataframes divided according to each label of timestep.
-    """
-    split_dataset_by_timestep = {}
-    for ms_name in dataset:
-        data = dataset[ms_name]
-        if not(data.empty):
-            split_data_by_timestep_dict = get_split_data_by_timestep_from_dataframe(data, timestep)
-            split_dataset_by_timestep[ms_name] = split_data_by_timestep_dict
+        for label in timestep["label"]:
+            split_data_by_timestep[label] = data[label == data["TimeStep"]].drop(["TimeStep"], axis=1)
+        
+        return split_data_by_timestep
 
-    return split_dataset_by_timestep
+    def _split_data_by_timestep_from_dataset(dataset, timestep):
+        """
+        Split Data Set by TimeStep.
+
+        Args:
+            dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
+            timestep_criteria (dictionary) : TimeStep criteria infromation
+            
+        Example:
+            >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+            
+        Returns:
+            dictionary: Return value has measurements as keys and split result as values. 
+                        split result composed of dataframes divided according to each label of timestep.
+        """
+        split_dataset_by_timestep = {}
+        for ms_name in dataset:
+            data = dataset[ms_name]
+            if not(data.empty):
+                split_data_by_timestep_dict = _split_data_by_timestep_from_dataframe(data, timestep)
+                split_dataset_by_timestep[ms_name] = split_data_by_timestep_dict
+
+        return split_dataset_by_timestep
+
+    if isinstance(data_input, dict):
+        result = _split_data_by_timestep_from_dataset(data_input, timestep)
+    elif isinstance(data_input, pd.DataFrame):
+        result = _split_data_by_timestep_from_dataframe(data_input, timestep)
+    
+    return result
