@@ -5,7 +5,7 @@ sys.path.append("../../")
 
 from Clust.clust.transformation.splitDataByCycle.cycleModule import CycleData
 from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
-
+import pandas as pd
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
     """
@@ -38,13 +38,13 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
 
     return data
 
-
-def getCycleSelectDataSet(query_data, feature_cycle, feature_cycle_times, frequency=None):
+        
+def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, frequency=None):
     """
     get Cycle Data Set
 
     Args:
-        query_data (dataframe): query_data
+        data_input (dataframe or dictionary): query_data
         feature_cycle (string): feature_cycle
         feature_cycle_times (int): feature_cycle_times
         frequency (int): frequency (option)
@@ -52,7 +52,36 @@ def getCycleSelectDataSet(query_data, feature_cycle, feature_cycle_times, freque
     Returns:
         Dictionary: Cycle DataSet, or None
     """
-    data_list = getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency)
+    
+    if isinstance(data_input, dict):
+        # if data is dictionary
+        result={}
+        for data_name in data_input:
+            data = data_input[data_name]
+            split_data = _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency)
+            if split_data:
+                result.update(dict((data_name+"_"+key, value) for key, value in split_data.items()))
+        
+    elif isinstance(data_input, pd.DataFrame):
+        # if data is dataframe
+        result = _getCycleSelectDataSet_oneDF(data_input, feature_cycle, feature_cycle_times, frequency)
+
+    return result
+
+def _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency):
+    """
+    get Cycle Data Set
+
+    Args:
+        data (dataframe ): query_data
+        feature_cycle (string): feature_cycle
+        feature_cycle_times (int): feature_cycle_times
+        frequency (int): frequency (option)
+    
+    Returns:
+        Dictionary: Cycle DataSet, or None
+    """
+    data_list = getCycleselectDataFrame(data, feature_cycle, feature_cycle_times, frequency)
     if data_list:
         dataSet = {}
         for data_slice in data_list:
