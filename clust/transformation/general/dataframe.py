@@ -23,8 +23,8 @@ def get_oneDF_with_oneFeature_from_multipleDF(dataSet, feature_name, duration=No
             data = get_multipleDF_sameDuration(data, duration, frequency)
 
         if feature_name in list(data.columns):
-            value = data[feature_name].values
-            newDF[data_name] = value
+            #value = data[feature_name].values
+            newDF[data_name] = data[feature_name]
     return newDF
 
 

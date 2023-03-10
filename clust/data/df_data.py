@@ -39,7 +39,8 @@ class DfData():
             result = self.ms_by_time(self.ingestion_param) 
         
         if self.ingestion_param['feature_list']:
-            result = result[self.ingestion_param['feature_list']]
+            if len(result)>0:
+                result = result[self.ingestion_param['feature_list']]
             
         return result
     
