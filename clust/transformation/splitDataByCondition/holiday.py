@@ -80,7 +80,9 @@ def split_data_by_holiday(data_input):
             data = dataset[ms_name]
             if not(data.empty):
                 split_data_by_holiday_dict = _split_data_by_holiday_from_dataframe(data)
-                split_dataset_by_holiday[ms_name] = split_data_by_holiday_dict
+                for condition_name in split_data_by_holiday_dict:
+                    split_dataset_by_holiday[ms_name + "_" + condition_name] = split_data_by_holiday_dict[condition_name]
+                #split_dataset_by_holiday[ms_name] = split_data_by_holiday_dict
 
         return split_dataset_by_holiday
 
