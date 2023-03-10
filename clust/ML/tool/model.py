@@ -3,7 +3,7 @@ sys.path.append("../")
 sys.path.append("../../")
 sys.path.append("../../../")
 
-from Clust.setting import model_path_setting
+from Clust.clust.ML.common import model_path_setting
 import pickle
 
 def get_model_path(train_data_path_list, method):
