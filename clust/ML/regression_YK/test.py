@@ -11,8 +11,6 @@ from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
 
 class RegressionTest():
     def __init__(self):
-        """
-        """
         pass
 
     def set_param(self, params):
@@ -40,9 +38,10 @@ class RegressionTest():
 
     def set_model(self, model_method, model_file_path):
         """
-        Set model from model file path
+        Set model and load weights from model file path
 
         Args:
+            model_method (string): model method name  
             model_file_path (string): path for trained model  
         """
         if model_method == 'LSTM_rg':
@@ -87,7 +86,10 @@ class RegressionTest():
         Test model and return result
 
         Returns:
-            result: model test result
+            preds (ndarray): prediction data
+            trues (ndarray): original data
+            mse (float): mean square error  # TBD
+            mae (float): mean absolute error    # TBD
         """
         print("\nStart testing data\n")
         pred, trues, mse, mae = self.model.test(self.params, self.test_loader, self.device)

@@ -4,36 +4,31 @@ import torch.optim as optim
 import numpy as np
 import time
 import copy
-import random
+import datetime
 from torch.utils.data import DataLoader, TensorDataset
-from sklearn.metrics import mean_absolute_error, mean_squared_error 
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to_np, trans_df_to_np_inf
-from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.tool import model as tool_model
 
-from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.lstm_fcns import LSTMFCNs
+from Clust.clust.ML.classification.interface import BaseRegressionModel
+from Clust.clust.ML.classification.models.fc import FC as fc
 
 
-class LSTMFCNsClust(BaseRegressionModel):
+
+class FCModel(BaseRegressionModel):
     """
-    LSTMFCNs Regression model class
+
     """
-    def __init__(self, param):
+    def __init__(self, params):
         """
-        Init function of LSTMFCNs regression class.
+        Init function of CNN1D regression class.
 
         Args:
-            params (dict): parameters for building a LSTMFCNs model
+            params (dict): parameters for building a CNN1D model
         """
-        self.param = param
+        self.params = params
         # model 생성
-        self.model = LSTMFCNs(
-            input_size=self.param['input_size'],
-            num_layers=self.param['num_layers'],
-            lstm_drop_p=self.param['lstm_drop_out'],
-            fc_drop_p=self.param['fc_drop_out']
-        )
+        self.model = fc(**self.params)
 
     def train(self, param, train_loader, valid_loader, num_epochs, device):
         """
@@ -53,10 +48,11 @@ class LSTMFCNsClust(BaseRegressionModel):
         optimizer = optim.Adam(self.model.parameters(), lr=param['lr'])
 
         since = time.time()
-        val_mse_history = []
+
+        val_acc_history = []
 
         best_model_wts = copy.deepcopy(self.model.state_dict())
-        best_mse = 10000000
+        best_acc = 0.0
 
         for epoch in range(num_epochs):
             if epoch == 0 or (epoch + 1) % 10 == 0:
@@ -71,23 +67,27 @@ class LSTMFCNsClust(BaseRegressionModel):
                     self.model.eval()   # 모델을 validation mode로 설정
 
                 running_loss = 0.0
+                running_corrects = 0
                 running_total = 0
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
                 for inputs, labels in data_loaders_dict[phase]:
                     inputs = inputs.to(device)
-                    labels = labels.to(device, dtype=torch.float)
+                    labels = labels.to(device, dtype=torch.long)
+                    # seq_lens = seq_lens.to(self.parameter['device'])
                     
                     # parameter gradients를 0으로 설정
                     optimizer.zero_grad()
-
+                    
                     # forward
                     # training 단계에서만 gradient 업데이트 수행
                     with torch.set_grad_enabled(phase == 'train'):
                         # input을 model에 넣어 output을 도출한 후, loss를 계산함
                         outputs = self.model(inputs)
-                        outputs = outputs.squeeze(1)
                         loss = criterion(outputs, labels)
+
+                        # output 중 최댓값의 위치에 해당하는 class로 예측을 수행
+                        _, preds = torch.max(outputs, 1)
 
                         # backward (optimize): training 단계에서만 수행
                         if phase == 'train':
@@ -96,28 +96,33 @@ class LSTMFCNsClust(BaseRegressionModel):
 
                     # batch별 loss를 축적함
                     running_loss += loss.item() * inputs.size(0)
+                    running_corrects += torch.sum(preds == labels.data)
                     running_total += labels.size(0)
 
                 # epoch의 loss 및 accuracy 도출
                 epoch_loss = running_loss / running_total
+                epoch_acc = running_corrects.double() / running_total
 
                 if epoch == 0 or (epoch + 1) % 10 == 0:
-                    print('{} Loss: {:.4f}'.format(phase, epoch_loss))
+                    print('{} Loss: {:.4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
                 # validation 단계에서 validation loss가 감소할 때마다 best model 가중치를 업데이트함
-                if phase == 'val' and epoch_loss < best_mse:
-                    best_mse = epoch_loss
+                if phase == 'val' and epoch_acc > best_acc:
+                    best_acc = epoch_acc
                     best_model_wts = copy.deepcopy(self.model.state_dict())
                 if phase == 'val':
-                    val_mse_history.append(epoch_loss)
+                    val_acc_history.append(epoch_acc)
+
 
         # 전체 학습 시간 계산
         time_elapsed = time.time() - since
+        timeElapsed = str(datetime.timedelta(seconds=time_elapsed))
         print('\nTraining complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
-        print('Best val MSE: {:4f}'.format(best_mse))
+        print('Best val Acc: {:4f}'.format(best_acc))
 
         # validation loss가 가장 낮았을 때의 best model 가중치를 불러와 best model을 구축함
         self.model.load_state_dict(best_model_wts)
+
 
     def test(self, param, test_loader, device):
         """
@@ -138,31 +143,45 @@ class LSTMFCNsClust(BaseRegressionModel):
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
-            trues, preds = [], []
+            corrects = 0
+            total = 0
+            preds = []
+            probs = []
+            trues = []
             for inputs, labels in test_loader:
                 inputs = inputs.to(device)
-                labels = labels.to(device, dtype=torch.float)
+                labels = labels.to(device, dtype=torch.long)
 
                 self.model.to(device)
-                
-                # forward
+    
+                # forwinputs = inputs.to(device)ard
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(inputs)
+                prob = outputs
+                prob = nn.Softmax(dim=1)(prob)
+
+                # output 중 최댓값의 위치에 해당하는 class로 예측을 수행
+                _, pred = torch.max(outputs, 1)
                 
-                # 예측 값 및 실제 값 축적
+                # batch별 정답 개수를 축적함
+                corrects += torch.sum(pred == labels.data)
+                total += labels.size(0)
+
+                preds.extend(pred.detach().cpu().numpy()) 
+                probs.extend(prob.detach().cpu().numpy())
                 trues.extend(labels.detach().cpu().numpy())
-                preds.extend(outputs.detach().cpu().numpy())
 
-        preds = np.array(preds).reshape(-1)
-        trues = np.array(trues)
+            preds = np.array(preds)
+            probs = np.array(probs)
+            trues = np.array(trues)
+            
+            acc = (corrects.double() / total).item()
 
-        mse = mean_squared_error(trues, preds)
-        mae = mean_absolute_error(trues, preds)
-
-        print(f'** Performance of test dataset ==> MSE = {mse}, MAE = {mae}')
+        print(f'** Performance of test dataset ==> PROB = {probs}, ACC = {acc}')
         print(f'** Dimension of result for test dataset = {preds.shape}')
 
-        return preds, trues, mse, mae
+        return preds, probs, trues, acc
+
 
     def inference(self, param, inference_loader, device):
         """
@@ -187,15 +206,17 @@ class LSTMFCNsClust(BaseRegressionModel):
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(inputs)
+                _, pred = torch.max(outputs, 1)
                 
                 # 예측 값 및 실제 값 축적
-                preds.extend(outputs.detach().cpu().numpy())
+                preds.extend(pred.detach().cpu().numpy())
 
-        preds = np.array(preds).reshape(-1)
+        preds = np.array(preds)
 
         print(f'** Dimension of result for inference dataset = {preds.shape}')
 
         return preds
+
 
     def export_model(self):
         """
@@ -206,6 +227,7 @@ class LSTMFCNsClust(BaseRegressionModel):
         """
         return self.model
 
+
     def save_model(self, save_path):
         """
         save model to save_path
@@ -213,7 +235,8 @@ class LSTMFCNsClust(BaseRegressionModel):
         Args:
             save_path (string): path to save model
         """
-        model_manager.save_pickle_model(self.model, save_path)
+        tool_model.save_pickle_model(self.model, save_path)
+
 
     def load_model(self, model_file_path):
         """
@@ -222,7 +245,8 @@ class LSTMFCNsClust(BaseRegressionModel):
         Args:
             model_file_path (string): path to load saved model
         """
-        self.model = model_manager.load_pickle_model(model_file_path)
+        self.model = tool_model.load_pickle_model(model_file_path)
+
 
     # move to utils?
     # for train data
@@ -242,8 +266,16 @@ class LSTMFCNsClust(BaseRegressionModel):
             train_loader (DataLoader): train data loader
             val_loader (DataLoader): validation data loader
         """
-        train_x, train_y = transDFtoNP(train_x, train_y, window_num)
-        val_x, val_y = transDFtoNP(val_x, val_y, window_num)
+        dim = 3
+        # if self.model_name == "FC_cf":
+        #    dim = 2
+        if type(train_x) !=  np.ndarray:
+            train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
+            val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
+
+        self.params['input_size'] = train_x.shape[1]
+        if dim != 2:
+            self.params['seq_len']  = train_x.shape[2] # seq_length
 
         # input_size = train_x.shape[1]
         # seq_len = train_x.shape[2]
@@ -261,6 +293,7 @@ class LSTMFCNsClust(BaseRegressionModel):
 
         return train_loader, val_loader
 
+
     # for test data
     def create_testloader(self, batch_size, test_x, test_y, window_num):
         """
@@ -277,7 +310,10 @@ class LSTMFCNsClust(BaseRegressionModel):
         """
         test_x, test_y = trans_df_to_np(test_x, test_y, window_num)
 
-        test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
+        x_data = np.array(test_x)
+        y_data = test_y
+
+        test_data = TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
         test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 
         return test_loader
@@ -297,7 +333,8 @@ class LSTMFCNsClust(BaseRegressionModel):
         """
         x_data = trans_df_to_np_inf(x_data, window_num)
 
-        x_data = torch.Tensor(x_data)
-        inference_loader = DataLoader(x_data, batch_size=batch_size, shuffle=True)
+        # x_data = np.array(x_data)
+        inference_data = torch.Tensor(x_data)
+        inference_loader = DataLoader(inference_data, batch_size=batch_size, shuffle=True)
 
         return inference_loader

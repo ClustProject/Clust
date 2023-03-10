@@ -3,7 +3,7 @@ sys.path.append("../")
 sys.path.append("../../")
 sys.path.append("../../../")
 
-from Clust.clust.ML.common import model_path_setting
+from Clust.setting import model_path_setting
 import pickle
 
 def get_model_path(train_data_path_list, method):
@@ -40,11 +40,7 @@ def get_model_path(train_data_path_list, method):
 
 
 # get model path
-# global 선언으로 train_save_pickle_model에 변수 사용 가능
-# 함수안에 global을 선언했으므로 해당 함수가 호출될때마다 global 변수 값도 변경
-# BUT, 해당 함수를 실행해야지만 model_file_path 값 할당 ---> 너무 종속적이다, 대안 고려
 def get_model_file_path(train_data_path_list, model_method):
-    global model_file_path
     model_file_path_list = get_model_path(train_data_path_list, model_method)
     model_file_path = ''.join(model_file_path_list)
     print(model_file_path)

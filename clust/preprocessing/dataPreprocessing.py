@@ -18,33 +18,33 @@ class DataPreprocessing():
     
     def get_refinedData(self, data, refine_param):
         """
-        This function gets refined data with static frequency, without redundency data. 
-        It refines data adaptively depending on flag status. (removeDuplication, staticFrequency)
-        ``removeDuplication`` :It removes duplicated data.
-        ``staticFrequency`` :The data will have a constant timestamp index. 
+        # Description
+         - This function gets refined data with static frequency, without redundency data. 
+         - It refines data adaptively depending on flag status. (removeDuplication, staticFrequency)
+            * removeDuplication :It removes duplicated data.
+            * staticFrequency :The data will have a constant timestamp index. 
 
-
-        Args:
-            data (DataFrame): data
-            refine_param (Dictionary): refinement parameter
+        # Args
+            data (_pd.dataFrame_): data
+            refine_param (_dict_): refinement parameter
             
-        Returns:
-            DataFrame: refinedData, refined DataFrame output
+        # Returns
+            self.refinedData (_pd.DataFrame_): refinedData, refined DataFrame output
 
-
-        refine_param additional info: 
+        # refine_param additional info
+        ```
             >>> refine_param['removeDuplication']={'flag':(Boolean)} 
             >>> refine_param['staticFrequency'] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
             >>> refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
+        ```
 
-
-        Example:
-
+        # Example
+        ```
             >>> from clust.preprocessing.dataPreprocessing import DataPreprocessing
             >>> refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': None}}
             >>> refine_param2 = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': "3H"}}
             >>> refinementData = DataPreprocessing().get_refinedData(data, refine_param)
-
+        ```
         """
         result = data.copy()
         if refine_param['removeDuplication']['flag']== True:
@@ -198,18 +198,21 @@ class DataProcessing(DataPreprocessing):
         return result
 
     def all_preprocessing_finalResult(self, input_data):
-        """ Produces partial Processing data depending on process_param
+        """ 
+        # Description
+         Produces partial Processing data depending on process_param
 
-        Args:
-            input_data (DataFrame): input data
+        # Args
+         * input_data (_pd.DataFrame_)
             
-        Returns:
-            json: New Dataframe after preprocessing according to the process_param
+        # Returns
+         * result (_dict_) : New Dataframe after preprocessing according to the process_param
         
-        Example:
-
+        # Example
+        ```
             >>> output = DataProcessing(process_param).all_preprocessing(data)
-            
+        ```
+
         """
         ###########
         refined_data = self.get_refinedData(input_data, self.refine_param)
@@ -219,24 +222,31 @@ class DataProcessing(DataPreprocessing):
         imputed_data = self.get_imputedData(datawithMoreUnCertainNaN, self.imputation_param)
         ###########
         result = imputed_data
+
         return result
 
     ## Get Multiple output
     def multiDataset_all_preprocessing(self, multiple_dataset):
-        """ Produces multiple DataFrame Processing result depending on process_param
+        """ 
+        # Description
+         Produces multiple DataFrame Processing result depending on multiple_dataset
 
-        Args:
-            input_data (json): multiple_dataset - (having DataFrame value) 
+        # Args
+         * multiple_dataset (_dict_) : multiple_dataset - (having DataFrame value) 
             
-        Returns:
-            json: json having New Dataframe after preprocessing according to the process_param  (having only final result)
+        # Returns
+         * output(_dict_) : Dictionary having New Dataframe after preprocessing according to the multiple_dataset  (having only final result)
         
-        Example:
-
-            >>> output = DataProcessing(process_param).multiDataset_all_preprocessing(multiple_dataset)
+        # Example
+        ```
+            >>> output = DataProcessing(multiple_dataset).multiDataset_all_preprocessing(multiple_dataset)
+        ```
+        
         """
+
         output={}
         for key in list(multiple_dataset.keys()):
             output[key] = self.all_preprocessing_finalResult(multiple_dataset[key])
+
         return output
 

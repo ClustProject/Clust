@@ -12,8 +12,6 @@ from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
 class RegressionInference():
 
     def __init__(self):
-        """
-        """
         pass
 
     def set_param(self, params):
@@ -41,9 +39,10 @@ class RegressionInference():
 
     def set_model(self, model_method, model_file_path):
         """
-        Set model from model file path
+        Set model and load weights from model file path
 
         Args:
+            model_method (string): model method name 
             model_file_path (string): path for trained model  
         """
         if model_method == 'LSTM_rg':
@@ -83,6 +82,10 @@ class RegressionInference():
 
     def inference(self):
         """
+        inference model and return result
+
+        Returns:
+            preds (ndarray): prediction data
         """
         print("\nStart inference\n")
         preds = self.model.inference(self.params, self.inference_loader, self.device)
