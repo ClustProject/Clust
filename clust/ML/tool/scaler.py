@@ -66,22 +66,19 @@ def get_scaled_data(data, scaler, scaler_param):
 
 
 
+from Clust.clust.transformation.general.dataScaler import DataScaler
+# p3_training
+def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
+    if scaler_param=='scale':
+        DS = DataScaler(scaler_method, scaler_root_path)
+        #from Clust.clust.transformation.general import dataScaler
+        #feature_col_list = dataScaler.get_scalable_columns(train_o)
+        DS.setScaleColumns(list(data.columns))
+        DS.setNewScaler(data)
+        result_data = DS.transform(data)
+        scaler_file_path = DS.scalerFilePath
+    else:
+        result_data = data.copy()
+        scaler_file_path=None
 
-
-
-# from Clust.clust.transformation.general.dataScaler import DataScaler
-# # p3_training
-# def get_scaled_data(scaler_param, scaler_root_path, data, scaler_method):
-#     if scaler_param=='scale':
-#         DS = DataScaler(scaler_method, scaler_root_path)
-#         #from Clust.clust.transformation.general import dataScaler
-#         #feature_col_list = dataScaler.get_scalable_columns(train_o)
-#         DS.setScaleColumns(list(data.columns))
-#         DS.setNewScaler(data)
-#         result_data = DS.transform(data)
-#         scaler_file_path = DS.scalerFilePath
-#     else:
-#         result_data = data.copy()
-#         scaler_file_path=None
-
-#     return result_data, scaler_file_path
+    return result_data, scaler_file_path

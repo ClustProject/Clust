@@ -17,8 +17,6 @@ from Clust.clust.ML.classification.classification_model.fc_model import FCModel
 from Clust.clust.ML.classification.classification_model.lstm_fcns_model import LSTMFCNsModel
 from Clust.clust.ML.classification.classification_model.rnn_model import RNNModel
 
-from Clust.clust.ML.common.train import Train
-
 class ClassificationTrain():
     def __init__(self):
         # seed 고정
@@ -30,7 +28,7 @@ class ClassificationTrain():
         torch.backends.cudnn.benchmark = False
         np.random.seed(random_seed)
         random.seed(random_seed)
-        super().__init__()
+        # super().__init__()
         
 
     def set_param(self, params):
@@ -58,7 +56,6 @@ class ClassificationTrain():
         Args:
             model_method (string): model method name
         """
-        model_method = model_method
         if model_method == 'LSTM_cf':
             self.params["rnn_type"] = 'lstm'
         elif self.model_method == 'GRU_cf':
@@ -66,13 +63,13 @@ class ClassificationTrain():
         
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
-            self.model = RNNModel(**self.params)
+            self.model = RNNModel(self.params)
         elif model_method == 'CNN_1D_cf':
-            self.model = CNNModel(**self.params)
+            self.model = CNNModel(self.params)
         elif model_method == 'LSTM_FCNs_cf':
-            self.model = LSTMFCNsModel(**self.params)
+            self.model = LSTMFCNsModel(self.params)
         elif model_method == 'FC_cf':
-            self.model = FCModel(**self.params)
+            self.model = FCModel(self.params)
         else:
             print('Choose the model correctly')
 
