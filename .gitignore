@@ -6,7 +6,7 @@ __pycache__/
 *$py.class
 
 /setting
-!/setting/model_path_setting.py
+!model_path_setting.py
 
 # C extensions
 *.so
