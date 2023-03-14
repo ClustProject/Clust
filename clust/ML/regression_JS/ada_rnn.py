@@ -58,6 +58,10 @@ class ClustAdaRnn():
             model_type="AdaRNN",  # 나중에는 삭제해야함 -> AdaRNN 함수에서 Boosting 관련 삭제 후에 진행하기
             len_seq=self.param["len_seq"], 
             trans_loss=self.dis_type).cuda()
+        
+    def _pprint(self, *text):
+        time = '['+str(datetime.datetime.utcnow() +datetime.timedelta(hours=8))[:19]+'] -'
+        print(time, *text, flush=True)
     
     def create_trainloader(self, train_x, train_y, valid_x, valid_y, k, train_x_start_time, train_x_end_time, shuffle = True):
         split_timelist_by_tdc = self._TDC(k, train_x, train_x_start_time, train_x_end_time, self.dis_type)
@@ -138,10 +142,6 @@ class ClustAdaRnn():
             return split_timelist_by_tdc
         else:
             print("error in number of domain")
-    
-    def _pprint(self, *text):
-        time = '['+str(datetime.datetime.utcnow() +datetime.timedelta(hours=8))[:19]+'] -'
-        print(time, *text, flush=True)
 
     def train_AdaRNN(self, args, model, optimizer, train_loader_list, epoch, dist_old=None, weight_mat=None):
         model.train()
@@ -163,7 +163,13 @@ class ClustAdaRnn():
                 list_feat.append(feature)
                 list_label.append(label_reg)
             flag = False
-            index = self.get_index(len(data_all) - 1)
+            #index = self._get_index(len(data_all) - 1)
+            index = []
+            num_domain = len(data_all) - 1
+            for i in range(num_domain):
+                 for j in range(i+1, num_domain+1):
+                      index.append((i,j))
+
             for temp_index in index:
                 s1 = temp_index[0]
                 s2 = temp_index[1]
@@ -207,15 +213,19 @@ class ClustAdaRnn():
                 weight_mat = model.update_weight_Boosting(weight_mat, dist_old, dist_mat)
             return loss, loss_l1, weight_mat, dist_mat
         else:
-            weight_mat = self.transform_type(out_weight_list, args)
+           #weight_mat = self._transform_type(out_weight_list, args)
+            weight_mat = torch.ones(args["num_layers"], args["len_seq"]).cuda()
+            for i in range(args["num_layers"]):
+                for j in range(args["len_seq"]):
+                    weight_mat[i, j] = out_weight_list[i][j].item()
             return loss, loss_l1, weight_mat, None
 
-    def get_index(self, num_domain=2):
-        index = []
-        for i in range(num_domain):
-            for j in range(i+1, num_domain+1):
-                index.append((i, j))
-        return index
+    # def _get_index(self, num_domain=2):
+    #     index = []
+    #     for i in range(num_domain):
+    #         for j in range(i+1, num_domain+1):
+    #             index.append((i, j))
+    #     return index
 
     def _get_evaluation_loss(self, model, test_loader, prefix='Test'):
         model.eval()
@@ -240,7 +250,7 @@ class ClustAdaRnn():
         loss_r = loss_r / len(test_loader)
         return loss, loss_1, loss_r
 
-    def test_epoch_inference(self, model, test_loader, prefix='Test'):
+    def _test_epoch_inference(self, model, test_loader, prefix='Test'):
         model.eval()
         total_loss = 0
         total_loss_1 = 0
@@ -272,8 +282,8 @@ class ClustAdaRnn():
         loss_r = total_loss_r / len(test_loader)
         return loss, loss_1, loss_r, label_list, predict_list
 
-    def inference(self, model, data_loader):
-        loss, loss_1, loss_r, label_list, predict_list = self.test_epoch_inference(model, data_loader, prefix='Inference')
+    def _inference(self, model, data_loader):
+        loss, loss_1, loss_r, label_list, predict_list = self._test_epoch_inference(model, data_loader, prefix='Inference')
         return loss, loss_1, loss_r, label_list, predict_list
 
     def inference_all(self, model, model_path, loaders):
@@ -285,21 +295,21 @@ class ClustAdaRnn():
         i = 0
         list_name = ['train', 'valid', 'test']
         for loader in loaders:
-            loss, loss_1, loss_r, label_list, predict_list = self.inference(model, loader)
+            loss, loss_1, loss_r, label_list, predict_list = self._inference(model, loader)
             loss_list.append(loss)
             loss_l1_list.append(loss_1)
             loss_r_list.append(loss_r)
             i = i + 1
         return loss_list, loss_l1_list, loss_r_list
 
-    def transform_type(self, init_weight, args):
-        weight = torch.ones(args["num_layers"], args["len_seq"]).cuda()
-        for i in range(args["num_layers"]):
-            for j in range(args["len_seq"]):
-                weight[i, j] = init_weight[i][j].item()
-        return weight
+    # def _transform_type(self, init_weight, args):
+    #     weight = torch.ones(args["num_layers"], args["len_seq"]).cuda()
+    #     for i in range(args["num_layers"]):
+    #         for j in range(args["len_seq"]):
+    #             weight[i, j] = init_weight[i][j].item()
+    #     return weight
 
-    def main_transfer(self, train_loader_list, valid_loader, args): # main_transfer -> train
+    def train(self, train_loader_list, valid_loader, args): # main_transfer -> train
         if not os.path.exists(args["output_folder_name"]):
             os.makedirs(args["output_folder_name"])
 
@@ -320,15 +330,16 @@ class ClustAdaRnn():
             #self._pprint(loss, lossl1)
             self._pprint('evaluating...')
 
-            val_loss, val_loss_l1, val_loss_r = self._get_evaluation_loss(model, valid_loader, prefix='Valid')
+            # MSELoss
+            val_mse_loss, val_loss_l1, val_loss_r = self._get_evaluation_loss(model, valid_loader, prefix='Valid')
             #test_loss, test_loss_l1, test_loss_r = self.test_epoch(model, test_loader, prefix='Test') # Train 파트에서는 분리
 
 #            self._pprint('valid %.6f, test %.6f' %(val_loss_l1, test_loss_l1))
             
-            self._pprint('train %.6f, valid %.6f' %(lossl1, val_loss_l1))
+            self._pprint('train %.6f, valid MSE Loss %.6f, valid L1  val_mse_loss, val_loss_lLoss %.6f' %(lossl1,1))
 
-            if val_loss < best_score:
-                best_score = val_loss
+            if val_mse_loss < best_score:
+                best_score = val_mse_loss
                 stop_round = 0
                 best_epoch = epoch
                 torch.save(model.state_dict(), os.path.join(args["output_folder_name"], args["save_model_name"]))
@@ -340,7 +351,7 @@ class ClustAdaRnn():
 
         self._pprint('best val score:', best_score, '@', best_epoch)
         self._pprint('Finished.')
-        # test_epoch(_get_evaluation_loss) 와 inference_all에서 쓰이는 test_epoch_inference 와 차이점은 pred을 하냐안하냐 정도의 차이일뿐
+        # test_epoch(_get_evaluation_loss) 와 inference_all에서 쓰이는 _test_epoch_inference 와 차이점은 pred을 하냐안하냐 정도의 차이일뿐
         # inference all 은 pred 뽑을때 사용하기
         # self._pprint('MSE: train %.6f, valid %.6f, test %.6f' %(loss_list[0], loss_list[1], loss_list[2]))
         # self._pprint('L1:  train %.6f, valid %.6f, test %.6f' %(loss_l1_list[0], loss_l1_list[1], loss_l1_list[2]))
