@@ -18,11 +18,13 @@ def get_plt_result(graph_type, df):
 def get_img_result(graph_type, df):
     #TODO 명확히 정의할 것 프로그램이 independent 하도록
     
-    plt_ = get_plt_result(graph_type, df)
+    plt_ = get_plt_result(graph_type, df)    
     my_stringIObytes = io.BytesIO()
+
     plt_.savefig(my_stringIObytes, format='jpg')
     my_stringIObytes.seek(0)    
-    my_base64_jpgData = base64.b64encode(my_stringIObytes.read()).decode()
+
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
 
     
     return my_base64_jpgData

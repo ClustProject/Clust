@@ -43,8 +43,9 @@ class DataSetAnalysis():
         """
         column_list = next(iter((df_set.items())))[1].columns
         max_correlation_index_timelag = pd.DataFrame(index = column_list)
-        feature_key = analysis_param['feature_key']
-        lag_number = analysis_param['lag_number']
+        feature_key = analysis_param['feature_key'] #사용하는 값인지요?
+        lag_number = analysis_param['lag_number'] #사용하는 값인지요?
+        
         for df_name in df_set.keys():
             data = df_set[df_name]
             #################################################
