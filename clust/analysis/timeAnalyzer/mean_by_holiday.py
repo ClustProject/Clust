@@ -19,7 +19,7 @@ def get_mean_analysis_result_by_holiday(data):
     """
     #self.data = self.make_holiday_column()
     labels = ["holiday", "notholiday"]
-    data = holiday.get_holiday_feature(data)
+    data = holiday.add_holiday_feature(data)
     print(">>>>> make holiday column success <<<<<")
     meanbyholiday_result_dict = data.groupby("Holiday").mean().to_dict()
     print(">>>>> holiday groupby success <<<<<")

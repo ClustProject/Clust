@@ -59,13 +59,13 @@ class ClassificationInference():
         
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
-            self.model = RNNModel(**self.params)
+            self.model = RNNModel(self.params)
         elif model_method == 'CNN_1D_cf':
-            self.model = CNNModel(**self.params)
+            self.model = CNNModel(self.params)
         elif model_method == 'LSTM_FCNs_cf':
-            self.model = LSTMFCNsModel(**self.params)
+            self.model = LSTMFCNsModel(self.params)
         elif model_method == 'FC_cf':
-            self.model = FCModel(**self.params)
+            self.model = FCModel(self.params)
         else:
             print('Choose the model correctly')
 

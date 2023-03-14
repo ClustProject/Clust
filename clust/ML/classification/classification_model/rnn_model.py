@@ -29,6 +29,14 @@ class RNNModel(BaseRegressionModel):
         self.params = params
         # model 생성
         self.model = rnn_model(**self.params)
+        # self.model = rnn_model(
+        #     input_size=self.params['input_size'],
+        #     hidden_size=self.params['hidden_size'],
+        #     num_layers=self.params['num_layers'],
+        #     num_classes=self.params['num_classes'],
+        #     bidirectional=self.params['bidirectional'],
+        #     rnn_type=self.params['rnn_type'],
+        #     device=self.params['device'])
 
     def train(self, param, train_loader, valid_loader, num_epochs, device):
         """
@@ -44,7 +52,7 @@ class RNNModel(BaseRegressionModel):
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
-        criterion = nn.MSELoss()
+        criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(self.model.parameters(), lr=param['lr'])
 
         since = time.time()

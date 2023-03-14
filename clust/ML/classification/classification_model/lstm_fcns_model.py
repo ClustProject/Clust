@@ -44,7 +44,7 @@ class LSTMFCNsModel(BaseRegressionModel):
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
-        criterion = nn.MSELoss()
+        criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(self.model.parameters(), lr=param['lr'])
 
         since = time.time()
@@ -250,7 +250,7 @@ class LSTMFCNsModel(BaseRegressionModel):
 
     # move to utils?
     # for train data
-    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y, window_num):
+    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y, window_num, dim=None):
         """
         Create train/valid data loader for torch
 

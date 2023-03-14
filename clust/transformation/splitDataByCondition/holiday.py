@@ -1,10 +1,10 @@
-from pytimekr import pytimekr
+from pytimekr import pytimekr 
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 import pandas as pd
-def get_holiday_feature(data):
+def add_holiday_feature(data):
     """
     A function that adds a new holiday column by designating holidays and weekends as holiday days during the data period.
 
@@ -55,7 +55,7 @@ def split_data_by_holiday(data_input):
             dictionary: Return value composed of dataframes divided according to each label of holiday and notholiday.
         """
         # Get data with holiday feature
-        data = get_holiday_feature(data)
+        data = add_holiday_feature(data)
         
         # Split Data by Holiday
         split_data_by_holiday = {}
@@ -76,13 +76,13 @@ def split_data_by_holiday(data_input):
                         split result composed of dataframes divided according to each label of holiday and notholiday.
         """
         split_dataset_by_holiday = {}
-        for ms_name in dataset:
-            data = dataset[ms_name]
+        for data_name in dataset:
+            data = dataset[data_name]
             if not(data.empty):
                 split_data_by_holiday_dict = _split_data_by_holiday_from_dataframe(data)
                 for condition_name in split_data_by_holiday_dict:
-                    split_dataset_by_holiday[ms_name + "_" + condition_name] = split_data_by_holiday_dict[condition_name]
-                #split_dataset_by_holiday[ms_name] = split_data_by_holiday_dict
+                    split_dataset_by_holiday[data_name + "/" + condition_name] = split_data_by_holiday_dict[condition_name]
+                #split_dataset_by_holiday[data_name] = split_data_by_holiday_dict
 
         return split_dataset_by_holiday
 
