@@ -12,6 +12,9 @@ class DfSetData():
         # Args
          * db_client (_str_): instance of InfluxClient class. instance to get data from influx DB
 
+        # Returns
+         None
+
         """
         self.db_client = db_client
     
@@ -56,7 +59,7 @@ class DfSetData():
         # Args
          * ingestion_param (_Dict_) : intDataInfo or ingestion_param        
         ```
-        >>> ingestion_param = {
+         ingestion_param = {
                                 'start_time': '2021-09-05 00:00:00', 
                                 'end_time': '2021-09-11 00:00:00', 
                                 'feature_list': ['CO2', 'out_PM25'], 
@@ -112,7 +115,7 @@ class DfSetData():
         # Args
          * ingestion_param (_dict_) : ingestion_param 
         ```
-        >>> ingestion_param = {'bucket_name': 'air_indoor_modelSchool', 
+            ingestion_param = {'bucket_name': 'air_indoor_modelSchool', 
                             'data_org': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul']], 
                             'start_time': '2021-09-05 00:00:00', 
                             'end_time': '2021-09-11 00:00:00', 

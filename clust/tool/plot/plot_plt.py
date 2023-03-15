@@ -3,10 +3,14 @@ import matplotlib.pyplot as plt
 class PlotPlt():
     def plot_heatmap(self, data):
         """
-        plot heatmap plt
-        Args:
-            data (dataFrame): input data 
-        Returns:
+        # Description 
+         plot heatmap plt
+
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
             
         """
         import seaborn as sns    
@@ -22,22 +26,35 @@ class PlotPlt():
     #plot_features->plot_plt
     def plot_all_feature_line_chart(self, data):
         """
+        # Description 
         This function plots all column data by index. graphs are lines.
-        Args:
-            data (dataFrame): input dataframe
+        
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
+
         """
         plot_cols = data.columns
         plot_features = data[plot_cols]
         _ = plot_features.plot(subplots=True)
+
         plt.legend()
         
         return plt
 
     def plot_bar_chart(self, data):
         """
-        This function plots bar chart
-        Args:
-            data (dataFrame): input dataframe
+        # Description 
+         This function plots bar chart
+        
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
+
         """
         plt.figure()
         data.plot.bar(subplots=True)
@@ -45,31 +62,52 @@ class PlotPlt():
         return plt
     
     def plot_scatter(self, data):
-        """This function plots scatter chart with only the front two columns
-        
-         
-    
-        Args:
-            data (dataframe): Input data
+        """
+        # Description 
+         This function plots scatter chart with only the front two columns
+               
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
 
         """
         plt.figure()
         data.plot.scatter(x=data.columns[0], y=data.columns[1], c='DarkBlue')
+
         return plt
     
     def plot_box_plot(self, data):
-        """This function plots scatter chart
+        """
+        # Description 
+         This function plots scatter chart
     
-        Args:
-            data (dataframe): Input data
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
 
         """
         plt.figure()
         data.boxplot()
+
         return plt
         
         
 def get_img_result(graph_type, df):
+    """ 
+    # Description         
+     graph_type에 따라 plt을 생성하여 리턴함.
+
+    # Args
+     * graph_type(_str_) = [ heat_map | line chart | bar chart ]
+      
+    # Returns      
+     * df(_pandas.dataFrame_) 
+            
+    """
     # TODO plt인 경우 바깥, 안에서 무분별하게 param을 설정하는 경우가 많은데. .이부분을 공부해서 어떻게 해야 원하는 사이즈로 이미지를 뽑을 수 있는지
     # # 그렇게 하려면 외부 변수를 어떤 식으로 받아들여야 하는지 정리 필요함
     pp = PlotPlt()

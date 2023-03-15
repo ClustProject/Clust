@@ -9,9 +9,20 @@ sys.path.append("../../")
 from Clust.clust.tool.plot import plot_plt
     
 def get_img_result(graph_type, df):
+    """ 
+    # Description    
+     graph_type에 따라 생성한 plt이미지를 byte string으로 변환하여 리턴함.    
+
+    # Args
+     * graph_type(_str_) = [ heat_map | line chart | bar chart ]
+
+    # Returns
+     * df(_pandas.dataFrame_)        
+            
+    """
     #TODO 명확히 정의할 것 프로그램이 independent 하도록
     
-    plt_ = plot_plt.img_graph_by_graph_type(graph_type, df)
+    plt_ = plot_plt.get_img_result(graph_type, df)
     my_stringIObytes = io.BytesIO()
 
     plt_.savefig(my_stringIObytes, format='jpg')
