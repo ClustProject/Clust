@@ -69,7 +69,7 @@ class PlotPlt():
         return plt
         
         
-def img_graph_by_graph_type(graph_type, df):
+def get_img_result(graph_type, df):
     # TODO plt인 경우 바깥, 안에서 무분별하게 param을 설정하는 경우가 많은데. .이부분을 공부해서 어떻게 해야 원하는 사이즈로 이미지를 뽑을 수 있는지
     # # 그렇게 하려면 외부 변수를 어떤 식으로 받아들여야 하는지 정리 필요함
     pp = PlotPlt()

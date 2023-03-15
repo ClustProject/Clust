@@ -54,58 +54,25 @@ def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'l
     return data
 
 def split_data_by_working(data_input, workingtime_criteria={'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
+    """
+    Split the data by working/notworking.
+
+    Args:
+        data (dataframe): Time series data
+        workingtime_criteria (dictionary) : Working time criteria information
+        
+    Example:
+        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
+
+    Returns:
+        dictionary: Return value composed of dataframes divided according to each label of working and notworking.
+    """
+    # Get data with working feature
+    data = get_working_feature(data_input, workingtime_criteria)
+    # Split Data by Working time
+    split_data_by_working = {}
+    split_data_by_working["working"] = data["working" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
+    split_data_by_working["notworking"] = data["notworking" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
     
-    def _split_data_by_workingtime_from_dataframe(data, workingtime_criteria ):
-        """
-        Split the data by working/notworking.
-
-        Args:
-            data (dataframe): Time series data
-            workingtime_criteria (dictionary) : Working time criteria information
-            
-        Example:
-            >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
-
-        Returns:
-            dictionary: Return value composed of dataframes divided according to each label of working and notworking.
-        """
-        # Get data with working feature
-        data = get_working_feature(data, workingtime_criteria)
-        
-        # Split Data by Working time
-        split_data_by_working = {}
-        split_data_by_working["working"] = data["working" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
-        split_data_by_working["notworking"] = data["notworking" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
-        
-        return split_data_by_working
-        
-    def _split_data_by_workingtime_from_dataset(dataset, workingtime_criteria):
-        """
-        Split Data Set by working/notworking.
-
-        Args:
-            dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
-            workingtime_criteria (dictionary) : Working time criteria information
-            
-        Example:
-            >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
-        
-        Returns:
-            dictionary: Return value has measurements as keys and split result as values. 
-                        split result composed of dataframes divided according to each label of working and notworking.
-        """
-        split_dataset_by_working = {}
-        for ms_name in dataset:
-            data = dataset[ms_name]
-            if not(data.empty):
-                split_data_by_working_dict = _split_data_by_workingtime_from_dataframe(data, workingtime_criteria)
-                split_dataset_by_working[ms_name] = split_data_by_working_dict
-
-        return split_dataset_by_working
+    return split_data_by_working
     
-    if isinstance(data_input, dict):
-        result = _split_data_by_workingtime_from_dataset(data_input, workingtime_criteria)
-    elif isinstance(data_input, pd.DataFrame):
-        result = _split_data_by_workingtime_from_dataframe(data_input, workingtime_criteria)
-        
-    return result

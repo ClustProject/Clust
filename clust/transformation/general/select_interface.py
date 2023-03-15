@@ -58,23 +58,17 @@ def split_data_from_dataframe(split_type, data, split_param):
                     split result composed of dataframes divided according to each condition
     """
     
-    if split_type=='holiday':
-        from Clust.clust.transformation.splitDataByCondition import holiday
-        result = holiday.split_data_by_holiday(data_input)
-    elif split_type =='working':
-        # split_param = {'workingtime_criteria': {'step': [0, 8, 18, 24], 'label': ['notworking', 'working', 'notworking']}}
-        from Clust.clust.transformation.splitDataByCondition import working
-        workingtime_criteria = split_param['workingtime_criteria']
-        result = working.split_data_by_working(data, workingtime_criteria)
-    elif split_type =='timestep':
-        from Clust.clust.transformation.splitDataByCondition import timeStep
-        result = timeStep.split_data_by_timestep(data, split_param)
-    elif split_type =='cycle':
-        # split_param = {'feature_cycle': 'Day', 'feature_cycle_times': 1}
-        from Clust.clust.transformation.splitDataByCycle import dataByCycle
-        feature_cycle = split_param['feature_cycle']
-        feature_cycle_times = split_param['feature_cycle_times']
-        result = dataByCycle.getCycleSelectDataSet(data, feature_cycle, feature_cycle_times)
+    if split_type =='keyword':
+        keyword = split_param['keyword']
+        result = select_only_specific_pair_inucluding_keyword(data, keyword)
+    return result
+
+def select_only_specific_pair_inucluding_keyword(data_dict, keyword):
+    old_keys = list(set(data_dict.keys()))
+    new_keys = [e for e in old_keys if '/working' in e]
+
+    result = dict((k, data_dict[k]) for k in new_keys if k in data_dict)
+    
     return result
 
 

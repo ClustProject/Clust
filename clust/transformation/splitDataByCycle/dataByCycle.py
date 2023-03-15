@@ -40,11 +40,12 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
 
         
 def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, frequency=None):
+
     """
     get Cycle Data Set
 
     Args:
-        data_input (dataframe or dictionary): query_data
+        data (dataframe ): query_data
         feature_cycle (string): feature_cycle
         feature_cycle_times (int): feature_cycle_times
         frequency (int): frequency (option)
@@ -52,43 +53,12 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
     Returns:
         Dictionary: Cycle DataSet, or None
     """
-    
-    def _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency):
-        """
-        get Cycle Data Set
-
-        Args:
-            data (dataframe ): query_data
-            feature_cycle (string): feature_cycle
-            feature_cycle_times (int): feature_cycle_times
-            frequency (int): frequency (option)
-        
-        Returns:
-            Dictionary: Cycle DataSet, or None
-        """
-        data_list = getCycleselectDataFrame(data, feature_cycle, feature_cycle_times, frequency)
-        if data_list:
-            dataSet = {}
-            for data_slice in data_list:
-                index_name = data_slice.index[0].strftime('%Y-%m-%d %H:%M:%S')
-                dataSet[index_name] = data_slice
-        else:
-            dataSet = None
-
-        return dataSet
-
-    if isinstance(data_input, dict):
-        # if data is dictionary
-        result={}
-        for data_name in data_input:
-            data = data_input[data_name]
-            split_data = _getCycleSelectDataSet_oneDF(data, feature_cycle, feature_cycle_times, frequency)
-            if split_data:
-                result.update(dict((data_name+"/"+key, value) for key, value in split_data.items()))
-        
-    elif isinstance(data_input, pd.DataFrame):
-        # if data is dataframe
-        result = _getCycleSelectDataSet_oneDF(data_input, feature_cycle, feature_cycle_times, frequency)
+    result = {}
+    data_set = getCycleselectDataFrame(data_input, feature_cycle, feature_cycle_times, frequency)
+    if data_set:
+        for data in data_set:
+            index_name = data.index[0].strftime('%Y-%m-%d %H:%M:%S')
+            result[index_name] = data
 
     return result
 

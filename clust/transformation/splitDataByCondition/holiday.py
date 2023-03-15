@@ -33,65 +33,23 @@ def add_holiday_feature(data):
 
     return data
 
-def split_data_by_holiday(data_input):
+def split_data_by_holiday_from_dataframe(data):
     """
     Split the data by holiday/non-holiday.
 
     Args:
-        input (dataframe, dictionary): input data
+        data (dataframe): Time series data
 
     Returns:
         dictionary: Return value composed of dataframes divided according to each label of holiday and notholiday.
     """
-       
-    def _split_data_by_holiday_from_dataframe(data):
-        """
-        Split the data by holiday/non-holiday.
-
-        Args:
-            data (dataframe): Time series data
-
-        Returns:
-            dictionary: Return value composed of dataframes divided according to each label of holiday and notholiday.
-        """
-        # Get data with holiday feature
-        data = add_holiday_feature(data)
-        
-        # Split Data by Holiday
-        split_data_by_holiday = {}
-        split_data_by_holiday["holiday"] = data["holiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
-        split_data_by_holiday["notholiday"] = data["notholiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
-        
-        return split_data_by_holiday
-
-    def _split_data_by_holiday_from_dataset(dataset):
-        """
-        Split Data Set by holiday/non-holiday.
-
-        Args:
-            dataset (Dictionary): dataSet, dictionary of dataframe (ms data). A dataset has measurements as keys and dataframes(Timeseries data) as values.
-        
-        Returns:
-            dictionary: Return value has measurements as keys and split result as values. 
-                        split result composed of dataframes divided according to each label of holiday and notholiday.
-        """
-        split_dataset_by_holiday = {}
-        for data_name in dataset:
-            data = dataset[data_name]
-            if not(data.empty):
-                split_data_by_holiday_dict = _split_data_by_holiday_from_dataframe(data)
-                for condition_name in split_data_by_holiday_dict:
-                    split_dataset_by_holiday[data_name + "/" + condition_name] = split_data_by_holiday_dict[condition_name]
-                #split_dataset_by_holiday[data_name] = split_data_by_holiday_dict
-
-        return split_dataset_by_holiday
-
+    # Get data with holiday feature
+    data = add_holiday_feature(data)
     
-    if isinstance(data_input, dict):
-        result = _split_data_by_holiday_from_dataset(data_input)
-    elif isinstance(data_input, pd.DataFrame):
-        result = _split_data_by_holiday_from_dataframe(data_input)
+    # Split Data by Holiday
+    split_data_by_holiday = {}
+    split_data_by_holiday["holiday"] = data["holiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
+    split_data_by_holiday["notholiday"] = data["notholiday" == data["Holiday"]].drop(["Day", "Holiday"], axis=1)
     
-    return result
-        
- 
+    return split_data_by_holiday
+
