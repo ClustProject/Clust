@@ -51,7 +51,7 @@ class ClustAdaRnn():
         self.model = AdaRNN(
             use_bottleneck=True, 
             bottleneck_width=64, 
-            n_input=self.param["d_feat"], 
+            n_input=self.param["x_features"], 
             n_hiddens=n_hiddens,  
             n_output=self.param["class_num"], 
             dropout=self.param["dropout"], 
@@ -134,6 +134,7 @@ class ClustAdaRnn():
             weight_mat = torch.ones(args["num_layers"], args["len_seq"]).cuda()
             for i in range(args["num_layers"]):
                 for j in range(args["len_seq"]):
+                    #local variable 'out_weight_list' referenced before assignment
                     weight_mat[i, j] = out_weight_list[i][j].item()
             return loss, loss_l1, weight_mat, None
 
