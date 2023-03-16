@@ -37,7 +37,6 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequ
 
     # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
     #필수적인 오류 데이터에 대해서 NaN 처리함
-    from Clust.clust.preprocessing.dataPreprocessing import DataProcessing
     CertainParam= {'flag': True, 'data_min_max_limit':min_max}
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
     outlier_param ={
@@ -47,8 +46,11 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequ
     imputation_param = {"flag":False}
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
-    partialP = DataProcessing(process_param)
-    dataSet_pre = partialP.multiDataset_all_preprocessing(dataSet)
+    from Clust.clust.preprocessing import processing_interface
+    multiple_dataset = processing_interface.get_data_result('all', process_param, dataSet)
+        
+    
+    
 
     return dataSet_pre
 
@@ -85,7 +87,8 @@ def preprocessing_basic_for_clust_oneData(data, mongo_client, db_name, timedelta
     imputation_param = {"flag":False}
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
-    partialP = DataProcessing(process_param)
-    result = partialP.all_preprocessing(data)
+    from Clust.clust.preprocessing import processing_interface
+    multiple_dataset = processing_interface.get_data_result('all', process_param, data)
+    
 
     return result

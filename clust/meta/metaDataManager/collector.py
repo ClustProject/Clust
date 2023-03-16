@@ -3,7 +3,6 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
-from Clust.clust.preprocessing import dataPreprocessing
 from Clust.clust.meta.metaDataManager import wizMongoDbApi as wiz
 # packcage : InputSourceController
 # class : Collector
@@ -121,9 +120,9 @@ class ReadData():
         end_time = influx_instance.get_last_time(bucket_name, measurement_name)
         data_nopreprocessing = influx_instance.get_data_by_days(end_time, days, bucket_name, measurement_name)
         # preprocessing
-        partialP = dataPreprocessing.DataProcessing(self.process_param)
-        dataframe = partialP.all_preprocessing(data_nopreprocessing)["imputed_data"]
-
+        from Clust.clust.preprocessing import processing_interface
+        multiple_dataset = processing_interface.get_data_result('all', self.process_param, multiple_dataset)
+        
         return dataframe
     
     def get_ms_data(self, bucket_name, measurement_name, influx_instance):
@@ -145,8 +144,8 @@ class ReadData():
         """
         data_nopreprocessing = influx_instance.get_data(bucket_name, measurement_name)
         # preprocessing
-        partialP = dataPreprocessing.DataProcessing(self.process_param)
-        dataframe = partialP.all_preprocessing(data_nopreprocessing)["imputed_data"]
+        from Clust.clust.preprocessing import processing_interface
+        multiple_dataset = processing_interface.get_data_result('all', processing_param, multiple_dataset)
 
         return dataframe
     

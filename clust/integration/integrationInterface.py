@@ -127,10 +127,9 @@ class IntegrationInterface():
             process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
 
         ## Preprocessing
-        partialP = dataPreprocessing.DataProcessing(process_param)        
-        print("===processingStart===")
-        multiple_dataset = partialP.multiDataset_all_preprocessing(multiple_dataset)
-        print("===processingEnd===")
+        from Clust.clust.preprocessing import processing_interface
+        multiple_dataset = processing_interface.get_data_result('all', processing_param, multiple_dataset)
+        
        
         ## Integration
         imputed_datas = {}
