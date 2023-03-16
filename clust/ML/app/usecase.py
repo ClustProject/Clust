@@ -36,7 +36,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     """
     # 1. preprocessing for oneDF
     from Clust.clust.preprocessing.custom import simple
-    dataSet_pre = simple.preprocessing_basic_for_clust_multiDataSet(data_set, min_max, timedelta_frequency_min)
+    dataSet_pre = simple.preprocessing_basic_for_clust(data_set, min_max, timedelta_frequency_min)
 
     # 2. one DF preparation
     from Clust.clust.transformation.general import dataframe

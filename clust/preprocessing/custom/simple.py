@@ -21,7 +21,7 @@ def preprocessing_smoothing_scaling(data, ewm_parameter=0.3):
     return data
     
 
-def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequency_sec):
+def preprocessing_basic_for_clust(dataSet, min_max, timedelta_frequency_sec):
     """
         simple preprocessing with multiple dataset
         Output multiple data (value of dataSet) -> same length, same description frequency, no certain error
@@ -35,7 +35,7 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequ
 
     """
 
-    # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
+
     #필수적인 오류 데이터에 대해서 NaN 처리함
     CertainParam= {'flag': True, 'data_min_max_limit':min_max}
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
@@ -47,48 +47,6 @@ def preprocessing_basic_for_clust_multiDataSet(dataSet, min_max, timedelta_frequ
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
     from Clust.clust.preprocessing import processing_interface
-    multiple_dataset = processing_interface.get_data_result('all', process_param, dataSet)
+    multiple_dataset = processing_interface.get_data_result('all', dataSet , process_param)
         
-    
-    
-
     return dataSet_pre
-
-def preprocessing_basic_for_clust_oneData(data, mongo_client, db_name, timedelta_frequency_sec):
-    """
-        simple preprocessing with multiple dataset
-    Args:
-        data (DataFrame) : original
-        mongo_client (mongo instance): instance of meta
-        db_name (string): db_name of data
-        timedelta_frequency_sec (timedelta): frequency information
-        dataSet (dictionary consisting of multiple dataFrame): original
-
-    Returns:
-        dataSet_pre (dictionary consisting of multiple dataFrame): preprocessed dataSet
-
-    """
-    # dataSet 형태기 때문에 dataSet형태의 전처리가 필요함
-
-    from Clust.clust.meta.metaDataManager import bucketMeta
-    
-    #db에서 가져온 데이터로 만든 민맥스
-    
-    min_max_from_db = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client, db_name)
-
-    #필수적인 오류 데이터에 대해서 NaN 처리함
-    from Clust.clust.preprocessing.dataPreprocessing import DataProcessing
-    CertainParam= {'flag': True, 'data_min_max_limit':min_max_from_db}
-    refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
-    outlier_param ={
-        "certainErrorToNaN":CertainParam, 
-        "unCertainErrorToNaN":{'flag': False}
-    }
-    imputation_param = {"flag":False}
-    process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
-
-    from Clust.clust.preprocessing import processing_interface
-    multiple_dataset = processing_interface.get_data_result('all', process_param, data)
-    
-
-    return result

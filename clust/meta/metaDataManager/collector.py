@@ -121,7 +121,7 @@ class ReadData():
         data_nopreprocessing = influx_instance.get_data_by_days(end_time, days, bucket_name, measurement_name)
         # preprocessing
         from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('all', self.process_param, multiple_dataset)
+        multiple_dataset = processing_interface.get_data_result('all', multiple_dataset, self.process_param)
         
         return dataframe
     
@@ -145,7 +145,7 @@ class ReadData():
         data_nopreprocessing = influx_instance.get_data(bucket_name, measurement_name)
         # preprocessing
         from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('all', processing_param, multiple_dataset)
+        multiple_dataset = processing_interface.get_data_result('all', multiple_dataset, processing_param)
 
         return dataframe
     

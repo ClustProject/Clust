@@ -11,7 +11,7 @@ from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
 import pandas as pd
 
     
-def get_data_result(processing_type, processing_param, data_input):
+def get_data_result(processing_type, data_input, processing_param=None):
     """ 
     # Description       
      
