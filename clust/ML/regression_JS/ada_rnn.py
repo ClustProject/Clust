@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from tqdm import tqdm
 
-from Clust.clust.ML.regression_JS.base.loss_transfer import TransferLoss
-from Clust.clust.ML.regression_JS.base.AdaRNN import AdaRNN
+from Clust.clust.ML.regression_JS.models.loss_transfer import TransferLoss
+from Clust.clust.ML.regression_JS.models.AdaRNN import AdaRNN
 
 import torch.nn as nn
 import torch
@@ -55,16 +55,172 @@ class ClustAdaRnn():
             n_hiddens=n_hiddens,  
             n_output=self.param["class_num"], 
             dropout=self.param["dropout"], 
-            model_type="AdaRNN",  # 나중에는 삭제해야함 -> AdaRNN 함수에서 Boosting 관련 삭제 후에 진행하기
             len_seq=self.param["len_seq"], 
             trans_loss=self.dis_type).cuda()
         
     def _pprint(self, *text):
         time = '['+str(datetime.datetime.utcnow() +datetime.timedelta(hours=8))[:19]+'] -'
         print(time, *text, flush=True)
+
+    def train_AdaRNN(self, args, model, optimizer, train_loader_list, epoch, dist_old=None, weight_mat=None):
+        model.train()
+        criterion = nn.MSELoss()
+        criterion_1 = nn.L1Loss()
+        loss_all = []
+        loss_1_all = []
+        dist_mat = torch.zeros(args["num_layers"], args["len_seq"]).cuda()
+        len_loader = np.inf
+        for loader in train_loader_list:
+            if len(loader) < len_loader:
+                len_loader = len(loader)
+        for data_all in tqdm(zip(*train_loader_list), total=len_loader):
+            optimizer.zero_grad()
+            list_feat = []
+            list_label = []
+            for data in data_all:
+                feature, label_reg = data[0].cuda().float(), data[1].cuda().float()
+                list_feat.append(feature)
+                list_label.append(label_reg)
+            flag = False
+            index = []
+            num_domain = len(data_all) - 1
+            for i in range(num_domain):
+                 for j in range(i+1, num_domain+1):
+                      index.append((i,j))
+
+            for temp_index in index:
+                s1 = temp_index[0]
+                s2 = temp_index[1]
+                if list_feat[s1].shape[0] != list_feat[s2].shape[0]:
+                    flag = True
+                    break
+            if flag:
+                continue
+
+            total_loss = torch.zeros(1).cuda()
+            for i in range(len(index)):
+                feature_s = list_feat[index[i][0]]
+                feature_t = list_feat[index[i][1]]
+                label_reg_s = list_label[index[i][0]]
+                label_reg_t = list_label[index[i][1]]
+                feature_all = torch.cat((feature_s, feature_t), 0)
+
+                if epoch < args["pre_epoch"]:
+                    pred_all, loss_transfer, out_weight_list = model.forward_pre_train(feature_all, len_win=args["len_win"])
+                else:
+                    pred_all, loss_transfer, dist, weight_mat = model.forward_Boosting(feature_all, weight_mat)
+                    dist_mat = dist_mat + dist
+                pred_s = pred_all[0:feature_s.size(0)]
+                pred_t = pred_all[feature_s.size(0):]
+
+                loss_s = criterion(pred_s, label_reg_s)
+                loss_t = criterion(pred_t, label_reg_t)
+                loss_l1 = criterion_1(pred_s, label_reg_s)
+
+                total_loss = total_loss + loss_s + loss_t + args["dw"] * loss_transfer
+            loss_all.append([total_loss.item(), (loss_s + loss_t).item(), loss_transfer.item()])
+            loss_1_all.append(loss_l1.item())
+            optimizer.zero_grad()
+            total_loss.backward()
+            torch.nn.utils.clip_grad_value_(model.parameters(), 3.)
+            optimizer.step()
+        loss = np.array(loss_all).mean(axis=0)
+        loss_l1 = np.array(loss_1_all).mean()
+        if epoch >= args["pre_epoch"]:
+            if epoch > args["pre_epoch"]:
+                weight_mat = model.update_weight_Boosting(weight_mat, dist_old, dist_mat)
+            return loss, loss_l1, weight_mat, dist_mat
+        else:
+            weight_mat = torch.ones(args["num_layers"], args["len_seq"]).cuda()
+            for i in range(args["num_layers"]):
+                for j in range(args["len_seq"]):
+                    weight_mat[i, j] = out_weight_list[i][j].item()
+            return loss, loss_l1, weight_mat, None
+
+    def _get_evaluation_loss(self, test_loader, prefix='Test'):
+        total_loss = 0
+        total_loss_1 = 0
+        total_loss_r = 0
+        
+        criterion = nn.MSELoss()
+        criterion_1 = nn.L1Loss()
+        for loader_x, loader_y in tqdm(test_loader, desc=prefix, total=len(test_loader)):
+            loader_x, loader_y = loader_x.cuda().float(), loader_y.cuda().float()
+            with torch.no_grad():
+                pred = self.model.predict(loader_x)
+            loss = criterion(pred, loader_y)
+            loss_r = torch.sqrt(loss)
+            loss_1 = criterion_1(pred, loader_y)
+            total_loss += loss.item()
+            total_loss_1 += loss_1.item()
+            total_loss_r += loss_r.item()
+        loss = total_loss / len(test_loader)
+        loss_1 = total_loss_1 / len(test_loader)
+        loss_r = loss_r / len(test_loader)
+        return loss, loss_1, loss_r
+
+    def train(self, train_loader_list, valid_loader, args):
+        if not os.path.exists(args["output_folder_name"]):
+            os.makedirs(args["output_folder_name"])
+
+        save_model_path = os.path.join(args["output_folder_name"], args["save_model_name"])
+
+        self._pprint('create model...')
+
+        optimizer = optim.Adam(self.model.parameters(), lr=args["lr"])
     
+        best_score = np.inf
+        best_epoch, stop_round = 0, 0
+        weight_mat, dist_mat = None, None
+
+        for epoch in range(args["n_epochs"]):
+            self._pprint('Epoch:', epoch)
+            self._pprint('training...')
+            loss, lossl1, weight_mat, dist_mat = self.train_AdaRNN(args, self.model, optimizer, train_loader_list, epoch, dist_mat, weight_mat)
+
+            self._pprint('evaluating...')
+            self.model.eval()
+            val_mse_loss, val_loss_l1, val_loss_r = self._get_evaluation_loss(valid_loader, prefix='Valid')
+            self._pprint('train %.6f, valid MSE Loss %.6f, valid L1 Loss %.6f' %(lossl1, val_mse_loss, val_loss_l1))
+
+            if val_mse_loss < best_score:
+                best_score = val_mse_loss
+                stop_round = 0
+                best_epoch = epoch
+                self.save_model(save_model_path)
+            else:
+                stop_round += 1
+                if stop_round >= args["early_stop"]:
+                    self._pprint('early stop')
+                    break
+
+        self._pprint('best val mse loss score:', best_score, '@', best_epoch)
+        self._pprint('Finished.')
+
+    def test(self, test_loader):
+        self.model.eval()
+        test_loss, test_loss_l1, test_loss_r = self._get_evaluation_loss(test_loader, prefix='Test')
+
+        self._pprint('Finished.')
+        
+        return test_loss, test_loss_l1, test_loss_r
+    
+    def inference(self, inference_loader):
+        self._pprint('inference...')
+
+        self.model.eval()
+        i = 0
+        for inference_data in inference_loader:
+            inference_data = inference_data.cuda().float()
+            with torch.no_grad():
+                pred = self.model.predict(inference_data)
+            predict_list = pred.cpu().numpy()
+
+        self._pprint('Finished.')
+        return predict_list
+
     def create_trainloader(self, train_x, train_y, valid_x, valid_y, k, train_x_start_time, train_x_end_time, shuffle = True):
-        split_timelist_by_tdc = self._TDC(k, train_x, train_x_start_time, train_x_end_time, self.dis_type)
+        split_timelist_by_tdc = self._tdc(k, train_x, train_x_start_time, train_x_end_time, self.dis_type)
 
         train_loader_list = []
         for i in range(len(split_timelist_by_tdc)):
@@ -88,11 +244,11 @@ class ClustAdaRnn():
             data_y=data_y[index_start: index_end + 1]
         
         dataset = data_loader(data_x, data_y)
-        train_loader=DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+        dataload=DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
-        return train_loader
+        return dataload
 
-    def _TDC(self, k, data_x, start_time, end_time, dis_type = 'coral'):
+    def _tdc(self, k, data_x, start_time, end_time, dis_type = 'coral'):
         start_time = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S') # 추후 csv 데이터로 time 읽어온 파라미터 타입 확인 후 삭제할지 말지 결정
         end_time = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
         num_day = (end_time - start_time).days
@@ -143,224 +299,19 @@ class ClustAdaRnn():
         else:
             print("error in number of domain")
 
-    def train_AdaRNN(self, args, model, optimizer, train_loader_list, epoch, dist_old=None, weight_mat=None):
-        model.train()
-        criterion = nn.MSELoss()
-        criterion_1 = nn.L1Loss()
-        loss_all = []
-        loss_1_all = []
-        dist_mat = torch.zeros(args["num_layers"], args["len_seq"]).cuda()
-        len_loader = np.inf
-        for loader in train_loader_list:
-            if len(loader) < len_loader:
-                len_loader = len(loader)
-        for data_all in tqdm(zip(*train_loader_list), total=len_loader):
-            optimizer.zero_grad()
-            list_feat = []
-            list_label = []
-            for data in data_all:
-                feature, label_reg = data[0].cuda().float(), data[1].cuda().float()
-                list_feat.append(feature)
-                list_label.append(label_reg)
-            flag = False
-            #index = self._get_index(len(data_all) - 1)
-            index = []
-            num_domain = len(data_all) - 1
-            for i in range(num_domain):
-                 for j in range(i+1, num_domain+1):
-                      index.append((i,j))
+    def create_testloader(self, test_x, test_y, shuffle):
+        test_loader = self._get_dataloader(test_x, test_y, self.batch_size, shuffle)
+        return test_loader
 
-            for temp_index in index:
-                s1 = temp_index[0]
-                s2 = temp_index[1]
-                if list_feat[s1].shape[0] != list_feat[s2].shape[0]:
-                    flag = True
-                    break
-            if flag:
-                continue
+    def create_inferenceloader(self, inference_x, shuffle=True):
+        inference_x = torch.tensor(inference_x, dtype=torch.float32)
+        inference_loader = DataLoader(inference_x, batch_size=self.batch_size, shuffle=shuffle)
+        return inference_loader
 
-            total_loss = torch.zeros(1).cuda()
-            for i in range(len(index)):
-                feature_s = list_feat[index[i][0]]
-                feature_t = list_feat[index[i][1]]
-                label_reg_s = list_label[index[i][0]]
-                label_reg_t = list_label[index[i][1]]
-                feature_all = torch.cat((feature_s, feature_t), 0)
+    def save_model(self, save_model_path):
+        torch.save(self.model.state_dict(), save_model_path)
 
-                if epoch < args["pre_epoch"]:
-                    pred_all, loss_transfer, out_weight_list = model.forward_pre_train(feature_all, len_win=args["len_win"])
-                else:
-                    pred_all, loss_transfer, dist, weight_mat = model.forward_Boosting(feature_all, weight_mat)
-                    dist_mat = dist_mat + dist
-                pred_s = pred_all[0:feature_s.size(0)]
-                pred_t = pred_all[feature_s.size(0):]
+    def load_model(self, model_file_path):
+        self.model.load_state_dict(torch.load(model_file_path))
 
-                loss_s = criterion(pred_s, label_reg_s)
-                loss_t = criterion(pred_t, label_reg_t)
-                loss_l1 = criterion_1(pred_s, label_reg_s)
 
-                total_loss = total_loss + loss_s + loss_t + args["dw"] * loss_transfer
-            loss_all.append([total_loss.item(), (loss_s + loss_t).item(), loss_transfer.item()])
-            loss_1_all.append(loss_l1.item())
-            optimizer.zero_grad()
-            total_loss.backward()
-            torch.nn.utils.clip_grad_value_(model.parameters(), 3.)
-            optimizer.step()
-        loss = np.array(loss_all).mean(axis=0)
-        loss_l1 = np.array(loss_1_all).mean()
-        if epoch >= args["pre_epoch"]:
-            if epoch > args["pre_epoch"]:
-                weight_mat = model.update_weight_Boosting(weight_mat, dist_old, dist_mat)
-            return loss, loss_l1, weight_mat, dist_mat
-        else:
-           #weight_mat = self._transform_type(out_weight_list, args)
-            weight_mat = torch.ones(args["num_layers"], args["len_seq"]).cuda()
-            for i in range(args["num_layers"]):
-                for j in range(args["len_seq"]):
-                    weight_mat[i, j] = out_weight_list[i][j].item()
-            return loss, loss_l1, weight_mat, None
-
-    # def _get_index(self, num_domain=2):
-    #     index = []
-    #     for i in range(num_domain):
-    #         for j in range(i+1, num_domain+1):
-    #             index.append((i, j))
-    #     return index
-
-    def _get_evaluation_loss(self, model, test_loader, prefix='Test'):
-        model.eval()
-        total_loss = 0
-        total_loss_1 = 0
-        total_loss_r = 0
-        correct = 0
-        criterion = nn.MSELoss()
-        criterion_1 = nn.L1Loss()
-        for loader_x, loader_y in tqdm(test_loader, desc=prefix, total=len(test_loader)):
-            loader_x, loader_y = loader_x.cuda().float(), loader_y.cuda().float()
-            with torch.no_grad():
-                pred = model.predict(loader_x)
-            loss = criterion(pred, loader_y)
-            loss_r = torch.sqrt(loss)
-            loss_1 = criterion_1(pred, loader_y)
-            total_loss += loss.item()
-            total_loss_1 += loss_1.item()
-            total_loss_r += loss_r.item()
-        loss = total_loss / len(test_loader)
-        loss_1 = total_loss_1 / len(test_loader)
-        loss_r = loss_r / len(test_loader)
-        return loss, loss_1, loss_r
-
-    def _test_epoch_inference(self, model, test_loader, prefix='Test'):
-        model.eval()
-        total_loss = 0
-        total_loss_1 = 0
-        total_loss_r = 0
-        correct = 0
-        criterion = nn.MSELoss()
-        criterion_1 = nn.L1Loss()
-        i = 0
-        for feature, label_reg in tqdm(test_loader, desc=prefix, total=len(test_loader)):
-            feature, label_reg = feature.cuda().float(), label_reg.cuda().float()
-            with torch.no_grad():
-                pred = model.predict(feature)
-            loss = criterion(pred, label_reg)
-            loss_r = torch.sqrt(loss)
-            loss_1 = criterion_1(pred, label_reg)
-            total_loss += loss.item()
-            total_loss_1 += loss_1.item()
-            total_loss_r += loss_r.item()
-            if i == 0:
-                label_list = label_reg.cpu().numpy()
-                predict_list = pred.cpu().numpy()
-            else:
-                label_list = np.hstack((label_list, label_reg.cpu().numpy()))
-                predict_list = np.hstack((predict_list, pred.cpu().numpy()))
-
-            i = i + 1
-        loss = total_loss / len(test_loader)
-        loss_1 = total_loss_1 / len(test_loader)
-        loss_r = total_loss_r / len(test_loader)
-        return loss, loss_1, loss_r, label_list, predict_list
-
-    def _inference(self, model, data_loader):
-        loss, loss_1, loss_r, label_list, predict_list = self._test_epoch_inference(model, data_loader, prefix='Inference')
-        return loss, loss_1, loss_r, label_list, predict_list
-
-    def inference_all(self, model, model_path, loaders):
-        self._pprint('inference...')
-        loss_list = []
-        loss_l1_list = []
-        loss_r_list = []
-        model.load_state_dict(torch.load(model_path))
-        i = 0
-        list_name = ['train', 'valid', 'test']
-        for loader in loaders:
-            loss, loss_1, loss_r, label_list, predict_list = self._inference(model, loader)
-            loss_list.append(loss)
-            loss_l1_list.append(loss_1)
-            loss_r_list.append(loss_r)
-            i = i + 1
-        return loss_list, loss_l1_list, loss_r_list
-
-    # def _transform_type(self, init_weight, args):
-    #     weight = torch.ones(args["num_layers"], args["len_seq"]).cuda()
-    #     for i in range(args["num_layers"]):
-    #         for j in range(args["len_seq"]):
-    #             weight[i, j] = init_weight[i][j].item()
-    #     return weight
-
-    def train(self, train_loader_list, valid_loader, args): # main_transfer -> train
-        if not os.path.exists(args["output_folder_name"]):
-            os.makedirs(args["output_folder_name"])
-
-        self._pprint('create model...')
-        model = self.model
-
-        optimizer = optim.Adam(model.parameters(), lr=args["lr"])
-    
-        best_score = np.inf
-        best_epoch, stop_round = 0, 0
-        weight_mat, dist_mat = None, None
-
-        for epoch in range(args["n_epochs"]):
-            self._pprint('Epoch:', epoch)
-            self._pprint('training...')
-            loss, lossl1, weight_mat, dist_mat = self.train_AdaRNN(args, model, optimizer, train_loader_list, epoch, dist_mat, weight_mat)
-
-            #self._pprint(loss, lossl1)
-            self._pprint('evaluating...')
-
-            # MSELoss
-            val_mse_loss, val_loss_l1, val_loss_r = self._get_evaluation_loss(model, valid_loader, prefix='Valid')
-            #test_loss, test_loss_l1, test_loss_r = self.test_epoch(model, test_loader, prefix='Test') # Train 파트에서는 분리
-
-#            self._pprint('valid %.6f, test %.6f' %(val_loss_l1, test_loss_l1))
-            
-            self._pprint('train %.6f, valid MSE Loss %.6f, valid L1  val_mse_loss, val_loss_lLoss %.6f' %(lossl1,1))
-
-            if val_mse_loss < best_score:
-                best_score = val_mse_loss
-                stop_round = 0
-                best_epoch = epoch
-                torch.save(model.state_dict(), os.path.join(args["output_folder_name"], args["save_model_name"]))
-            else:
-                stop_round += 1
-                if stop_round >= args["early_stop"]:
-                    self._pprint('early stop')
-                    break
-
-        self._pprint('best val score:', best_score, '@', best_epoch)
-        self._pprint('Finished.')
-        # test_epoch(_get_evaluation_loss) 와 inference_all에서 쓰이는 _test_epoch_inference 와 차이점은 pred을 하냐안하냐 정도의 차이일뿐
-        # inference all 은 pred 뽑을때 사용하기
-        # self._pprint('MSE: train %.6f, valid %.6f, test %.6f' %(loss_list[0], loss_list[1], loss_list[2]))
-        # self._pprint('L1:  train %.6f, valid %.6f, test %.6f' %(loss_l1_list[0], loss_l1_list[1], loss_l1_list[2]))
-        # self._pprint('RMSE: train %.6f, valid %.6f, test %.6f' %(loss_r_list[0], loss_r_list[1], loss_r_list[2]))
-        # self._pprint('Finished.')
-
-        # loaders = train_loader_list[0], valid_loader, test_loader
-        # loss_list, loss_l1_list, loss_r_list = self.inference_all(model, os.path.join(args["output_folder_name"], args["save_model_name"]), loaders)
-        # self._pprint('MSE: train %.6f, valid %.6f, test %.6f' %(loss_list[0], loss_list[1], loss_list[2]))
-        # self._pprint('L1:  train %.6f, valid %.6f, test %.6f' %(loss_l1_list[0], loss_l1_list[1], loss_l1_list[2]))
-        # self._pprint('RMSE: train %.6f, valid %.6f, test %.6f' %(loss_r_list[0], loss_r_list[1], loss_r_list[2]))
-        # self._pprint('Finished.')

@@ -2,21 +2,20 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from Clust.clust.ML.regression_JS.base.loss_transfer import TransferLoss
+from Clust.clust.ML.regression_JS.models.loss_transfer import TransferLoss
 
 class AdaRNN(nn.Module):
     """
-    model_type:  'Boosting', 'AdaRNN'
+    model_type:  'AdaRNN'
     """
 
-    def __init__(self, use_bottleneck=False, bottleneck_width=256, n_input=128, n_hiddens=[64, 64], n_output=6, dropout=0.0, len_seq=9, model_type='AdaRNN', trans_loss='mmd'):
+    def __init__(self, use_bottleneck=False, bottleneck_width=256, n_input=128, n_hiddens=[64, 64], n_output=6, dropout=0.0, len_seq=9, trans_loss='mmd'):
         super(AdaRNN, self).__init__()
         self.use_bottleneck = use_bottleneck
         self.n_input = n_input
         self.num_layers = len(n_hiddens)
         self.hiddens = n_hiddens
         self.n_output = n_output
-        self.model_type = model_type
         self.trans_loss = trans_loss
         self.len_seq = len_seq
         in_size = self.n_input
@@ -51,20 +50,18 @@ class AdaRNN(nn.Module):
         else:
             self.fc_out = nn.Linear(n_hiddens[-1], self.n_output)
 
-        if self.model_type == 'AdaRNN':
-            gate = nn.ModuleList()
-            for i in range(len(n_hiddens)):
-                gate_weight = nn.Linear(
-                    len_seq * self.hiddens[i]*2, len_seq)
-                gate.append(gate_weight)
-            self.gate = gate
+        gate = nn.ModuleList()
+        for i in range(len(n_hiddens)):
+            gate_weight = nn.Linear(len_seq * self.hiddens[i]*2, len_seq)
+            gate.append(gate_weight)
+        self.gate = gate
 
-            bnlst = nn.ModuleList()
-            for i in range(len(n_hiddens)):
-                bnlst.append(nn.BatchNorm1d(len_seq))
-            self.bn_lst = bnlst
-            self.softmax = torch.nn.Softmax(dim=0)
-            self.init_layers()
+        bnlst = nn.ModuleList()
+        for i in range(len(n_hiddens)):
+            bnlst.append(nn.BatchNorm1d(len_seq))
+        self.bn_lst = bnlst
+        self.softmax = torch.nn.Softmax(dim=0)
+        self.init_layers()
 
     def init_layers(self):
         for i in range(len(self.hiddens)):
@@ -84,30 +81,26 @@ class AdaRNN(nn.Module):
         out_list_s, out_list_t = self.get_features(out_list_all)
         loss_transfer = torch.zeros((1,)).cuda()
         for i in range(len(out_list_s)):
-            criterion_transder = TransferLoss(
-                loss_type=self.trans_loss, input_dim=out_list_s[i].shape[2])
+            criterion_transder = TransferLoss(loss_type=self.trans_loss, input_dim=out_list_s[i].shape[2])
             h_start = 0 
             for j in range(h_start, self.len_seq, 1):
                 i_start = j - len_win if j - len_win >= 0 else 0
                 i_end = j + len_win if j + len_win < self.len_seq else self.len_seq - 1
                 for k in range(i_start, i_end + 1):
-                    weight = out_weight_list[i][j] if self.model_type == 'AdaRNN' else 1 / (
-                        self.len_seq - h_start) * (2 * len_win + 1)
-                    loss_transfer = loss_transfer + weight * criterion_transder.compute(
-                        out_list_s[i][:, j, :], out_list_t[i][:, k, :])
+                    weight = out_weight_list[i][j] 
+                    loss_transfer = loss_transfer + weight * criterion_transder.compute(out_list_s[i][:, j, :], out_list_t[i][:, k, :])
         return fc_out, loss_transfer, out_weight_list
 
     def gru_features(self, x, predict=False):
         x_input = x
         out = None
         out_lis = []
-        out_weight_list = [] if (
-             self.model_type == 'AdaRNN') else None
+        out_weight_list = [] 
         for i in range(self.num_layers):
             out, _ = self.features[i](x_input.float())
             x_input = out
             out_lis.append(out)
-            if self.model_type == 'AdaRNN' and predict == False:
+            if predict == False:
                 out_gate = self.process_gate_weight(x_input, i)
                 out_weight_list.append(out_gate)
         return out, out_lis, out_weight_list
@@ -117,8 +110,7 @@ class AdaRNN(nn.Module):
         x_t = out[out.shape[0]//2: out.shape[0]]
         x_all = torch.cat((x_s, x_t), 2)
         x_all = x_all.view(x_all.shape[0], -1)
-        weight = torch.sigmoid(self.bn_lst[index](
-            self.gate[index](x_all.float())))
+        weight = torch.sigmoid(self.bn_lst[index](self.gate[index](x_all.float())))
         weight = torch.mean(weight, dim=0)
         res = self.softmax(weight).squeeze()
         return res
@@ -130,7 +122,7 @@ class AdaRNN(nn.Module):
             fea_list_tar.append(fea[fea.size(0) // 2:])
         return fea_list_src, fea_list_tar
 
-    # For Boosting-based
+    #For Boosting-based
     def forward_Boosting(self, x, weight_mat=None):
         out = self.gru_features(x)
         fea = out[0]
@@ -144,29 +136,25 @@ class AdaRNN(nn.Module):
         out_list_s, out_list_t = self.get_features(out_list_all)
         loss_transfer = torch.zeros((1,)).cuda()
         if weight_mat is None:
-            weight = (1.0 / self.len_seq *
-                      torch.ones(self.num_layers, self.len_seq)).cuda()
+            weight = (1.0 / self.len_seq * torch.ones(self.num_layers, self.len_seq)).cuda()
         else:
             weight = weight_mat
         dist_mat = torch.zeros(self.num_layers, self.len_seq).cuda()
         for i in range(len(out_list_s)):
-            criterion_transder = TransferLoss(
-                loss_type=self.trans_loss, input_dim=out_list_s[i].shape[2])
+            criterion_transder = TransferLoss(loss_type=self.trans_loss, input_dim=out_list_s[i].shape[2])
             for j in range(self.len_seq):
-                loss_trans = criterion_transder.compute(
-                    out_list_s[i][:, j, :], out_list_t[i][:, j, :])
+                loss_trans = criterion_transder.compute(out_list_s[i][:, j, :], out_list_t[i][:, j, :])
                 loss_transfer = loss_transfer + weight[i, j] * loss_trans
                 dist_mat[i, j] = loss_trans
         return fc_out, loss_transfer, dist_mat, weight
 
-    # For Boosting-based
+    # # For Boosting-based
     def update_weight_Boosting(self, weight_mat, dist_old, dist_new):
         epsilon = 1e-12
         dist_old = dist_old.detach()
         dist_new = dist_new.detach()
         ind = dist_new > dist_old + epsilon
-        weight_mat[ind] = weight_mat[ind] * \
-            (1 + torch.sigmoid(dist_new[ind] - dist_old[ind]))
+        weight_mat[ind] = weight_mat[ind] *(1 + torch.sigmoid(dist_new[ind] - dist_old[ind]))
         weight_norm = torch.norm(weight_mat, dim=1, p=1)
         weight_mat = weight_mat / weight_norm.t().unsqueeze(1).repeat(1, self.len_seq)
         return weight_mat
