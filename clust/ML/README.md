@@ -19,37 +19,58 @@
       └── util.py                   : ML 데이터/모델 이외 관련 공통 모듈
   └── common
       │   └── common
-      │       ├── p1_integratedDataSaving.py
-      │       ├── p2_dataSelection.py
-      │       ├── p3_training.py
-      │       └── p4_testing.py
-      ├── trainer.py            : train abstract class
-      ├── inference.py          : inference abstract class
-      ├── model_manager.py      : model save 관련 모듈
-      ├── model_info.py         : model 저장하기 위한 path function
-      └── model_path_setting.py : 각 model 별 path name 설정
+      │       └── p1_integratedDataSaving.py
   └── brits
       ├── brits_model.py    : brits model 관련 class, 모듈
       ├── brits_trainer.py  : brits train class
       ├── train.py          : brits training class
       └── inference.py      : brits inference class
   └── forecasting
-      ├── gru_forecasting.py        : GRU model forecasting train & Test & Inference class
-      ├── lstm_forecasting.py       : LSTM model forecasting train & Test & Inference class
-      ├── rnn_forecasting.py        : RNN model forecasting train & Test & Inference class
-      └── app.py                    : test & inference application
+      │   └── forecasting_model
+      │       ├── gru_model.py        : custom GUR model
+      │       ├── lstm_model.py       : custom LSTM model
+      │       └── rnn_model.py        : custom RNN model
+      │   └── models
+      │       ├── gru.py        : standard GUR model
+      │       ├── lstm.py       : standard LSTM model
+      │       └── rnn.py        : standard RNN model
+      ├── interface.py      : abstract class & method
+      ├── train.py          : train class
+      ├── test.py           : test class
+      ├── inference.py      : inference class
+      └── app.py            : test & inference application
   └── regression
-      ├── cnn_1d_regression.py      : 1D CNN model regression train & Test & Inference class
-      ├── fc_regression.py          : FC model regression inference class
-      ├── lstm_fcns_regression.py   : LSTM FCNs model regression inference class
-      ├── rnn_regression.py         : RNN model regression inference class
-      └── app.py                    : test & inference application
+      │   └── regression_model
+      │       ├── cnn_id_model.py       : custom CNN1D model
+      │       ├── fc_model.py           : custom FC model
+      │       ├── lstm_fcns_model.py    : custom LSTMFCNs model
+      │       └── rnn_model.py          : custom RNN model
+      │   └── models
+      │       ├── cnn_1d.py     : standard CNN1D model
+      │       ├── fc.py         : standard FC model
+      │       ├── lstm_fcns.py  : standard LSTMFCNs model
+      │       └── rnn.py        : standard RNN model
+      ├── interface.py      : abstract class & method
+      ├── train.py          : train class
+      ├── test.py           : test class
+      ├── inference.py      : inference class
+      └── app.py            : test & inference application
   └── classification
-      ├── cnn_1d_classification.py      : 1D CNN model classification train & Test & Inference class
-      ├── fc_classification.py          : FC model classification inference class
-      ├── lstm_fcns_classification.py   : LSTM FCNs model classification inference class
-      ├── rnn_classification.py         : RNN model classification inference class
-      └── app.py                        : test & inference application
+      │   └── classification_model
+      │       ├── cnn_id_model.py       : custom CNN1D model
+      │       ├── fc_model.py           : custom FC model
+      │       ├── lstm_fcns_model.py    : custom LSTMFCNs model
+      │       └── rnn_model.py          : custom RNN model
+      │   └── models
+      │       ├── cnn_1d.py     : standard CNN1D model
+      │       ├── fc.py         : standard FC model
+      │       ├── lstm_fcns.py  : standard LSTMFCNs model
+      │       └── rnn.py        : standard RNN model
+      ├── interface.py      : abstract class & method
+      ├── train.py          : train class
+      ├── test.py           : test class
+      ├── inference.py      : inference class
+      └── app.py            : test & inference application
 
 ```
 

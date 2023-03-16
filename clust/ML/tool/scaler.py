@@ -4,6 +4,7 @@ sys.path.append("../")
 sys.path.append("../../")
 sys.path.append("../../../")
 
+from Clust.clust.transformation.general.dataScaler import DataScaler
 
  # p4_testing
 def get_scaled_test_data(data, scaler_file_path, scaler_param):
@@ -66,7 +67,6 @@ def get_scaled_data(data, scaler, scaler_param):
 
 
 
-from Clust.clust.transformation.general.dataScaler import DataScaler
 # p3_training
 def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
     if scaler_param=='scale':
