@@ -33,7 +33,7 @@ def add_holiday_feature(data):
 
     return data
 
-def split_data_by_holiday_from_dataframe(data):
+def split_data_by_holiday(data):
     """
     Split the data by holiday/non-holiday.
 

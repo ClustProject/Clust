@@ -47,6 +47,6 @@ def preprocessing_basic_for_clust(dataSet, min_max, timedelta_frequency_sec):
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
     from Clust.clust.preprocessing import processing_interface
-    multiple_dataset = processing_interface.get_data_result('all', dataSet , process_param)
+    dataSet_pre = processing_interface.get_data_result('all', dataSet , process_param)
         
     return dataSet_pre
