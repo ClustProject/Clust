@@ -145,20 +145,27 @@ class ClustAdaRnn():
         
         criterion = nn.MSELoss()
         criterion_1 = nn.L1Loss()
+
+        pred_list = []
         for loader_x, loader_y in tqdm(test_loader, desc=prefix, total=len(test_loader)):
             loader_x, loader_y = loader_x.cuda().float(), loader_y.cuda().float()
             with torch.no_grad():
                 pred = self.model.predict(loader_x)
+            self.loader_x = loader_x ## 나중 삭제
+            self.loader_y = loader_y ## 나중 삭제
+            self.pred = pred ## 나중 삭제
+            pred_list.append(pred.cpu().numpy()) ## predict plot 그리기 위해 해놓은 거지만 나중에 삭제해도 됨.
             loss = criterion(pred, loader_y)
             loss_r = torch.sqrt(loss)
             loss_1 = criterion_1(pred, loader_y)
             total_loss += loss.item()
             total_loss_1 += loss_1.item()
             total_loss_r += loss_r.item()
+        self.pred_list = pred_list
         loss = total_loss / len(test_loader)
         loss_1 = total_loss_1 / len(test_loader)
         loss_r = loss_r / len(test_loader)
-        return loss, loss_1, loss_r
+        return loss, loss_1, loss_r, pred_list
 
     def train(self, train_loader_list, valid_loader, args):
         if not os.path.exists(args["output_folder_name"]):
@@ -181,7 +188,7 @@ class ClustAdaRnn():
 
             self._pprint('evaluating...')
             self.model.eval()
-            val_mse_loss, val_loss_l1, val_loss_r = self._get_evaluation_loss(valid_loader, prefix='Valid')
+            val_mse_loss, val_loss_l1, val_loss_r, pred_list = self._get_evaluation_loss(valid_loader, prefix='Valid')
             self._pprint('train %.6f, valid MSE Loss %.6f, valid L1 Loss %.6f' %(lossl1, val_mse_loss, val_loss_l1))
 
             if val_mse_loss < best_score:
@@ -200,11 +207,11 @@ class ClustAdaRnn():
 
     def test(self, test_loader):
         self.model.eval()
-        test_loss, test_loss_l1, test_loss_r = self._get_evaluation_loss(test_loader, prefix='Test')
+        test_loss, test_loss_l1, test_loss_r, pred_list = self._get_evaluation_loss(test_loader, prefix='Test')
 
         self._pprint('Finished.')
         
-        return test_loss, test_loss_l1, test_loss_r
+        return test_loss, test_loss_l1, test_loss_r, pred_list
     
     def inference(self, inference_loader):
         self._pprint('inference...')
@@ -213,6 +220,7 @@ class ClustAdaRnn():
         i = 0
         for inference_data in inference_loader:
             inference_data = inference_data.cuda().float()
+            self.inference_data= inference_data ## 나중 삭제
             with torch.no_grad():
                 pred = self.model.predict(inference_data)
             predict_list = pred.cpu().numpy()
