@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.metrics import mean_absolute_error, mean_squared_error 
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to_np, trans_df_to_np_inf
-from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
 from Clust.clust.ML.regression_YK.models.cnn_1d import CNN1D
@@ -215,7 +215,7 @@ class CNN1DClust(BaseRegressionModel):
         Args:
             save_path (string): path to save model
         """
-        model_manager.save_pickle_model(self.model, save_path)
+        ml_model.save_pickle_model(self.model, save_path)
 
     def load_model(self, model_file_path):
         """
@@ -224,7 +224,7 @@ class CNN1DClust(BaseRegressionModel):
         Args:
             model_file_path (string): path to load saved model
         """
-        self.model = model_manager.load_pickle_model(model_file_path)
+        self.model = ml_model.load_pickle_model(model_file_path)
 
     # move to utils?
     # for train data
