@@ -5,11 +5,11 @@ sys.path.append("../")
 sys.path.append("../../")
 
 from sklearn.metrics import classification_report
-from Clust.clust.ML.common import model_manager
-from Clust.clust.ML.common.common import p2_dataSelection as p2
-from Clust.clust.ML.common.common import p4_testing as p4
 from Clust.clust.ML.classification.test import ClassificationTest as CT
 from Clust.clust.ML.classification.inference import ClassificationInference as CI
+from Clust.clust.ML.tool import model as ml_model
+from Clust.clust.ML.tool import data as ml_data
+from Clust.clust.ML.tool import scaler as ml_scaler
 
 def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder_name=None, window_num=0, db_client=None):
     
@@ -32,8 +32,8 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
     if model_method == "FC_cf":
         dim = 2
 
-    test_X, scaler_X = p4.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
-    test_y, scaler_y = p4.get_scaled_test_data(data_y[target], y_scaler_file_path, scaler_param)# No Scale
+    test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
+    test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y[target], y_scaler_file_path, scaler_param)# No Scale
 
     # test_y = datay[target] # for classification
 
@@ -46,11 +46,11 @@ def get_test_result(data_name_X, data_name_y, data_meta, model_meta, data_folder
     ct = CT()
     ct.set_param(train_parameter)
     ct.set_data(test_X, test_y, window_num, dim)
-    model = model_manager.load_pickle_model(model_file_path)
+    model = ml_model.load_pickle_model(model_file_path)
     preds, probs, trues, acc =  ct.get_result(model)
 
     result_metrics = classification_report(trues, preds, output_dict = True)
-    df_result = p4.get_prediction_df_result(preds, trues, scaler_param, scaler_y, featureList= target, target_col = target[0])
+    df_result = ml_data.get_prediction_df_result(preds, trues, scaler_param, scaler_y, featureList= target, target_col = target[0])
     
     return df_result, result_metrics, acc
 
@@ -73,7 +73,7 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     if model_method == "FC_cf":
         dim = 2
 
-    input_X, scaler_X = p4.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
+    input_X, scaler_X = ml_scaler.get_scaled_test_data(data_X[feature_list], X_scaler_file_path, scaler_param)
     # sacler_y = p4.get_scaler_file(y_scaler_file_path)
 
     train_parameter['batch_size'] = 1
@@ -84,7 +84,7 @@ def get_inference_result(data_X, model_meta, window_num=0, db_client=None):
     ci = CI()
     ci.set_param(train_parameter)
     ci.set_data(input_X, window_num, dim)
-    model = model_manager.load_pickle_model(model_file_path)
+    model = ml_model.load_pickle_model(model_file_path)
     preds =  ci.get_result(model)
 
 

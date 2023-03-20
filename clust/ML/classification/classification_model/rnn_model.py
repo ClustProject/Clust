@@ -8,7 +8,7 @@ import datetime
 from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to_np, trans_df_to_np_inf
-from Clust.clust.ML.tool import model as tool_model
+from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.classification.interface import BaseRegressionModel
 from Clust.clust.ML.classification.models.rnn import RNNModel as rnn_model
@@ -243,7 +243,7 @@ class RNNModel(BaseRegressionModel):
         Args:
             save_path (string): path to save model
         """
-        tool_model.save_pickle_model(self.model, save_path)
+        ml_model.save_pickle_model(self.model, save_path)
 
 
     def load_model(self, model_file_path):
@@ -253,7 +253,7 @@ class RNNModel(BaseRegressionModel):
         Args:
             model_file_path (string): path to load saved model
         """
-        self.model = tool_model.load_pickle_model(model_file_path)
+        self.model = ml_model.load_pickle_model(model_file_path)
 
 
     # move to utils?

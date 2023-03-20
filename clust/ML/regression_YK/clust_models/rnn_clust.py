@@ -14,7 +14,6 @@ from Clust.clust.ML.tool import model as ml_model
 from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
 from Clust.clust.ML.regression_YK.models.rnn import RNNModel
 
-from Clust.clust.ML.common.common import p4_testing as p4
 
 class RNNClust(BaseRegressionModel):
     """
