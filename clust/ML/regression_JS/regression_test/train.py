@@ -8,6 +8,8 @@ from Clust.clust.ML.regression_YK.clust_models.cnn1d_clust import CNN1DClust
 from Clust.clust.ML.regression_YK.clust_models.lstm_fcns_clust import LSTMFCNsClust
 from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
 
+from torch.utils.data import TensorDataset, DataLoader
+
 # seed 고정
 random_seed = 42
 torch.manual_seed(random_seed)
@@ -67,7 +69,7 @@ class RegressionTrain():
         else:
             print('Choose the model correctly')
 
-    def set_data(self, train_x, train_y, val_x, val_y, window_num=0):
+    def set_data(self, train_x_arr, train_y_arr, val_x_arr, val_y_arr):
         """
         set train, val data & transform data for training
 
@@ -78,13 +80,12 @@ class RegressionTrain():
             val_y (dataframe): validation y data
             window_num (integer) : window size
         """
-
-        # TBD: input_size & seq_len?
-        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y, window_num)
+        train_set = TensorDataset(torch.Tensor(train_x_arr), torch.Tensor(train_y_arr))
+        val_set = TensorDataset(torch.Tensor(val_x_arr), torch.Tensor(val_y_arr))
         
-        # self.params['input_size'] = input_size
-        # self.params['seq_len'] = seq_len
-
+        self.train_loader = DataLoader(train_set, batch_size=self.batch_size, shuffle=True)
+        self.valid_loader = DataLoader(val_set, batch_size=self.batch_size, shuffle=True)
+                
     def train(self):
         """
         Train the model

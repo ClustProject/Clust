@@ -8,6 +8,9 @@ from Clust.clust.ML.regression_YK.clust_models.cnn1d_clust import CNN1DClust
 from Clust.clust.ML.regression_YK.clust_models.lstm_fcns_clust import LSTMFCNsClust
 from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
 
+import torch
+from torch.utils.data import TensorDataset, DataLoader
+
 
 class RegressionTest():
     def __init__(self):
@@ -79,7 +82,10 @@ class RegressionTest():
             ...         window_num : window size
 
         """  
-        self.test_loader = self.model.create_testloader(self.batch_size, test_X, test_y, window_num)
+        test_data = TensorDataset(torch.Tensor(test_X), torch.Tensor(test_y))
+        self.test_loader = DataLoader(test_data, batch_size=self.batch_size, shuffle=True)
+
+       # self.test_loader = self.model.create_testloader(self.batch_size, test_X, test_y, window_num)
 
     def test(self):
         """
