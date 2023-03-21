@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from Clust.clust.ML.regression_JS.models.loss_transfer import TransferLoss
+from Clust.clust.ML.regression_JS.ada_rnn.models.loss_transfer import TransferLoss
 
 class AdaRNN(nn.Module):
     """

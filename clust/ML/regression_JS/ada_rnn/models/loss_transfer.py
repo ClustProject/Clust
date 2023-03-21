@@ -1,4 +1,4 @@
-from Clust.clust.ML.regression_JS.models.loss import adv_loss, coral, kl_js, mmd, mutual_info, cos, pair_dist
+from Clust.clust.ML.regression_JS.ada_rnn.models.loss import adv_loss, coral, kl_js, mmd, mutual_info, cos, pair_dist
 
 class TransferLoss(object):
     def __init__(self, loss_type='cosine', input_dim=512):

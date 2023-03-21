@@ -9,8 +9,8 @@ import pandas as pd
 import math
 from tqdm import tqdm
 
-from Clust.clust.ML.regression_JS.models.loss_transfer import TransferLoss
-from Clust.clust.ML.regression_JS.models.AdaRNN import AdaRNN
+from Clust.clust.ML.regression_JS.ada_rnn.models.loss_transfer import TransferLoss
+from Clust.clust.ML.regression_JS.ada_rnn.models.AdaRNN import AdaRNN
 
 import torch.nn as nn
 import torch
@@ -62,7 +62,7 @@ class ClustAdaRnn():
         time = '['+str(datetime.datetime.utcnow() +datetime.timedelta(hours=8))[:19]+'] -'
         print(time, *text, flush=True)
 
-    def train_AdaRNN(self, args, model, optimizer, train_loader_list, epoch, dist_old=None, weight_mat=None):
+    def _train_AdaRNN(self, args, model, optimizer, train_loader_list, epoch, dist_old=None, weight_mat=None):
         model.train()
         criterion = nn.MSELoss()
         criterion_1 = nn.L1Loss()
@@ -184,7 +184,7 @@ class ClustAdaRnn():
         for epoch in range(args["n_epochs"]):
             self._pprint('Epoch:', epoch)
             self._pprint('training...')
-            loss, lossl1, weight_mat, dist_mat = self.train_AdaRNN(args, self.model, optimizer, train_loader_list, epoch, dist_mat, weight_mat)
+            loss, lossl1, weight_mat, dist_mat = self._train_AdaRNN(args, self.model, optimizer, train_loader_list, epoch, dist_mat, weight_mat)
 
             self._pprint('evaluating...')
             self.model.eval()
