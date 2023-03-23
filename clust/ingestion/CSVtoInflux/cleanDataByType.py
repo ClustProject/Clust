@@ -36,45 +36,7 @@ class CleanDataByType():
 
     ## 시간 Column 병합 및 24시 변환 (Data Type 4)
     def time_combine_conversion(self):
-        if self.time_column["Year"] == self.time_column["Month"] == self.time_column["Day"]:
-            self.data["date"] = pd.to_datetime(self.data[self.time_column["Year"]])
-        else:
-            date_list = pd.unique(list(x for x in (self.time_column["Year"], self.time_column["Month"], self.time_column["Day"]) if x != "-")).tolist()
-            self.data["date"] = self.data[date_list[0]].astype(str)
-
-            if self.time_column["Day"]=="-":
-                for column in range(1,len(date_list)):
-                    self.data["date"] = self.data["date"] + "-" + self.data[date_list[column]].astype(str)+"-01"
-            else:
-                for column in range(1,len(date_list)):
-                    self.data["date"] = self.data["date"] + "-" + self.data[date_list[column]].astype(str)
-            self.data["date"] = pd.to_datetime(self.data["date"], format="%y-%m-%d")
-
-        if self.time_column["Hour"] == self.time_column["Minute"] == self.time_column["Second"]:
-            self.data["time"] = pd.to_datetime(self.data[self.time_column["Hour"]])            
-        else:
-            time_list = pd.unique(list(x for x in (self.time_column["Hour"], self.time_column["Minute"], self.time_column["Second"]) if x != "-")).tolist()
-            self.data["time"] = self.data[time_list[0]].astype(str)
-
-            if self.time_column["Minute"] == "-":
-                    self.data["time"]=self.data["time"] + ":00:00"
-            elif self.time_column["Second"] == "-":
-                for column in range(1,len(time_list)):
-                    self.data["time"] = self.data["time"] + ":" + self.data[time_list[column]].astype(str) + ":00"
-            else:
-                for column in range(1,len(time_list)):
-                    self.data["time"] = self.data["time"] + ":" + self.data[time_list[column]].astype(str)
-            self.data["time"] = pd.to_datetime(self.data["time"], format="%H:%M:%S").dt.time
-
-        self.data["time"]=list(map(lambda x,y : datetime.combine(x,y), self.data["date"], self.data["time"]))
-
-        self.time_column = "time"
-        self.data.set_index(self.data["time"], inplace=True)
-        
-
-
-    def time_combine_conversion_24(self):
-        try:
+        if self.time_column["Year"] != "-":
             if self.time_column["Year"] == self.time_column["Month"] == self.time_column["Day"]:
                 self.data["date"] = pd.to_datetime(self.data[self.time_column["Year"]])
             else:
@@ -88,21 +50,11 @@ class CleanDataByType():
                     for column in range(1,len(date_list)):
                         self.data["date"] = self.data["date"] + "-" + self.data[date_list[column]].astype(str)
                 self.data["date"] = pd.to_datetime(self.data["date"], format="%y-%m-%d")
+        else:
+            now_time = datetime.now()
+            self.data["date"] = pd.to_datetime(now_time.date())
 
-            # 24hours conversion 00hour
-            idx_24=[]
-            data_time = self.data[[self.time_column["Hour"]]].astype(str)
-            for idx, row in data_time.iterrows():
-                if self.time_column["Minute"] == self.time_column["Hour"]:
-                    if row[0][:2] == "24":
-                        row[0] = "00"+row[0][2:]
-                        idx_24.append(idx)
-                else:
-                    if row[0] =="24":
-                        row[0] = "00"
-                        idx_24.append(idx)
-            self.data[self.time_column["Hour"]] = data_time[self.time_column["Hour"]]
-            
+        if self.time_column["Hour"] != "-":
             if self.time_column["Hour"] == self.time_column["Minute"] == self.time_column["Second"]:
                 self.data["time"] = pd.to_datetime(self.data[self.time_column["Hour"]])            
             else:
@@ -118,7 +70,69 @@ class CleanDataByType():
                     for column in range(1,len(time_list)):
                         self.data["time"] = self.data["time"] + ":" + self.data[time_list[column]].astype(str)
                 self.data["time"] = pd.to_datetime(self.data["time"], format="%H:%M:%S").dt.time
- 
+        else:
+            self.data["time"] = pd.to_datetime("00:00:00", format="%H:%M:%S").dt.time
+
+        self.data["time"]=list(map(lambda x,y : datetime.combine(x,y), self.data["date"], self.data["time"]))
+
+        self.time_column = "time"
+        self.data.set_index(self.data["time"], inplace=True)
+        
+
+
+    def time_combine_conversion_24(self):
+        try:
+            if self.time_column["Year"] != "-":
+                if self.time_column["Year"] == self.time_column["Month"] == self.time_column["Day"]:
+                    self.data["date"] = pd.to_datetime(self.data[self.time_column["Year"]])
+                else:
+                    date_list = pd.unique(list(x for x in (self.time_column["Year"], self.time_column["Month"], self.time_column["Day"]) if x != "-")).tolist()
+                    self.data["date"] = self.data[date_list[0]].astype(str)
+
+                    if self.time_column["Day"]=="-":
+                        for column in range(1,len(date_list)):
+                            self.data["date"] = self.data["date"] + "-" + self.data[date_list[column]].astype(str)+"-01"
+                    else:
+                        for column in range(1,len(date_list)):
+                            self.data["date"] = self.data["date"] + "-" + self.data[date_list[column]].astype(str)
+                    self.data["date"] = pd.to_datetime(self.data["date"], format="%y-%m-%d")
+            else:
+                now_time = datetime.now()
+                self.data["date"] = pd.to_datetime(now_time.date())
+
+            # 24hours conversion 00hour
+            idx_24=[]
+            data_time = self.data[[self.time_column["Hour"]]].astype(str)
+            for idx, row in data_time.iterrows():
+                if self.time_column["Minute"] == self.time_column["Hour"]:
+                    if row[0][:2] == "24":
+                        row[0] = "00"+row[0][2:]
+                        idx_24.append(idx)
+                else:
+                    if row[0] =="24":
+                        row[0] = "00"
+                        idx_24.append(idx)
+            self.data[self.time_column["Hour"]] = data_time[self.time_column["Hour"]]
+            
+            if self.time_column["Hour"] != "-":
+                if self.time_column["Hour"] == self.time_column["Minute"] == self.time_column["Second"]:
+                    self.data["time"] = pd.to_datetime(self.data[self.time_column["Hour"]])            
+                else:
+                    time_list = pd.unique(list(x for x in (self.time_column["Hour"], self.time_column["Minute"], self.time_column["Second"]) if x != "-")).tolist()
+                    self.data["time"] = self.data[time_list[0]].astype(str)
+
+                    if self.time_column["Minute"] == "-":
+                            self.data["time"]=self.data["time"] + ":00:00"
+                    elif self.time_column["Second"] == "-":
+                        for column in range(1,len(time_list)):
+                            self.data["time"] = self.data["time"] + ":" + self.data[time_list[column]].astype(str) + ":00"
+                    else:
+                        for column in range(1,len(time_list)):
+                            self.data["time"] = self.data["time"] + ":" + self.data[time_list[column]].astype(str)
+                    self.data["time"] = pd.to_datetime(self.data["time"], format="%H:%M:%S").dt.time
+            else:
+                self.data["time"] = pd.to_datetime("00:00:00", format="%H:%M:%S").dt.time
+
             self.data["date"].loc[idx_24] = self.data["date"].loc[idx_24] + timedelta(hours=24)
             self.data["time"]=list(map(lambda x,y : datetime.combine(x,y), self.data["date"], self.data["time"]))
 
@@ -195,11 +209,6 @@ class CleanDataByType():
 
     ## Data Clean
     def clean_data(self):
-        idx = self.data.fillna(method="ffill").dropna(axis=0, thresh=round(len(self.selected_columns)*0.8)).index
-        res_idx = self.data.loc[idx].fillna(method="bfill").dropna(axis=0, thresh=round(len(self.selected_columns)*0.8)).index # nan 비율이 80%인 이상 컬럼 삭제
-        self.data = self.data.loc[res_idx]
-        self.data = self.data.drop_duplicates()
-
         if type(self.time_column) == dict:
             time_list = pd.unique(list(x for x in (self.time_column.values()) if x != "-")).tolist()
             for num in range(len(time_list)):

@@ -61,16 +61,14 @@ class Collector():
         self.selected_columns = collect_parameter["selectedColumns"]
         self.dtcpm = collect_parameter["duplicatedTimeColumnProcessingMethod"]
         self.field_type = collect_parameter["fieldType"]
-        
-       ## 정한 parameter 랑 def 함수를 일단 여기다가 붙여보기
 
     def get_basic_data(self):
         if type(self.time_column) == dict:
-            self.data = pd.read_csv(self.file_path, header=0, index_col=False, encoding=self.encoding, dtype={self.time_column["Year"]:str})
+            time_key = list(self.time_column.keys())[0]
+            self.data = pd.read_csv(self.file_path, header=0, index_col=False, encoding=self.encoding, dtype={self.time_column[time_key]:str})
         else:
             self.data = pd.read_csv(self.file_path, header=0, index_col=False, encoding=self.encoding, dtype={self.time_column:str})
             
-# self.data = self.data[self.data[self.selected_datas[0]["Selected_columns"][n]] == self.selected_datas[1]["Selected_values"][n]].copy()
     def get_data_by_condition(self):
         """
         사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
@@ -106,8 +104,6 @@ class Collector():
         print(self.data.tail(2))
         
         self.db_client.write_db(self.db_name, self.ms_name, self.data)
-        #db_client.write_db(self.db_name, self.ms_name, self.data)
-        # bk_name, ms_name, data_frame
 
     def collect_clean_data(self, data):
         """
