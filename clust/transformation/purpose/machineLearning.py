@@ -9,7 +9,7 @@ def split_data_by_ratio(data, split_ratio, mode=None, windows=None):
         if mode == "Classification": # Xdata Freq : 11분 15초 / ydata Freq : 1 Days
             data_date = np.unique(data.index.date)
             length1 = int(len(data_date)*split_ratio)
-            data1, data2 = data[:str(data_date[length1])], data[str(data_date[length1+1]):]
+            data1, data2 = data[:str(data_date[length1-1])], data[str(data_date[length1]):]
         elif mode == "windows_split": # 입력 windows 를 기준으로 split
             import math
             round_num = math.ceil(len(data)/windows)
