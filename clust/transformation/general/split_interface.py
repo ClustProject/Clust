@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../")
 sys.path.append("../../")
+import pandas as pd
 
 
 def get_data_result(split_type, data_input, split_param=None):
