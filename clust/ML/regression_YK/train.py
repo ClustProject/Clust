@@ -40,6 +40,7 @@ class RegressionTrain():
             ...            'batch_size':16,
             ...            'n_epochs':10    }
         """
+        # TODO: parameters refactoring 
         self.params = params
         self.batch_size = params['batch_size']
         self.n_epochs = params['n_epochs']

@@ -1,5 +1,7 @@
 import torch.nn as nn
 import torch
+
+
 class RNNModel(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, bidirectional, rnn_type, device='cuda'):
         super(RNNModel, self).__init__()

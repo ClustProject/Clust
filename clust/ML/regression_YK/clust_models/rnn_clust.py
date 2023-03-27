@@ -12,7 +12,8 @@ from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to
 from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.rnn import RNNModel
+# from Clust.clust.ML.regression_YK.models.rnn import RNNModel
+from Clust.clust.ML.regression_YK.models.rnn_model import RNNModel
 
 
 class RNNClust(BaseRegressionModel):
@@ -33,6 +34,8 @@ class RNNClust(BaseRegressionModel):
             input_size=self.params['input_size'],
             hidden_size=self.params['hidden_size'],
             num_layers=self.params['num_layers'],
+            output_dim = 1,     # TBD
+            dropout_prob = 0.2,  # TBD
             bidirectional=self.params['bidirectional'],
             device=self.params['device']
         )
@@ -77,7 +80,7 @@ class RNNClust(BaseRegressionModel):
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
                 for inputs, labels in data_loaders_dict[phase]:
-                    inputs = inputs.to(device)
+                    inputs = torch.transpose(inputs, 1, 2).to(device)
                     labels = labels.to(device, dtype=torch.float)
                     
                     # parameter gradients를 0으로 설정
