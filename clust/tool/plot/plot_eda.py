@@ -9,22 +9,7 @@ import plotly.express as px
 from Clust.clust.transformation.splitDataByCycle import dataByCycle
 from Clust.clust.transformation.sampling.data_up_down import DataUpDown
 
-
-    
-########################### 아래 그래프들 모두 정리해야함########################################################### JISU 코드인듯
-def show_one_comaparing_distributions_of_multiple_data(dataset, feature):
-    """
-    Args:
-        dataset (dictionary of dataframe): Input dataset
-        feature (string): A column of data as one of column name to be shown
-    """
-    layout = go.Layout(title = feature)
-    fig = go.Figure(layout = layout)
-    for data_name in dataset.keys():
-        trace = go.Box(y = dataset[data_name][feature], name = data_name)
-        fig.add_trace(trace)
-    fig.show()
-
+# TODO JISU 아래 파일 수정할 것 ---우리 스타일로
 def show_one_feature_data_based_on_two_times(data, feature, time_criteria, min_max, sampling_flag = True):
     """
     A function that visualizes the amount of change in a specific feature of one data as a heatmap based on two time standards.
