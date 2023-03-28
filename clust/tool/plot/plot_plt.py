@@ -15,7 +15,7 @@ class PlotPlt():
         """
         import seaborn as sns    
         
-        ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.columns.values, annot =True, annot_kws ={'size': 8})
+        ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.index.values, annot =True, annot_kws ={'size': 8})
         bottom, top = ax.get_ylim() 
         heat_map = plt.gcf()
         ax.set_ylim(bottom+0.5, top-0.5)

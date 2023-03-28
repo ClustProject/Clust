@@ -25,15 +25,16 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
     cycleData = CycleData()
 
     # cycle 주기에 따라 적절한 함수 적용
-    if feature_cycle == 'Hour':
+    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html
+    if feature_cycle in ['Hour', 'H']:
         data = cycleData.getHourCycleSet(output_data, feature_cycle_times, False)
-    elif feature_cycle == 'Day':
+    elif feature_cycle in ['Day', 'D']:
         data = cycleData.getDayCycleSet(output_data, feature_cycle_times, False)
-    elif feature_cycle == 'Week':
+    elif feature_cycle in ['Week', 'W']:
         data = cycleData.getWeekCycleSet(output_data, feature_cycle_times, False)
-    elif feature_cycle == 'Month':
+    elif feature_cycle in ['Month', 'M']:
         data = cycleData.getMonthCycleSet(output_data, feature_cycle_times, False)
-    elif feature_cycle == 'Year':
+    elif feature_cycle in ['Year', 'A']:
         data = cycleData.getYearCycleSet(output_data, feature_cycle_times, False)
 
     return data
