@@ -13,6 +13,7 @@ from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
 from Clust.clust.ML.regression_YK.models.rnn import RNNModel
+from matplotlib import pyplot as plt
 
 
 class RNNClust(BaseRegressionModel):
@@ -56,6 +57,7 @@ class RNNClust(BaseRegressionModel):
 
         since = time.time()
         val_mse_history = []
+        train_mse_history = []
 
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_mse = 10000000
@@ -112,6 +114,18 @@ class RNNClust(BaseRegressionModel):
                     best_model_wts = copy.deepcopy(self.model.state_dict())
                 if phase == 'val':
                     val_mse_history.append(epoch_loss)
+                
+                if phase == 'train':
+                    train_mse_history.append(epoch_loss)
+
+        ## 성능 검사 테스트용 train, val loss 그래프 그린것. 나중에 삭제해도 됨
+        plt.plot(train_mse_history)
+        plt.plot(val_mse_history)
+        plt.title('model mse loss')
+        plt.ylabel('mse loss')
+        plt.xlabel('epoch')
+        plt.legend(['train', 'val'], loc='upper left')
+        plt.show()
 
         # 전체 학습 시간 계산
         time_elapsed = time.time() - since

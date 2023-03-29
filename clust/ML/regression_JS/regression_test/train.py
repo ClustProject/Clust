@@ -3,10 +3,10 @@ import torch
 import numpy as np
 import random
 
-from Clust.clust.ML.regression_YK.clust_models.rnn_clust import RNNClust
-from Clust.clust.ML.regression_YK.clust_models.cnn1d_clust import CNN1DClust
-from Clust.clust.ML.regression_YK.clust_models.lstm_fcns_clust import LSTMFCNsClust
-from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
+from Clust.clust.ML.regression_JS.regression_test.clust_models.rnn_clust import RNNClust
+from Clust.clust.ML.regression_JS.regression_test.clust_models.cnn1d_clust import CNN1DClust
+from Clust.clust.ML.regression_JS.regression_test.clust_models.lstm_fcns_clust import LSTMFCNsClust
+from Clust.clust.ML.regression_JS.regression_test.clust_models.fc_clust import FCClust
 
 from torch.utils.data import TensorDataset, DataLoader
 
