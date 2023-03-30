@@ -121,10 +121,6 @@ class CleanFeatureData:
             ...               'end_time' : "2021-02-04 00:00:00" }
 
         """
-        """
-        if duration:
-            data = self._get_multipleDF_sameDuration(data, duration)
-        """
 
         DRN = data_remove_byNaN.DataRemoveByNaNStatus()
         nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
@@ -134,21 +130,3 @@ class CleanFeatureData:
         return imputed_data
 
 
-    """             
-    # self.query_start_time, self.query_end_time 문제 이슈
-    def _get_multipleDF_sameDuration(self, data, duration):
-        # Make Data with Full Duration [query_start_time ~ query_end_time]
-        
-        start_time =duration['start_time']
-        end_time = duration['end_time']
-        # print("get_multipleDF_sameDuration", start_time, end_time)
-        if len(data)>0:
-            #2. Make Full Data(query Start ~ end) with NaN
-            data.index = data.index.tz_localize(None) # 지역정보 없이 시간대만 가져오기
-            new_idx = pd.date_range(start = start_time, end = (end_time- self.frequency), freq = self.frequency)
-            new_data = pd.DataFrame(index= new_idx)
-            new_data.index.name ='time' 
-            data = new_data.join(data) # new_data에 data를 덮어쓴다
-        return data
-
-    """

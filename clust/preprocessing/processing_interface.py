@@ -17,7 +17,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
      
 
     # Args
-     * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'all_step_result']
+     * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'step3_result']
      * processing_param)(dict)     
      * data_input(pandas.dataFrame or dict)
 
@@ -25,7 +25,9 @@ def get_data_result(processing_type, data_input, processing_param=None):
      * result (pandas.dataFrame or dict)
             
     """
-    
+    if processing_param is None:
+        processing_param = get_default_processing_param()
+        
     if isinstance(data_input, dict):
         result = get_preprocessed_dataset(processing_type, processing_param, data_input)
     elif isinstance(data_input, pd.DataFrame):
@@ -33,14 +35,27 @@ def get_data_result(processing_type, data_input, processing_param=None):
 
     return result
 
-def get_preprocessed_dataset(processing_type, param, data_set):
-    result={}
-    for key in list(data_set.keys()):
-        result[key] = get_preprocessed_data(processing_type, param, data_set[key])
+def get_default_processing_param(min_max={'min':{}, "max":{}}, timedelta_frequency_sec=None):
+    """get default_processing_param  (refining, min_max check(if min_max is not empty), sampling (if timedelta_frequency_sec is not None))
+    Args:
+        min_max(dict): min max restriction information of data
+        timedelta_frequency_sec: timedelta for refined data processing
+    Returns:
+        default_process_param
+    """
+    CertainParam= {'flag': True, 'data_min_max_limit':min_max}
+    refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
+    outlier_param ={
+        "certainErrorToNaN":CertainParam, 
+        "unCertainErrorToNaN":{'flag': False}
+    }
+    imputation_param = {"flag":False}
+    process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
-    return result
+    return process_param
 
-def get_preprocessed_all_step_result(data_input, param):
+# only 3 processing
+def get_preprocessed_step3_result(data_input, param):
     """ Produces partial Processing data depending on process_param
 
     Args:
@@ -69,7 +84,14 @@ def get_preprocessed_all_step_result(data_input, param):
     
     return result
         
-    
+def get_preprocessed_dataset(processing_type, param, data_set):
+    result={}
+    for key in list(data_set.keys()):
+        result[key] = get_preprocessed_data(processing_type, param, data_set[key])
+
+    return result
+
+
 def get_preprocessed_data(processing_type, param, data):
     """ Produces only one clean data according to the processing_type and param
 
@@ -86,6 +108,7 @@ def get_preprocessed_data(processing_type, param, data):
 
     DP = DataPreprocessing()
     
+    # 3 step processing
     if processing_type =='refine':
         result = DP.get_refinedData(data, param)
     elif processing_type =='error_to_NaN':
@@ -98,12 +121,18 @@ def get_preprocessed_data(processing_type, param, data):
         result = errorToNaN().getDataWithUncertainNaN(data, param)
     elif processing_type =='imputation': 
         result = DP.get_imputedData(data, param)
-    elif processing_type =='all':
-        result = get_preprocessed_all_step_result(data, param)['imputed_data']
+    elif processing_type =='step_3': # refine, error_to_NaN, certain_error_to_Nan, uncertain_error_to_Nan, impuatation
+        result = get_preprocessed_step3_result(data, param)['imputed_data']
         # all_preprocessing_finalResult
         # multiDataset_all_preprocessing
-    elif processing_type =='all_step_result':
-        result = get_preprocessed_all_step_result(data, param)
+    elif processing_type =='step3_result':# refine, error_to_NaN, certain_error_to_Nan, uncertain_error_to_Nan, impuatation
+        result = get_preprocessed_step3_result(data, param)
         # all_preprocessing
-        
+    
+    # Additional Processing    
+    if processing_type =='smoothing':
+        result = DP.get_smoothed_data(data, param)
+    if processing_type =='scaling':
+        result = DP.get_scaling_data(data, param)
+
     return result

@@ -6,8 +6,9 @@ from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import model as model_manager
 
 
-# Clust/KETIAppTestCode/KWeather2nd/20-01, 20-02, 20-03 Clust/clust/example/4-1, 4-2 테스트 코드와 관련 있음
-# 서버의 dataDomainExploration.py도 연결
+# KETIAppdataServer/dataDomainExploration
+# KETIAppTestCode/Domain, Cycle Data
+# 기타 EDA에서 활용되고 있음
 def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam):
 
     """_customized clustering function_ 
@@ -31,12 +32,14 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
         _type_: _description_
     """
     # 1. preprocessing for oneDF
-    from Clust.clust.preprocessing.custom import simple
-    dataSet_pre = simple.preprocessing_basic_for_clust(data_set, min_max, timedelta_frequency_min)
-
+    from Clust.clust.preprocessing import processing_interface
+    process_param = processing_interface.get_default_processing_param(min_max, timedelta_frequency_min)
+    dataSet_pre = processing_interface.get_data_result('step_3', data_set , process_param)
+    
     # 2. one DF preparation
-    from Clust.clust.transformation.general import dataframe
-    data_DF = dataframe.get_oneDF_with_oneFeature_from_multipleDF(dataSet_pre, feature_name, duration, timedelta_frequency_min)
+    from Clust.clust.transformation.general import select_interface
+    select_param ={"feature_name":feature_name, "duration":duration, "frequency":timedelta_frequency_min }
+    data_DF = select_interface.get_data_result("oneDF_with_oneFeature_from_multipleDF", dataSet_pre, select_param)
 
     # 3. quality check
     from Clust.clust.quality.NaN import cleanData
@@ -44,9 +47,12 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     data = CMS.get_cleanData_by_removing_column(data_DF, NaNProcessingParam) 
 
     # 4. preprocessing for clustering
-    from Clust.clust.preprocessing.custom.simple import preprocessing_smoothing_scaling
-    data = preprocessing_smoothing_scaling(data, ewm_parameter=0.3)
-
+    from Clust.clust.preprocessing import processing_interface
+    process_param={'flag': True, 'emw_param':0.3}
+    data = processing_interface.get_data_result('smoothing', data, process_param)
+    process_param={'flag': True, 'method':'minmax'} 
+    data = processing_interface.get_data_result('scaling', data, process_param)
+    
     # 5. clustering
     from Clust.clust.tool.plot import plot_features
     # plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)

@@ -128,7 +128,7 @@ class IntegrationInterface():
 
         ## Preprocessing
         from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('all', multiple_dataset, process_param)
+        multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, process_param)
         
        
         ## Integration

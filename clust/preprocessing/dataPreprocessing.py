@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append("../")
 sys.path.append("../..")
-
+import pandas as pd
 class DataPreprocessing():
     """
     This class has interfaces of Data Preprocessing.
@@ -122,4 +122,50 @@ class DataPreprocessing():
 
         return self.imputedData
 
+    def get_smoothed_data(self, data, smoothing_param):
+        """ Get smoothed data
+
+        Args:
+            data (DataFrame): input data
+            smoothing_param (json): smoothing_param 
+            
+        Returns:
+            DataFrame: New Dataframe after smoothing
+        
+        Example:
+
+            >>> smoothing_param = {'flag': True, 'emw_param':0.3} #emw parameter. Defaults to 0.3.
+
+
+        """
+        if smoothing_param['flag']==True:
+            data = data.ewm(com=smoothing_param['emw_param'] ).mean()
+        return data
+    
+    def get_scaling_data(self, data, scaling_param):
+        """ Get smoothed data
+
+        Args:
+            data (DataFrame): input data
+            scaling_param (json): scaling_param 
+            
+        Returns:
+            DataFrame: New Dataframe after smoothing
+        
+        Example:
+
+            >>> scaling_param = {'flag': True, 'method':'minmax'} 
+
+
+        """
+        # TODO all scaler defin
+        if scaling_param['flag']==True:
+            method = scaling_param['method']
+            if method =='minmax':
+                from sklearn.preprocessing import MinMaxScaler
+                scaler = MinMaxScaler()
+                data = pd.DataFrame(scaler.fit_transform(data), columns=list(data.columns), index = data.index)   
+        
+        return data
+        
     # Add New Function

@@ -50,7 +50,7 @@ def split_data_by_day_workingtime(data, split_param, select_param):
     """
     split_data_day = split_interface.get_data_result("cycle", data, split_param)
     split_data_working = split_interface.get_data_result("working", split_data_day,  split_param)
-    split_data_day_working = select_interface.get_data_result("keyword", split_data_working, select_param)
+    split_data_day_working = select_interface.get_data_result("keyword_data_selection", split_data_working, select_param)
 
     data_empty_name = []
     for data_name, data in split_data_day_working.items():
