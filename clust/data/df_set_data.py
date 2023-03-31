@@ -18,7 +18,7 @@ class DfSetData():
         """
         self.db_client = db_client
     
-    def get_result(self, ingestion_type, ingestion_param, process_param = None):
+    def get_result(self, ingestion_type, ingestion_param):
         """
         # Description
          get dataframe result according to intestion_type, and ingestion_param
@@ -34,14 +34,13 @@ class DfSetData():
         """
         # define param
         self.ingestion_param    = ingestion_param
-        self.process_param      = df_data.get_default_process_param(process_param)
         
         # get result
-        if ingestion_type == "multi_numeric_ms_list": # general type
-            result = self.multi_numeric_ms_list(self.ingestion_param)
+        if ingestion_type == "multiple_ms_by_time": # general type
+            result = self.multiple_ms_by_time(self.ingestion_param)
             
         elif ingestion_type == "multi_ms_one_enumerated_ms_in_bucket_integration":
-            result = self.multi_ms_one_enumerated_ms_in_bucket_integration(self.ingestion_param, self.process_param)
+            result = self.multi_ms_one_enumerated_ms_in_bucket_integration(self.ingestion_param)
             
         elif ingestion_type == "all_ms_in_one_bucket":
             result = self.all_ms_in_one_bucket(self.ingestion_param)
@@ -51,7 +50,7 @@ class DfSetData():
             
         return result
     
-    def multi_numeric_ms_list(self, ingestion_param):
+    def multiple_ms_by_time(self, ingestion_param):
         """
         # Description
          Get only numeric ms data list by ingestion_param without any preprocessing
@@ -106,7 +105,7 @@ class DfSetData():
 
         return MSdataSet
     
-    def multi_ms_one_enumerated_ms_in_bucket_integration(self, ingestion_param, process_param) :
+    def multi_ms_one_enumerated_ms_in_bucket_integration(self, ingestion_param) :
         """
         # Description
          1개의 특정 bucket에 있는 모든 ms (multiple ms in bucket) 와 고정된 다른 ms (ms_list_info) 들을 복합하여 데이터를 준비함.
@@ -122,8 +121,6 @@ class DfSetData():
                             'integration_freq_min': 60, 
                             'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
         ```
-         * process_param (_dict_) : preprocessing parameter
-        
         # Returns
          * bucket_dataSet (_dict_) : integrated data
 
@@ -131,9 +128,6 @@ class DfSetData():
 
         data_org            = ingestion_param['data_org']
         bucket_name         = ingestion_param['bucket_name']
-        start_time          = ingestion_param['start_time']     #현재 사용되지 않는 파라미터, 삭제 해야하는지 추후 확인
-        end_time            = ingestion_param['end_time']   #현재 사용되지 않는 파라미터, 삭제 해야하는지 추후 확인
-        integration_freq_sec = int(ingestion_param['integration_freq_min']) * 60    #현재 사용되지 않는 파라미터, 삭제 해야하는지 추후 확인
         
         bucket_dataSet = {}        
         ms_list = self.db_client.measurement_list(bucket_name) #ms_name
@@ -141,8 +135,26 @@ class DfSetData():
             dataInfo = data_org
             dataInfo = data_org + [[bucket_name, ms_name]] 
             ingestion_param['ms_list_info'] = dataInfo
-            dataIntegrated = df_data.DfData(self.db_client).get_result("multi_ms_integration", ingestion_param, process_param)
             
+            ############ ingestion
+            from Clust.clust.data import data_interface
+            multiple_dataset = data_interface.get_data_result("multiple_ms_by_time", self.db_client, ingestion_param)
+            ############ Preprocessing
+            from Clust.clust.preprocessing import processing_interface
+            multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset)
+            #############
+            # data Integration
+            from Clust.clust.integration.integrationInterface import IntegrationInterface
+            integration_freq_sec    = int(ingestion_param['integration_freq_min']) * 60 
+            integration_param   = {
+                "integration_duration":"common",
+                "integration_frequency":integration_freq_sec,
+                "param":{},
+                "method":"meta"
+            }
+            dataIntegrated = IntegrationInterface().multipleDatasetsIntegration(integration_param, multiple_dataset)
+            ############
+
             if ingestion_param['feature_list']:
                 dataIntegrated = dataIntegrated[ingestion_param['feature_list']]
             bucket_dataSet[ms_name]= dataIntegrated
@@ -193,8 +205,6 @@ class DfSetData():
         """
 
         bucket_list = ingestion_param['bucket_list']
-        start_time  = ingestion_param['start_time'] #현재 사용되지 않는 파라미터, 삭제 해야하는지 추후 확인
-        end_time    = ingestion_param['end_time'] #현재 사용되지 않는 파라미터, 삭제 해야하는지 추후 확인
         
         if 'new_bucket_list' in ingestion_param.keys():
             new_bucket_list = ingestion_param['new_bucket_list']
@@ -213,6 +223,3 @@ class DfSetData():
             data_set.update(dataSet_indi)
 
         return data_set
-
-
-

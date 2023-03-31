@@ -12,26 +12,19 @@ def get_data_result(ingestion_type, db_client, param) :
         # Args
          * ingestion_type (_str_)
         ```example        
-        
-            >>> ingestion_type = ['multi_ms_integration', 'ms_by_days', 'ms_by_time', 'ms_by_num']  
-        ```
+            >>> ingestion_type = 'ms_by_num'
          * db_client (_db_client_) : influxDB에서 데이터를 인출하기 위한 client
-         * param (_dict_) : ingestion_type에 따른 인출을 위해 필요한 parameter
-        ```example
-        
-           
-        ```
-
+         * param (_dict_) : ingestion_type에 따른 인출을 위해 필요한 parameter로 intestion_type에 따라 각각 다름
         # Returns
          * result (_pd.DataFrame_ or _dict of pd.DataFrame_) : 단일 dataframe 혹은 dataframe을 value로 갖는 dictionary
-
         """
+        # data_param에 'feature_list' key가 유효한 경우 한번 더 필터링
         
-        # data_param 하위에 'feature_list' key가 유효한 경우 한번 더 필터링
-        df_out_list     = ['ms_by_num', 'ms_by_days', 'ms_by_time', 'multi_ms_integration']
-        df_set_out_list = ['multi_ms_one_enumerated_ms_in_bucket_integration',
-                           'multi_numeric_ms_list',
-                           'all_ms_in_one_bucket', 'all_ms_in_multiple_bucket']        
+        df_out_list     = ['ms_by_num', 'ms_by_days', 'ms_by_time']
+        df_set_out_list = ['multiple_ms_by_time',
+                            'multi_ms_one_enumerated_ms_in_bucket_integration',           
+                           'all_ms_in_one_bucket', 
+                           'all_ms_in_multiple_bucket']        
         
         if ingestion_type in df_out_list:
             result = df_data.DfData(db_client).get_result(ingestion_type, param)

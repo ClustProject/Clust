@@ -29,7 +29,6 @@ def get_data_result(select_type, data_input, select_param=None):
         result = dict((k, data_input[k]) for k in new_keys if k in data_input)
     
     if select_type =='oneDF_with_oneFeature_from_multipleDF':
-        from Clust.clust.transformation.general import dataframe
         feature_name = select_param['feature_name']
         if select_param['duration']:
             duration = select_param['duration']

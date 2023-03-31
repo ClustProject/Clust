@@ -4,7 +4,7 @@ sys.path.append("../")
 sys.path.append("../..")
 sys.path.append("../../..")
 import datetime
-from Clust.clust.integration.meta import partialDataInfo
+
 from Clust.clust.preprocessing import dataPreprocessing
 from Clust.clust.data import df_set_data
 from Clust.clust.integration.ML import RNNAEAlignment
@@ -90,13 +90,17 @@ class IntegrationInterface():
         
         """
         ## multiple dataset
-        multiple_dataset  = df_set_data.DfSetData(db_client).get_result("multi_numeric_ms_list", intDataInfo)
+        multiple_dataset  = df_set_data.DfSetData(db_client).get_result("multiple_ms_by_time", intDataInfo)
         ## get integrated data
-        result = self.multipleDatasetsIntegration(process_param, integration_param, multiple_dataset)
+        ## Preprocessing
+        from Clust.clust.preprocessing import processing_interface
+        multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, process_param)
+    
+        result = self.multipleDatasetsIntegration(integration_param, multiple_dataset)
 
         return result
-    
-    def multipleDatasetsIntegration(self, process_param, integration_param, multiple_dataset):
+        
+    def multipleDatasetsIntegration(self, integration_param, multiple_dataset):
         """ 
         # Description
          dataSet과 Parameter에 따라 데이터를 병합하는 함수
@@ -115,26 +119,25 @@ class IntegrationInterface():
          * integrated_data (_pd.dataFrame_)
     
         """
-      
-        integration_duration    = integration_param["integration_duration"]
+        """
+        from Clust.clust.integration.meta import partialDataInfo
         partial_data_info       = partialDataInfo.PartialData(multiple_dataset, integration_duration)
-        overlap_duration        = partial_data_info.column_meta["overlap_duration"]
-        integration_freq_sec    = integration_param["integration_frequency"]
-        integrationMethod       = integration_param['method']
-
-        ## set refine frequency parameter
         if not integration_freq_sec:
             process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
-
-        ## Preprocessing
-        from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, process_param)
+        """ 
         
-       
+        integrationMethod = integration_param['method']
+        integration_freq_sec    = integration_param["integration_frequency"]
+        integration_duration    = integration_param["integration_duration"]
+        
+        from Clust.clust.integration.meta import partialDataInfo
+        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
+        overlap_duration = partial_data_info.column_meta["overlap_duration"]
         ## Integration
         imputed_datas = {}
         
         print("===integrationStart===")
+        
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key])
         if integrationMethod=="meta":

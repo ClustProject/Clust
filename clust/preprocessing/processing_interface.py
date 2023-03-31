@@ -35,7 +35,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
 
     return result
 
-def get_default_processing_param(min_max={'min':{}, "max":{}}, timedelta_frequency_sec=None):
+def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta_frequency_sec=None):
     """get default_processing_param  (refining, min_max check(if min_max is not empty), sampling (if timedelta_frequency_sec is not None))
     Args:
         min_max(dict): min max restriction information of data

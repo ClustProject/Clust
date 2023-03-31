@@ -41,7 +41,9 @@ def getData(db_client, dataInfo, integration_freq_sec, processParam, startTime, 
 
 def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
     integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
-    
+    ## Preprocessing
+    from Clust.clust.preprocessing import processing_interface
+    multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, processParam)
     data = IntegrationInterface().multipleDatasetsIntegration(processParam, integrationParam, dataSet)
 
     return data
