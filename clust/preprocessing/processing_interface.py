@@ -1,5 +1,4 @@
 import sys
-import os
 sys.path.append("../")
 sys.path.append("../..")
 import os
@@ -17,7 +16,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
      
 
     # Args
-     * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'step3_result']
+     * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'step3']
      * processing_param)(dict)     
      * data_input(pandas.dataFrame or dict)
 
@@ -30,8 +29,10 @@ def get_data_result(processing_type, data_input, processing_param=None):
         
     if isinstance(data_input, dict):
         result = get_preprocessed_dataset(processing_type, processing_param, data_input)
+        
     elif isinstance(data_input, pd.DataFrame):
         result = get_preprocessed_data(processing_type, processing_param, data_input)
+
 
     return result
 
@@ -53,36 +54,6 @@ def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
 
     return process_param
-
-# only 3 processing
-def get_preprocessed_step3_result(data_input, param):
-    """ Produces partial Processing data depending on process_param
-
-    Args:
-        param(dict): processing parm
-        data_input (DataFrame): input data
-        
-    Returns:
-        json: New Dataframe after preprocessing according to the process_param
-        
-    """
-    DP = DataPreprocessing()
-    
-    refine_param = param['refine_param']
-    outlier_param = param['outlier_param']
-    imputation_param = param['imputation_param']
-        
-    ###########
-    refined_data = DP.get_refinedData(data_input, refine_param)
-    ###########
-    datawithMoreCertainNaN, datawithMoreUnCertainNaN = DP.get_errorToNaNData(refined_data, outlier_param)
-    ###########
-    imputed_data = DP.get_imputedData(datawithMoreUnCertainNaN, imputation_param)
-    ###########
-    result ={'original':data_input, 'refined_data':refined_data, 'datawithMoreCertainNaN':datawithMoreCertainNaN,
-    'datawithMoreUnCertainNaN':datawithMoreUnCertainNaN, 'imputed_data':imputed_data}
-    
-    return result
         
 def get_preprocessed_dataset(processing_type, param, data_set):
     result={}
@@ -122,12 +93,16 @@ def get_preprocessed_data(processing_type, param, data):
     elif processing_type =='imputation': 
         result = DP.get_imputedData(data, param)
     elif processing_type =='step_3': # refine, error_to_NaN, certain_error_to_Nan, uncertain_error_to_Nan, impuatation
-        result = get_preprocessed_step3_result(data, param)['imputed_data']
-        # all_preprocessing_finalResult
-        # multiDataset_all_preprocessing
-    elif processing_type =='step3_result':# refine, error_to_NaN, certain_error_to_Nan, uncertain_error_to_Nan, impuatation
-        result = get_preprocessed_step3_result(data, param)
-        # all_preprocessing
+        DP = DataPreprocessing() 
+        refine_param = param['refine_param']
+        outlier_param = param['outlier_param']
+        imputation_param = param['imputation_param']
+        ###########
+        refined_data = DP.get_refinedData(data, refine_param)
+        ###########
+        datawithMoreCertainNaN, datawithMoreUnCertainNaN = DP.get_errorToNaNData(refined_data, outlier_param)
+        ###########
+        result = DP.get_imputedData(datawithMoreUnCertainNaN, imputation_param)
     
     # Additional Processing    
     if processing_type =='smoothing':

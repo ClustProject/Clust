@@ -34,12 +34,11 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     # 1. preprocessing for oneDF
     from Clust.clust.preprocessing import processing_interface
     process_param = processing_interface.get_default_processing_param(min_max, timedelta_frequency_min)
-    dataSet_pre = processing_interface.get_data_result('step_3', data_set , process_param)
-    
+
     # 2. one DF preparation
     from Clust.clust.transformation.general import select_interface
     select_param ={"feature_name":feature_name, "duration":duration, "frequency":timedelta_frequency_min }
-    data_DF = select_interface.get_data_result("oneDF_with_oneFeature_from_multipleDF", dataSet_pre, select_param)
+    data_DF = select_interface.get_data_result("oneDF_with_oneFeature_from_multipleDF", data_set, select_param)
 
     # 3. quality check
     from Clust.clust.quality.NaN import cleanData
@@ -48,16 +47,16 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
 
     # 4. preprocessing for clustering
     from Clust.clust.preprocessing import processing_interface
+    imputation_param = {
+        "flag":True,
+        "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
+                             {"min":0,"max":10000,"method":"mean", "parameter":{}}],
+        "totalNonNanRatio":1 }
+    data = processing_interface.get_data_result('imputation', data, imputation_param)
     process_param={'flag': True, 'emw_param':0.3}
     data = processing_interface.get_data_result('smoothing', data, process_param)
     process_param={'flag': True, 'method':'minmax'} 
     data = processing_interface.get_data_result('scaling', data, process_param)
-    
-    # 5. clustering
-    from Clust.clust.tool.plot import plot_features
-    # plot_features.plot_all_column_data_in_sub_plot(data, fig_width, fig_height, fig_width_num = 4)
-    
-
     
     """
     # SOM

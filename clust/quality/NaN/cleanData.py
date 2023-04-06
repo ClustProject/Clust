@@ -30,16 +30,11 @@ class CleanData:
             ImputedData(dataframe): filtered and imputed data
 
         """
-        self.imputation_param = {
-                "flag":True,
-                "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
-                "totalNonNanRatio":5
-        }
+
         DRN = data_remove_byNaN.DataRemoveByNaNStatus()
         nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
         MDP = dataPreprocessing.DataPreprocessing()
-        imputed_data= MDP.get_imputedData(nan_removed_data, self.imputation_param)
 
-        print(len(data.columns), "--->", len(imputed_data.columns))
+        print(len(data.columns), "--->", len(nan_removed_data.columns))
 
-        return imputed_data
+        return nan_removed_data

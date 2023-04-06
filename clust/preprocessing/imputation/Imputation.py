@@ -12,7 +12,7 @@ class SerialImputation():
         self.fillNAMethods = ['bfill','ffill']
         self.simpleIntMethods= ['linear', 'time', 'nearest', 'zero', 'slinear','quadratic', 'cubic', 'barycentric']
         self.orderIntMethods = [ 'polynomial', 'spline']
-        self.deepMethods = ['brits']
+        #self.deepMethods = ['brits']
  
     def get_dataWithSerialImputationMethods(self, data, imputation_param):
         """ This function cleans the data by applying several missing data handling methods.

@@ -44,7 +44,7 @@ class DfData():
         elif ingestion_type == "ms_by_time":
             result = self.ms_by_time(self.ingestion_param) 
         
-        if self.ingestion_param['feature_list']:
+        if 'feature_list' in ingestion_param.keys():
             if len(result)>0:
                 result = result[self.ingestion_param['feature_list']]
             

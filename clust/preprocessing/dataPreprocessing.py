@@ -118,6 +118,7 @@ class DataPreprocessing():
         self.imputedData = data.copy()
         if imputation_param['flag'] == True:
             from Clust.clust.preprocessing.imputation import Imputation
+            print(data.shape)
             self.imputedData = Imputation.SerialImputation().get_dataWithSerialImputationMethods(self.imputedData, imputation_param)
 
         return self.imputedData

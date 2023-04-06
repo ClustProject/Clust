@@ -74,12 +74,11 @@ def get_oneDF_with_oneFeature_from_multipleDF(dataSet, feature_name, duration, f
     newDF = pd.DataFrame()
     for data_name in dataSet:
         data = dataSet[data_name]
-
         if duration:
             data = _get_multipleDF_sameDuration(data, duration, frequency)
 
         if feature_name in list(data.columns):
-            #value = data[feature_name].values
-            newDF[data_name] = data[feature_name]
+            newDF[data_name] = data[feature_name].values # 이 부분 문제 생길수 있음
+
     return newDF
 
