@@ -45,9 +45,9 @@ class ForecastTrain():
         self.params = params
         self.batch_size = params['batch_size']
         self.n_epochs = params['n_epochs']
-        self.clean_param = params['clean_param']
-        self.train_parameter = params['train_parameter']
-        self.transform_parameter = params['transform_parameter']
+        # self.clean_param = params['clean_param']
+        # self.train_parameter = params['train_parameter']
+        # self.transform_parameter = params['transform_parameter']
         self.device = params['device']
 
     def set_model(self, model_method):

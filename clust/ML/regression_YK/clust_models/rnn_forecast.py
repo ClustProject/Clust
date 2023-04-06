@@ -8,7 +8,7 @@ import random
 from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.transformation.purpose.machineLearning import LSTMData
-from Clust.clust.ML.common import model_manager
+from Clust.clust.ML.tool import model as ml_model
 
 # from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
 from Clust.clust.ML.regression_YK.models.rnn_model import RNNModel
@@ -31,9 +31,9 @@ class RNNForecast():
         # TODO: parameters refactoring
         self.model = RNNModel(
             rnn_type=self.params['rnn_type'],
-            input_size=self.params['trainParameter']['input_size'],
-            hidden_size=self.params['trainParameter']['hidden_size'],
-            num_layers=self.params['trainParameter']['num_layers'],
+            input_size=self.params['input_size'],
+            hidden_size=self.params['hidden_size'],
+            num_layers=self.params['num_layers'],
             output_dim = 1,     # TBD
             dropout_prob = 0.2,  # TBD
             bidirectional=False,    # TBD
@@ -109,8 +109,6 @@ class RNNForecast():
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data
-            mse (float): mean square error  # TBD
-            mae (float): mean absolute error    # TBD
         """
         self.model.eval()   # 모델을 validation mode로 설정
         
@@ -120,7 +118,7 @@ class RNNForecast():
 
             for x_test, y_test in test_loader:
 
-                x_test = x_test.view([params['batch_size'], -1, len(params['transformParameter']['feature_col'])]).to(device)
+                x_test = x_test.view([params['batch_size'], -1, len(params['transform_parameter']['feature_col'])]).to(device)
                 y_test = y_test.to(device)
 
                 self.model.to(device)
@@ -185,7 +183,7 @@ class RNNForecast():
         Args:
             save_path (string): path to save model
         """
-        model_manager.save_pickle_model(self.model, save_path)
+        ml_model.save_pickle_model(self.model, save_path)
 
     def load_model(self, model_file_path):
         """
@@ -194,7 +192,7 @@ class RNNForecast():
         Args:
             model_file_path (string): path to load saved model
         """
-        self.model = model_manager.load_pickle_model(model_file_path)
+        self.model = ml_model.load_pickle_model(model_file_path)
 
     # move to utils?
     # for train data
@@ -240,7 +238,7 @@ class RNNForecast():
             test_loader (DataLoader) : test data loader
         """
         LSTMD = LSTMData()
-        testX_arr, testy_arr = LSTMD.transform_Xy_arr(test_X, self.params['transformParameter'], self.params['cleanTrainDataParam'])
+        testX_arr, testy_arr = LSTMD.transform_Xy_arr(test_X, self.params['transform_parameter'], self.params['cleanTrainDataParam'])
         features = torch.Tensor(testX_arr)
         targets = torch.Tensor(testy_arr)
 

@@ -22,7 +22,7 @@ class RegressionTrain():
     def __init__(self):
         pass
 
-    def set_param(self, params):
+    def set_param(self, train_params):
         """
         Set Parameters for train
 
@@ -41,50 +41,43 @@ class RegressionTrain():
             ...            'n_epochs':10    }
         """
         # TODO: parameters refactoring 
-        self.params = params
-        self.batch_size = params['batch_size']
-        self.n_epochs = params['n_epochs']
-        self.device = params['device']
+        self.train_params = train_params
+        # self.batch_size = params['batch_size']
+        # self.n_epochs = params['n_epochs']
+        # self.device = params['device']
 
-    def set_model(self, model_method):
+    def set_model(self, model_method, model_params):
         """
         Set model for selected model_method
 
         Args:
             model_method (string): model method name  
         """
-        if model_method == 'LSTM_rg':
-            self.params['rnn_type'] = 'lstm'
-            self.model = RNNClust(self.params)
-        elif model_method == 'GRU_rg':
-            self.params['rnn_type'] = 'gru'
-            self.model = RNNClust(self.params)
-        elif model_method == 'CNN_1D_rg':
-            self.model = CNN1DClust(self.params)
-        elif model_method == 'LSTM_FCNs_rg':
-            self.model = LSTMFCNsClust(self.params)
-        elif model_method == 'FC_rg':
-            self.model = FCClust(self.params)
+        self.model_params = model_params
+
+        if model_method == 'LSTM' or 'GRU' or 'RNN':
+            self.model = RNNClust(self.model_params)
+        elif model_method == 'CNN_1D':
+            self.model = CNN1DClust(self.model_params)
+        elif model_method == 'LSTM_FCNs':
+            self.model = LSTMFCNsClust(self.model_params)
+        elif model_method == 'FC':
+            self.model = FCClust(self.model_params)
         else:
             print('Choose the model correctly')
 
-    def set_data(self, train_x, train_y, val_x, val_y, window_num=0):
+    def set_data(self, train_x, train_y, val_x, val_y):
         """
         set train, val data & transform data for training
 
+        # regression task
         Args:
             train_x (dataframe): train X data
-            train_y (dataframe): train y data
+            train_y (dataframe): train y data (optional)
             val_x (dataframe): validation X data
-            val_y (dataframe): validation y data
-            window_num (integer) : window size
+            val_y (dataframe): validation y data (optional)
         """
-
-        # TBD: input_size & seq_len?
-        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y, window_num)
-        
-        # self.params['input_size'] = input_size
-        # self.params['seq_len'] = seq_len
+        self.train_loader, self.valid_loader = self.model.create_trainloader(self.train_params['batch_size'], train_x, train_y, val_x, val_y)
 
     def train(self):
         """
@@ -93,7 +86,7 @@ class RegressionTrain():
         print("Start training model")
 
         # train model
-        self.model.train(self.params, self.train_loader, self.valid_loader, self.n_epochs, self.device)
+        self.model.train(self.train_params, self.train_loader, self.valid_loader)
 
     def save_best_model(self, save_path):
         """

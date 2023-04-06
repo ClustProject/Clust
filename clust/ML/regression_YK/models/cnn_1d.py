@@ -1,6 +1,8 @@
 import torch.nn as nn
+
 def calculate_output_length(input_seq, kernel_size, stride=1, padding=0, dilation=1):
     return (input_seq + 2 * padding - dilation * (kernel_size - 1) - 1) // stride + 1
+
 
 class CNN1D(nn.Module):
     def __init__(self, input_channels, output_channels, kernel_size, stride, padding, drop_out, input_seq):

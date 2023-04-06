@@ -18,7 +18,7 @@ class ForecastInference():
         Args:
             param(dict): train parameter
 
-
+        #TODO: parameters refactoring
         Example:
 
             >>> param = { 'num_layers': 2, 
@@ -69,14 +69,12 @@ class ForecastInference():
 
         Args:
             data (dataframe): Inference data
-            window_num (integer) : window size
     
 
         Example:
 
         >>> set_data(test_X, window_num)
         ...         test_X : inference data
-        ...         window_num : window size
 
         """  
         self.inference_loader = self.model.create_inferenceloader(self.batch_size, data)

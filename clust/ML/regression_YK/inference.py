@@ -10,17 +10,15 @@ from Clust.clust.ML.regression_YK.clust_models.fc_clust import FCClust
 
 
 class RegressionInference():
-
     def __init__(self):
         pass
 
-    def set_param(self, params):
+    def set_param(self, infer_params):
         """
         Set Parameter for Inference
 
         Args:
             param(dict): train parameter
-
 
         Example:
 
@@ -33,52 +31,48 @@ class RegressionInference():
             ...            "batch_size":16,
             ...            "n_epochs":10    }
         """
-        self.params = params
-        self.batch_size = params['batch_size']
-        self.device = params['device']
+        self.infer_params = infer_params
+        # self.batch_size = params['batch_size']
+        # self.device = params['device']
 
-    def set_model(self, model_method, model_file_path):
+    def set_model(self, model_method, model_file_path, model_params):
         """
         Set model and load weights from model file path
 
         Args:
-            model_method (string): model method name 
+            model_method (string): model method name  
             model_file_path (string): path for trained model  
+            model_params (dict): parameters to create a model
         """
-        if model_method == 'LSTM_rg':
-            self.params['rnn_type'] = 'lstm'
-            self.model = RNNClust(self.params)
-        elif model_method == 'GRU_rg':
-            self.params['rnn_type'] = 'gru'
-            self.model = RNNClust(self.params)
-        elif model_method == 'CNN_1D_rg':
-            self.model = CNN1DClust(self.params)
-        elif model_method == 'LSTM_FCNs_rg':
-            self.model = LSTMFCNsClust(self.params)
-        elif model_method == 'FC_rg':
-            self.model = FCClust(self.params)
+        self.model_params = model_params
+
+        if model_method == 'LSTM' or 'GRU' or 'RNN':
+            self.model = RNNClust(self.model_params)
+        elif model_method == 'CNN_1D':
+            self.model = CNN1DClust(self.model_params)
+        elif model_method == 'LSTM_FCNs':
+            self.model = LSTMFCNsClust(self.model_params)
+        elif model_method == 'FC':
+            self.model = FCClust(self.model_params)
         else:
             print('Choose the model correctly')
 
         self.model.load_model(model_file_path)
 
-    def set_data(self, data, window_num=0):
+    def set_data(self, data):
         """
         set data for inference & transform data
 
         Args:
             data (dataframe): Inference data
-            window_num (integer) : window size
     
-
         Example:
 
         >>> set_data(test_X, window_num)
         ...         test_X : inference data
-        ...         window_num : window size
 
         """  
-        self.inference_loader = self.model.create_inferenceloader(self.batch_size, data, window_num)
+        self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], data)
 
     def inference(self):
         """
@@ -88,6 +82,6 @@ class RegressionInference():
             preds (ndarray): prediction data
         """
         print("\nStart inference\n")
-        preds = self.model.inference(self.params, self.inference_loader, self.device)
+        preds = self.model.inference(self.infer_params, self.inference_loader)
 
         return preds

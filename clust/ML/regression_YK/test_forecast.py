@@ -17,6 +17,7 @@ class ForecastTest():
         Args:
         param(dict): train parameter
 
+        #TODO: parameters refactoring
         Example:
 
             >>> param = { 'num_layers': 2, 
@@ -85,8 +86,6 @@ class ForecastTest():
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data
-            mse (float): mean square error  # TBD
-            mae (float): mean absolute error    # TBD
         """
         print("\nStart testing data\n")
 

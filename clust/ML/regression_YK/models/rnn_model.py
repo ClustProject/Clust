@@ -4,7 +4,7 @@ import torch
 # device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class RNNModel(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type, device):
+    def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type):
         """The __init__ method that initiates an RNN instance.
 
         Args:
@@ -13,7 +13,8 @@ class RNNModel(nn.Module):
             num_layers (int): The number of layers in the network
             output_dim (int): The number of nodes in the output layer
             dropout_prob (float): The probability of nodes being dropped out
-
+            bidirectional (boolean): Whether bidirectional or not
+            rnn_type (string): The type of RNN structure (i.e., rnn, lstm, gru)
         """
         super(RNNModel, self).__init__()
 
@@ -29,20 +30,20 @@ class RNNModel(nn.Module):
         if self.rnn_type == 'rnn':
             self.rnn = nn.RNN(
                 input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
-            ).to(device)
+            )
         # LSTM layers
         elif self.rnn_type == 'lstm':
             self.lstm = nn.LSTM(
                 input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
-            ).to(device)
+            )
         # GRU layers
         elif self.rnn_type == 'gru':
             self.gru = nn.GRU(
                 input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
-            ).to(device)
+            )
 
         # Fully connected layer according to wheter bidirectional
-        self.fc = nn.Linear(self.num_directions * hidden_size, output_dim).to(device)
+        self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
 
     def forward(self, x):
         """The forward method takes input tensor x and does forward propagation
