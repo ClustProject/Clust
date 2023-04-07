@@ -1,7 +1,7 @@
 import pandas as pd
 import sys
 sys.path.append("../")
-
+import math
 from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import model as model_manager
 
@@ -9,7 +9,7 @@ from Clust.clust.ML.tool import model as model_manager
 # KETIAppdataServer/dataDomainExploration
 # KETIAppTestCode/Domain, Cycle Data
 # 기타 EDA에서 활용되고 있음
-def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam):
+def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam, model_type, cluster_num):
 
     """_customized clustering function_ 
         1) preprocessing for making one DF
@@ -61,27 +61,28 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     """
     # SOM
     """
-    parameter = {
-        "method": "som",
-        "param": {
-            "epochs":5000,
-            "som_x":2,
-            "som_y":2,
-            "neighborhood_function":"gaussian",
-            "activation_distance":"euclidean"
+
+    if model_type =='som':
+        parameter = {
+            "method": "som",
+            "param": {
+                "epochs":5000,
+                "som_x":int(math.sqrt(cluster_num)),
+                "som_y":int(cluster_num / int(math.sqrt(cluster_num))),
+                "neighborhood_function":"gaussian",
+                "activation_distance":"euclidean"
+            }
         }
-    }
-    
-    """
-    # K-Means
-    parameter = {
-         "method": "kmeans",
-         "param": {
-             "n_clusters": 3,
-             "metric": "euclidean"
-         }
-    }
-    """
+    elif model_type =='kmeans':  
+        # K-Means
+        parameter = {
+            "method": "kmeans",
+            "param": {
+                "n_clusters": cluster_num,
+                "metric": "euclidean"
+            }
+        }
+        
 
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod

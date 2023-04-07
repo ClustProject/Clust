@@ -2,7 +2,6 @@ from tqdm.autonotebook import tqdm
 import numpy as np
 import pandas as pd
 from Clust.clust.ML.clustering.clustering import Train, Test
-import matplotlib.pyplot as plt
 from tslearn.clustering import TimeSeriesKMeans
 seed = 0
 np.random.seed(seed)
@@ -43,7 +42,7 @@ class KMeansTest(Test):
             data(series):data
             
         Return:
-            cluster_map(array): cluster map result of input data
+            self.y(array): label result
             >>> example> [1, 2, 0]
         """
 
@@ -52,54 +51,9 @@ class KMeansTest(Test):
         # return dataframe
         #label = []
         
-        label = self.model.predict(data)
-        self.y = label
+        self.y = self.model.predict(data)
 
-        return label
-
-    def plot_ts_by_label(self):
-        """
-        Show clustering result 
-        
-        Args:
-            n_clusters (int):Number of clusters to form.
-            X (numpy.ndarray): 2d array of timeseries dataset
-            y (numpy.ndarray): 1d array (label result)
-            method (string): k-means method {“euclidean”, “dtw”, “softdtw”} (default: “euclidean”)
-            model: (class tslearn.clustering.TimeSeriesKMeans) :kmeans Model
-
-        """
-        n_clusters = self.model.cluster_centers_.shape[0]
-
-        custom_xlim = [0, self.X.shape[1]]
-        custom_ylim = [self.X.min(), self.X.max()]
-        fig, ax = plt.subplots(1, n_clusters, figsize=(20, 3))
-        fig.suptitle("k_means:" + self.model.metric, y=1.08)
-        plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
-        for yi in range(n_clusters):
-            ax[yi].set_title('Clust '+str(yi+1))
-            for xx in self.X[self.y == yi]:
-                ax[yi].plot(xx.ravel(), "k-", alpha=.2)
-            ax[yi].plot(self.model.cluster_centers_[yi].ravel(), "r-")
-
-        return plt
-
-    def plot_label_histogram(self):
-        """ overriding
-        """
-        n_clusters = self.model.cluster_centers_.shape[0]
-        label = self.y
-
-        cluster_c = [0 for i in range(n_clusters)]
-        cluster_n = [f"Cluster {i+1}" for i in range(n_clusters)]
-
-        for i in range(len(label)):
-            cluster_c[label[i]] += 1
-        
-        plt.title("Cluster Distribution for K-Means")
-        plt.bar(cluster_n, cluster_c)
-
-        return plt
+        return self.y
 
 
 def search_best_n_clust(data, param):

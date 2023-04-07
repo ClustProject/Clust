@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import math
+import numpy as np
 class Train:
     """Clustering Train Super Class"""
 
@@ -49,23 +52,60 @@ class Test:
             data(series):data
             
         Return:
-            label(array): label result by
+            self.y(array): label result by
             >>> example> [1, 2, 0]
         """
-        
-        label =[]
+        self.X = data
+        self.y = []
 
-        return label
+        return self.y
 
     def plot_ts_by_label(self):
-        """ plot timeseries style result with representative clustering value.
+        """
+            Show clustering result 
+            
+            Args:
+                X (numpy.ndarray): 2d array of timeseries dataset
+                y (numpy.ndarray): 1d array (label result)    
+                cluster_centers_ (numpy.ndarray): 1d array 
+        """
+        X = self.X
+        y = self.y
         
-        """
-        pass
+        def get_cluster_centers(center_type):
+            cluster_centers_ = []
+            self.n_clusters = max(self.y)+1
+            for i in range(0, self.n_clusters):
+                cluster_result = self.X[self.y == i]
+                if center_type == 'dtw_barycenter_averaging':
+                    from tslearn.barycenters import dtw_barycenter_averaging
+                    cluster_centers_[i] = dtw_barycenter_averaging(cluster_result)
+                else:
+                    cluster_centers_.append(cluster_result.mean(axis=0)) 
+            return cluster_centers_
     
-
+        cluster_centers_ = get_cluster_centers('mean')
+        n_clusters = y.max()
+        custom_xlim = [0, X.shape[1]]
+        custom_ylim = [0, X.max()]
+        col_num = 2
+        row_num = math.ceil(n_clusters/col_num)
+        fig, ax = plt.subplots(col_num, row_num, figsize=(20, row_num * 5))
+        plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
+        for i in range(0, row_num):
+            for j in range(0, col_num):
+                clust_num = (col_num*i+j)
+                ax[i][j].set_title('Clust '+str(clust_num))
+                for xx in X[y == clust_num]:
+                    ax[i][j].plot(xx.ravel(), "k-", alpha=.2)
+                ax[i][j].plot(cluster_centers_[clust_num].ravel(), "r-")
+            
+        return plt
+    
     def plot_label_histogram(self):
-        """ plot histogram result with clustered result
+        bins = np.arange(0, self.y.max()+1.5)-0.5
+        fig, ax = plt.subplots()
+        _ = ax.hist(self.y, bins)
+        ax.set_xticks(bins+0.5)
 
-        """
-        pass
+        return plt

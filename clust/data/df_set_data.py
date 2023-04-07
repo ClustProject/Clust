@@ -121,6 +121,7 @@ class DfSetData():
                             'integration_freq_min': 60, 
                             'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
         ```
+        
         # Returns
          * bucket_dataSet (_dict_) : integrated data
 
