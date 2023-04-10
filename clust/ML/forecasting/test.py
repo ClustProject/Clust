@@ -134,7 +134,3 @@ class ForecasatingTest(Inference):
         trues = np.array(trues).reshape(-1)
         
         return preds, trues
-
-
-                # preds.append(outputs.detach().numpy().ravel()[0])
-                # trues.append(y_test.detach().numpy().ravel()[0])

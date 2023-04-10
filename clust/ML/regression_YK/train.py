@@ -55,13 +55,13 @@ class RegressionTrain():
         """
         self.model_params = model_params
 
-        if model_method == 'LSTM' or 'GRU' or 'RNN':
+        if model_method == 'LSTM_rg' or model_method == 'GRU_rg' or model_method == 'RNN_rg':
             self.model = RNNClust(self.model_params)
-        elif model_method == 'CNN_1D':
+        elif model_method == 'CNN_1D_rg':
             self.model = CNN1DClust(self.model_params)
-        elif model_method == 'LSTM_FCNs':
+        elif model_method == 'LSTM_FCNs_rg':
             self.model = LSTMFCNsClust(self.model_params)
-        elif model_method == 'FC':
+        elif model_method == 'FC_rg':
             self.model = FCClust(self.model_params)
         else:
             print('Choose the model correctly')

@@ -130,7 +130,7 @@ class RNNClust(BaseRegressionModel):
                 trues.extend(y_test.detach().cpu().numpy())
 
         preds = np.array(preds).reshape(-1)
-        trues = np.array(trues)
+        trues = np.array(trues).reshape(-1)
 
         return preds, trues
     
