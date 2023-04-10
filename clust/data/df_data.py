@@ -63,7 +63,7 @@ class DfData():
          >>> ingestion_param = {
             'days' : 1,                                     
             'end_time': '2021-09-11 00:00:00', 
-            'db_name' : 'air_indoor_modelSchool',
+            "bucket_name" : 'air_indoor_modelSchool',
             'ms_name' : 'ICW0W2000014',
             'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
                                 'out_h2s','out_humi', 'out_noise', 'out_temp',
@@ -76,7 +76,7 @@ class DfData():
 
         """
         #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
-        data = self.db_client.get_data_by_days(ingestion_param['end_time'], ingestion_param['days'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+        data = self.db_client.get_data_by_days(ingestion_param['end_time'], ingestion_param['days'], ingestion_param["bucket_name"], ingestion_param['ms_name']) 
 
         return data
     
@@ -89,7 +89,7 @@ class DfData():
          * ingestion_param (_dict_) 
         ```            
          >>> ingestion_param = {
-                'db_name' : 'air_indoor_modelSchool'
+                "bucket_name" : 'air_indoor_modelSchool'
                 , 'ms_name' : 'ICW0W2000014'
                 , 'start_time': '2021-09-05 00:00:00'
                 , 'end_time': '2021-09-11 00:00:00'
@@ -103,7 +103,7 @@ class DfData():
 
         """
         #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
-        data = self.db_client.get_data_by_time(ingestion_param['start_time'], ingestion_param['end_time'], ingestion_param['db_name'], ingestion_param['ms_name'])
+        data = self.db_client.get_data_by_time(ingestion_param['start_time'], ingestion_param['end_time'], ingestion_param["bucket_name"], ingestion_param['ms_name'])
         
         return data
     
@@ -116,7 +116,7 @@ class DfData():
          * ingestion_param (_dict_)
         ```
         >>> ingestion_param = {
-                'db_name' : 'air_indoor_modelSchool'
+                "bucket_name" : 'air_indoor_modelSchool'
                 , 'ms_name' : 'ICW0W2000014'
                 , 'num' : 1000 #ms_by_num
                 , 'position' : 'end'
@@ -131,8 +131,8 @@ class DfData():
         """
         #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         if ingestion_param['position']=='end':
-            data = self.db_client.get_data_end_by_num(ingestion_param['num'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+            data = self.db_client.get_data_end_by_num(ingestion_param['num'], ingestion_param["bucket_name"], ingestion_param['ms_name']) 
         else:
-            data = self.db_client.get_data_front_by_num(ingestion_param['num'], ingestion_param['db_name'], ingestion_param['ms_name']) 
+            data = self.db_client.get_data_front_by_num(ingestion_param['num'], ingestion_param["bucket_name"], ingestion_param['ms_name']) 
             
         return data             

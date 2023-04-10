@@ -32,7 +32,7 @@ def get_meta_table(mongodb_url):
                     except KeyError as e:
                         print("KeyError:", e)
                 
-    exploration_df.columns = ['db_name', 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
+    exploration_df.columns = ["bucket_name", 'measurement_name', 'start_time', 'end_time', 'frequency', 'number_of_columns']
     exploration_df.reset_index(drop=True, inplace = True)
     exploration_js = exploration_df.to_json(orient = 'records')
     

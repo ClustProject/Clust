@@ -86,7 +86,7 @@ class DfSetData():
         
         MSdataSet ={}
         for dbinfo in intDataInfo['db_info']:
-            db_name     = dbinfo['db_name']
+            db_name     = dbinfo["bucket_name"]
             ms_name     = dbinfo['measurement']
             data_name   = db_name + "_" + ms_name
             tag_key     = None

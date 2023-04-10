@@ -1,9 +1,8 @@
-from Clust.clust.tool.plot.util import plt_to_image
 from Clust.clust.ML.clustering.som import SomTrain, SomTest
 from Clust.clust.ML.clustering.kMeans import KMeansTrain, KMeansTest
 from Clust.clust.ML.tool.data import DF_to_series
 from Clust.clust.ML.tool.model import load_pickle_model, save_pickle_model
-
+import pandas as pd
 #TODO 나중에 수정해야함 전반적인 구조들과 스트럭쳐
 
 def clusteringByMethod(data, parameter, model_path):
@@ -49,7 +48,7 @@ def clusteringByMethod(data, parameter, model_path):
         print("start..........................")
         # 1. 데이터 준비
         data_series = DF_to_series(data)
-        data_name = list(data.columns)
+        
 
         # 2. Train
         clust_train.set_param(param)
@@ -61,28 +60,27 @@ def clusteringByMethod(data, parameter, model_path):
         # 4. model load
         model = load_pickle_model(model_path)
         
-
-        # 5. test (predict)
+        # 5. predict
         clust_test.set_model(model)
-        from Clust.clust.ML.tool import util
         result = clust_test.predict(data_series)
 
+        # 6. test 
         from sklearn.metrics import calinski_harabasz_score
         score = calinski_harabasz_score(data_series, result)
         print("Score:", score)
-        result_dic = util.get_dict_from_two_array(data_name, result)
         
-        # plot time series style
-        plt1 = clust_test.plot_ts_by_label()
+        # 7. test data plot
+        import matplotlib.pyplot as plt
+        from Clust.clust.tool.plot import plot_image
+        plt.rcParams['figure.figsize'] =(18, 5)
+        print(data_series.shape, result.shape)
+        plt1 = clust_test.plot_ts_by_label(data_series, result)
+        
         plt1.show()
-        figdata = plt_to_image(plt1)
-            
-        # plot historgram
-        plt2 = clust_test.plot_label_histogram()
-        plt2.show()
-        figdata2 = plt_to_image(plt2)
+        figdata = plot_image.plt_to_image(plt1)
+    
         
-        return result_dic, figdata
+        return result, figdata
 
 
 

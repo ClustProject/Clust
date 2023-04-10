@@ -84,7 +84,7 @@ def search_best_n_clust(data, param):
         clust_test.set_model(clust_train.model)
         
         result = clust_test.predict(data)
-        plt = clust_test.plot_ts_by_label()
+        plt = clust_test.plot_ts_by_label(data, result)
         plt.show()
 
         silhouette_avg = silhouette_score(data, result)

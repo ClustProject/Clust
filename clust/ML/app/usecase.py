@@ -84,12 +84,21 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
         }
         
 
-
     from Clust.clust.ML.clustering.interface import clusteringByMethod
     model_path = "model.pkl"
     result, figdata= clusteringByMethod(data, parameter, model_path)
+    
+    # histogram by label
+    from Clust.clust.tool.plot import plot_interface
+    y_df = pd.DataFrame(result)
+    plt2 = plot_interface.get_graph_result('plt', 'histogram', y_df)
+    plt2.show()
+    
+    from Clust.clust.ML.tool import util
+    data_name = list(data.columns)
+    result_dic = util.get_dict_from_two_array(data_name, result)
 
-    return result, figdata
+    return result_dic, figdata
 
 
 

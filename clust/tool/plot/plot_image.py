@@ -1,13 +1,10 @@
-
-
-import os
 import sys
 import io, base64
 sys.path.append("../")
 sys.path.append("../../")
 
 from Clust.clust.tool.plot import plot_plt
-    
+
 def get_img_result(graph_type, df):
     """ 
     # Description    
@@ -23,13 +20,21 @@ def get_img_result(graph_type, df):
     #TODO 명확히 정의할 것 프로그램이 independent 하도록
     
     plt_ = plot_plt.get_img_result(graph_type, df)
-    my_stringIObytes = io.BytesIO()
-
-    plt_.savefig(my_stringIObytes, format='jpg')
-    my_stringIObytes.seek(0)    
-
-    my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
-
+    jpg_data = plt_to_image(plt_)
     
-    return my_base64_jpgData
+    return jpg_data
 
+def plt_to_image(plt):
+    """
+    Convert plt into real image
+    Args:
+        plt (matplotlib.pyplot):
+    Return:
+        image_base64 (image_base64)
+    """
+    # send images
+    buf = io.BytesIO()
+    plt.savefig(buf, format='jpg')
+    image_base64 = base64.b64encode(buf.read())
+    #image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
+    return image_base64

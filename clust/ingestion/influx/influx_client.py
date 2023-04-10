@@ -16,8 +16,8 @@ class InfluxClient():
     def __init__(self, influx_setting):
         self.influx_setting = influx_setting
         self.DBClient = InfluxDBClient(host=self.influx_setting['host'], port=self.influx_setting['port'], username=self.influx_setting['user'], password = self.influx_setting['password'])
-        if "db_name" in self.influx_setting:
-            self.switch_DB(self.influx_setting['db_name'])
+        if "bucket_name" in self.influx_setting:
+            self.switch_DB(self.influx_setting["bucket_name"])
        
     def get_db_list(self):
         """
@@ -494,7 +494,7 @@ class InfluxClient():
 #         for i, dbinfo in enumerate(intDataInfo['db_info']):
 #             print(i)
 #             print(dbinfo)
-#             db_name = dbinfo['db_name']
+#             db_name = dbinfo["bucket_name"]
 #             ms_name = dbinfo['measurement']
 #             self.switch_MS(db_name, ms_name)
 #             bind_params = {'end_time': dbinfo['end'], 'start_time': dbinfo['start']}

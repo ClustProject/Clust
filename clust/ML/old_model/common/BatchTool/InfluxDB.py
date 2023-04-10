@@ -50,7 +50,7 @@ class BatchTraining():
             >>> trainer.batchTrain()   
 
         """
-        db_name = self.dataIngestionParameter['db_name']
+        db_name = self.dataIngestionParameter["bucket_name"]
         #MSColumn
         if "ms_name" in self.dataIngestionParameter:
             self.trainerForMSColumn()
@@ -67,7 +67,7 @@ class BatchTraining():
 
         """
         ms_name = self.dataIngestionParameter['ms_name']
-        db_name = self.dataIngestionParameter['db_name']
+        db_name = self.dataIngestionParameter["bucket_name"]
 
         if 'duration' in self.dataIngestionParameter:
             duration = self.dataIngestionParameter['duration']

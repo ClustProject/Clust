@@ -30,14 +30,16 @@ def get_data_result(select_type, data_input, select_param=None):
     
     if select_type =='oneDF_with_oneFeature_from_multipleDF':
         feature_name = select_param['feature_name']
-        if select_param['duration']:
+        if 'duration' in list(select_param.keys()):
             duration = select_param['duration']
         else:
             duration = None
-        if select_param['frequency']:
+            
+        if 'frequency' in list(select_param.keys()):
             frequency = select_param['frequency']
         else:
             frequency = None
+            
         result = get_oneDF_with_oneFeature_from_multipleDF(data_input, feature_name, duration, frequency)
 
     return result
