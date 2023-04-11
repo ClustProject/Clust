@@ -65,18 +65,18 @@ def clusteringByMethod(data, parameter, model_path):
         result = clust_test.predict(data_series)
 
         # 6. test 
+        """
         from sklearn.metrics import calinski_harabasz_score
+        print(data_series, result)
         score = calinski_harabasz_score(data_series, result)
         print("Score:", score)
-        
+        """
         # 7. test data plot
         import matplotlib.pyplot as plt
         from Clust.clust.tool.plot import plot_image
         plt.rcParams['figure.figsize'] =(18, 5)
         print(data_series.shape, result.shape)
         plt1 = clust_test.plot_ts_by_label(data_series, result)
-        
-        plt1.show()
         figdata = plot_image.plt_to_image(plt1)
     
         
