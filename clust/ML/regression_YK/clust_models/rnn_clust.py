@@ -246,8 +246,11 @@ class RNNClust(BaseRegressionModel):
         Returns:
             test_loader (DataLoader) : test data loader
         """
-        test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+        features, targets = torch.Tensor(test_x), torch.Tensor(test_y)
+
+        test_data = TensorDataset(features, targets)
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False, drop_last=True)
+        print("features shape:", features.shape, "targets shape: ", targets.shape)
 
         return test_loader
 
