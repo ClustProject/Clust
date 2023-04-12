@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
+import seaborn as sns 
 
-def get_img_result(graph_type, df):
+def get_plt_result(graph_type, df):
     """ 
     # Description         
      graph_type에 따라 plt을 생성하여 리턴함.
@@ -45,8 +46,6 @@ class PlotPlt():
          * plt(_pyplot module_)
             
         """
-        import seaborn as sns    
-        
         ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.index.values, annot =True, annot_kws ={'size': 4})
         bottom, top = ax.get_ylim() 
         heat_map = plt.gcf()

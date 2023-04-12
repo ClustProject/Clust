@@ -38,6 +38,16 @@ def getData(db_client, dataInfo, integration_freq_sec, processParam, startTime, 
 
     return data
 
+def integrated_data_meta(dataInfo, start_time, end_time, integration_freq_sec, clean_param, process_param):
+    integrated_data_meta = {}
+    integrated_data_meta["dataInfo"] = dataInfo
+    integrated_data_meta["startTime"] = start_time
+    integrated_data_meta["endTime"] = end_time
+    integrated_data_meta["cleanParam"] = clean_param
+    integrated_data_meta["integration_freq_sec"] = integration_freq_sec
+    integrated_data_meta["process_param"] = process_param
+    
+    return integrated_data_meta
 
 def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
     integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
