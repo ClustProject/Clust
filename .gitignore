@@ -133,3 +133,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 examples/YK_notebook.ipynb
+examples/7. ModelTest/7-3. Regression/Models/CNN_1D_rg/YKTestCNN1D/IntegraionTrainX/d531eec11664669cff1f6a3ad9639012/model.pkl
+examples/7. ModelTest/7-3. Regression/Models/GRU_rg/TestGRU_rg/IntegraionTrainX/d531eec11664669cff1f6a3ad9639012/model.pkl
+examples/7. ModelTest/7-3. Regression/Models/GRU_rg/YKTestGRU/IntegraionTrainX/d531eec11664669cff1f6a3ad9639012/model.pkl
+examples/7. ModelTest/7-3. Regression/Models/LSTM_rg/YKTestLSTM/IntegraionTrainX/d531eec11664669cff1f6a3ad9639012/model.pkl
+examples/7. ModelTest/7-3. Regression/scaler/IntegraionTrainX/NoClean/minmax/44e77c5a60a148deb89c5ef9a221a365/scaler.pkl
+examples/7. ModelTest/7-3. Regression/scaler/IntegraionTrainX/NoClean/minmax/f69156750a210491ffd4a67b605bc88b/scaler.pkl
+examples/7. ModelTest/7-3. Regression/scaler/IntegraionTrainX/NoClean/minmax/44e77c5a60a148deb89c5ef9a221a365/scaler.pkl
+examples/7. ModelTest/7-3. Regression/scaler/IntegraionTrainX/NoClean/minmax/f69156750a210491ffd4a67b605bc88b/scaler.pkl

@@ -106,10 +106,10 @@ class RNNClust(BaseRegressionModel):
         """
         device = test_params['device']
         batch_size = test_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
-        n_features = self.model_params['input_size']
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds, trues = [], []
@@ -146,23 +146,25 @@ class RNNClust(BaseRegressionModel):
             preds (ndarray) : Inference result data
         """
         device = infer_params['device']
+        batch_size = infer_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
-        # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds = []
 
-            for inputs in inference_loader:
+            for x_infer in inference_loader:
 
-                inputs = input.to(device)
+                # x_infer = x_infer.to(device)
+                x_infer = x_infer.view(batch_size, -1, n_features).to(device)
 
                 self.model.to(device)
                 
                 # forward
                 # input을 model에 넣어 output을 도출
-                outputs = self.model(inputs)
-                
+                outputs = self.model(x_infer)
+                print(x_infer)
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
 
@@ -266,9 +268,12 @@ class RNNClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
+        # infer_x = infer_x.values.astype(np.float32)
+        # infer_x = infer_x.reshape((-1, infer_x.shape[0], infer_x.shape[1]))
 
         infer_x = torch.Tensor(infer_x)
-        inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=True)
+        inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=False)
+        print("inference data shape:", infer_x.shape)
 
         return inference_loader
 

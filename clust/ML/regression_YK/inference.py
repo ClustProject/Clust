@@ -59,7 +59,7 @@ class RegressionInference():
 
         self.model.load_model(model_file_path)
 
-    def set_data(self, data):
+    def set_data(self, infer_X):
         """
         set data for inference & transform data
 
@@ -72,7 +72,7 @@ class RegressionInference():
         ...         test_X : inference data
 
         """  
-        self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], data)
+        self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], infer_X)
 
     def inference(self):
         """
