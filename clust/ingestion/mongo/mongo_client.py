@@ -141,7 +141,7 @@ class MongoClient():
         collection = database[collection_name]
 
         collection.insert_one(document)
-        print("========== Data Svae Success ==========")
+        print("========== Data Save Success ==========")
         
 
     # TODO update function 수정 예정
