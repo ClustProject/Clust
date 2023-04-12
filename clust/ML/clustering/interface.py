@@ -73,14 +73,14 @@ def clusteringByMethod(data, parameter, model_path):
         """
         # 7. test data plot
         import matplotlib.pyplot as plt
-        from Clust.clust.tool.plot import plot_image
+        
         plt.rcParams['figure.figsize'] =(18, 5)
         
         plt1 = clust_test.plot_ts_by_label(data_series, result)
-        figdata = plot_image.plt_to_image(plt1)
+        
     
         
-        return result, figdata
+        return result, plt1
 
 
 
