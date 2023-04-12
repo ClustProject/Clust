@@ -45,58 +45,61 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     CMS = cleanData.CleanData()
     data = CMS.get_cleanData_by_removing_column(data_DF, NaNProcessingParam) 
 
-    # 4. preprocessing for clustering
-    from Clust.clust.preprocessing import processing_interface
-    imputation_param = {
-        "flag":True,
-        "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
-                             {"min":0,"max":10000,"method":"mean", "parameter":{}}],
-        "totalNonNanRatio":1 }
-    data = processing_interface.get_data_result('imputation', data, imputation_param)
-    process_param={'flag': True, 'emw_param':0.3}
-    data = processing_interface.get_data_result('smoothing', data, process_param)
-    process_param={'flag': True, 'method':'minmax'} 
-    data = processing_interface.get_data_result('scaling', data, process_param)
-    
-    """
-    # SOM
-    """
-
-    if model_type =='som':
-        parameter = {
-            "method": "som",
-            "param": {
-                "epochs":5000,
-                "som_x":int(math.sqrt(cluster_num)),
-                "som_y":int(cluster_num / int(math.sqrt(cluster_num))),
-                "neighborhood_function":"gaussian",
-                "activation_distance":"euclidean"
-            }
-        }
-    elif model_type =='kmeans':  
-        # K-Means
-        parameter = {
-            "method": "kmeans",
-            "param": {
-                "n_clusters": cluster_num,
-                "metric": "euclidean"
-            }
-        }
+    figdata=None
+    result_dic={}
+    if len(data.columns) > 1:
+        # 4. preprocessing for clustering
+        from Clust.clust.preprocessing import processing_interface
+        imputation_param = {
+            "flag":True,
+            "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
+                                {"min":0,"max":10000,"method":"mean", "parameter":{}}],
+            "totalNonNanRatio":1 }
+        data = processing_interface.get_data_result('imputation', data, imputation_param)
+        process_param={'flag': True, 'emw_param':0.3}
+        data = processing_interface.get_data_result('smoothing', data, process_param)
+        process_param={'flag': True, 'method':'minmax'} 
+        data = processing_interface.get_data_result('scaling', data, process_param)
         
+        """
+        # SOM
+        """
 
-    from Clust.clust.ML.clustering.interface import clusteringByMethod
-    model_path = "model.pkl"
-    result, figdata= clusteringByMethod(data, parameter, model_path)
-    
-    # histogram by label
-    from Clust.clust.tool.plot import plot_interface
-    y_df = pd.DataFrame(result)
-    plt2 = plot_interface.get_graph_result('plt', 'histogram', y_df)
-    #plt2.show()
-    
-    from Clust.clust.ML.tool import util
-    data_name = list(data.columns)
-    result_dic = util.get_dict_from_two_array(data_name, result)
+        if model_type =='som':
+            parameter = {
+                "method": "som",
+                "param": {
+                    "epochs":5000,
+                    "som_x":int(math.sqrt(cluster_num)),
+                    "som_y":int(cluster_num / int(math.sqrt(cluster_num))),
+                    "neighborhood_function":"gaussian",
+                    "activation_distance":"euclidean"
+                }
+            }
+        elif model_type =='kmeans':  
+            # K-Means
+            parameter = {
+                "method": "kmeans",
+                "param": {
+                    "n_clusters": cluster_num,
+                    "metric": "euclidean"
+                }
+            }
+            
+
+        from Clust.clust.ML.clustering.interface import clusteringByMethod
+        model_path = "model.pkl"
+        result, figdata= clusteringByMethod(data, parameter, model_path)
+        
+        # histogram by label
+        from Clust.clust.tool.plot import plot_interface
+        y_df = pd.DataFrame(result)
+        plt2 = plot_interface.get_graph_result('plt', 'histogram', y_df)
+        #plt2.show()
+        
+        from Clust.clust.ML.tool import util
+        data_name = list(data.columns)
+        result_dic = util.get_dict_from_two_array(data_name, result)
 
     return result_dic, figdata
 
