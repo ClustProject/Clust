@@ -46,7 +46,8 @@ class CNN1DClust(BaseRegressionModel):
         """
         device = train_params['device']
         epochs = train_params['n_epochs']
-        # batch_size = train_params['batch_size']
+        batch_size = train_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.to(device)
 
@@ -58,12 +59,11 @@ class CNN1DClust(BaseRegressionModel):
 
         since = time.time()
 
-        # n_features = self.model_params['input_size']
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                # x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
-                x_batch = x_batch.to(device)
+                x_batch = x_batch.view([batch_size, -1, n_features])
+                x_batch = x_batch.transpose(1, 2).to(device)    # Conv-1d condition
                 y_batch = y_batch.to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
@@ -73,8 +73,8 @@ class CNN1DClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    # x_val = x_val.view([batch_size, -1, n_features]).to(device)
-                    x_val = x_val.to(device)
+                    x_val = x_val.view([batch_size, -1, n_features])
+                    x_val = x_val.transpose(1, 2).to(device)    # Conv-1d condition
                     y_val = y_val.to(device)
                     self.model.eval()
                     yhat = self.model(x_val)
@@ -105,18 +105,18 @@ class CNN1DClust(BaseRegressionModel):
             trues (ndarray): original data
         """
         device = test_params['device']
-        # batch_size = test_params['batch_size']
+        batch_size = test_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
-        # n_features = self.model_params['input_size']
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                # x_test = x_test.view(batch_size, -1, n_features).to(device)
-                x_test = x_test.to(device)
+                x_test = x_test.view([batch_size, -1, n_features])
+                x_test = x_test.transpose(1, 2).to(device)    # Conv-1d condition
                 y_test = y_test.to(device, dtype=torch.float)
 
                 self.model.to(device)
@@ -243,7 +243,7 @@ class CNN1DClust(BaseRegressionModel):
             test_loader (DataLoader) : test data loader
         """
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return test_loader
 

@@ -49,6 +49,7 @@ class RNNClust(BaseRegressionModel):
         device = train_params['device']
         epochs = train_params['n_epochs']
         batch_size = train_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.to(device)
 
@@ -60,11 +61,10 @@ class RNNClust(BaseRegressionModel):
 
         since = time.time()
 
-        n_features = self.model_params['input_size']
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
+                # x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
                 y_batch = y_batch.to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
@@ -74,7 +74,7 @@ class RNNClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    x_val = x_val.view([batch_size, -1, n_features]).to(device)
+                    # x_val = x_val.view([batch_size, -1, n_features]).to(device)
                     y_val = y_val.to(device)
                     self.model.eval()
                     yhat = self.model(x_val)

@@ -111,8 +111,8 @@ class FCClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                # x_test = x_test.to(device)
-                x_test = x_test.view(batch_size, -1, n_features).to(device)
+                x_test = x_test.view(batch_size, -1, n_features)
+                # x_test = x_test.transpose(1, 2).to(device)
                 y_test = y_test.to(device, dtype=torch.float)
 
                 self.model.to(device)
@@ -238,7 +238,7 @@ class FCClust(BaseRegressionModel):
             test_loader (DataLoader) : test data loader
         """
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return test_loader
 
