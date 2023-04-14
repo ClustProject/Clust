@@ -36,7 +36,7 @@ clust/
   │
   ├── ML
   │   ├── app
-  │       ├── usecase.py : 응용 어플리케이션을 위함
+  │       ├── clustering_app1.py : 응용 어플리케이션을 위함
   │   ├── clustering
   │       ├── interface.py :clustering 모듈을 활용하기 위한 인터페이스 
   │       ├── cluetring.py :train, test를 위한 추상화 클래스 기술

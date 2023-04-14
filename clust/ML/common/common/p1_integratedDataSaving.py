@@ -80,8 +80,7 @@ def getNewDataName(process_param, data_info, integration_freq_sec, clean_param, 
 def get_process_param(clean_param):
     if clean_param == "Clean":
         refine_param = {
-            "removeDuplication": {"flag": True},
-            "staticFrequency": {"flag": True, "frequency": None}
+            "removeDuplication": {"flag": True},"staticFrequency": {"flag": True, "frequency": None}
         }
         CertainParam = {'flag': True}
         uncertainParam = {'flag': True, "param": {
@@ -100,10 +99,7 @@ def get_process_param(clean_param):
         }
 
     else:
-        refine_param = {
-            "removeDuplication": {"flag": False},
-            "staticFrequency": {"flag": False, "frequency": None}
-        }
+        refine_param = {"removeDuplication": {"flag": False},"staticFrequency": {"flag": False, "frequency": None}}
         CertainParam = {'flag': False}
         uncertainParam = {'flag': False, "param": {}}
         outlier_param = {

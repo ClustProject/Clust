@@ -17,7 +17,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
 
     # Args
      * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'step3']
-     * processing_param)(dict)     
+     * processing_param)(dict)  or None   
      * data_input(pandas.dataFrame or dict)
 
     # Returns         
