@@ -43,6 +43,7 @@ class FCClust(BaseRegressionModel):
         device = train_params['device']
         epochs = train_params['n_epochs']
         batch_size = train_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.to(device)
 
@@ -54,7 +55,6 @@ class FCClust(BaseRegressionModel):
 
         since = time.time()
 
-        n_features = self.model_params['input_size']
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
@@ -102,16 +102,16 @@ class FCClust(BaseRegressionModel):
         """
         device = test_params['device']
         batch_size = test_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
-        n_features = self.model_params['input_size']
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                x_test = x_test.view(batch_size, -1, n_features)
+                x_test = x_test.view([batch_size, -1, n_features]).to(device)
                 # x_test = x_test.transpose(1, 2).to(device)
                 y_test = y_test.to(device, dtype=torch.float)
 
@@ -120,6 +120,7 @@ class FCClust(BaseRegressionModel):
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_test)
+                print(outputs.shape)
                 
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
@@ -281,9 +282,11 @@ class FCClust(BaseRegressionModel):
 
         # Makes predictions
         yhat = self.model(x)
+        print(yhat.shape)
 
         # Computes loss
         loss = self.loss_fn(y, yhat)
+        print(y.shape)
 
         # Computes gradients
         loss.backward()

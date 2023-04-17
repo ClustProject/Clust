@@ -113,7 +113,7 @@ class LSTMFCNsClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                x_test = x_test.view(batch_size, -1, n_features)
+                x_test = x_test.view([batch_size, -1, n_features])
                 x_test = x_test.transpose(1, 2).to(device)
                 y_test = y_test.to(device, dtype=torch.float)
 
