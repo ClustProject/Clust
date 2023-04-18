@@ -64,8 +64,8 @@ class RNNClust(BaseRegressionModel):
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                # x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
-                y_batch = y_batch.to(device)
+                x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
+                y_batch = y_batch.view([batch_size, 1]).to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
             training_loss = np.mean(batch_losses)
@@ -74,8 +74,8 @@ class RNNClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    # x_val = x_val.view([batch_size, -1, n_features]).to(device)
-                    y_val = y_val.to(device)
+                    x_val = x_val.view([batch_size, -1, n_features]).to(device)
+                    y_val = y_val.view([batch_size, 1]).to(device)
                     self.model.eval()
                     yhat = self.model(x_val)
                     val_loss = self.loss_fn(y_val, yhat).item()
@@ -115,9 +115,8 @@ class RNNClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                # x_test = x_test.to(device)
-                x_test = x_test.view(batch_size, -1, n_features).to(device)
-                y_test = y_test.to(device, dtype=torch.float)
+                x_test = x_test.view([batch_size, -1, n_features]).to(device)
+                y_test = y_test.view([batch_size, 1]).to(device, dtype=torch.float)
 
                 self.model.to(device)
                 
@@ -156,7 +155,6 @@ class RNNClust(BaseRegressionModel):
 
             for x_infer in inference_loader:
 
-                # x_infer = x_infer.to(device)
                 x_infer = x_infer.view(batch_size, -1, n_features).to(device)
 
                 self.model.to(device)
@@ -164,7 +162,6 @@ class RNNClust(BaseRegressionModel):
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_infer)
-                print(x_infer)
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
 
@@ -201,7 +198,6 @@ class RNNClust(BaseRegressionModel):
         """
         self.model = ml_model.load_pickle_model(model_file_path)
 
-    # move to utils?
     # for train data
     def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y):
         """
@@ -226,9 +222,6 @@ class RNNClust(BaseRegressionModel):
             datasets.append(TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
 
         train_set, val_set = datasets[0], datasets[1]
-
-        # train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-        # val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True)
 
         train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, drop_last=True)
         val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, drop_last=True)
@@ -268,8 +261,6 @@ class RNNClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # infer_x = infer_x.values.astype(np.float32)
-        # infer_x = infer_x.reshape((-1, infer_x.shape[0], infer_x.shape[1]))
 
         infer_x = torch.Tensor(infer_x)
         inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=False)

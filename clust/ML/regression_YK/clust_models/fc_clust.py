@@ -58,9 +58,8 @@ class FCClust(BaseRegressionModel):
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
-                # x_batch = x_batch.to(device)
-                y_batch = y_batch.to(device)
+                x_batch = x_batch.view([batch_size, n_features]).to(device)
+                y_batch = y_batch.view([batch_size, 1]).to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
             training_loss = np.mean(batch_losses)
@@ -69,9 +68,8 @@ class FCClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    x_val = x_val.view([batch_size, -1, n_features]).to(device)
-                    # x_val = x_val.to(device)
-                    y_val = y_val.to(device)
+                    x_val = x_val.view([batch_size, n_features]).to(device)
+                    y_val = y_val.view([batch_size, 1]).to(device)
                     self.model.eval()
                     yhat = self.model(x_val)
                     val_loss = self.loss_fn(y_val, yhat).item()
@@ -111,16 +109,14 @@ class FCClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                x_test = x_test.view([batch_size, -1, n_features]).to(device)
-                # x_test = x_test.transpose(1, 2).to(device)
-                y_test = y_test.to(device, dtype=torch.float)
+                x_test = x_test.view([batch_size, n_features]).to(device)
+                y_test = y_test.view([batch_size, 1]).to(device, dtype=torch.float)
 
                 self.model.to(device)
                 
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_test)
-                print(outputs.shape)
                 
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
@@ -192,7 +188,6 @@ class FCClust(BaseRegressionModel):
         """
         self.model = ml_model.load_pickle_model(model_file_path)
 
-    # move to utils?
     # for train data
     def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y):
         """
@@ -216,9 +211,6 @@ class FCClust(BaseRegressionModel):
             datasets.append(TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data)))
 
         train_set, val_set = datasets[0], datasets[1]
-
-        # train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-        # val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True)
 
         train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, drop_last=True)
         val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=False, drop_last=True)
@@ -255,7 +247,6 @@ class FCClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # x_data = trans_df_to_np_inf(x_data, window_num)
 
         infer_x = torch.Tensor(infer_x)
         inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=True)
@@ -282,11 +273,9 @@ class FCClust(BaseRegressionModel):
 
         # Makes predictions
         yhat = self.model(x)
-        print(yhat.shape)
 
         # Computes loss
         loss = self.loss_fn(y, yhat)
-        print(y.shape)
 
         # Computes gradients
         loss.backward()
