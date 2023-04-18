@@ -59,9 +59,6 @@ def get_index_value_by_columns(df):
     """
     result ={}
     df = df.replace({np.nan:None})
-
-    print("============================df")
-    print(df)
    
     #index라는 컬럼이 없다. 
     result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
