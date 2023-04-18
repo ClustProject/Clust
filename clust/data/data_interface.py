@@ -31,5 +31,7 @@ def get_data_result(ingestion_type, db_client, param) :
             
         elif ingestion_type in df_set_out_list:
             result = df_set_data.DfSetData(db_client).get_result(ingestion_type, param)
+
+            
         
         return result

@@ -37,4 +37,5 @@ def plt_to_image(plt):
     plt.savefig(buf, format='jpg')
     #image_base64 = base64.b64encode(buf.read())
     image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
+    
     return image_base64
