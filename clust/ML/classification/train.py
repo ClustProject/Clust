@@ -80,7 +80,7 @@ class ClassificationTrain():
             val_y (dataframe): validation y data
             window_num (integer) : window size
         """
-        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y)
+        self.train_loader, self.valid_loader = self.model.create_trainloader(self.train_params['batch_size'], train_x, train_y, val_x, val_y)
         
         # self.params['input_size'] = input_size
         # self.params['seq_len'] = seq_len

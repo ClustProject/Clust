@@ -7,12 +7,9 @@ import copy
 import datetime
 from torch.utils.data import DataLoader, TensorDataset
 
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to_np, trans_df_to_np_inf
 from Clust.clust.ML.tool import model as ml_model
-
 from Clust.clust.ML.classification.interface import BaseRegressionModel
 from Clust.clust.ML.classification.models.rnn import RNNModel as rnn_model
-
 
 
 class RNNModel(BaseRegressionModel):
@@ -52,6 +49,8 @@ class RNNModel(BaseRegressionModel):
         device = train_params['device']
         n_epochs = train_params['n_epochs']
         lr = train_params['lr']
+        print("=================================11111111111111111111111111111111111111111111")
+        print(device)
 
         self.model.to(device)
 
@@ -136,7 +135,7 @@ class RNNModel(BaseRegressionModel):
         self.model.load_state_dict(best_model_wts)
 
 
-    def test(self, param, test_loader, device):
+    def test(self, test_params, test_loader):
         """
         Predict Regression result for test dataset based on the trained model
 
@@ -151,6 +150,8 @@ class RNNModel(BaseRegressionModel):
             mse (float): mean square error  # TBD
             mae (float): mean absolute error    # TBD
         """
+        device = test_params['device']
+
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
@@ -195,7 +196,7 @@ class RNNModel(BaseRegressionModel):
         return preds, probs, trues, acc
 
 
-    def inference(self, inference_loader, device):
+    def inference(self, infer_params, inference_loader):
         """
         Predict regression result for inference dataset based on the trained model
 
@@ -207,6 +208,8 @@ class RNNModel(BaseRegressionModel):
         Returns:
             preds (ndarray) : Inference result data
         """
+
+        device = infer_params['device']
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
@@ -307,7 +310,7 @@ class RNNModel(BaseRegressionModel):
 
 
     # for test data
-    def create_testloader(self, batch_size, test_x, test_y, window_num, dim=None):
+    def create_testloader(self, batch_size, test_x, test_y):
         """
         Create test data loader for torch
 
@@ -320,7 +323,7 @@ class RNNModel(BaseRegressionModel):
         Returns:
             test_loader (DataLoader) : test data loader
         """
-        test_x, test_y = trans_df_to_np(test_x, test_y, window_num, dim)
+        # test_x, test_y = trans_df_to_np(test_x, test_y, window_num, dim)
 
         x_data = np.array(test_x)
         y_data = test_y
@@ -331,7 +334,7 @@ class RNNModel(BaseRegressionModel):
         return test_loader
 
     # for inference data
-    def create_inferenceloader(self, batch_size, x_data, window_num, dim=None):
+    def create_inferenceloader(self, batch_size, x_data):
         """
         Create inference data loader for torch
 
@@ -343,7 +346,7 @@ class RNNModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        x_data = trans_df_to_np_inf(x_data, window_num, dim)
+        # x_data = trans_df_to_np_inf(x_data, window_num, dim)
 
         # x_data = np.array(x_data)
         inference_data = torch.Tensor(x_data)
