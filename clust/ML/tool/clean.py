@@ -13,7 +13,7 @@ from Clust.clust.quality.NaN import cleanData
 
 # p3_training
 # integration_freq_sec 삭제
-def delete_low_quality_train_val_data(train, val, clean_mode, nan_processing_param):
+def delete_low_quality_train_val_data(train, val, clean_level, nan_processing_param):
     """
     if clean_mode == clean, remove nan data by column
 
@@ -29,7 +29,7 @@ def delete_low_quality_train_val_data(train, val, clean_mode, nan_processing_par
     
     """
     print("------", nan_processing_param)
-    if clean_mode =='Clean':
+    if clean_level == 4:
         # TODO integration_freq sec  사용을 안하는데 추후 문제될 수 있으니 확인해봐야 함
         #timedelta_frequency_sec = datetime.timedelta(seconds= integration_freq_sec)
         # 3. quality check
@@ -72,7 +72,7 @@ def clean_nan_df(data_set, nan_processing_param, timedelta_frequency_sec):
     return clean_data
 
  # p4_testing
-def get_cleand_data(data, clean_mode, integration_freq_sec, nan_processing_param):
+def get_cleand_data(data, clean_level, integration_freq_sec, nan_processing_param):
     """
     if clean_mode == clean, remove nan data by column
 
@@ -86,7 +86,7 @@ def get_cleand_data(data, clean_mode, integration_freq_sec, nan_processing_param
         result (dataframe) : clean data
     
     """
-    if clean_mode =='Clean':
+    if clean_level == 4:
         timedelta_frequency_sec = datetime.timedelta(seconds= integration_freq_sec)
         result = clean_nan_df(data, nan_processing_param,  timedelta_frequency_sec)
 
