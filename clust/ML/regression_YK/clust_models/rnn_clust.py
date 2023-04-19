@@ -145,7 +145,7 @@ class RNNClust(BaseRegressionModel):
             preds (ndarray) : Inference result data
         """
         device = infer_params['device']
-        # batch_size = infer_params['batch_size']
+        batch_size = infer_params['batch_size']
         n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
@@ -155,7 +155,7 @@ class RNNClust(BaseRegressionModel):
 
             for x_infer in inference_loader:
 
-                x_infer = x_infer.view(1, -1, n_features).to(device)
+                x_infer = x_infer.view(batch_size, -1, n_features).to(device)
 
                 self.model.to(device)
                 

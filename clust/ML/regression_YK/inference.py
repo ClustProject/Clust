@@ -15,25 +15,17 @@ class RegressionInference():
 
     def set_param(self, infer_params):
         """
-        Set Parameter for Inference
+        Set Parameters for Inference
 
         Args:
-            param(dict): train parameter
+            infer_params(dict): inference parameter
 
         Example:
 
-            >>> param = { 'num_layers': 2, 
-            ...            'hidden_size': 64, 
-            ...            'dropout': 0.1,
-            ...            'bidirectional': True,
-            ...            "lr":0.0001,
-            ...            "device":"cpu",
-            ...            "batch_size":16,
-            ...            "n_epochs":10    }
+            >>> param = { "device": "cpu",
+            ...           "batch_size": 1 }
         """
         self.infer_params = infer_params
-        # self.batch_size = params['batch_size']
-        # self.device = params['device']
 
     def set_model(self, model_method, model_file_path, model_params):
         """
@@ -64,15 +56,15 @@ class RegressionInference():
         set data for inference & transform data
 
         Args:
-            data (dataframe): Inference data
+            infer_X (dataframe): Inference data
     
         Example:
 
-        >>> set_data(test_X, window_num)
-        ...         test_X : inference data
+        >>> set_data(infer_X)
+        ...         infer_X : inference data
 
         """  
-        self.inference_loader = self.model.create_inferenceloader(1, infer_X)
+        self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], infer_X)
 
     def inference(self):
         """

@@ -15,27 +15,18 @@ class RegressionTest():
 
     def set_param(self, test_params):
         """
-        Set Parameter for Test
+        Set Parameters for Test
 
         Args:
-        param(dict): train parameter
+        test_params(dict): test parameter
 
         Example:
 
-            >>> param = { 'num_layers': 2, 
-            ...            'hidden_size': 64, 
-            ...            'dropout': 0.1,
-            ...            'bidirectional': True,
-            ...            "lr":0.0001,
-            ...            "device":"cpu",
-            ...            "batch_size":16,
-            ...            "n_epochs":10    }
+            >>> param = { "device": "cpu",
+            ...           "batch_size": 16 }
 
         """
-        # TODO: parameter refactoring
         self.test_params = test_params
-        # self.batch_size = params['batch_size']
-        # self.device = params['device']
 
     def set_model(self, model_method, model_file_path, model_params):
         """
