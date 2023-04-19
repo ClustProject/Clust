@@ -55,7 +55,7 @@ class RegressionTrain():
         """
         self.model_params = model_params
 
-        if model_method == 'LSTM_rg' or model_method == 'GRU_rg' or model_method == 'RNN_rg':
+        if model_method == 'LSTM_rg' or model_method == 'GRU_rg':
             self.model = RNNClust(self.model_params)
         elif model_method == 'CNN_1D_rg':
             self.model = CNN1DClust(self.model_params)

@@ -146,18 +146,23 @@ class CNN1DClust(BaseRegressionModel):
             preds (ndarray) : Inference result data
         """
         device = infer_params['device']
+        batch_size = infer_params['batch_size']
+        n_features = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds = []
-            for inputs in inference_loader:
+            for x_infer in inference_loader:
+                x_infer = x_infer.view([batch_size, -1, n_features])
+                x_infer = x_infer.transpose(1, 2).to(device)    # Conv-1d condition
+                
                 self.model.to(device)
                 
                 # forward
                 # input을 model에 넣어 output을 도출
-                outputs = self.model(inputs)
+                outputs = self.model(x_infer)
                 
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())

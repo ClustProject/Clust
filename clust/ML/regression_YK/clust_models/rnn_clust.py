@@ -162,6 +162,7 @@ class RNNClust(BaseRegressionModel):
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_infer)
+
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
 
