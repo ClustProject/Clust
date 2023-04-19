@@ -183,7 +183,7 @@ class CNNModel(BaseRegressionModel):
         return preds, probs, trues, acc
 
 
-    def inference(self, param, inference_loader, device):
+    def inference(self, inference_loader, device):
         """
         Predict regression result for inference dataset based on the trained model
 
@@ -250,7 +250,7 @@ class CNNModel(BaseRegressionModel):
 
     # move to utils?
     # for train data
-    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y, window_num, dim=None):
+    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y):
         """
         Create train/valid data loader for torch
 
@@ -266,16 +266,16 @@ class CNNModel(BaseRegressionModel):
             train_loader (DataLoader): train data loader
             val_loader (DataLoader): validation data loader
         """
-        dim = 3
-        # if self.model_name == "FC_cf":
-        #    dim = 2
-        if type(train_x) !=  np.ndarray:
-            train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
-            val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
+        # dim = 3
+        # # if self.model_name == "FC_cf":
+        # #    dim = 2
+        # if type(train_x) !=  np.ndarray:
+        #     train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
+        #     val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
 
-        self.params['input_size'] = train_x.shape[1]
-        if dim != 2:
-            self.params['seq_len']  = train_x.shape[2] # seq_length
+        # self.params['input_size'] = train_x.shape[1]
+        # if dim != 2:
+        #     self.params['seq_len']  = train_x.shape[2] # seq_length
 
         # input_size = train_x.shape[1]
         # seq_len = train_x.shape[2]

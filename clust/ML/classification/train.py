@@ -1,17 +1,10 @@
 import sys
 import torch
-import torch.nn as nn
-import torch.optim as optim
 import numpy as np
 import random
-import time
-import copy
-import datetime
-from torch.utils.data import TensorDataset, DataLoader
 sys.path.append("..")
 sys.path.append("../..")
 
-from Clust.clust.transformation.type.DFToNPArray import transDFtoNP
 from Clust.clust.ML.classification.classification_model.cnn_1d_model import CNNModel
 from Clust.clust.ML.classification.classification_model.fc_model import FCModel
 from Clust.clust.ML.classification.classification_model.lstm_fcns_model import LSTMFCNsModel
@@ -31,7 +24,7 @@ class ClassificationTrain():
         # super().__init__()
         
 
-    def set_param(self, params):
+    def set_param(self, train_params):
         """
         Set Parameter for train
 
@@ -42,39 +35,41 @@ class ClassificationTrain():
                          "num_classes":,
                          "n_epochs":10,}
         """
-        self.params = params
-        self.n_epochs = params['n_epochs']
-        self.num_classes = params['num_classes']
-        self.device = params['device']
-        self.batch_size = params['batch_size']
+        self.train_params = train_params
+        # self.n_epochs = train_params['n_epochs']
+        # self.num_classes = train_params['num_classes']
+        # self.device = train_params['device']
+        # self.batch_size = train_params['batch_size']
 
 
-    def set_model(self, model_method):
+    def set_model(self, model_method, model_params):
         """
         Build model and return initialized model for selected model_name
 
         Args:
             model_method (string): model method name
         """
-        if model_method == 'LSTM_cf':
-            self.params["rnn_type"] = 'lstm'
-        elif self.model_method == 'GRU_cf':
-            self.params["rnn_type"] = 'gru'
+        # if model_method == 'LSTM_cf':
+        #     self.model_params["rnn_type"] = 'lstm'
+        # elif self.model_method == 'GRU_cf':
+        #     self.model_params["rnn_type"] = 'gru'
         
+        self.model_params = model_params
+
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
-            self.model = RNNModel(self.params)
+            self.model = RNNModel(self.model_params)
         elif model_method == 'CNN_1D_cf':
-            self.model = CNNModel(self.params)
+            self.model = CNNModel(self.model_params)
         elif model_method == 'LSTM_FCNs_cf':
-            self.model = LSTMFCNsModel(self.params)
+            self.model = LSTMFCNsModel(self.model_params)
         elif model_method == 'FC_cf':
-            self.model = FCModel(self.params)
+            self.model = FCModel(self.model_params)
         else:
             print('Choose the model correctly')
 
 
-    def set_data(self, train_x, train_y, val_x, val_y, window_num=0, dim=None):
+    def set_data(self, train_x, train_y, val_x, val_y):
         """
         transform data for train
 
@@ -85,7 +80,7 @@ class ClassificationTrain():
             val_y (dataframe): validation y data
             window_num (integer) : window size
         """
-        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y, window_num, dim)
+        self.train_loader, self.valid_loader = self.model.create_trainloader(self.batch_size, train_x, train_y, val_x, val_y)
         
         # self.params['input_size'] = input_size
         # self.params['seq_len'] = seq_len
@@ -100,7 +95,7 @@ class ClassificationTrain():
         """
         print("Start training model")
         
-        self.model.train(self.params, self.train_loader, self.valid_loader, self.n_epochs, self.device)
+        self.model.train(self.train_params, self.train_loader, self.valid_loader)
 
 
     def save_best_model(self, save_path):

@@ -19,16 +19,16 @@ class RNNModel(BaseRegressionModel):
     """
 
     """
-    def __init__(self, params):
+    def __init__(self, model_params):
         """
         Init function of CNN1D regression class.
 
         Args:
             params (dict): parameters for building a CNN1D model
         """
-        self.params = params
+        self.model_params = model_params
         # model 생성
-        self.model = rnn_model(**self.params)
+        self.model = rnn_model(**self.model_params)
         # self.model = rnn_model(
         #     input_size=self.params['input_size'],
         #     hidden_size=self.params['hidden_size'],
@@ -38,7 +38,7 @@ class RNNModel(BaseRegressionModel):
         #     rnn_type=self.params['rnn_type'],
         #     device=self.params['device'])
 
-    def train(self, param, train_loader, valid_loader, num_epochs, device):
+    def train(self, train_params, train_loader, valid_loader):
         """
         train function for the regression task.
 
@@ -49,11 +49,15 @@ class RNNModel(BaseRegressionModel):
             num_epochs (integer): the number of train epochs
             device (string): device for train
         """
+        device = train_params['device']
+        n_epochs = train_params['n_epochs']
+        lr = train_params['lr']
+
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(self.model.parameters(), lr=param['lr'])
+        optimizer = optim.Adam(self.model.parameters(), lr=lr)
 
         since = time.time()
 
@@ -62,10 +66,10 @@ class RNNModel(BaseRegressionModel):
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
 
-        for epoch in range(num_epochs):
+        for epoch in range(n_epochs):
             if epoch == 0 or (epoch + 1) % 10 == 0:
                 print()
-                print('Epoch {}/{}'.format(epoch + 1, num_epochs))
+                print('Epoch {}/{}'.format(epoch + 1, n_epochs))
 
             # 각 epoch마다 순서대로 training과 validation을 진행
             for phase in ['train', 'val']:
@@ -191,7 +195,7 @@ class RNNModel(BaseRegressionModel):
         return preds, probs, trues, acc
 
 
-    def inference(self, param, inference_loader, device):
+    def inference(self, inference_loader, device):
         """
         Predict regression result for inference dataset based on the trained model
 
@@ -258,7 +262,7 @@ class RNNModel(BaseRegressionModel):
 
     # move to utils?
     # for train data
-    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y, window_num, dim=None):
+    def create_trainloader(self, batch_size, train_x, train_y, val_x, val_y):
         """
         Create train/valid data loader for torch
 
@@ -274,16 +278,16 @@ class RNNModel(BaseRegressionModel):
             train_loader (DataLoader): train data loader
             val_loader (DataLoader): validation data loader
         """
-        dim = 3
-        # if self.model_name == "FC_cf":
-        #    dim = 2
-        if type(train_x) !=  np.ndarray:
-            train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
-            val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
+        # dim = 3
+        # # if self.model_name == "FC_cf":
+        # #    dim = 2
+        # if type(train_x) !=  np.ndarray:
+        #     train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
+        #     val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
 
-        self.params['input_size'] = train_x.shape[1]
-        if dim != 2:
-            self.params['seq_len']  = train_x.shape[2] # seq_length
+        # self.params['input_size'] = train_x.shape[1]
+        # if dim != 2:
+        #     self.params['seq_len']  = train_x.shape[2] # seq_length
 
         # input_size = train_x.shape[1]
         # seq_len = train_x.shape[2]
