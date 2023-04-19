@@ -29,7 +29,7 @@ def get_analysis_result(analysis_method, analysis_param, input_data):
     """
     
     # 가능한 분석 기법
-    analysis_by_data_list       = ["original", 'correlation', 'max_correlation_value_index_with_lag','scale_xy_frequency'] # dataframe input
+    analysis_by_data_list       = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency'] # dataframe input
     analysis_by_data_set_list   = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag'] # dictionary input
     
     if analysis_method in analysis_by_data_list:
@@ -63,6 +63,10 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
 
     elif analysis_method == 'correlation':
         df_analysis = input_df.corr()
+
+    elif analysis_method == 'scaling':
+        from Clust.clust.transformation.general import basicTransform
+        df_analysis = basicTransform.getRobustScaledDF(input_df)
 
     elif analysis_method == 'max_correlation_value_index_with_lag':
         df_analysis = da.get_max_correlation_table_with_lag(analysis_param, input_df) 
