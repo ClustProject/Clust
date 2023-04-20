@@ -49,8 +49,6 @@ class RNNModel(BaseRegressionModel):
         device = train_params['device']
         n_epochs = train_params['n_epochs']
         lr = train_params['lr']
-        print("=================================11111111111111111111111111111111111111111111")
-        print(device)
 
         self.model.to(device)
 
@@ -208,8 +206,8 @@ class RNNModel(BaseRegressionModel):
         Returns:
             preds (ndarray) : Inference result data
         """
-
         device = infer_params['device']
+
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
@@ -325,10 +323,10 @@ class RNNModel(BaseRegressionModel):
         """
         # test_x, test_y = trans_df_to_np(test_x, test_y, window_num, dim)
 
-        x_data = np.array(test_x)
-        y_data = test_y
+        # x_data = np.array(test_x)
+        # y_data = test_y
 
-        test_data = TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
         test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 
         return test_loader

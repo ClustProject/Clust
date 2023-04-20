@@ -20,7 +20,7 @@ class ClassificationInference():
         super().__init__()
         
 
-    def set_param(self, params):
+    def set_param(self, infer_params):
         """
         Set Parameter for Test
 
@@ -39,12 +39,12 @@ class ClassificationInference():
             ...            "batch_size":16,
             ...            "n_epochs":10    }
         """
-        self.params = params
-        self.batch_size = params['batch_size']
-        self.device = params['device']
+        self.infer_params = infer_params
+        # self.batch_size = params['batch_size']
+        # self.device = params['device']
 
         
-    def set_model(self, model_method, model_file_path):
+    def set_model(self, model_method, model_file_path, model_params):
         """
         Set model and load weights from model file path
 
@@ -52,28 +52,30 @@ class ClassificationInference():
             model_method (string): model method name 
             model_file_path (string): path for trained model  
         """
-        model_method = model_method
-        if model_method == 'LSTM_cf':
-            self.params["rnn_type"] = 'lstm'
-        elif self.model_method == 'GRU_cf':
-            self.params["rnn_type"] = 'gru'
+        # model_method = model_method
+        # if model_method == 'LSTM_cf':
+        #     self.params["rnn_type"] = 'lstm'
+        # elif self.model_method == 'GRU_cf':
+        #     self.params["rnn_type"] = 'gru'
+
+        self.model_params = model_params
         
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):
-            self.model = RNNModel(self.params)
+            self.model = RNNModel(self.model_params)
         elif model_method == 'CNN_1D_cf':
-            self.model = CNNModel(self.params)
+            self.model = CNNModel(self.model_params)
         elif model_method == 'LSTM_FCNs_cf':
-            self.model = LSTMFCNsModel(self.params)
+            self.model = LSTMFCNsModel(self.model_params)
         elif model_method == 'FC_cf':
-            self.model = FCModel(self.params)
+            self.model = FCModel(self.model_params)
         else:
             print('Choose the model correctly')
 
         self.model.load_model(model_file_path)
 
 
-    def set_data(self, data, window_num=0, dim=None):
+    def set_data(self, data):
         """
         set data for inference & transform data
 
@@ -89,7 +91,7 @@ class ClassificationInference():
         ...         window_num : window size
 
         """  
-        self.inference_loader = self.model.create_inferenceloader(self.batch_size, data, window_num, dim)
+        self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], data)
 
     def inference(self):
         """
@@ -99,6 +101,6 @@ class ClassificationInference():
             preds (ndarray): prediction data
         """
         print("\nStart inference\n")
-        preds = self.model.inference(self.params, self.inference_loader, self.device)
+        preds = self.model.inference(self.infer_params, self.inference_loader)
 
         return preds

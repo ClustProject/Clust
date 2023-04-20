@@ -19,18 +19,18 @@ class CNNModel(BaseRegressionModel):
     """
 
     """
-    def __init__(self, params):
+    def __init__(self, model_params):
         """
         Init function of CNN1D regression class.
 
         Args:
             params (dict): parameters for building a CNN1D model
         """
-        self.params = params
+        self.model_params = model_params
         # model 생성
-        self.model = cnn_1d(**self.params)
+        self.model = cnn_1d(**self.model_params)
 
-    def train(self, param, train_loader, valid_loader, num_epochs, device):
+    def train(self, train_params, train_loader, valid_loader):
         """
         train function for the regression task.
 
@@ -41,11 +41,15 @@ class CNNModel(BaseRegressionModel):
             num_epochs (integer): the number of train epochs
             device (string): device for train
         """
+        device = train_params['device']
+        n_epochs = train_params['n_epochs']
+        lr = train_params['lr']
+
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(self.model.parameters(), lr=param['lr'])
+        optimizer = optim.Adam(self.model.parameters(), lr=lr)
 
         since = time.time()
 
@@ -54,10 +58,10 @@ class CNNModel(BaseRegressionModel):
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
 
-        for epoch in range(num_epochs):
+        for epoch in range(n_epochs):
             if epoch == 0 or (epoch + 1) % 10 == 0:
                 print()
-                print('Epoch {}/{}'.format(epoch + 1, num_epochs))
+                print('Epoch {}/{}'.format(epoch + 1, n_epochs))
 
             # 각 epoch마다 순서대로 training과 validation을 진행
             for phase in ['train', 'val']:
@@ -124,7 +128,7 @@ class CNNModel(BaseRegressionModel):
         self.model.load_state_dict(best_model_wts)
 
 
-    def test(self, param, test_loader, device):
+    def test(self, test_params, test_loader):
         """
         Predict Regression result for test dataset based on the trained model
 
@@ -139,6 +143,8 @@ class CNNModel(BaseRegressionModel):
             mse (float): mean square error  # TBD
             mae (float): mean absolute error    # TBD
         """
+        device = test_params['device']
+
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
@@ -183,7 +189,7 @@ class CNNModel(BaseRegressionModel):
         return preds, probs, trues, acc
 
 
-    def inference(self, inference_loader, device):
+    def inference(self, infer_params, inference_loader):
         """
         Predict regression result for inference dataset based on the trained model
 
@@ -195,6 +201,8 @@ class CNNModel(BaseRegressionModel):
         Returns:
             preds (ndarray) : Inference result data
         """
+        device = infer_params['device']
+
         self.model.eval()   # 모델을 validation mode로 설정
         
         # test_loader에 대하여 검증 진행 (gradient update 방지)
@@ -295,7 +303,7 @@ class CNNModel(BaseRegressionModel):
 
 
     # for test data
-    def create_testloader(self, batch_size, test_x, test_y, window_num):
+    def create_testloader(self, batch_size, test_x, test_y):
         """
         Create test data loader for torch
 
@@ -308,18 +316,18 @@ class CNNModel(BaseRegressionModel):
         Returns:
             test_loader (DataLoader) : test data loader
         """
-        test_x, test_y = trans_df_to_np(test_x, test_y, window_num)
+        # test_x, test_y = trans_df_to_np(test_x, test_y, window_num)
 
-        x_data = np.array(test_x)
-        y_data = test_y
+        # x_data = np.array(test_x)
+        # y_data = test_y
 
-        test_data = TensorDataset(torch.Tensor(x_data), torch.Tensor(y_data))
+        test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
         test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
 
         return test_loader
 
     # for inference data
-    def create_inferenceloader(self, batch_size, x_data, window_num):
+    def create_inferenceloader(self, batch_size, x_data):
         """
         Create inference data loader for torch
 
@@ -331,7 +339,7 @@ class CNNModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        x_data = trans_df_to_np_inf(x_data, window_num)
+        # x_data = trans_df_to_np_inf(x_data, window_num)
 
         # x_data = np.array(x_data)
         inference_data = torch.Tensor(x_data)
