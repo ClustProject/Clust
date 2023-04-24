@@ -44,6 +44,8 @@ class DfData():
             result = self.ms_by_days(self.ingestion_param) 
         elif ingestion_type == "ms_by_time":
             result = self.ms_by_time(self.ingestion_param) 
+        elif ingestion_type == 'ms_all':
+            result = self.ms_by_all(self.ingestion_param) 
         
         if 'feature_list' in ingestion_param.keys():
             if len(result)>0:
@@ -51,6 +53,31 @@ class DfData():
             
         return result
     
+    def ms_by_all(self, ingestion_parm):
+        
+        """
+        # Description
+         all data ingestion
+
+        # Args
+         * ingestion_param (_dict_) 
+
+        ```         
+         >>> ingestion_param = {
+            "bucket_name" : 'air_indoor_modelSchool',
+            'ms_name' : 'ICW0W2000014',
+            'feature_list' : ['CO2']                                
+        }
+        ```
+        
+        # Returns
+         * data (_pd.dataFrame_) : result data
+
+        """
+
+        data = self.db_client.get_data(ingestion_parm["bucket_name"], ingestion_parm['ms_name'])
+        return data
+        
     def ms_by_days(self, ingestion_param):
         """
         # Description

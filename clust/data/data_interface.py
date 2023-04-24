@@ -20,7 +20,7 @@ def get_data_result(ingestion_type, db_client, param) :
         """
         # data_param에 'feature_list' key가 유효한 경우 한번 더 필터링
         
-        df_out_list     = ['ms_by_num', 'ms_by_days', 'ms_by_time']
+        df_out_list     = ['ms_by_num', 'ms_by_days', 'ms_by_time', 'ms_all']
         df_set_out_list = ['multiple_ms_by_time',
                             'multi_ms_one_enumerated_ms_in_bucket_integration',           
                            'all_ms_in_one_bucket', 

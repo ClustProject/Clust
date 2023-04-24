@@ -1,8 +1,6 @@
-from torch.utils.data import TensorDataset, DataLoader
-import torch
 import numpy as np
 
-def split_data_by_ratio(data, split_ratio, mode=None, windows=None):
+def split_data_by_ratio(data, split_ratio, mode=None, window_size=None):
         """
         Split Data By Ratio. It usually makes train/validation data and train/test data
         """
@@ -10,16 +8,17 @@ def split_data_by_ratio(data, split_ratio, mode=None, windows=None):
             data_date = np.unique(data.index.date)
             length1 = int(len(data_date)*split_ratio)
             data1, data2 = data[:str(data_date[length1-1])], data[str(data_date[length1]):]
+            
         elif mode == "windows_split": # 입력 windows 를 기준으로 split
             import math
-            round_num = math.ceil(len(data)/windows)
+            round_num = math.ceil(len(data)/window_size)
     
             data_date = []
             for i in range(round_num):
                 try:
-                    data_date.append(data.iloc[[(i+1)*windows-1]].index)
+                    data_date.append(data.iloc[[(i+1)*window_size-1]].index)
                 except IndexError: # 결합 데이터의 길이가 공통 기간으로 기준 삼을 경우 y class data와 끝 시간이 일치하지 않은 경우 (Classification)
-                    print("data length : ",len(data), " but  {} th windows index : ".format(i), (i+1)*windows-1)
+                    print("data length : ",len(data), " but  {} th windows index : ".format(i), (i+1)*window_size-1)
                     data_date.append(data.iloc[[len(data)-1]].index)
 
             length1 = int(len(data_date) * split_ratio)
@@ -31,6 +30,36 @@ def split_data_by_ratio(data, split_ratio, mode=None, windows=None):
             data1, data2 = data[:length1], data[length1:]
         return data1, data2
 
+def trans_by_step_info(X, y, transformParameter):
+    """transform for RNN style training
+
+    Args:
+        X (dataframe): _description_
+        y (dataframe): _description_
+        transformParameter (_type_): transform parameter
+
+    Returns:
+        X_array, y_array(numpy.array): transformed data for RNN style training
+    """
+    X_array, y_array =[], []
+    n_steps = transformParameter['past_step']
+    m_steps = transformParameter['future_step']
+    for i in range(n_steps, len(X)-m_steps):
+        seq_x = X.iloc[i-n_steps:i, :].values
+        seq_y = y.iloc[i+m_steps, :].values
+        if np.isnan(seq_x).any() | np.isnan(seq_y).any():
+            pass
+        else:
+            X_array.append(seq_x)
+            y_array.append(seq_y)
+    X_array, y_array = np.array(X_array), np.array(y_array)
+    print("Original Length:", len(X), "Final Length:", len(X_array), "NaN Length:",  len(X)-len(X_array))
+    return X_array, y_array
+
+
+
+
+# TODO 아래 지울까?
 class LSTMData():
     def __init__(self):
         pass

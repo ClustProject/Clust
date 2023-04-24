@@ -66,7 +66,6 @@ def get_scaled_data(data, scaler, scaler_param):
     return scaled_data
 
 
-
 # p3_training
 def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
     if scaler_param=='scale':
@@ -77,6 +76,7 @@ def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
         DS.setNewScaler(data)
         result_data = DS.transform(data)
         scaler_file_path = DS.scalerFilePath
+        
     else:
         result_data = data.copy()
         scaler_file_path=None

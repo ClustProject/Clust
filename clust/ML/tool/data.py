@@ -5,7 +5,7 @@ sys.path.append("../../")
 sys.path.append("../../../")
 
 from Clust.clust.transformation.purpose import machineLearning as ML
-from Clust.clust.ML.tool.scaler import get_data_scaler
+from Clust.clust.ML.tool import scaler
 
 # p2_dataSelection
 def get_saved_integrated_data(data_save_mode, data_name, data_folder_path=None, db_name=None, db_client = None):
@@ -105,7 +105,7 @@ def get_train_val_data(data, feature_list, scaler_root_path, split_ratio, scaler
         scaler_file_path (string) : scaler file path
     
     """
-    train_val, scaler_file_path = get_data_scaler(scaler_param, scaler_root_path, data[feature_list], scaler_method)
+    train_val, scaler_file_path = scaler.get_data_scaler(scaler_param, scaler_root_path, data[feature_list], scaler_method)
     train, val = ML.split_data_by_ratio(train_val, split_ratio, mode, windows)
     
     return train, val, scaler_file_path
