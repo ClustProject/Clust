@@ -30,6 +30,20 @@ def split_data_by_ratio(data, split_ratio, mode=None, window_size=None):
             data1, data2 = data[:length1], data[length1:]
         return data1, data2
 
+def check_nan_status(np_X, np_y, nan_limit_num):
+    nan_X = np.isnan(np_X).sum()
+    # step1
+    if (nan_limit_num > nan_X):
+        ok = ~np.isnan(np_X)
+        xp = ok.ravel().nonzero()[0]
+        fp = np_X[~np.isnan(np_X)]
+        x  = np.isnan(np_X).ravel().nonzero()[0]
+        # Replacing nan values
+        np_X[np.isnan(np_X)] = np.interp(x, xp, fp)
+    else:
+        pass
+    return np_X, np_y
+
 def trans_by_step_info(X, y, transformParameter):
     """transform for RNN style training
 
@@ -44,16 +58,23 @@ def trans_by_step_info(X, y, transformParameter):
     X_array, y_array =[], []
     n_steps = transformParameter['past_step']
     m_steps = transformParameter['future_step']
+    max_nan_limit_ratio = transformParameter['max_nan_limit_ratio']
+    nan_limit_num = int(n_steps*max_nan_limit_ratio)
+    print("nan_limit_num: ", nan_limit_num)
     for i in range(n_steps, len(X)-m_steps):
-        seq_x = X.iloc[i-n_steps:i, :].values
-        seq_y = y.iloc[i+m_steps, :].values
-        if np.isnan(seq_x).any() | np.isnan(seq_y).any():
+        np_X = X.iloc[i-n_steps:i, :].values
+        np_y = y.iloc[i+m_steps, :].values
+        # step2
+        np_X, np_y = check_nan_status(np_X, np_y, nan_limit_num)
+        # step2
+        if np.isnan(np_X).any() | np.isnan(np_y).any():
             pass
         else:
-            X_array.append(seq_x)
-            y_array.append(seq_y)
+            X_array.append(np_X)
+            y_array.append(np_y)
+            
     X_array, y_array = np.array(X_array), np.array(y_array)
-    print("Original Length:", len(X), "Final Length:", len(X_array), "NaN Length:",  len(X)-len(X_array))
+    print("Original num:", len(X), "Final num:", len(X_array), "NaN num:",  len(X)-len(X_array))
     return X_array, y_array
 
 

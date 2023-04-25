@@ -1,7 +1,9 @@
 
 import numpy as np
 
-def trans_DF_to_NP_by_windowNum(df, window_size):
+
+from Clust.clust.transformation.purpose import machineLearning as ML
+def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
     """_summary_
 
     Args:
@@ -11,18 +13,32 @@ def trans_DF_to_NP_by_windowNum(df, window_size):
     Returns:
         array (numpy.array): shape ===> (len(df)/window_size , window_size, column_num) ==> (batch, seq_length, input_size )
     """
-    
+    window_size = transformParameter['past_step']
+    max_nan_limit_ratio = transformParameter['max_nan_limit_ratio']
+    nan_limit_num = int(window_size*max_nan_limit_ratio)
+    print("window_size:", window_size, "nan_limit_num:", nan_limit_num)
+    y_array_old = y.values
     # 144개 인덱스 간격으로 데이터프레임을 쪼갬
-    splitted_df = [df.iloc[i:i+window_size] for i in range(0, len(df), window_size)]
-    new_array=[]
-    for splitted in splitted_df:
+    splitted_df = [X.iloc[i:i+window_size] for i in range(0, len(X), window_size)]
+    X_array, y_array=[], []
+    for i, splitted in enumerate(splitted_df):
         #list_cols = [splitted[col_name].tolist() for col_name in splitted.columns]
-        list_cols = splitted.values.tolist()
-        new_array.append(list_cols)
-    new_array= np.array(new_array)
-    print(new_array.shape)
+        np_X = np.array(splitted.values.tolist())
+        np_y = np.array(y_array_old[i])
+        np_X , np_y = ML.check_nan_status(np_X, np_y, nan_limit_num)
+        
+        # step2
+        if np.isnan(np_X).any() | np.isnan(np_y).any():
+            pass
+        else:
+            X_array.append(np_X)
+            y_array.append(np_y)
+    X_array = np.array(X_array)
+    y_array = np.array(y_array)
+    print(X.shape, X_array.shape)
+    print(y.shape, y_array.shape)
     
-    return new_array
+    return X_array, y_array
     
     
 #YK
@@ -129,9 +145,6 @@ def transDFtoNP(dfX, dfy, windowNum = 0, dim = None):
         y = np.array(y)
     
     return X, y
-
-
-
 
 def transDFtoNP2(dfX, windowNum = 0, dim = None):
     """

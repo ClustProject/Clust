@@ -21,11 +21,11 @@ def get_process_param_by_level(level):
         refine_param = {"removeDuplication": {"flag": True},"staticFrequency": {"flag": True, "frequency": None}}
         
     if level >= 2:
-        uncertain_param['flag'] = True
+        certain_param['flag'] = True
         
     if level >= 3:
         imputation_param = {
-            "flag": False,
+            "flag": True,
             "imputation_method": [{"min": 0, "max": 2, "method": "linear", "parameter": {}}],
             "totalNonNanRatio": 90
         }
@@ -39,4 +39,6 @@ def get_process_param_by_level(level):
                      'imputation_param': imputation_param}
 
     return process_param
+
+
     
