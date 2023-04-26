@@ -51,7 +51,7 @@ def DF_to_series(data):
     return series_data
 
 
- # p4_testing
+
 def get_prediction_df_result(predictions, values, scaler_param, scaler, feature_list, target_col):
     """
     if scaler_param == scale, inverse scaled prediction data
