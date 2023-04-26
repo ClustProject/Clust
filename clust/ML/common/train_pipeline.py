@@ -83,16 +83,19 @@ def get_transfomed_data(split_mode, transformParameter, X, y):
         
     return X_array, y_array
 
-def get_default_model_name_path(model_name, data_name_X, model_method, model_clean, train_parameter):
+def get_default_model_name(model_name, app_name, model_method, model_clean):
     if model_name is None:
-        model_name = data_name_X + '_' + model_method + '_modelCleanLevel' + str(model_clean)
+        model_name = app_name+ '_'+ model_method + '_' + str(model_clean)
     else:
         pass
+    return model_name
 
+
+def get_default_model_path(model_name,data_name, model_method, train_parameter):
     from Clust.clust.transformation.general.dataScaler import encode_hash_style
     trainParameter_encode =  encode_hash_style(str(train_parameter))
-    trainDataPathList = [model_name, data_name_X, trainParameter_encode]
+    trainDataPathList = [model_name, data_name, trainParameter_encode]
     from Clust.clust.ML.tool import model as ml_model
     modelFilePath = ml_model.get_model_file_path(trainDataPathList, model_method)
     
-    return model_name, modelFilePath
+    return modelFilePath
