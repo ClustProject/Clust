@@ -3,7 +3,7 @@ import torch
 
 # device = "cuda" if torch.cuda.is_available() else "cpu"
 
-class RNNModel(nn.Module):
+class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type):
         """The __init__ method that initiates an RNN instance.
 
@@ -16,7 +16,7 @@ class RNNModel(nn.Module):
             bidirectional (boolean): Whether bidirectional or not
             rnn_type (string): The type of RNN structure (i.e., rnn, lstm, gru)
         """
-        super(RNNModel, self).__init__()
+        super(RNN, self).__init__()
 
         # Defining the number of layers and the nodes in each layer
         self.hidden_size = hidden_size

@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.rnn_model import RNNModel
+from Clust.clust.ML.regression_YK.models.rnn import RNN
 
 
 class RNNClust(BaseRegressionModel):
@@ -27,7 +27,7 @@ class RNNClust(BaseRegressionModel):
         # model 생성
         # TODO: parameters refactoring
         self.model_params = model_params
-        self.model = RNNModel(
+        self.model = RNN(
             rnn_type = self.model_params['rnn_type'],
             input_size = self.model_params['input_size'],
             hidden_size = self.model_params['hidden_size'],
