@@ -1,22 +1,25 @@
 import sys
 sys.path.append("../")
-from Clust.app import  data_preprocessing
-def save_integrated_data_meta_by_clean_level(ms_name, bucket_name, db_client, ingestion_type, ingestion_param, 
-                                             clean_level, processing_type, integration_param,
-                                             data_name, mongo_client):
-    # Processing Param by clean_level
-    process_param = data_preprocessing.get_process_param_by_level(clean_level)
+
+def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     
-    # meta info
-    meta_info={"data_name": ms_name,"ingestion_param": ingestion_param, 
-               "integration_param":integration_param, "clean_level":clean_level, "process_param":process_param}
-    collection_name = "forecasting_"+data_name
+    
+    ms_name = meta_info['ms_name']
+    bucket_name = meta_info['bucket_name']
+    ingestion_type = meta_info['ingestion_type']
+    ingestion_param = meta_info['ingestion_param']
+    integration_param = meta_info['integration_param']
+    processing_type = meta_info['processing_type']
+    process_param = meta_info['process_param']
+    
+    
     ##########################################          
     # 1. Data Manipulation: dataset ingestion---> data preprocessing ---> data integration 
     data = ingestion_processing_integration(db_client, ingestion_type, ingestion_param, processing_type, process_param, integration_param)
     # 2. Save Data##########################
     db_client.write_db(bucket_name, ms_name, data)
     # 3. Save Meta########################## 
+    collection_name = ms_name
     mongo_client.insert_document(bucket_name, collection_name, meta_info)
     
 def ingestion_processing_integration(db_client, ingestion_type, ingestion_param, processing_type, process_param, integration_param):
@@ -38,3 +41,44 @@ def ingestion_processing_integration(db_client, ingestion_type, ingestion_param,
     
         
     return data
+
+
+def get_process_param_by_level(level):
+    """
+    Args:
+        level (int): cleaning level
+    Returns:
+        process_param(dict): process_param 
+    """
+    refine_param = {"removeDuplication": {"flag": False},"staticFrequency": {"flag": False, "frequency": None}}
+    certain_param = {'flag': False}
+    uncertain_param = {'flag': False}
+    imputation_param = {"flag": False}
+    
+    if level == 0:
+        pass 
+    if level >= 1:
+        refine_param = {"removeDuplication": {"flag": True},"staticFrequency": {"flag": True, "frequency": None}}
+        
+    if level >= 2:
+        certain_param['flag'] = True
+        
+    if level >= 3:
+        imputation_param = {
+            "flag": True,
+            "imputation_method": [{"min": 0, "max": 2, "method": "linear", "parameter": {}}],
+            "totalNonNanRatio": 90
+        }
+        
+    if level >= 4:
+        uncertain_param = {'flag': True, "param": {
+            "outlierDetectorConfig": [{'algorithm': 'IQR', 'percentile': 99,'alg_parameter': {'weight': 100}}]}}
+
+    process_param = {'refine_param': refine_param,
+                     'outlier_param': {"certainErrorToNaN":  certain_param, "unCertainErrorToNaN": uncertain_param}, 
+                     'imputation_param': imputation_param}
+
+    return process_param
+
+
+    
