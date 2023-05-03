@@ -80,7 +80,6 @@ def clean_low_quality_column(model_clean, nan_process_info, data):
 
 ## Split
 
-    
 from Clust.clust.transformation.purpose import machineLearning as ML
 def split_data_by_mode(split_mode, split_ratio, dataX, datay, day_window_size):
     """학습 및 검증 데이터 분할
@@ -95,7 +94,7 @@ def split_data_by_mode(split_mode, split_ratio, dataX, datay, day_window_size):
     Returns:
         train_x, val_x, train_y, val_y (pd.DataFrame): 분할된 데이터
     """
-    if split_mode =='window_split':
+    if split_mode =='windows_split':
         train_x, val_x = ML.split_data_by_ratio(dataX, split_ratio, split_mode, day_window_size)
     else:
         train_x, val_x = ML.split_data_by_ratio(dataX, split_ratio, None, None)
@@ -127,7 +126,7 @@ def transform_data_by_split_mode(split_mode, transformParameter, X, y):
 
 
 ###################################### Training
-def CLUST_regresstion(train_parameter, model_method, modelParameter, model_file_path, train_X_array, train_y_array, val_X_array, val_y_array):
+def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model_file_path, train_X_array, train_y_array, val_X_array, val_y_array):
     """regression 수행하고 적절한 모델을 저장함
 
     Args:
@@ -162,3 +161,72 @@ def CLUST_regresstion(train_parameter, model_method, modelParameter, model_file_
     rml.set_data(train_X_array, train_y_array, val_X_array, val_y_array)
     rml.train()
     rml.save_best_model(model_file_path)
+    
+    
+from Clust.clust.ML.regression_YK.test import RegressionTest as RT
+def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
+    """ Regression Test
+
+    Args:
+        test_X_array (np.array): 입력 test X
+        test_y_array np.array): 입력 test y
+        testParameter (dict): 테스트 파라미터
+        model_method (str): 주요 테스트 메서드
+        model_file_path (str): 모델 파일 패스
+        modelParameter (dict): 파라미터
+
+    Returns:
+        preds, trues (np.arrau): 예측값, 실제값
+    """
+        
+    rt = RT()
+    rt.set_param(testParameter)
+    rt.set_model(model_method, model_file_path, modelParameter)
+    rt.set_data(test_X_array, test_y_array)
+    preds, trues = rt.test()
+    
+    return preds, trues
+
+
+def get_scaler_information_by_y_flag(data_y_flag, scaler_X, scaler_y, feature_X_list, feature_y_list):
+    """ get scaler for final prediction result by data_y_flag
+
+    Args:
+        data_y_flag (Bool):data_y_flag
+        scaler_X (_type_):scaler X
+        scaler_y (_type_): scaler Y
+        feature_X_list (list): feature_X_list
+        feature_y_list (list): feature_y_list
+
+    Returns:
+        scaler, feature_list: scaler, feature list of scaler
+    """
+    if data_y_flag:
+        scaler = scaler_y
+        feature_list = feature_y_list
+    else:
+        scaler = scaler_X
+        feature_list = feature_X_list
+        
+    return scaler, feature_list
+
+
+def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
+    """get final result (after inverse scaling), test metrics
+    Args:
+        preds (np.array): prediction value array
+        trues (np.array): true value array
+        scaler_param (string): with/without scaler
+        scaler (_type_): scaler of prediction value
+        feature_list (array): full featurelist of scaler
+        target (string): target feature
+
+    Returns:
+        df_result(pd.dataframe), result_metrics(dict): final result and test metrics
+    """
+    from Clust.clust.tool.stats_table import metrics
+    from Clust.clust.ML.tool import data as ml_data 
+    df_result = ml_data.get_prediction_df_result(preds, trues, scaler_param, scaler, feature_list, target)
+    result_metrics =  metrics.calculate_metrics_df(df_result)
+        
+    return df_result, result_metrics
