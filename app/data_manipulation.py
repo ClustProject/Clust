@@ -3,7 +3,7 @@ sys.path.append("../")
 
 def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     
-    
+    collection_name = meta_info['collection_name']
     ms_name = meta_info['ms_name']
     bucket_name = meta_info['bucket_name']
     ingestion_type = meta_info['ingestion_type']
@@ -18,8 +18,8 @@ def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     data = ingestion_processing_integration(db_client, ingestion_type, ingestion_param, processing_type, process_param, integration_param)
     # 2. Save Data##########################
     db_client.write_db(bucket_name, ms_name, data)
-    # 3. Save Meta########################## 
-    collection_name = ms_name
+    # 3. Save Meta##########################
+
     mongo_client.insert_document(bucket_name, collection_name, meta_info)
     
 def ingestion_processing_integration(db_client, ingestion_type, ingestion_param, processing_type, process_param, integration_param):
