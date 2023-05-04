@@ -58,6 +58,18 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_path,
 
 from Clust.clust.ML.tool import scaler as ml_scaler
 def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path, scaler_param):
+    """_summary_
+
+    Args:
+        data_X (_type_): _description_
+        data_y (_type_): _description_
+        X_scaler_file_path (_type_): _description_
+        y_scaler_file_path (_type_): _description_
+        scaler_param (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     
     test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
     test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, y_scaler_file_path, scaler_param)
