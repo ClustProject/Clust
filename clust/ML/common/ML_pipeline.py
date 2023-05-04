@@ -4,7 +4,7 @@ sys.path.append("../../")
 import pandas as pd
 
 ############# Xy
-def Xy_data_preparation (ingestion_param_X, data_y_flag, ingestion_param_y, ingestion_method, db_client):
+def Xy_data_preparation(ingestion_param_X, data_y_flag, ingestion_param_y, ingestion_method, db_client):
     """학습 하기 위한 X, y 데이터를 준비
 
     Args:
@@ -28,9 +28,7 @@ def Xy_data_preparation (ingestion_param_X, data_y_flag, ingestion_param_y, inge
         
     return data_X, data_y
 
-
-
-def Xy_data_scaling(data_name_X, data_X, data_name_y, data_y, scaler_path, scaler_flag, scale_method):
+def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_path, scaler_flag, scale_method):
     """X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
 
     Args:
@@ -58,6 +56,13 @@ def Xy_data_scaling(data_name_X, data_X, data_name_y, data_y, scaler_path, scale
     
     return dataX_scaled, X_scalerFilePath, datay_scaled, y_scalerFilePath
 
+from Clust.clust.ML.tool import scaler as ml_scaler
+def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path, scaler_param):
+    
+    test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
+    test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, y_scaler_file_path, scaler_param)
+    return test_X, scaler_X , test_y, scaler_y 
+
 ############# Clean
 def clean_low_quality_column(model_clean, nan_process_info, data):
     """퀄러티가 좋지 않은 컬럼은 삭제함
@@ -79,7 +84,6 @@ def clean_low_quality_column(model_clean, nan_process_info, data):
     return data
 
 ## Split
-
 from Clust.clust.transformation.purpose import machineLearning as ML
 def split_data_by_mode(split_mode, split_ratio, dataX, datay, day_window_size):
     """학습 및 검증 데이터 분할
@@ -125,7 +129,7 @@ def transform_data_by_split_mode(split_mode, transformParameter, X, y):
     return X_array, y_array
 
 
-###################################### Training
+######train pipeline
 def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model_file_path, train_X_array, train_y_array, val_X_array, val_y_array):
     """regression 수행하고 적절한 모델을 저장함
 
@@ -162,7 +166,8 @@ def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model
     rml.train()
     rml.save_best_model(model_file_path)
     
-    
+
+# Test pieline
 from Clust.clust.ML.regression_YK.test import RegressionTest as RT
 def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
     """ Regression Test
