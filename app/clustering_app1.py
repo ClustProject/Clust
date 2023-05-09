@@ -2,8 +2,6 @@ import pandas as pd
 import sys
 sys.path.append("../")
 import math
-from Clust.clust.tool.stats_table import metrics
-from Clust.clust.ML.tool import model as model_manager
 
 
 # KETIAppdataServer/dataDomainExploration
@@ -45,7 +43,6 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     CMS = cleanData.CleanData()
     data = CMS.get_cleanData_by_removing_column(data_DF, NaNProcessingParam) 
 
-    figdata=None
     result_dic={}
     if len(data.columns) > 1:
         # 4. preprocessing for clustering

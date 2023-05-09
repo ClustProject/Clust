@@ -2,7 +2,7 @@ from Clust.clust.ML.clustering.som import SomTrain, SomTest
 from Clust.clust.ML.clustering.kMeans import KMeansTrain, KMeansTest
 from Clust.clust.ML.tool.data import DF_to_series
 from Clust.clust.ML.tool.model import load_pickle_model, save_pickle_model
-import pandas as pd
+
 #TODO 나중에 수정해야함 전반적인 구조들과 스트럭쳐
 
 def clusteringByMethod(data, parameter, model_path):
@@ -30,7 +30,6 @@ def clusteringByMethod(data, parameter, model_path):
     """
 
     result = None
-    figdata = None
     param = parameter['param']
     model_name = parameter['method']
 
