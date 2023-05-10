@@ -47,7 +47,7 @@ class RefineFrequency():
         """
         
         inffered_freq = self.get_frequencyWith3DataPoints(data)
-        self.output = self.make_staticFrequencyData(data, inffered_freq)
+        self.output = self.make_static_frequencyData(data, inffered_freq)
         return self.output, inffered_freq
     
     def get_RefinedDatawithStaticFreq(self, data, freq):
@@ -65,7 +65,7 @@ class RefineFrequency():
             >>> output = RefineFrequency().get_RefinedDatawithStaticFreq(data, '30S')
         """
         
-        self.output = self.make_staticFrequencyData(data, freq)
+        self.output = self.make_static_frequencyData(data, freq)
         return self.output
     
     def get_RefinedDataSetwithStaticFreq(self, dataSet, freq=None):
@@ -94,7 +94,7 @@ class RefineFrequency():
         return newDataSet
 
 
-    def make_staticFrequencyData(self, data, freq):
+    def make_static_frequencyData(self, data, freq):
         """ This function makes data with static frequency.
 
         Args:
@@ -106,13 +106,13 @@ class RefineFrequency():
 
         Example:
 
-            >>> output = RefineFrequency().make_staticFrequencyData(data, '30S')
+            >>> output = RefineFrequency().make_static_frequencyData(data, '30S')
         """
-        data_staticFrequency = data.copy()
-        data_staticFrequency = data_staticFrequency.sort_index()
-        data_staticFrequency = data_staticFrequency.resample(freq).mean()
-        data_staticFrequency = data_staticFrequency.asfreq(freq=freq)
-        return data_staticFrequency
+        data_static_frequency = data.copy()
+        data_static_frequency = data_static_frequency.sort_index()
+        data_static_frequency = data_static_frequency.resample(freq).mean()
+        data_static_frequency = data_static_frequency.asfreq(freq=freq)
+        return data_static_frequency
     
     def get_frequencyWith3DataPoints(self, data):
         """ this function inferrs description frequency of input data

@@ -20,9 +20,9 @@ class DataPreprocessing():
         """
         # Description
          - This function gets refined data with static frequency, without redundency data. 
-         - It refines data adaptively depending on flag status. (removeDuplication, staticFrequency)
-            * removeDuplication :It removes duplicated data.
-            * staticFrequency :The data will have a constant timestamp index. 
+         - It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
+            * remove_duplication :It removes duplicated data.
+            * static_frequency :The data will have a constant timestamp index. 
 
         # Args
             data (_pd.dataFrame_): data
