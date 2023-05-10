@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 class CertainErrorRemove():
     """
@@ -10,9 +9,9 @@ class CertainErrorRemove():
 
             ``Sensor Min Max Check``, ``Remove no numeric data``
     """
-    def __init__(self, data, min_max_limit, anomal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] ):
+    def __init__(self, data, min_max_limit, abnormal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] ):
         # TODO JW min_max 통과하는 모듈도 업그레이드 해야함
-        self.anomal_value_list = anomal_value_list
+        self.abnormal_value_list = abnormal_value_list
         self.data = data
         self.min_max_limit = min_max_limit
     
@@ -24,7 +23,7 @@ class CertainErrorRemove():
         data_out = self.data.copy()
         data_out = self._out_of_range_error_remove (data_out, self.min_max_limit)
         # TODO JW anomal_value_list 관련 향후 수정/업그레이드 해야 함 
-        data_out = self._anomal_value_remove(data_out, self.anomal_value_list)
+        data_out = self._abnomal_value_remove(data_out, self.abnormal_value_list)
         return data_out
         
     def _out_of_range_error_remove (self, data, min_max_limit):
@@ -67,7 +66,7 @@ class CertainErrorRemove():
 
         return data_out
 
-    def _anomal_value_remove(self, data, anomal_value_list):
+    def _abnomal_value_remove(self, data, anomal_value_list):
         """
         Remove out-of-range errors. change error values to NaN
 

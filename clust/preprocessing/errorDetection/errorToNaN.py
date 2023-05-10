@@ -15,9 +15,13 @@ class errorToNaN():
 
         if CertainParam['flag'] ==True:  
             from Clust.clust.preprocessing.errorDetection import certainError
-            anomal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] 
+            if 'abnormal_value_list' in list(CertainParam.keys()):
+                abnormal_value_list = CertainParam['abnormal_value_list']
+            else:
+                abnormal_value_list = [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] 
+                
             #anomal_value_list=[]
-            datawithMoreCertainNaN = certainError.CertainErrorRemove(data, self.limit_min_max, anomal_value_list).getDataWitoutcertainError()  
+            datawithMoreCertainNaN = certainError.CertainErrorRemove(data, self.limit_min_max, abnormal_value_list).getDataWitoutcertainError()  
         else:
             datawithMoreCertainNaN = data.copy()
         return datawithMoreCertainNaN

@@ -44,8 +44,9 @@ def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta
     Returns:
         default_process_param
     """
-    CertainParam= {'flag': True, 'data_min_max_limit':min_max}
     refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': timedelta_frequency_sec}}
+    CertainParam= {'flag': True, 'data_min_max_limit':min_max}
+    
     outlier_param ={
         "certainErrorToNaN":CertainParam, 
         "unCertainErrorToNaN":{'flag': False}
