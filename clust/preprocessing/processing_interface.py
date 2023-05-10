@@ -1,11 +1,6 @@
 import sys
 sys.path.append("../")
 sys.path.append("../..")
-import os
-import sys
-sys.path.append("../")
-sys.path.append("../../")
-
 from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
 import pandas as pd
 
