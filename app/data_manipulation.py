@@ -66,7 +66,7 @@ def get_process_param_by_level(level):
         imputation_param = {
             "flag": True,
             "imputation_method": [{"min": 0, "max": 2, "method": "linear", "parameter": {}}],
-            "totalNonNanRatio": 90
+            "total_non_NaN_ratio": 90
         }
         
     if level >= 4:
@@ -74,7 +74,7 @@ def get_process_param_by_level(level):
             "outlierDetectorConfig": [{'algorithm': 'IQR', 'percentile': 99,'alg_parameter': {'weight': 100}}]}}
 
     process_param = {'refine_param': refine_param,
-                     'outlier_param': {"certainErrorToNaN":  certain_param, "unCertainErrorToNaN": uncertain_param}, 
+                     'outlier_param': {"certain_error_to_NaN":  certain_param, "uncertain_error_to_NaN": uncertain_param}, 
                      'imputation_param': imputation_param}
 
     return process_param

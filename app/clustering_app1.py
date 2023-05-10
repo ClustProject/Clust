@@ -51,7 +51,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
             "flag":True,
             "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
                                 {"min":0,"max":10000,"method":"mean", "parameter":{}}],
-            "totalNonNanRatio":1 }
+            "total_non_NaN_ratio":1 }
         data = processing_interface.get_data_result('imputation', data, imputation_param)
         process_param={'flag': True, 'emw_param':0.3}
         data = processing_interface.get_data_result('smoothing', data, process_param)

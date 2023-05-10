@@ -89,13 +89,13 @@ def get_process_param(clean_param):
                     'alg_parameter': {'weight': 100}}
             ]}}
         outlier_param = {
-            "certainErrorToNaN": CertainParam,
-            "unCertainErrorToNaN": uncertainParam
+            "certain_error_to_NaN": CertainParam,
+            "uncertain_error_to_NaN": uncertainParam
         }
         imputation_param = {
             "flag": False,
             "imputation_method": [{"min": 0, "max": 3, "method": "linear", "parameter": {}}],
-            "totalNonNanRatio": 80
+            "total_non_NaN_ratio": 80
         }
 
     else:
@@ -103,13 +103,13 @@ def get_process_param(clean_param):
         CertainParam = {'flag': False}
         uncertainParam = {'flag': False, "param": {}}
         outlier_param = {
-            "certainErrorToNaN": CertainParam,
-            "unCertainErrorToNaN": uncertainParam
+            "certain_error_to_NaN": CertainParam,
+            "uncertain_error_to_NaN": uncertainParam
         }
         imputation_param = {
                 "flag": False,
                 "imputation_method": [],
-                "totalNonNanRatio": 80
+                "total_non_NaN_ratio": 80
         }
 
     process_param = {'refine_param': refine_param,

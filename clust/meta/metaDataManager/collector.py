@@ -26,8 +26,8 @@ class ReadData():
         }
         
         outlier_param  = {
-            "certainErrorToNaN":{"flag":True},
-            "unCertainErrorToNaN":{
+            "certain_error_to_NaN":{"flag":True},
+            "uncertain_error_to_NaN":{
                 "flag":False,
                 "param":{"neighbor":0.5}
             },
@@ -37,7 +37,7 @@ class ReadData():
         imputation_param = {
             "flag":True,
             "imputation_method":[{"min":0,"max":20,"method":"linear" , "parameter":{}}],
-            "totalNonNanRatio":70
+            "total_non_NaN_ratio":70
         }
         self.process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
         

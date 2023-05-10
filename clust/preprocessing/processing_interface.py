@@ -43,8 +43,8 @@ def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta
     CertainParam= {'flag': True, 'data_min_max_limit':min_max}
     
     outlier_param ={
-        "certainErrorToNaN":CertainParam, 
-        "unCertainErrorToNaN":{'flag': False}
+        "certain_error_to_NaN":CertainParam, 
+        "uncertain_error_to_NaN":{'flag': False}
     }
     imputation_param = {"flag":False}
     process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}

@@ -21,7 +21,7 @@ class CleanFeatureData:
         self.imputation_param = {
                 "flag":True,
                 "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
-                "totalNonNanRatio":5
+                "total_non_NaN_ratio":5
         }
     """
     def getMultipleCleanDataSetsByDF(self, dataSet, NanInfoForCleanData) :

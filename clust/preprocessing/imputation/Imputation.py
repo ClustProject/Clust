@@ -29,16 +29,16 @@ class SerialImputation():
             >>> imputation_param = {'flag': True, 
             ...                     'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}},
             ...                                          {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}],
-            ...                     'totalNonNanRatio': 80}
+            ...                     'total_non_NaN_ratio': 80}
             >>> output = SerialImputation().get_dataWithSerialImputationMethods(data, imputation_param)
 
         """
         result = data.copy()
         imputation_method = imputation_param['imputation_method']
-        totalNonNanRatio = imputation_param['totalNonNanRatio']
+        total_non_NaN_ratio = imputation_param['total_non_NaN_ratio']
 
         # if total column NaN number is less tan limit, Impute it according to the parameter  
-        result = self.dropOverNaNThresh(result, totalNonNanRatio)
+        result = self.dropOverNaNThresh(result, total_non_NaN_ratio)
         
         if not result.empty:
             result = self.dfImputation(result, imputation_method)
@@ -50,12 +50,12 @@ class SerialImputation():
                 data.loc[:, column] = result[column]
         return data
 
-    def dropOverNaNThresh(self, data, totalNonNanRatio):
+    def dropOverNaNThresh(self, data, total_non_NaN_ratio):
         """ This function removes any column that does not meet the qualifications (total Non-Nan Ratio).
 
         Args:
             data (DataFrame): input data
-            totalNonNanRatio (float): total NaN Ratio
+            total_non_NaN_ratio (float): total NaN Ratio
             
         Note
         ---------
@@ -67,11 +67,11 @@ class SerialImputation():
         
         Example:
 
-            >>> totalNonNanRatio = 80 # %
+            >>> total_non_NaN_ratio = 80 # %
             >>> output = SerialImputation().dropOverNaNThresh(data, imputation_param)
 
         """
-        totalNonNanNum = int(totalNonNanRatio/100 * len(data)) 
+        totalNonNanNum = int(total_non_NaN_ratio/100 * len(data)) 
         result= data.dropna(thresh = totalNonNanNum, axis=1)
        
         return result

@@ -76,7 +76,7 @@ class DataPreprocessing():
 
             >>> uncertainErrorParam = {
                 # TODO define }
-            >>> outlier_param = {'certainErrorToNaN': {'flag': True}, 'unCertainErrorToNaN': uncertainErrorParam}
+            >>> outlier_param = {'certain_error_to_NaN': {'flag': True}, 'uncertain_error_to_NaN': uncertainErrorParam}
             >>> datawithMoreCertainNaN, datawithMoreUnCertainNaN = DataPreprocessing().get_errorToNaNData(data, outlier_param)
 
 
@@ -92,8 +92,8 @@ class DataPreprocessing():
             
         """
         from Clust.clust.preprocessing.errorDetection import errorToNaN
-        self.datawithMoreCertainNaN = errorToNaN.errorToNaN().getDataWithCertainNaN(data, outlier_param['certainErrorToNaN'])
-        self.datawithMoreUnCertainNaN = errorToNaN.errorToNaN().getDataWithUncertainNaN(self.datawithMoreCertainNaN, outlier_param['unCertainErrorToNaN'])
+        self.datawithMoreCertainNaN = errorToNaN.errorToNaN().getDataWithCertainNaN(data, outlier_param['certain_error_to_NaN'])
+        self.datawithMoreUnCertainNaN = errorToNaN.errorToNaN().getDataWithUncertainNaN(self.datawithMoreCertainNaN, outlier_param['uncertain_error_to_NaN'])
         return self.datawithMoreCertainNaN, self.datawithMoreUnCertainNaN
 
     def get_imputedData(self, data, imputation_param):
@@ -111,7 +111,7 @@ class DataPreprocessing():
             >>> imputation_param = {'flag': True, 
             ...                     'imputation_method': [{'min': 0, 'max': 3, 'method': 'KNN', 'parameter': {}}, '
             ...                                           {'min': 4, 'max': 6, 'method': 'mean', 'parameter': {}}], 
-            ...                     'totalNonNanRatio': 80}
+            ...                     'total_non_NaN_ratio': 80}
             >>> output = DataPreprocessing().get_imputedData(data, outlier_param)
 
         """

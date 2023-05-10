@@ -94,7 +94,7 @@ class DataOutlier():
             >>> imputation_param = {
             ...     "flag":True,
             ...     "imputation_method":[{"min":0,"max":1000000,"method":"linear", "parameter":{}}
-            ...     ],"totalNonNanRatio":0}
+            ...     ],"total_non_NaN_ratio":0}
 
         """ 
         self.originNaNIndex = getNaNIndex(self.data)
