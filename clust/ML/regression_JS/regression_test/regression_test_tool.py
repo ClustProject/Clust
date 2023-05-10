@@ -24,7 +24,7 @@ def nan_plot_refine_data_plot(data, refine_param, target):
     print(data.isna().sum())
 
     ## refine
-    refinement_data = processing_interface.get_data_result('refine', data , refine_param)
+    refinement_data = processing_interface.get_data_result('refinement', data , refine_param)
 
     print("======= Refine Data Nan =======")
     print(refinement_data.isna().sum())

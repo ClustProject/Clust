@@ -16,7 +16,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
      
 
     # Args
-     * processing_type(_str_)    = ['refine'|'error_to_NaN'|'imputation'|'all'|'step3']
+     * processing_type(_str_)    = ['refinement'|'error_to_NaN'|'imputation'|'all'|'step3']
      * processing_param)(dict)  or None   
      * data_input(pandas.dataFrame or dict)
 
@@ -68,7 +68,7 @@ def get_preprocessed_data(processing_type, param, data):
     """ Produces only one clean data according to the processing_type and param
 
         Args:
-            processing_type (string): ['refine'|'error_to_NaN'|'imputation'|'all']
+            processing_type (string): ['refinement'|'error_to_NaN'|'imputation'|'all']
             param (dict): parameter for preprocessing
             data (DataFrame): input data
             
@@ -81,7 +81,7 @@ def get_preprocessed_data(processing_type, param, data):
     DP = DataPreprocessing()
     
     # 3 step processing
-    if processing_type =='refine':
+    if processing_type =='refinement':
         result = DP.get_refinedData(data, param)
     elif processing_type =='error_to_NaN':
         result_0, result = DP.get_errorToNaNData(data, param)
