@@ -39,8 +39,8 @@ class IntegrationInterface():
 
         >>> process_param 
         ... refine_param = {
-        ...     "removeDuplication":{"flag":True},
-        ...     "staticFrequency":{"flag":True, "frequency":None}
+        ...     "remove_duplication":{"flag":True},
+        ...     "static_frequency":{"flag":True, "frequency":None}
         ... }
         ... CertainParam= {'flag': True}
         ... uncertainParam= {'flag': False, "param":{
@@ -123,7 +123,7 @@ class IntegrationInterface():
         from Clust.clust.integration.meta import partialDataInfo
         partial_data_info       = partialDataInfo.PartialData(multiple_dataset, integration_duration)
         if not integration_freq_sec:
-            process_param["refine_param"]["staticFrequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
+            process_param["refine_param"]["static_frequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
         """ 
         
         integrationMethod = integration_param['method']

@@ -71,8 +71,8 @@ class DataOutlier():
 
         """ 
         refine_param = {
-            "removeDuplication":{"flag":True},
-            "staticFrequency":{"flag":True, "frequency":None}
+            "remove_duplication":{"flag":True},
+            "static_frequency":{"flag":True, "frequency":None}
             }
         self.data = DataPreprocessing().get_refinedData(self.data, refine_param)
 

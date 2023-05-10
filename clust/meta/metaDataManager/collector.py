@@ -21,8 +21,8 @@ class ReadData():
             - Bucket Meta 읽기 가능
         """
         refine_param = {
-            "removeDuplication":{"flag":True},
-            "staticFrequency":{"flag":True, "frequency":None}
+            "remove_duplication":{"flag":True},
+            "static_frequency":{"flag":True, "frequency":None}
         }
         
         outlier_param  = {

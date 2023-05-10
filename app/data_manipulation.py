@@ -49,7 +49,7 @@ def get_process_param_by_level(level):
     Returns:
         process_param(dict): process_param 
     """
-    refine_param = {"removeDuplication": {"flag": False},"staticFrequency": {"flag": False, "frequency": None}}
+    refine_param = {"remove_duplication": {"flag": False},"static_frequency": {"flag": False, "frequency": None}}
     certain_param = {'flag': False}
     uncertain_param = {'flag': False}
     imputation_param = {"flag": False}
@@ -57,7 +57,7 @@ def get_process_param_by_level(level):
     if level == 0:
         pass 
     if level >= 1:
-        refine_param = {"removeDuplication": {"flag": True},"staticFrequency": {"flag": True, "frequency": None}}
+        refine_param = {"remove_duplication": {"flag": True},"static_frequency": {"flag": True, "frequency": None}}
         
     if level >= 2:
         certain_param['flag'] = True

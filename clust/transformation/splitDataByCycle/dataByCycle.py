@@ -20,7 +20,7 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
     Returns:
         List: Cycle Data, or None
     """
-    refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': frequency}}
+    refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': frequency}}
     output_data = DataPreprocessing().get_refinedData(query_data, refine_param)
     cycleData = CycleData()
 

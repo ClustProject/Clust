@@ -33,27 +33,27 @@ class DataPreprocessing():
 
         # refine_param additional info
         ```
-            >>> refine_param['removeDuplication']={'flag':(Boolean)} 
-            >>> refine_param['staticFrequency'] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
+            >>> refine_param["remove_duplication"]={'flag':(Boolean)} 
+            >>> refine_param["static_frequency"] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
             >>> refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
         ```
 
         # Example
         ```
             >>> from clust.preprocessing.dataPreprocessing import DataPreprocessing
-            >>> refine_param = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': None}}
-            >>> refine_param2 = {'removeDuplication': {'flag': True}, 'staticFrequency': {'flag': True, 'frequency': "3H"}}
+            >>> refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': None}}
+            >>> refine_param2 = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': "3H"}}
             >>> refinementData = DataPreprocessing().get_refinedData(data, refine_param)
         ```
         """
         result = data.copy()
-        if refine_param['removeDuplication']['flag']== True:
+        if refine_param["remove_duplication"]['flag']== True:
             from Clust.clust.preprocessing.refinement import redundancy
             result = redundancy.ExcludeRedundancy().get_result(result)
 
-        if refine_param['staticFrequency']['flag'] == True:
+        if refine_param["static_frequency"]['flag'] == True:
             from Clust.clust.preprocessing.refinement import frequency
-            inferred_freq = refine_param['staticFrequency']['frequency']
+            inferred_freq = refine_param["static_frequency"]['frequency']
             result = frequency.RefineFrequency().get_RefinedData(result, inferred_freq)
 
         self.refinedData = result
