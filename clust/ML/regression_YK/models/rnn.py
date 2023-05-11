@@ -1,8 +1,6 @@
 import torch.nn as nn
 import torch
 
-# device = "cuda" if torch.cuda.is_available() else "cpu"
-
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type):
         """The __init__ method that initiates an RNN instance.

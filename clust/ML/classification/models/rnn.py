@@ -1,44 +1,78 @@
 import torch.nn as nn
 import torch
-import torch.optim as optim
 
-import numpy as np
-import time
-import copy
+class RNN(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type):
+        """The __init__ method that initiates an RNN instance.
 
-class RNNModel(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, num_classes, bidirectional, rnn_type, device='cuda', **extra_model_param):
-        super(RNNModel, self).__init__()
+        Args:
+            input_size (int): The number of nodes in the input layer
+            hidden_size (int): The number of nodes in each layer
+            num_layers (int): The number of layers in the network
+            output_dim (int): The number of nodes in the output layer
+            dropout_prob (float): The probability of nodes being dropped out
+            bidirectional (boolean): Whether bidirectional or not
+            rnn_type (string): The type of RNN structure (i.e., rnn, lstm, gru)
+        """
+        super(RNN, self).__init__()
+
+        # Defining the number of layers and the nodes in each layer
         self.hidden_size = hidden_size
         self.num_layers = num_layers
-        self.num_classes = num_classes
+
+        # defining the type of RNN families (e.g., rnn, lstm, gru,...)
         self.rnn_type = rnn_type
         self.num_directions = 2 if bidirectional == True else 1
-        self.device = device
-        
-        # rnn_type에 따른 recurrent layer 설정
-        if self.rnn_type == 'lstm':
-            self.rnn = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True, bidirectional=bidirectional)
+
+        # RNN layers
+        if self.rnn_type == 'rnn':
+            self.rnn = nn.RNN(
+                input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
+            )
+        # LSTM layers
+        elif self.rnn_type == 'lstm':
+            self.lstm = nn.LSTM(
+                input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
+            )
+        # GRU layers
         elif self.rnn_type == 'gru':
-            self.rnn = nn.GRU(input_size, hidden_size, num_layers, batch_first=True, bidirectional=bidirectional)
-        
-        # bidirectional에 따른 fc layer 구축
-        # bidirectional 여부에 따라 hidden state의 shape가 달라짐 (True: 2 * hidden_size, False: hidden_size)
-        self.fc = nn.Linear(self.num_directions * hidden_size, self.num_classes)
+            self.gru = nn.GRU(
+                input_size, hidden_size, num_layers, batch_first=True, dropout=dropout_prob, bidirectional=bidirectional
+            )
+
+        # Fully connected layer according to wheter bidirectional
+        self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
 
     def forward(self, x):
-        # data dimension: (batch_size x input_size x seq_len) -> (batch_size x seq_len x input_size)로 변환
-        x = torch.transpose(x, 1, 2)
-        # initial hidden states 설정
-        h0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size, device=x.device).to(self.device)
-        
-        # 선택한 rnn_type의 RNN으로부터 output 도출
-        if self.rnn_type == 'gru':
-            out, _ = self.rnn(x, h0)  # out: tensor of shape (batch_size, seq_length, hidden_size)
+        """The forward method takes input tensor x and does forward propagation
+
+        Args:
+            x (torch.Tensor): The input tensor of the shape (batch size, sequence length, input_size)
+
+        Returns:
+            torch.Tensor: The output tensor of the shape (batch size, output_dim)
+
+        """
+        # Initializing hidden state for first input with zeros
+        h0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+
+        # Forward propagation by passing in the input and hidden state into the model
+        if self.rnn_type == 'lstm':
+            # Initializing cell state for first input with zeros
+            c0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+            # We need to detach as we are doing truncated backpropagation through time (BPTT)
+            # If we don't, we'll backprop all the way to the start even after going through another batch
+            # Forward propagation by passing in the input, hidden state, and cell state into the model
+            out, (hn, cn) = self.lstm(x, (h0.detach(), c0.detach()))
+        elif self.rnn_type == 'gru':
+            out, h0 = self.gru(x, h0.detach())
         else:
-            # initial cell states 설정
-            c0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size, device=x.device).to(self.device)
-            out, _ = self.rnn(x, (h0, c0))  # out: tensor of shape (batch_size, seq_length, hidden_size)
-        
-        out = self.fc(out[:, -1, :])
+            out, h0 = self.rnn(x, h0.detach())
+
+        # Reshaping the outputs in the shape of (batch_size, seq_length, hidden_size)
+        # so that it can fit into the fully connected layer
+        out = out[:, -1, :]
+
+        # Convert the final state to our desired output shape (batch_size, output_dim)
+        out = self.fc(out)
         return out

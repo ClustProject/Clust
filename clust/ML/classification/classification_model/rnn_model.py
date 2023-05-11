@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
 from Clust.clust.ML.classification.interface import BaseRegressionModel
-from Clust.clust.ML.classification.models.rnn import RNNModel as rnn_model
+from Clust.clust.ML.classification.models.rnn import RNN
 
 
 class RNNModel(BaseRegressionModel):
@@ -23,17 +23,18 @@ class RNNModel(BaseRegressionModel):
         Args:
             params (dict): parameters for building a CNN1D model
         """
-        self.model_params = model_params
         # model 생성
-        self.model = rnn_model(**self.model_params)
-        # self.model = rnn_model(
-        #     input_size=self.params['input_size'],
-        #     hidden_size=self.params['hidden_size'],
-        #     num_layers=self.params['num_layers'],
-        #     num_classes=self.params['num_classes'],
-        #     bidirectional=self.params['bidirectional'],
-        #     rnn_type=self.params['rnn_type'],
-        #     device=self.params['device'])
+        # self.model = RNN(**self.model_params)
+        self.model_params = model_params
+        self.model = RNN(
+            rnn_type = self.model_params['rnn_type'],
+            input_size = self.model_params['input_size'],
+            hidden_size = self.model_params['hidden_size'],
+            num_layers = self.model_params['num_layers'],
+            output_dim = self.model_params['num_classes'],
+            dropout_prob = self.model_params['dropout'],
+            bidirectional = self.model_params['bidirectional']
+        )
 
     def train(self, train_params, train_loader, valid_loader):
         """
@@ -48,13 +49,14 @@ class RNNModel(BaseRegressionModel):
         """
         device = train_params['device']
         n_epochs = train_params['n_epochs']
-        lr = train_params['lr']
+        batch_size = train_params['batch_size']
+        input_size = self.model_params['input_size']
 
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(self.model.parameters(), lr=lr)
+        optimizer = optim.Adam(self.model.parameters(), lr=train_params['lr'], weight_decay=train_params['weight_decay'])
 
         since = time.time()
 
@@ -81,8 +83,8 @@ class RNNModel(BaseRegressionModel):
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
                 for inputs, labels in data_loaders_dict[phase]:
-                    inputs = inputs.to(device)
-                    labels = labels.to(device, dtype=torch.long)
+                    inputs = inputs.view([batch_size, -1, input_size]).to(device)
+                    labels = labels.squeeze(dim=-1).to(device, dtype=torch.long)
                     # seq_lens = seq_lens.to(self.parameter['device'])
                     
                     # parameter gradients를 0으로 설정
@@ -149,6 +151,8 @@ class RNNModel(BaseRegressionModel):
             mae (float): mean absolute error    # TBD
         """
         device = test_params['device']
+        batch_size = test_params['batch_size']
+        input_size = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
@@ -160,8 +164,8 @@ class RNNModel(BaseRegressionModel):
             probs = []
             trues = []
             for inputs, labels in test_loader:
-                inputs = inputs.to(device)
-                labels = labels.to(device, dtype=torch.long)
+                inputs = inputs.view([batch_size, -1, input_size]).to(device)
+                labels = labels.squeeze(dim=-1).to(device, dtype=torch.long)
 
                 self.model.to(device)
     
@@ -207,6 +211,8 @@ class RNNModel(BaseRegressionModel):
             preds (ndarray) : Inference result data
         """
         device = infer_params['device']
+        batch_size = infer_params['batch_size']
+        input_size = self.model_params['input_size']
 
         self.model.eval()   # 모델을 validation mode로 설정
         
@@ -214,6 +220,8 @@ class RNNModel(BaseRegressionModel):
         with torch.no_grad():
             preds = []
             for inputs in inference_loader:
+                inputs = inputs.view([batch_size, -1, input_size])
+
                 self.model.to(device)
                 
                 # forward
@@ -301,8 +309,8 @@ class RNNModel(BaseRegressionModel):
 
         train_set, val_set = datasets[0], datasets[1]
 
-        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True)
+        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, drop_last=True)
+        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return train_loader, val_loader
 
@@ -327,7 +335,7 @@ class RNNModel(BaseRegressionModel):
         # y_data = test_y
 
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return test_loader
 
