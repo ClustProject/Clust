@@ -148,7 +148,7 @@ class DataPreprocessing():
 
         Args:
             data (DataFrame): input data
-            scaling_param (json): scaling_param 
+            scaling_param (json): scaling_param with scaling method  (method: minmax, standard, maxabs, robust) 
             
         Returns:
             DataFrame: New Dataframe after smoothing
@@ -162,10 +162,15 @@ class DataPreprocessing():
         # TODO all scaler defin
         if scaling_param['flag']==True:
             method = scaling_param['method']
-            if method =='minmax':
-                from sklearn.preprocessing import MinMaxScaler
-                scaler = MinMaxScaler()
-                data = pd.DataFrame(scaler.fit_transform(data), columns=list(data.columns), index = data.index)   
+            from sklearn.preprocessing import MinMaxScaler, StandardScaler, MaxAbsScaler, RobustScaler
+            scalers = {
+                "minmax": MinMaxScaler,
+                "standard": StandardScaler,
+                "maxabs": MaxAbsScaler,
+                "robust": RobustScaler,
+            }
+            scaler = scalers.get(method.lower())()
+            data = pd.DataFrame(scaler.fit_transform(data), columns=list(data.columns), index = data.index)   
         
         return data
         

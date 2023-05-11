@@ -27,7 +27,7 @@ class DataOutlier():
             raw_data (DataFrame): train data whose shape is (num_index x num_variable)
 
         """
-        self.AlgParameter = {
+        self.defaultAlgParameter = {
             "IF":{
                 'IF_estimators': 100, # ensemble에 활용하는 모델 개수, int(default: 100, 데이터 크기에 적합하게 설정)
                 'IF_max_samples': 'auto', # 각 모델에 사용하는 샘플 개수(샘플링 적용), int or float(default: 'auto')
@@ -119,7 +119,7 @@ class DataOutlier():
 
             >>> config = { 
             ...     'algorithm': 'IF', # outlier detection에 활용할 알고리즘 정의, {'SR', 'LOF', 'MoG', 'KDE', 'IF'} 중 택 1            
-            ...     'alg_parameter': AlgParameter['IF']      # option
+            ...     'alg_parameter': alg_parameter like default AlgParameter    # option
             ... }
             >>> data_outlier = mod.DataOutlier(raw_data)
             >>> replaced_data, index_list = data_outlier.getOneDetectionResult(config, 95)
@@ -138,7 +138,7 @@ class DataOutlier():
         if 'alg_parameter'in config:
             self.args = config['alg_parameter']
         else:
-            self.args = self.AlgParameter[self.algorithm]
+            self.args = self.defaultAlgParameter[self.algorithm]
 
         self.columns_list = list(data.columns)
         index_list={}
