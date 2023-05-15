@@ -169,7 +169,7 @@ def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model
                 'bidirectional': True}
             
     """
-    from Clust.clust.ML.regression_YK.train import RegressionTrain as RML
+    from Clust.clust.ML.regression.train import RegressionTrain as RML
 
     rml = RML()
     rml.set_param(train_parameter)
@@ -180,7 +180,7 @@ def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model
     
 
 # Test pieline
-from Clust.clust.ML.regression_YK.test import RegressionTest as RT
+from Clust.clust.ML.regression.test import RegressionTest as RT
 def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
     """ Regression Test
 
