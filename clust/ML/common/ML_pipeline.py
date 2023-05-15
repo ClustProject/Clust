@@ -1,7 +1,6 @@
 import sys, os
 sys.path.append("../")
 sys.path.append("../../")
-import pandas as pd
 
 ############# Xy
 def Xy_data_preparation(ingestion_param_X, data_y_flag, ingestion_param_y, ingestion_method, db_client):
@@ -88,9 +87,11 @@ def clean_low_quality_column(model_clean, nan_process_info, data):
         data (pd.DataFrame):처리 데이터
     """
     if model_clean:
-        from Clust.clust.quality.NaN import cleanData
-        CMS = cleanData.CleanData()
-        data = CMS.get_cleanData_by_removing_column(data, nan_process_info) 
+        from Clust.clust.quality import quality_interface
+        quality_param = {"nan_processing_param":nan_process_info}
+        data = quality_interface.get_data_result("data_with_clean_feature", data, quality_param)
+    
+    
     else:
         pass
     return data

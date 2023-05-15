@@ -10,7 +10,7 @@ def get_data_result(split_type, data_input, split_param=None):
 
     Args:
         split_type (string):split type 
-        data(dataframe, dictionary)
+        data(dataframe, dictionary): input data
         param: split parameter by split_type
     
     Returns:

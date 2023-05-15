@@ -6,18 +6,19 @@ from Clust.clust.quality.NaN import data_remove_byNaN
 from Clust.clust.preprocessing import dataPreprocessing
 
 # 특정 datasetd에 대해 품질을 점검하고 각 피쳐별로 이상 수치를 넘는 피쳐 데이터는 제거하고 깨끗한 데이터를 전달
-# - multiple dataFrame:getMultipleCleanDataSetsByFeature
-# - one dataFrame: getOneCleanDataSetByFeature
+# - multiple dataFrame:get_multiple_clean_datasets_by_feature
+# - one dataFrame: get_one_clean_dataset_by_feature
+
+""" get_one_clean_dataset_by_feature, getMultipleCleanDataSetsByDF 안쓰는듯."""
 
 class CleanFeatureData:
-    def __init__(self, frequency):
+    def __init__(self):
         """
         - Clean Data by each column
         - Delete bad quality column
         - recover column with moderate quality by NaNInfoCleanData partameter (use linear imputation)
         
         """
-        self.frequency = frequency
         self.imputation_param = {
                 "flag":True,
                 "imputation_method":[{"min":0,"max":10000,"method":"linear" , "parameter":{}}],
@@ -68,7 +69,7 @@ class CleanFeatureData:
         return self.FilteredImputedDataSet
 
     """
-    def getMultipleCleanDataSetsByFeature(self, dataSet, NanInfoForCleanData, duration=None) :
+    def get_multiple_clean_datasets_by_feature(self, dataSet, NanInfoForCleanData, duration=None) :
         """
         - refinedDataSet, refinedDataSetName: 간단한 cleaning 진행한 데이터셋
         - NaNRemovedDataSet : 품질이 좋지 않은 NaN 값을 다수 포함한 컬럼을 제거한 데이터
@@ -93,13 +94,13 @@ class CleanFeatureData:
 
         for column_name in list(dataSet.columns):
             data = dataSet[[column_name]]
-            imputed_data  = self.getOneCleanDataSetByFeature(data, NanInfoForCleanData, duration)
+            imputed_data  = self.get_one_clean_dataset_by_feature(data, NanInfoForCleanData, duration)
             self.imputed_data_set = pd.concat([self.imputed_data_set, imputed_data], axis=1)
                     
         return self.imputed_data_set
 
 
-    def getOneCleanDataSetByFeature(self, data, NanInfoForCleanData, duration=None) :
+    def get_one_clean_dataset_by_feature(self, data, NanInfoForCleanData, duration=None) :
         """
         This function gets CleanDataSet by Feature
 
@@ -121,12 +122,33 @@ class CleanFeatureData:
             ...               'end_time' : "2021-02-04 00:00:00" }
 
         """
-
-        DRN = data_remove_byNaN.DataRemoveByNaNStatus()
-        nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
+        nan_removed_data = self.get_cleanData_by_removing_column(data, NanInfoForCleanData)
         MDP = dataPreprocessing.DataPreprocessing()
         imputed_data= MDP.get_imputedData(nan_removed_data, self.imputation_param)
         
         return imputed_data
+    
+    def get_cleanData_by_removing_column(self, data, NanInfoForCleanData) :
+        """
+        - Clean Data by each column
+            - Delete bad quality column
+            - Impute missing data in surviving columns of baseline quality by the NaNInfoCleanData parameter (using linear replacement)
+        - input data must be processed and refined by preprocessing(after refining and making more NaN )
+
+        Args:
+            data (np.DataFrame):  input Data to be handled
+            NanInfoForCleanData (dictionary): selection condition 
+
+        Returns:
+            ImputedData(dataframe): filtered and imputed data
+
+        """
+
+        DRN = data_remove_byNaN.DataRemoveByNaNStatus()
+        nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
+
+        print(len(data.columns), "--->", len(nan_removed_data.columns))
+
+        return nan_removed_data
 
 

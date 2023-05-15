@@ -33,7 +33,7 @@ def clean_nan_df(data_set, nan_processing_param, timedelta_frequency_sec):
     day_cycle = dataByCycle.getCycleSelectDataSet(data_set, feature_cycle, feature_cycle_times, timedelta_frequency_sec)
 
     CMS = clean_feature_data.CleanFeatureData(timedelta_frequency_sec)
-    filter_imputed_data = CMS.getMultipleCleanDataSetsByFeature(day_cycle, nan_info_clean_data, None) 
+    filter_imputed_data = CMS.get_multiple_clean_datasets_by_feature(day_cycle, nan_info_clean_data, None) 
     clean_data = pd.concat(filter_imputed_data.values())
 
     return clean_data

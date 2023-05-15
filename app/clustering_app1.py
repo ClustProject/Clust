@@ -34,14 +34,14 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     process_param = processing_interface.get_default_processing_param(min_max, timedelta_frequency_min)
 
     # 2. one DF preparation
-    from Clust.clust.transformation.general import select_interface
-    select_param ={"feature_name":feature_name, "duration":duration, "frequency":timedelta_frequency_min }
-    data_DF = select_interface.get_data_result("oneDF_with_oneFeature_from_multipleDF", data_set, select_param)
-
+    from Clust.clust.integration import integration_interface
+    integration_param ={"feature_name":feature_name, "duration":duration, "frequency":timedelta_frequency_min }
+    data_DF = integration_interface.get_data_result("oneDF_with_oneFeature_from_multipleDF", data_set, integration_param)
+    
     # 3. quality check
-    from Clust.clust.quality.NaN import cleanData
-    CMS = cleanData.CleanData()
-    data = CMS.get_cleanData_by_removing_column(data_DF, NaNProcessingParam) 
+    from Clust.clust.quality import quality_interface
+    quality_param = {"nan_processing_param":NaNProcessingParam}
+    data = quality_interface.get_data_result("data_with_clean_feature", data_DF, quality_param)
 
     result_dic={}
     if len(data.columns) > 1:
@@ -87,7 +87,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
         from Clust.clust.ML.clustering.interface import clusteringByMethod
         model_path = "model.pkl"
         result, plt1= clusteringByMethod(data, parameter, model_path)
-        
+        print(result)
         # histogram by label
         from Clust.clust.tool.plot import plot_interface
         y_df = pd.DataFrame(result)
