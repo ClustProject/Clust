@@ -43,13 +43,14 @@ class FCModel(BaseRegressionModel):
         """
         device = train_params['device']
         n_epochs = train_params['n_epochs']
-        lr = train_params['lr']
+        batch_size = train_params['batch_size']
+        input_size = self.model_params['input_size']
 
         self.model.to(device)
 
         data_loaders_dict = {'train': train_loader, 'val': valid_loader}
         criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(self.model.parameters(), lr=lr)
+        optimizer = optim.Adam(self.model.parameters(), lr=train_params['lr'])
 
         since = time.time()
 
@@ -76,8 +77,9 @@ class FCModel(BaseRegressionModel):
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
                 for inputs, labels in data_loaders_dict[phase]:
-                    inputs = inputs.to(device)
-                    labels = labels.to(device, dtype=torch.long)
+                    #inputs = inputs.to(device)
+                    inputs = inputs.view([batch_size, -1]).to(device)
+                    labels = labels.squeeze(dim=-1).to(device, dtype=torch.long)
                     # seq_lens = seq_lens.to(self.parameter['device'])
                     
                     # parameter gradients를 0으로 설정
@@ -296,8 +298,8 @@ class FCModel(BaseRegressionModel):
 
         train_set, val_set = datasets[0], datasets[1]
 
-        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
-        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True)
+        train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True, drop_last=True)
+        val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return train_loader, val_loader
 
@@ -322,7 +324,7 @@ class FCModel(BaseRegressionModel):
         # y_data = test_y
 
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True)
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return test_loader
 

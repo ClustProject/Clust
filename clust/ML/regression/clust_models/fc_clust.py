@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
 
-from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.fc import FC
+from Clust.clust.ML.regression.interface import BaseRegressionModel
+from Clust.clust.ML.regression.models.fc import FC
 
 
 class FCClust(BaseRegressionModel):
@@ -58,7 +58,7 @@ class FCClust(BaseRegressionModel):
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                x_batch = x_batch.view([batch_size, n_features]).to(device)
+                x_batch = x_batch.view([batch_size, -1]).to(device)
                 y_batch = y_batch.view([batch_size, 1]).to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
@@ -68,7 +68,7 @@ class FCClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    x_val = x_val.view([batch_size, n_features]).to(device)
+                    x_val = x_val.view([batch_size, -1]).to(device)
                     y_val = y_val.view([batch_size, 1]).to(device)
                     self.model.eval()
                     yhat = self.model(x_val)

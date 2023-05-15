@@ -8,8 +8,8 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
 
-from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.cnn_1d import CNN1D
+from Clust.clust.ML.regression.interface import BaseRegressionModel
+from Clust.clust.ML.regression.models.cnn_1d import CNN1D
 
 
 class CNN1DClust(BaseRegressionModel):

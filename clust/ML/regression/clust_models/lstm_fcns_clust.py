@@ -9,32 +9,28 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
 
-from Clust.clust.ML.regression_YK.interface import BaseRegressionModel
-from Clust.clust.ML.regression_YK.models.rnn import RNN
+from Clust.clust.ML.regression.interface import BaseRegressionModel
+from Clust.clust.ML.regression.models.lstm_fcns import LSTMFCNs
 
 
-class RNNClust(BaseRegressionModel):
+class LSTMFCNsClust(BaseRegressionModel):
     """
-    RNN Regression & forecast model class
+    LSTMFCNs Regression & forecast model class
     """
     def __init__(self, model_params):
         """
-        Init function of RNN class.
+        Init function of LSTMFCNs class.
 
         Args:
-            model_params (dict): parameters for building an RNN model
+            model_params (dict): parameters for building an LSTMFCNs model
         """
-        # model 생성
-        # TODO: parameters refactoring
         self.model_params = model_params
-        self.model = RNN(
-            rnn_type = self.model_params['rnn_type'],
-            input_size = self.model_params['input_size'],
-            hidden_size = self.model_params['hidden_size'],
-            num_layers = self.model_params['num_layers'],
-            output_dim = self.model_params['output_dim'],
-            dropout_prob = self.model_params['dropout'],
-            bidirectional = self.model_params['bidirectional']
+        # model 생성
+        self.model = LSTMFCNs(
+            input_size=self.model_params['input_size'],
+            num_layers=self.model_params['num_layers'],
+            lstm_drop_p=self.model_params['lstm_dropout'],
+            fc_drop_p=self.model_params['fc_dropout']
         )
 
     def train(self, train_params, train_loader, valid_loader):
@@ -64,7 +60,8 @@ class RNNClust(BaseRegressionModel):
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
+                x_batch = x_batch.view([batch_size, -1, n_features])
+                x_batch = x_batch.transpose(1, 2).to(device)    # LSTM_FCNs condtition
                 y_batch = y_batch.view([batch_size, 1]).to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
@@ -74,7 +71,8 @@ class RNNClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    x_val = x_val.view([batch_size, -1, n_features]).to(device)
+                    x_val = x_val.view([batch_size, -1, n_features])
+                    x_val = x_val.transpose(1, 2).to(device)    # LSTM_FCNs condtition
                     y_val = y_val.view([batch_size, 1]).to(device)
                     self.model.eval()
                     yhat = self.model(x_val)
@@ -94,12 +92,12 @@ class RNNClust(BaseRegressionModel):
 
     def test(self, test_params, test_loader):
         """
-        Predict result for test dataset based on the trained model
+        Predict regression result for test dataset based on the trained model
 
         Args:
             test_params (dict): parameters for test
             test_loader (DataLoader): data loader
-
+            
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data
@@ -115,7 +113,8 @@ class RNNClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                x_test = x_test.view([batch_size, -1, n_features]).to(device)
+                x_test = x_test.view([batch_size, -1, n_features])
+                x_test = x_test.transpose(1, 2).to(device)      # LSTM_FCNs condtition
                 y_test = y_test.view([batch_size, 1]).to(device, dtype=torch.float)
 
                 self.model.to(device)
@@ -129,16 +128,16 @@ class RNNClust(BaseRegressionModel):
                 trues.extend(y_test.detach().cpu().numpy())
 
         preds = np.array(preds).reshape(-1)
-        trues = np.array(trues).reshape(-1)
+        trues = np.array(trues)
 
         return preds, trues
-    
+
     def inference(self, infer_params, inference_loader):
         """
         Predict regression result for inference dataset based on the trained model
 
         Args:
-            infer_params (dict): parameters for inference
+            infer_params (dict): parameters for inference     # TBD
             inference_loader (DataLoader): inference data loader
 
         Returns:
@@ -150,19 +149,19 @@ class RNNClust(BaseRegressionModel):
 
         self.model.eval()   # 모델을 validation mode로 설정
         
+        # test_loader에 대하여 검증 진행 (gradient update 방지)
         with torch.no_grad():
             preds = []
-
             for x_infer in inference_loader:
-
-                x_infer = x_infer.view(batch_size, -1, n_features).to(device)
-
+                x_infer = x_infer.view([batch_size, -1, n_features])
+                x_infer = x_infer.transpose(1, 2).to(device)    # LSTM_FCNs condtition
+                
                 self.model.to(device)
                 
                 # forward
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_infer)
-
+                
                 # 예측 값 및 실제 값 축적
                 preds.extend(outputs.detach().cpu().numpy())
 
@@ -206,11 +205,10 @@ class RNNClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            task (string): task (e.g., regression, forecast)
             train_x (dataframe): train X data
-            train_y (dataframe): train y data (regression only)
+            train_y (dataframe): train y data
             val_x (dataframe): validation X data
-            val_y (dataframe): validation y data (regression only)
+            val_y (dataframe): validation y data
 
         Returns:
             train_loader (DataLoader): train data loader
@@ -242,11 +240,8 @@ class RNNClust(BaseRegressionModel):
         Returns:
             test_loader (DataLoader) : test data loader
         """
-        features, targets = torch.Tensor(test_x), torch.Tensor(test_y)
-
-        test_data = TensorDataset(features, targets)
-        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=False, drop_last=True)
-        print("features shape:", features.shape, "targets shape: ", targets.shape)
+        test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
+        test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 
         return test_loader
 
@@ -257,19 +252,19 @@ class RNNClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            infer_x (dataframe): inference X data
+            x_data (dataframe): inference X data
+            window_num (integer): slice window number
         
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
 
         infer_x = torch.Tensor(infer_x)
-        inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=False)
-        print("inference data shape:", infer_x.shape)
+        inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=True)
 
         return inference_loader
 
-    # customized funtions
+# customized funtions
     def _train_step(self, x, y):
         """The method train_step completes one step of training.
 
