@@ -33,6 +33,9 @@ def get_echart_json_result(graph_type, df)  :
     elif graph_type == 'bar_chart' :
         index_value = get_index_value_by_columns(df)
 
+    elif graph_type == 'box_plot' :
+        index_value = get_index_value_by_columns(df)
+
     index_value  = json.dumps(index_value)
     return index_value
 

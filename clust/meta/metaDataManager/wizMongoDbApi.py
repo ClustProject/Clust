@@ -113,8 +113,11 @@ class WizApiMongoMeta():
         headers = {'Content-Type': 'application/json'}
         
         url = self.mongodb_instance_url+"/rest/1.0/mongodb/documents/{}/{}?mode={}".format(domain, subdomain, mode)
+
+        print("url:: ", url, ", data :: ", data)
+
         response = requests.post(url, data=json.dumps(data), headers=headers)
-        print("Success:", response.status_code)
+        print("Success:", response.text)
 
 if __name__ == "__main__":
     from pprint import pprint
