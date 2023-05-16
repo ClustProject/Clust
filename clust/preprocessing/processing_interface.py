@@ -11,7 +11,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
      
 
     # Args
-     * processing_type(_str_) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step3'|'scaling'|'smoothing']
+     * processing_type(_str_) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
      * processing_param)(dict)  or None   
      * data_input(pandas.dataFrame or dict)
 
