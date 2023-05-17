@@ -53,38 +53,40 @@ clust/
   │       └── util.py                   : ML 데이터/모델 이외 관련 공통 모듈
   │   └── common
   │       │   └── common
-  │       │       ├── p1_integratedDataSaving.py
-  │       │       ├── p2_dataSelection.py
-  │       │       ├── p3_training.py
-  │       │       └── p4_testing.py
-  │       ├── trainer.py            : train abstract class
-  │       ├── inference.py          : inference abstract class
-  │       ├── model_manager.py      : model save 관련 모듈
-  │       ├── model_info.py         : model 저장하기 위한 path function
-  │       └── model_path_setting.py : 각 model 별 path name 설정
-  │   └── brits
-  │       ├── brits_model.py    : brits model 관련 class, 모듈
-  │       ├── brits_trainer.py  : brits train class
-  │       ├── train.py          : brits training class
-  │       └── inference.py      : brits inference class
-  │   └── forecasting
-  │       │   └── models    : forecasting 관련 사용 model
-  │       ├── train.py      : forecasting train class
-  │       ├── test.py       : forecasting test 모듈
-  │       ├── inference.py  : forecasting inference class
-  │       ├── app.py        : test & inference application
-  │       └── optimizer.py  : forecasting train optimization class
+  │       │       └── p1_integratedDataSaving.py
+  │       ├── ML_pipeline.py            : 
+  │       ├── model_path_setting.py     : 
+  │       └── tool.py                   : 
   │   └── regression
-  │       │   └── models    : regression 관련 사용 model
-  │       ├── train.py      : regression train class
-  │       ├── inference.py  : regression inference class
-  │       └── app.py        : test & inference application
+  │       │   └── regression_model
+  │       │      ├── cnn_id_model.py       : custom CNN1D model
+  │       │      ├── fc_model.py           : custom FC model
+  │       │      ├── lstm_fcns_model.py    : custom LSTMFCNs model
+  │       │      └── rnn_model.py          : custom RNN model
+  │       │   └── models
+  │       │      ├── cnn_1d.py     : standard CNN1D model
+  │       │      ├── fc.py         : standard FC model
+  │       │      ├── lstm_fcns.py  : standard LSTMFCNs model
+  │       │      └── rnn.py        : standard RNN model
+  │       ├── interface.py      : abstract class & method
+  │       ├── train.py          : train class
+  │       ├── test.py           : test class
+  │       └── inference.py      : inference class
   │   └── classification
-  │       │   └── models    : classification 관련 사용 model
-  │       ├── train.py      : classification train class
-  │       ├── test.py       : classification test 모듈
-  │       ├── inference.py  : classification inference class
-  │       └── app.py        : test & inference application
+  │       │   └── classification_model
+  │       │      ├── cnn_id_model.py       : custom CNN1D model
+  │       │      ├── fc_model.py           : custom FC model
+  │       │      ├── lstm_fcns_model.py    : custom LSTMFCNs model
+  │       │      └── rnn_model.py          : custom RNN model
+  │       │   └── models
+  │       │      ├── cnn_1d.py     : standard CNN1D model
+  │       │      ├── fc.py         : standard FC model
+  │       │      ├── lstm_fcns.py  : standard LSTMFCNs model
+  │       │      └── rnn.py        : standard RNN model
+  │       ├── interface.py      : abstract class & method
+  │       ├── train.py          : train class
+  │       ├── test.py           : test class
+  │       └── inference.py      : inference class
   │
   ├── preprocessing
   │   ├── custom

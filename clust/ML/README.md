@@ -20,25 +20,9 @@
   └── common
       │   └── common
       │       └── p1_integratedDataSaving.py
-  └── brits
-      ├── brits_model.py    : brits model 관련 class, 모듈
-      ├── brits_trainer.py  : brits train class
-      ├── train.py          : brits training class
-      └── inference.py      : brits inference class
-  └── forecasting
-      │   └── forecasting_model
-      │       ├── gru_model.py        : custom GUR model
-      │       ├── lstm_model.py       : custom LSTM model
-      │       └── rnn_model.py        : custom RNN model
-      │   └── models
-      │       ├── gru.py        : standard GUR model
-      │       ├── lstm.py       : standard LSTM model
-      │       └── rnn.py        : standard RNN model
-      ├── interface.py      : abstract class & method
-      ├── train.py          : train class
-      ├── test.py           : test class
-      ├── inference.py      : inference class
-      └── app.py            : test & inference application
+      │       ├── ML_pipeline.py            : 
+      │       ├── model_path_setting.py     : 
+      │       └── tool.py                   : 
   └── regression
       │   └── regression_model
       │       ├── cnn_id_model.py       : custom CNN1D model
@@ -53,8 +37,7 @@
       ├── interface.py      : abstract class & method
       ├── train.py          : train class
       ├── test.py           : test class
-      ├── inference.py      : inference class
-      └── app.py            : test & inference application
+      └── inference.py      : inference class
   └── classification
       │   └── classification_model
       │       ├── cnn_id_model.py       : custom CNN1D model
@@ -69,8 +52,7 @@
       ├── interface.py      : abstract class & method
       ├── train.py          : train class
       ├── test.py           : test class
-      ├── inference.py      : inference class
-      └── app.py            : test & inference application
+      └── inference.py      : inference class
 
 ```
 
