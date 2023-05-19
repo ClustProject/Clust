@@ -35,8 +35,9 @@ def ingestion_processing_integration(db_client, ingestion_type, ingestion_param,
         multiple_dataset = processing_interface.get_data_result(processing_type, multiple_dataset, process_param)
 
     # 3. Data Integration
-    from Clust.clust.integration.integrationInterface import IntegrationInterface
-    data = IntegrationInterface().multipleDatasetsIntegration(integration_param, multiple_dataset)
+    from Clust.clust.integration import integration_interface
+    data = integration_interface.get_data_result('multiple_dataset_integration', multiple_dataset, integration_param)
+
     
         
     return data

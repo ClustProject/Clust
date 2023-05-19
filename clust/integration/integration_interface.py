@@ -4,19 +4,19 @@ sys.path.append("../..")
 sys.path.append("../../..")
 import pandas as pd 
 
-def get_data_result(integration_type, data_input, integration_param):
+def get_data_result(integration_type, data_set, integration_param):
     """get integrated data by integration_type and parameter
 
     Args:
-        integration_type (string): integration type ['oneDF_with_oneFeature_from_multipleDF' ]
-        data_input (dictionary of dataframe): data input (dictionary of data frame)
+        integration_type (string): integration type ['one_feature_based_integration' ]
+        data_set (dictionary of dataframe): data input 
         integration_param (dictionary): integratoin parameter
 
     Returns:
         result (dataframe): integrated dataframe
     """
     
-    if integration_type =='oneDF_with_oneFeature_from_multipleDF':
+    if integration_type =='one_feature_based_integration':
         feature_name = integration_param['feature_name']
         if 'duration' in list(integration_param.keys()):
             duration = integration_param['duration']
@@ -28,11 +28,15 @@ def get_data_result(integration_type, data_input, integration_param):
         else:
             frequency = None
             
-        result = get_oneDF_with_oneFeature_from_multipleDF(data_input, feature_name, duration, frequency)
-
+        result = get_one_feature_based_integration(data_set, feature_name, duration, frequency)
+        
+    if integration_type =="multiple_dataset_integration":
+        from Clust.clust.integration.integrationInterface import IntegrationInterface
+        result = IntegrationInterface().multipleDatasetsIntegration(integration_param, data_set)
+    
     return result
 
-def get_oneDF_with_oneFeature_from_multipleDF(dataSet, feature_name, duration, frequency):
+def get_one_feature_based_integration(dataSet, feature_name, duration, frequency):
     """
     1) choose only one column value from each data of dataSet
     2) make one dataFrame.

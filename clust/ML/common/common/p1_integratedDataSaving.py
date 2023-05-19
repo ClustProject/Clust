@@ -5,7 +5,6 @@ import json
 sys.path.append("../../")
 sys.path.append("../../..")
 from Clust.clust.transformation.general.dataScaler import encode_hash_style
-from Clust.clust.integration.integrationInterface import IntegrationInterface
 from Clust.clust.integration.utils import param
 
 # 1. IntegratedDataSaving
@@ -29,12 +28,14 @@ def save_influx_data(db_name, data_name, data, db_client):
     db_client.write_db(bk_name, ms_name, data)
 
 
-def getData(db_client, dataInfo, integration_freq_sec, processParam, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
+def getData(db_client, dataInfo, integration_freq_sec, process_param, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
     intDataInfo = param.makeIntDataInfoSet(dataInfo, startTime, endTime)
 
-    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
 
-    data = IntegrationInterface().integrationByInfluxInfo(db_client, intDataInfo, processParam, integrationParam)
+    from Clust.app.integration_app1 import integration_from_influx_info
+    data = integration_from_influx_info(db_client, intDataInfo, process_param, integration_param)
+
 
     return data
 
@@ -49,13 +50,15 @@ def integrated_data_meta(dataInfo, start_time, end_time, integration_freq_sec, c
     
     return integrated_data_meta
 
-def getIntDataFromDataset(integration_freq_sec, processParam, dataSet, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
-    integrationParam = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+def getIntDataFromDataset(integration_freq_sec, processParam, multiple_dataset, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
+    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
     ## Preprocessing
     from Clust.clust.preprocessing import processing_interface
     multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, processParam)
-    data = IntegrationInterface().multipleDatasetsIntegration(processParam, integrationParam, dataSet)
-
+    
+    from Clust.clust.integration import integration_interface
+    data = integration_interface.get_data_result('multiple_dataset_integration', multiple_dataset, integration_param)
+            
     return data
 
 

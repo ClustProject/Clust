@@ -3,8 +3,7 @@ sys.path.append("../")
 sys.path.append("../..")
 sys.path.append("../../..")
 import datetime
-
-from Clust.clust.data import df_set_data
+    
 from Clust.clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
@@ -15,88 +14,6 @@ class IntegrationInterface():
     """
     def __init__(self):
         pass
-
-    def integrationByInfluxInfo(self, db_client, intDataInfo, process_param, integration_param):
-        """ 
-        Influx에서 데이터를 직접 읽고 Parameter에 의거하여 데이터를 병합
-
-        1. intDataInfo 에 따라 InfluxDB로 부터 데이터를 읽어와 DataSet을 생성함
-        2. multipleDatasetsIntegration 함수를 이용하여 결합된 데이터셋 재생성
-
-        Args:
-            intDataInfo (json): 병합하고 싶은 데이터의 정보로 DB Name, Measuremen Name, Start Time, End Time를 기입
-            process_param (json): Refine Frequency를 하기 위한 Preprocessing Parameter
-            integration_param (json): Integration을 위한 method, transformParam이 담긴 Parameter
-            
-        Example:
-
-        >>> ingestion_param = {'ms_list_info': [['life_indoor_environment', 'humidityTrain_10min'], ['life_indoor_environment', 'temperatureTrain_10min'],
-            ['weather_outdoor_environment', 'belgiumChieverseAirportTrain_10min']],
-            'start_time': '2016-01-11',
-            'end_time': '2016-04-15'}
-
-        >>> process_param 
-        ... refine_param = {
-        ...     "remove_duplication":{"flag":True},
-        ...     "static_frequency":{"flag":True, "frequency":None}
-        ... }
-        ... CertainParam= {'flag': True}
-        ... uncertainParam= {'flag': False, "param":{
-        ...         "outlierDetectorConfig":[
-        ...                 {'algorithm': 'IQR', 'percentile':99 ,'alg_parameter': {'weight':100}}    
-        ... ]}}
-        ... outlier_param ={
-        ...     "certain_error_to_NaN":CertainParam, 
-        ...     "uncertain_error_to_NaN":uncertainParam
-        ... }
-        ... imputation_param = {
-        ...     "flag":False,
-        ...     "imputation_method":[{"min":0,"max":3,"method":"linear", "parameter":{}}],
-        ...     "total_non_NaN_ratio":80
-        ... }
-        ... process_param = {'refine_param':refine_param, 'outlier_param':outlier_param, 'imputation_param':imputation_param}
-
-        >>> integrationFreq_min= 30
-        >>> integration_freq_sec = 60 * integrationFreq_min # 분
-
-        >>> MLIntegrationParamExample = {
-        ...     "integration_duration":"total" ["total" or "common"],
-        ...     "integration_frequency":"",
-        ...     "param":{
-        ...                     "model": 'RNN_AE',
-        ...                     "model_parameter": {
-        ...                         "window_size": 10, # 모델의 input sequence 길이, int(default: 10, 범위: 0 이상 & 원래 데이터의 sequence 길이 이하)
-        ...                         "emb_dim": 5, # 변환할 데이터의 차원, int(범위: 16~256)
-        ...                         "num_epochs": 50, # 학습 epoch 횟수, int(범위: 1 이상, 수렴 여부 확인 후 적합하게 설정)
-        ...                         "batch_size": 128, # batch 크기, int(범위: 1 이상, 컴퓨터 사양에 적합하게 설정)
-        ...                         "learning_rate": 0.0001, # learning rate, float(default: 0.0001, 범위: 0.1 이하)
-        ...                         "device": 'cpu' # 학습 환경, ["cuda", "cpu"] 중 선택
-        ...                     }
-        ...                 },
-        ...     "method":"ML" #["ML", "meta", "simple]
-        ... }
-
-        >>> metaIntegrationParamExample = {
-        ...     "integration_duration":"total" ["total" or "common"],
-        ...     "integration_frequency":integration_freq_sec,
-        ...     "param":{},
-        ...     "method":"meta"
-        ... }
-                
-        Returns:
-            DataFrame: integrated_data  
-        
-        """
-        ## multiple dataset
-        multiple_dataset  = df_set_data.DfSetData(db_client).get_result("multiple_ms_by_time", intDataInfo)
-        ## get integrated data
-        ## Preprocessing
-        from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, process_param)
-    
-        result = self.multipleDatasetsIntegration(integration_param, multiple_dataset)
-
-        return result
         
     def multipleDatasetsIntegration(self, integration_param, multiple_dataset):
         """ 
@@ -123,7 +40,9 @@ class IntegrationInterface():
         if not integration_freq_sec:
             process_param["refine_param"]["static_frequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
         """ 
-        
+        for i, df_name in enumerate(multiple_dataset):
+            multiple_dataset[df_name] = multiple_dataset[df_name].add_suffix('_'+str(i))
+            
         integrationMethod = integration_param['method']
         integration_freq_sec    = integration_param["integration_frequency"]
         integration_duration    = integration_param["integration_duration"]
@@ -134,8 +53,8 @@ class IntegrationInterface():
         ## Integration
         imputed_datas = {}
         
-        print("===integrationStart===")
         
+        print("===integrationStart===")
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key])
         if integrationMethod=="meta":

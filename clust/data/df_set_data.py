@@ -145,7 +145,6 @@ class DfSetData():
             multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset)
             #############
             # data Integration
-            from Clust.clust.integration.integrationInterface import IntegrationInterface
             integration_freq_sec    = int(ingestion_param['integration_freq_min']) * 60 
             integration_param   = {
                 "integration_duration":"common",
@@ -153,7 +152,10 @@ class DfSetData():
                 "param":{},
                 "method":"meta"
             }
-            dataIntegrated = IntegrationInterface().multipleDatasetsIntegration(integration_param, multiple_dataset)
+            
+            from Clust.clust.integration import integration_interface
+            dataIntegrated = integration_interface.get_data_result('multiple_dataset_integration', multiple_dataset, integration_param)
+
             ############
 
             if ingestion_param['feature_list']:
