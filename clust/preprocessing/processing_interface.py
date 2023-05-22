@@ -7,16 +7,16 @@ import pandas as pd
     
 def get_data_result(processing_type, data_input, processing_param=None):
     """ 
-    # Description       
-     
+    It is processing interface.
+    Produce processing data according to processing_type and processing_param.
 
-    # Args
-     * processing_type(_str_) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
-     * processing_param)(dict)  or None   
-     * data_input(pandas.dataFrame or dict)
+    Args
+        processing_type (string) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
+        processing_param (dict)  or None   
+        data_input (pandas.dataFrame or dict)
 
-    # Returns         
-     * result (pandas.dataFrame or dict)
+    Returns         
+        pandas.dataFrame or dict: New Data (Dataset) after processing
             
     """
     if processing_param is None:
@@ -32,12 +32,14 @@ def get_data_result(processing_type, data_input, processing_param=None):
     return result
 
 def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta_frequency_sec=None):
-    """get default_processing_param  (refining, min_max check(if min_max is not empty), sampling (if timedelta_frequency_sec is not None))
+    """
+    get default_processing_param  (refining, min_max check(if min_max is not empty), sampling (if timedelta_frequency_sec is not None))
+    
     Args:
         min_max(dict): min max restriction information of data
         timedelta_frequency_sec: timedelta for refined data processing
     Returns:
-        default_process_param
+        Dictionary: default_process_param
     """
     refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': timedelta_frequency_sec}}
     CertainParam= {'flag': True, 'data_min_max_limit':min_max}
@@ -52,6 +54,18 @@ def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta
     return process_param
         
 def get_preprocessed_dataset(processing_type, param, data_set):
+    """
+    Produces clean dataset consisting of multiple data according to the processing_type and param
+
+    Args:
+        processing_type (string): ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
+        param (dict): parameter for preprocessing
+        data_set (dict): input dataset
+
+    Returns:
+        Dictionary: New Dataset after preprocessing
+    
+    """
     result={}
     for key in list(data_set.keys()):
         result[key] = get_preprocessed_data(processing_type, param, data_set[key])
@@ -60,16 +74,16 @@ def get_preprocessed_dataset(processing_type, param, data_set):
 
 
 def get_preprocessed_data(processing_type, param, data):
-    """ Produces only one clean data according to the processing_type and param
+    """ 
+    Produces only one clean data according to the processing_type and param
 
-        Args:
-            processing_type (string): ['refinement'|'error_to_NaN'|'imputation'|'all']
-            param (dict): parameter for preprocessing
-            data (DataFrame): input data
-            
-            
-        Returns:
-            DataFrame: New Dataframe after preprocessing 
+    Args:
+        processing_type (string): ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
+        param (dict): parameter for preprocessing
+        data (DataFrame): input data
+        
+    Returns:
+        DataFrame: New Dataframe after preprocessing 
     
     """
 

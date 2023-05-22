@@ -18,28 +18,26 @@ class DataPreprocessing():
     
     def get_refinedData(self, data, refine_param):
         """
-        # Description
-         - This function gets refined data with static frequency, without redundency data. 
-         - It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
+        This function gets refined data with static frequency, without redundency data. 
+        It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
             * remove_duplication :It removes duplicated data.
             * static_frequency :The data will have a constant timestamp index. 
 
-        # Args
-            data (_pd.dataFrame_): data
-            refine_param (_dict_): refinement parameter
+        Args
+            data (DataFrame): data
+            refine_param (Dictionary): refinement parameter
             
-        # Returns
-            self.refinedData (_pd.DataFrame_): refinedData, refined DataFrame output
+        Returns
+            DataFrame: refinedData, refined DataFrame output
 
-        # refine_param additional info
-        ```
+        **refine_param additional info**::
+
             >>> refine_param["remove_duplication"]={'flag':(Boolean)} 
             >>> refine_param["static_frequency"] ={'flag':(Boolean), 'frequency':[None|timeinfo]}
             >>> refine_param['ststicFreeuncy']['frequnecy'] == None -> infer original frequency and make static time stamp.
-        ```
 
-        # Example
-        ```
+        Example:
+
             >>> from clust.preprocessing.dataPreprocessing import DataPreprocessing
             >>> refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': None}}
             >>> refine_param2 = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': "3H"}}
@@ -74,8 +72,8 @@ class DataPreprocessing():
 
         Example:
 
-            >>> uncertainErrorParam = {
-                # TODO define }
+            >>> uncertainErrorParam = {'flag': True, 
+            ...                        'param': {'outlierDetectorConfig': [{'algorithm': 'IF', 'percentile': 99, 'alg_parameter': algorithm_param}]}}
             >>> outlier_param = {'certain_error_to_NaN': {'flag': True}, 'uncertain_error_to_NaN': uncertainErrorParam}
             >>> datawithMoreCertainNaN, datawithMoreUnCertainNaN = DataPreprocessing().get_errorToNaNData(data, outlier_param)
 
@@ -97,11 +95,12 @@ class DataPreprocessing():
         return self.datawithMoreCertainNaN, self.datawithMoreUnCertainNaN
 
     def get_imputedData(self, data, imputation_param):
-        """ Get imputed data
+        """ 
+        Get imputed data
 
         Args:
             data (DataFrame): input data
-            refine_param (json): imputation_param
+            imputation_param (json): imputation_param
             
         Returns:
             DataFrame: New Dataframe after imputation
@@ -124,7 +123,8 @@ class DataPreprocessing():
         return self.imputedData
 
     def get_smoothed_data(self, data, smoothing_param):
-        """ Get smoothed data
+        """ 
+        Get smoothed data
 
         Args:
             data (DataFrame): input data
@@ -144,14 +144,15 @@ class DataPreprocessing():
         return data
     
     def get_scaling_data(self, data, scaling_param):
-        """ Get smoothed data
+        """ 
+        Get scaled data
 
         Args:
             data (DataFrame): input data
             scaling_param (json): scaling_param with scaling method  (method: minmax, standard, maxabs, robust) 
             
         Returns:
-            DataFrame: New Dataframe after smoothing
+            DataFrame: New Dataframe after scaling
         
         Example:
 
