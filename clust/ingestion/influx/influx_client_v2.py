@@ -272,7 +272,7 @@ class InfluxClient():
 
         return data_frame
 
-    def get_data_by_days(self, end_time, days, bk_name, ms_name, tag_key=None, tag_value=None):
+    def get_data_by_days(self, start_time, days, bk_name, ms_name, tag_key=None, tag_value=None):
         """
         Get data of the specific mearuement based on :guilabel:`time duration` (days)
 
@@ -286,22 +286,22 @@ class InfluxClient():
             Dataframe: df, time duration
         """
 
-        if isinstance(end_time, str):
-            if 'T' not in end_time:
-                if len(end_time) < 12:
-                    end_time = end_time + " 23:59:59"
-                end_time = datetime.strptime(end_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+        if isinstance(start_time, str):
+            if 'T' not in start_time:
+                if len(start_time) < 12:
+                    start_time = start_time + " 00:00:00"
+                start_time = datetime.strptime(start_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
             else:
                 pass
         else: #Not String:
-            end_time = end_time.strftime(UTC_Style)
+            start_time = start_time.strftime(UTC_Style)
 
         if tag_key:
             if tag_value:
                 query = f'''
                 import "experimental"
                 from(bucket: "{bk_name}") 
-                |> range(start: experimental.subDuration(d: {days}d, from: {end_time}), stop: now())
+                |> range(start: {start_time}, stop: experimental.addDuration(d: {days}d, to: {start_time}))
                 |> filter(fn: (r) => r._measurement == "{ms_name}")
                 |> filter(fn: (r) => r.{tag_key} == "{tag_value}")
                 |> drop(columns: ["_start", "_stop", "_measurement"])
@@ -311,7 +311,7 @@ class InfluxClient():
             query = f'''
             import "experimental"
             from(bucket: "{bk_name}") 
-            |> range(start: experimental.subDuration(d: {days}d, from: {end_time}), stop: now())
+            |> range(start: {start_time}, stop: experimental.addDuration(d: {days}d, to: {start_time}))
             |> filter(fn: (r) => r._measurement == "{ms_name}")
             |> drop(columns: ["_start", "_stop", "_measurement"])
             |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
