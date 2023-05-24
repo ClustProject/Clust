@@ -1,16 +1,15 @@
 
 def makeIntDataInfoSet(dataInfo, start, end):
     """
-    # Description
-     intDataInfo를 가공해주는 함수
+    intDataInfo를 가공해주는 함수
 
-    # Args
-     * dataInfo (_list_)
-     * start (_str_)
-     * end (_str_)
+    Args:
+        dataInfo (List)
+        start (String)
+        end (String)
 
-    # Returns
-     * intDataInfo (_dict_)
+    Returns:
+        Dictionary: intDataInfo
 
     """
     intDataInfo = {}

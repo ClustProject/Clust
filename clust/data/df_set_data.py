@@ -6,31 +6,23 @@ from Clust.clust.data import df_data
 class DfSetData():
     def __init__(self, db_client):
         """
-        # Description
-         This class makes dataframe style data based on ingestion type, and param
+        This class makes dataframe style data based on ingestion type, and param.
 
-        # Args
-         * db_client (_str_): instance of InfluxClient class. instance to get data from influx DB
-
-        # Returns
-         None
-
+        Args:
+            db_client (_instance_): Instance of InfluxClient class. Instance to get data from influx DB.
         """
         self.db_client = db_client
     
     def get_result(self, ingestion_type, ingestion_param):
         """
-        # Description
-         get dataframe result according to intestion_type, and ingestion_param
+        Get dictionary result with dataframe as value according to ingestion_type, and ingestion_param.
 
-        # Args
-         * ingestion_type (_str_)
-         * ingestion_param (_dict_) : ingestion parameter depending on ingestion_type
-         * process_param (_dict_, optional) : data preprocessing paramter. Defaults to None.
+        Args:
+            ingestion_type (String): ingestion_type (method)
+            ingestion_param (Dictionary): ingestion parameter depending on ingestion_type
 
-        # Returns
-         * result (_pd.dataFrame_)
-
+        Returns:
+            result (_pd.dataFrame_)
         """
         # define param
         self.ingestion_param    = ingestion_param
@@ -52,24 +44,23 @@ class DfSetData():
     
     def multiple_ms_by_time(self, ingestion_param):
         """
-        # Description
-         Get only numeric ms data list by ingestion_param without any preprocessing
+        Collect data set(type is dictionary) whose values are dataframe with only numeric values collected by time duration
         
-        # Args
-         * ingestion_param (_Dict_) : intDataInfo or ingestion_param        
-        ```
-         ingestion_param = {
-                                'start_time': '2021-09-05 00:00:00', 
-                                'end_time': '2021-09-11 00:00:00', 
-                                'feature_list': ['CO2', 'out_PM25'], 
-                                'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], 
-                                                    ['air_outdoor_keti_clean', 'seoul'], 
-                                                    ['air_indoor_modelSchool', 'ICW0W2000011']]
-                            }
-        ```
-
-        # Returns
-         * MSdataset (_dict_)
+        Args:
+            ingestion_param (Dictionary) : intDataInfo or ingestion_param        
+        
+        Returns:
+            Dictionary: MSdataset
+        
+        Example:
+            >>> ingestion_param = {
+                ...        'start_time': '2021-09-05 00:00:00', 
+                ...        'end_time': '2021-09-11 00:00:00', 
+                ...        'feature_list': ['CO2', 'out_PM25'], 
+                ...        'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], 
+                ...                            ['air_outdoor_keti_clean', 'seoul'], 
+                ...                            ['air_indoor_modelSchool', 'ICW0W2000011']]
+                ...    }
 
         """       
         #-------------------------------------------------------------------------------------------------------------------------------
@@ -107,24 +98,23 @@ class DfSetData():
     
     def multi_ms_one_enumerated_ms_in_bucket_integration(self, ingestion_param) :
         """
-        # Description
-         1개의 특정 bucket에 있는 모든 ms (multiple ms in bucket) 와 고정된 다른 ms (ms_list_info) 들을 복합하여 데이터를 준비함.
-         feature_list 가 명시 되었다면, 명시된 feature_list와 관련한 데이터만 전달.
+        1개의 특정 bucket에 있는 모든 ms (multiple ms in bucket) 와 고정된 다른 ms (ms_list_info) 들을 복합하여 데이터를 준비함.
+        feature_list 가 명시 되었다면, 명시된 feature_list와 관련한 데이터만 전달.
 
-        # Args
-         * ingestion_param (_dict_) : ingestion_param 
-        ```
-            ingestion_param = {'bucket_name': 'air_indoor_modelSchool', 
-                            'data_org': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul']], 
-                            'start_time': '2021-09-05 00:00:00', 
-                            'end_time': '2021-09-11 00:00:00', 
-                            'integration_freq_min': 60, 
-                            'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
-        ```
+        Args:
+            ingestion_param (Dictionary) : ingestion_param 
         
-        # Returns
-         * bucket_dataSet (_dict_) : integrated data
+        Returns:
+            Dictionary: integrated data # bucket_dataSet
 
+        Example:
+            >>> ingestion_param = {
+            ...         'bucket_name': 'air_indoor_modelSchool', 
+            ...         'data_org': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul']], 
+            ...         'start_time': '2021-09-05 00:00:00', 
+            ...         'end_time': '2021-09-11 00:00:00', 
+            ...         'integration_freq_min': 60, 
+            ...         'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
         """
 
         data_org            = ingestion_param['data_org']
@@ -166,14 +156,20 @@ class DfSetData():
     
     def all_ms_in_one_bucket(self, ingestion_param):
         """
-        # Description
-         It returns dataSet from all MS of a speicific DB(Bucket) from start_time to end_time
+        It returns dataSet from all MS of a speicific DB(Bucket) from start_time to end_time
 
-        # Args
-         * ingestion_param(_dict_) : bucket_name, start_time, end_time  + feature_list(optional)
+        Args:
+            ingestion_param(Dictionary) : ingestion param (bucket_name, start_time, end_time  + feature_list(optional))
         
-        # Returns
-         * dataSet (_dict_) : returned dataset ----> {"data1_name":DF1, "data2_name:DF2......}
+        Returns:
+            Dictionary: returned dataset ----> {"data1_name":DF1, "data2_name:DF2......}
+
+        Example: 
+            >>> ingestion_param = {
+            ...    'bucket_name' : 'air_indoor_modelSchool', 
+            ...    'start_time': '2021-09-05 00:00:00',
+            ...    'end_time': '2021-09-11 00:00:00',
+            ...    'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]}
 
         """
 

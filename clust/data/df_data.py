@@ -7,33 +7,34 @@ from Clust.clust.data import df_set_data
 class DfData():
     def __init__(self, db_client):
         """
-        # Description
         This class makes dataframe style data based on ingestion type, and param
 
-        # Args
-         * db_client (_instance_): influx db instance
-
+        Args:
+            db_client (_instance_): Instance of InfluxClient class. Instance to get data from influx DB.
         """
         self.db_client = db_client
         
     def get_result(self, ingestion_type, ingestion_param) -> pandas.DataFrame :
         """       
-        # Description
-         get dataframe result according to intestion_type, and ingestion_param
+        Get dataframe result according to intestion_type, and ingestion_param
 
-        # Args
-         * ingestion_type (_str_): ingestion_type (method)
-         ```
-            >>> ingestion_type_list = ['ms_by_days', 'ms_by_time', 'ms_by_num']  
-         ```
-         * ingestion_param (_Dict_): ingestion parameter depending on ingestion_type
-         * process_param (_Dict_, _optional_): data preprocessing paramter. Defaults to None.
-         
-        # Returns
-         * result (_dataframe_)
+        Args:
+            ingestion_type (String): ingestion_type (method)
+            ingestion_param (Dictionary): ingestion parameter depending on ingestion_type
 
+        Returns:
+            DataFrame
+
+        Example:
+            >>> ingestion_type_list = ['ms_by_days', 'ms_by_time', 'ms_by_num']
+            >>> ingestion_type = 'ms_by_num'
+            >>> ingestion_param = {
+            ...    'bucket_name' : bucket_name,
+            ...    'ms_name' : ms_name,
+            ...    'num' : 1000,
+            ...    'position' : 'end',
+            ...    'feature_list' : feature_list}  
         """
-
         # define param
         self.ingestion_param    = ingestion_param
         
@@ -54,109 +55,91 @@ class DfData():
         return result
     
     def ms_by_all(self, ingestion_parm):
-        
         """
-        # Description
-         all data ingestion
+        Get all data ingestion
 
-        # Args
-         * ingestion_param (_dict_) 
+        Args:
+            ingestion_param (Dictionary): get data by all parameter 
 
-        ```         
-         >>> ingestion_param = {
-            "bucket_name" : 'air_indoor_modelSchool',
-            'ms_name' : 'ICW0W2000014',
-            'feature_list' : ['CO2']                                
-        }
-        ```
-        
-        # Returns
-         * data (_pd.dataFrame_) : result data
+        Returns:
+            DaraFrame : result data
 
+        Example:
+            >>> ingestion_param = {
+            ...    "bucket_name" : 'air_indoor_modelSchool',
+            ...    'ms_name' : 'ICW0W2000014',
+            ...    'feature_list' : ['CO2']}
         """
-
         data = self.db_client.get_data(ingestion_parm["bucket_name"], ingestion_parm['ms_name'])
         return data
         
     def ms_by_days(self, ingestion_param):
         """
-        # Description
-         data by days 
+        Get data by days 
 
-        # Args
-         * ingestion_param (_dict_) 
+        Args:
+            ingestion_param (Dictionary): data by days parameter
 
-        ```         
-         >>> ingestion_param = {
-            'days' : 1,                                     
-            'end_time': '2021-09-11 00:00:00', 
-            "bucket_name" : 'air_indoor_modelSchool',
-            'ms_name' : 'ICW0W2000014',
-            'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
-                                'out_h2s','out_humi', 'out_noise', 'out_temp',
-                            'out_ultraviolet_rays', 'out_PM10','out_PM25']                                
-        }
-        ```
-        
-        # Returns
-         * data (_pd.dataFrame_) : result data
+        Returns:
+            DataFrame : result data
+
+        Example:       
+            >>> ingestion_param = {
+            ...    'days' : 1,                                     
+            ...    'end_time': '2021-09-11 00:00:00', 
+            ...    "bucket_name" : 'air_indoor_modelSchool',
+            ...    'ms_name' : 'ICW0W2000014',
+            ...    'feature_list' : ['CO2', 'Noise', 'PM10', 'PM25', 'Temp', 'VoCs', 'humid',
+            ...                      'out_h2s','out_humi', 'out_noise', 'out_temp',
+            ...                      'out_ultraviolet_rays', 'out_PM10','out_PM25']}
 
         """
-        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         data = self.db_client.get_data_by_days(ingestion_param['end_time'], ingestion_param['days'], ingestion_param["bucket_name"], ingestion_param['ms_name']) 
 
         return data
     
     def ms_by_time(self, ingestion_param):
         """
-        # Description
-         data by time duration
+        Get data by time duration
 
-        # Args
-         * ingestion_param (_dict_) 
-        ```            
-         >>> ingestion_param = {
-                "bucket_name" : 'air_indoor_modelSchool'
-                , 'ms_name' : 'ICW0W2000014'
-                , 'start_time': '2021-09-05 00:00:00'
-                , 'end_time': '2021-09-11 00:00:00'
-                , 'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]
+        Args:
+            ingestion_param (Dictionary) : data by time duration parameter 
 
-            }
-        ```
+        Returns:
+            DaraFrame : result data
 
-        # Returns
-         * data (_pd.dataFrame_) : result data
+        Example:
+            >>> ingestion_param = {
+            ...    'bucket_name' : 'air_indoor_modelSchool', 
+            ...    'ms_name' : 'ICW0W2000014', 
+            ...    'start_time': '2021-09-05 00:00:00',
+            ...    'end_time': '2021-09-11 00:00:00',
+            ...    'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]}
 
         """
-        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         data = self.db_client.get_data_by_time(ingestion_param['start_time'], ingestion_param['end_time'], ingestion_param["bucket_name"], ingestion_param['ms_name'])
         
         return data
     
     def ms_by_num(self, ingestion_param):
         """
-        # Description
-         data by num 
+        Get data by num 
 
-        # Args
-         * ingestion_param (_dict_)
-        ```
-        >>> ingestion_param = {
-                "bucket_name" : 'air_indoor_modelSchool'
-                , 'ms_name' : 'ICW0W2000014'
-                , 'num' : 1000 #ms_by_num
-                , 'position' : 'end'
-                , 'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]
+        Args:
+            ingestion_param (Dictionary): data by num parameter
 
-            }
-        ```
+        Returns:
+            DataFrame: result data
 
-        # Returns
-         * data (_pd.dataFrame_) : result data
+        Example:
+            >>> ingestion_param = {
+            ...        'bucket_name' : 'air_indoor_modelSchool',
+            ...        'ms_name' : 'ICW0W2000014',
+            ...        'num' : 1000, #ms_by_num
+            ...        'position' : 'end',
+            ...        'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]}
 
         """
-        #TODO: ingestion_param 의 bucket은 list안에 들어있다. for문 사용하는 소스로 개선할 것인지 확인 필요.
         if ingestion_param['position']=='end':
             data = self.db_client.get_data_end_by_num(ingestion_param['num'], ingestion_param["bucket_name"], ingestion_param['ms_name']) 
         else:
