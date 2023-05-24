@@ -12,7 +12,7 @@ class DfData():
         """
         self.db_client = db_client
         
-    def get_result(self, ingestion_type, ingestion_param) -> pandas.DataFrame :
+    def get_result(self, ingestion_type, ingestion_param):
         """       
         Get dataframe result according to intestion_type, and ingestion_param
 
