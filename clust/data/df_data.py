@@ -2,8 +2,6 @@ import sys, pandas
 sys.path.append("../")
 sys.path.append("../../")
 
-from Clust.clust.data import df_set_data
-
 class DfData():
     def __init__(self, db_client):
         """

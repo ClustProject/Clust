@@ -2,7 +2,6 @@ import sys
 sys.path.append("../")
 sys.path.append("../../")
 
-from Clust.clust.data import df_data
 class DfSetData():
     def __init__(self, db_client):
         """
@@ -45,6 +44,7 @@ class DfSetData():
     def multiple_ms_by_time(self, ingestion_param):
         """
         Collect data set(type is dictionary) whose values are dataframe with only numeric values collected by time duration
+        The parameter "feature_list" is designated for each data.
         
         Args:
             ingestion_param (Dictionary) : intDataInfo or ingestion_param        
@@ -54,13 +54,13 @@ class DfSetData():
         
         Example:
             >>> ingestion_param = {
-                ...        'start_time': '2021-09-05 00:00:00', 
-                ...        'end_time': '2021-09-11 00:00:00', 
-                ...        'feature_list': ['CO2', 'out_PM25'], 
-                ...        'ms_list_info': [['air_outdoor_kweather', 'OC3CL200012'], 
-                ...                            ['air_outdoor_keti_clean', 'seoul'], 
-                ...                            ['air_indoor_modelSchool', 'ICW0W2000011']]
-                ...    }
+            ...        'start_time': '2022-11-01 00:00:00', 
+            ...        'end_time': '2022-11-08 00:00:00', 
+            ...        'feature_list': [['in_co2', 'in_humi'], ['in_co2', 'in_noise'], ['in_co2', 'in_temp']], 
+            ...        'ms_list_info': [['air_indoor_중학교', 'ICW0W2000010'], 
+            ...                        ['air_indoor_초등학교', 'ICW0W2000034'], 
+            ...                        ['air_indoor_도서관', 'ICW0W2000094']]
+            ...        }
 
         """       
         #-------------------------------------------------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ class DfSetData():
         #-------------------------------------------------------------------------------------------------------------------------------
         
         MSdataSet ={}
-        for dbinfo in intDataInfo['db_info']:
+        for idx, dbinfo in enumerate(intDataInfo['db_info']):
             db_name     = dbinfo["bucket_name"]
             ms_name     = dbinfo['measurement']
             data_name   = db_name + "_" + ms_name
@@ -91,6 +91,9 @@ class DfSetData():
             import numpy as np
             multiple_dataset=self.db_client.get_data_by_time(dbinfo['start'], dbinfo['end'], db_name, ms_name, tag_key, tag_value)
             if not(multiple_dataset.empty):
+                if 'feature_list' in ingestion_param.keys():
+                    feature_list= ingestion_param['feature_list'][idx]
+                    multiple_dataset = multiple_dataset[feature_list]
                 MSdataSet[data_name]  =  multiple_dataset.select_dtypes(include=np.number)
                 MSdataSet[data_name].index.name ='datetime'
 
@@ -100,6 +103,7 @@ class DfSetData():
         """
         1개의 특정 bucket에 있는 모든 ms (multiple ms in bucket) 와 고정된 다른 ms (ms_list_info) 들을 복합하여 데이터를 준비함.
         feature_list 가 명시 되었다면, 명시된 feature_list와 관련한 데이터만 전달.
+        feature_list는 list of list 형태로 각 데이터 별 지정.
 
         Args:
             ingestion_param (Dictionary) : ingestion_param 
@@ -109,12 +113,12 @@ class DfSetData():
 
         Example:
             >>> ingestion_param = {
-            ...         'bucket_name': 'air_indoor_modelSchool', 
+            ...         'bucket_name': 'air_indoor_체육시설', 
             ...         'data_org': [['air_outdoor_kweather', 'OC3CL200012'], ['air_outdoor_keti_clean', 'seoul']], 
             ...         'start_time': '2021-09-05 00:00:00', 
             ...         'end_time': '2021-09-11 00:00:00', 
             ...         'integration_freq_min': 60, 
-            ...         'feature_list': ['CO2', 'out_PM10', 'out_PM25']}
+            ...         'feature_list': [['out_pm10', 'out_pm25'], ['out_PM10', 'out_PM25'], ['in_pm01', 'in_pm10', 'in_pm25']]}
         """
 
         data_org            = ingestion_param['data_org']
@@ -148,8 +152,8 @@ class DfSetData():
 
             ############
             
-            if 'feature_list' in list(ingestion_param.keys()):
-                dataIntegrated = dataIntegrated[ingestion_param['feature_list']]
+            #if 'feature_list' in list(ingestion_param.keys()):
+            #    dataIntegrated = dataIntegrated[ingestion_param['feature_list']]
             bucket_dataSet[ms_name]= dataIntegrated
         
         return bucket_dataSet
@@ -191,18 +195,24 @@ class DfSetData():
 
     def all_ms_in_multiple_bucket(self, ingestion_param):    
         """        
-        # Description
-         get all ms dataset in bucket_list (duration: start_time ~ end_time).
-         if new_bucket_list is not None, change bucket_list name.
+        Get all ms dataset in bucket_list (duration: start_time ~ end_time).
+        If new_bucket_list is not None, change bucket_list name.
 
-        # Args
-         * ingestion_param (_dict_) : array of multiple bucket name 
+        Args:
+            ingestion_param (Dictionary) : array of multiple bucket name 
         
-        # Returns
-         * data_set (_dict of pd.DataFrame_) : new DataSet : key name  ===> msName + bucketName
+        Returns:
+            Dictionary : new DataSet (key name  ===> msName + bucketName)
 
+        Example:
+            >>> ingestion_param = {
+            ...     'bucket_list' : ['air_indoor_중학교', 'air_indoor_도서관'],
+            ...     'new_bucket_list' : ['library', 'middleSchool'],
+            ...     'start_time' : '2022-11-01 00:00:00',
+            ...     'end_time' : '2022-11-08 00:00:00',
+            ...     'feature_list' : ['in_co2', 'in_humi', 'in_noise', 'in_temp']
+            }
         """
-
         bucket_list = ingestion_param['bucket_list']
         
         if 'new_bucket_list' in ingestion_param.keys():
