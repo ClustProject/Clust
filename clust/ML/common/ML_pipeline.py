@@ -248,3 +248,29 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
     result_metrics =  metrics.calculate_metrics_df(df_result)
         
     return df_result, result_metrics
+
+
+
+
+# classification train pipeline
+from Clust.clust.ML.classification.train import ClassificationTrain as CML
+def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_array, train_parameter, model_method, model_file_path, modelParameter):
+
+    cml = CML()
+    cml.set_param(train_parameter)
+    cml.set_model(model_method, modelParameter)
+    cml.set_data(train_X_array, train_y_array, val_X_array, val_y_array)
+    cml.train()
+    cml.save_best_model(model_file_path)
+
+
+# classification test pipeline
+from Clust.clust.ML.classification.test import ClassificationTest as CT
+def clust_classification_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
+    ct = CT()
+    ct.set_param(testParameter)
+    ct.set_model(model_method, model_file_path, modelParameter)
+    ct.set_data(test_X_array, test_y_array)
+    preds, probs, trues, acc = ct.test()
+    
+    return preds, probs, trues, acc
