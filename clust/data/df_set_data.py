@@ -157,8 +157,8 @@ class DfSetData():
             dataIntegrated = integration_interface.get_data_result('multiple_dataset_integration', multiple_dataset, integration_param)
 
             ############
-
-            if ingestion_param['feature_list']:
+            
+            if 'feature_list' in list(ingestion_param.keys()):
                 dataIntegrated = dataIntegrated[ingestion_param['feature_list']]
             bucket_dataSet[ms_name]= dataIntegrated
         
