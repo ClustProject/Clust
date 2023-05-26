@@ -119,5 +119,5 @@ def get_preprocessed_data(processing_type, param, data):
         result = DP.get_smoothed_data(data, param)
     if processing_type =='scaling':
         result = DP.get_scaling_data(data, param)
-
+    
     return result
