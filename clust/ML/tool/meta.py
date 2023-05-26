@@ -1,8 +1,17 @@
 def save_model_meta_data(mongodb_client, model_meta):
     db_name = 'model'
     collection_name = 'meta'
-    mongodb_client.insert_document(db_name, collection_name, model_meta)
-    print(model_meta)
+
+    try :
+        result = mongodb_client.insert_document(db_name, collection_name, model_meta)
+        print("======== save_model_meta_data result ========")
+        print(result)
+        return 200
+    except Exception as e : 
+        print("======== save_model_meta_data fail ========")
+        print(e)
+        return 500
+   
 
 
 def get_model_meta_data(mongodb_client, search):

@@ -140,8 +140,10 @@ class MongoClient():
         database = self.DBClient[db_name]
         collection = database[collection_name]
 
-        collection.insert_one(document)
+        result = collection.insert_one(document)
         print("========== Data Save Success ==========")
+        
+        return result
         
 
     # TODO update function 수정 예정
