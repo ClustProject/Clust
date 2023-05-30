@@ -62,11 +62,11 @@ def split_data_from_dataframe(split_type, data, split_param):
         1. split_type: cycle
         >>> split_param = {'feature_cycle': 'Day', 'feature_cycle_times': 1}
         2. split_type: working
-        >>> split_param = {'workingtime_criteria': {'step': [0, 8, 18, 24], 'label': ['notworking', 'working', 'notworking']}}
+        >>> split_param = {'workingtime_criteria' : {'step': [0, 8, 18, 24], 'label': ['notworking', 'working', 'notworking']}}
         3. split_type: holiday
         >>> split_param = {}
         4. split_type: timestep 
-        >>> split_param = {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}
+        >>> split_param = {'workingtime_criteria' : {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}}
     """
     
     if split_type=='holiday':
@@ -78,7 +78,8 @@ def split_data_from_dataframe(split_type, data, split_param):
         result = working.split_data_by_working(data, workingtime_criteria)
     elif split_type =='timestep':
         from Clust.clust.transformation.splitDataByCondition import timeStep
-        result = timeStep.split_data_by_timestep(data, split_param)
+        timestep_criteria = split_param['timestep_criteria']
+        result = timeStep.split_data_by_timestep(data, timestep_criteria)
     elif split_type =='cycle':
         from Clust.clust.transformation.splitDataByCycle import dataByCycle
         feature_cycle = split_param['feature_cycle']
