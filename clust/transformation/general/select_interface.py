@@ -14,11 +14,8 @@ def get_data_result(select_type, data_input, select_param=None):
     Returns:
         dictionary: Return selected dictionary dataset or dataframe
         
-        {'keyword': '/afternoon'}
-    select_param example:
-        1. select_type: keyword
+    Example:
         >>> select_param = {'keyword': '/afternoon'}
-        
     """
     
     if select_type =='keyword_data_selection':
