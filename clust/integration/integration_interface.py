@@ -8,12 +8,12 @@ def get_data_result(integration_type, data_set, integration_param):
     """get integrated data by integration_type and parameter
 
     Args:
-        integration_type (string): integration type ['one_feature_based_integration' ]
+        integration_type (string): integration type ['one_feature_based_integration',  'multiple_dataset_integration']
         data_set (dictionary of dataframe): data input 
         integration_param (dictionary): integratoin parameter
 
     Returns:
-        result (dataframe): integrated dataframe
+        dataframe: integrated dataframe
     """
     
     if integration_type =='one_feature_based_integration':

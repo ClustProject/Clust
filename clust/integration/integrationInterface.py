@@ -17,28 +17,29 @@ class IntegrationInterface():
         
     def multipleDatasetsIntegration(self, integration_param, multiple_dataset):
         """ 
-        # Description
-         dataSet과 Parameter에 따라 데이터를 병합하는 함수
+        dataSet과 Parameter에 따라 데이터를 병합하는 함수
 
-         1. 각 데이터셋이서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
+         1. 각 데이터셋에서 병합에 필요한 partial_data_info (각 컬럼들에 대한 특성) 추출
          2. 명확하게 정합 주기 값이 입력 없을 경우 최소공배수 주기를 설정함
          3. 각 데이터들에 대한 Preprocessing  
          4. 입력 method에 따라 3가지 방법 중 하나를 선택하여 정합함
 
-        # Args
-         * process_param (_Dict_) : Refine Frequency를 하기 위한 Preprocessing Parameter
-         * integration_param (_Dict_) : Integration을 위한 method, transformParam이 담긴 Parameter
-         * multiple_dataset (_Dict_)
+        Args:
+            integration_param (dictionary) : Integration을 위한 method, transformParam이 담긴 Parameter
+            multiple_dataset (dictionary)
             
-        # Returns
-         * integrated_data (_pd.dataFrame_)
-    
-        """
-        """
-        from Clust.clust.integration.meta import partialDataInfo
-        partial_data_info       = partialDataInfo.PartialData(multiple_dataset, integration_duration)
-        if not integration_freq_sec:
-            process_param["refine_param"]["static_frequency"]["frequency"] = partial_data_info.partial_frequency_info['GCDs']
+        Returns:
+            DataFrame : integrated_data
+
+        Example:
+            >>> re_frequency_min = 3
+            >>> re_frequency_sec = re_frequency_min*60
+
+            >>> integration_param   = {
+            ...    "integration_duration":"common",
+            ...    "integration_frequency":re_frequency_sec,
+            ...    "param":{},
+            ...    "method":"meta"}
         """ 
         for i, df_name in enumerate(multiple_dataset):
             multiple_dataset[df_name] = multiple_dataset[df_name].add_suffix('_'+str(i))
@@ -79,14 +80,13 @@ class IntegrationInterface():
             data_set (json): 병합하고 싶은 데이터들의 셋
             transform_param (json): RNN_AE를 하기 위한 Parameter
             overlap_duration (json): 병합하고 싶은 데이터들의 공통 시간 구간
-
-        Example:
-
-        >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 
-        ...                     'end_time': Timestamp('2018-01-05 00:00:00')}
-                
+        
         Returns:
             DataFrame: integrated_data by transform
+
+        Example:
+        >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 
+        ...                     'end_time': Timestamp('2018-01-05 00:00:00')}
         """
         
         ## simple integration
