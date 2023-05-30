@@ -66,7 +66,7 @@ def split_data_from_dataframe(split_type, data, split_param):
         3. split_type: holiday
         >>> split_param = {}
         4. split_type: timestep 
-        >>> split_param = {'workingtime_criteria' : {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}}
+        >>> split_param = {'timestep_criteria' : {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}}
     """
     
     if split_type=='holiday':
