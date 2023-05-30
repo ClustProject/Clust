@@ -1,28 +1,22 @@
-def save_model_meta_data(mongodb_client, model_meta):
-    db_name = 'model'
-    collection_name = 'meta'
+db_name ='model'
+collection_name ='meta'
 
+def get_model_meta_data(mongodb_client, search):
+    meta = mongodb_client.get_document_by_json(db_name, collection_name, search)
+    model_meta = meta[0]
+    return model_meta
+
+def save_model_meta_data(mongodb_client, model_meta):
     try :
         result = mongodb_client.insert_document(db_name, collection_name, model_meta)
-        print("======== save_model_meta_data result ========")
+        print("======== OK ========")
         print(result)
         return 200
     except Exception as e : 
-        print("======== save_model_meta_data fail ========")
+        print("======== Fail ========")
         print(e)
         return 500
-   
-
-
-def get_model_meta_data(mongodb_client, search):
-    db_name = 'model'
-    collection_name = 'meta'
-    meta = mongodb_client.get_document_by_json(db_name, collection_name, search)
-    model_meta = meta[0]
-
-    return model_meta
-
-
+    
 def model_meta_update(data_meta, model_name, split_mode, feature_X_list, feature_y_list, data_y_flag, model_purpose, model_method, model_tags, model_clean, train_parameter, model_parameter, transform_parameter, scaler_param, data_name_X, data_name_y, model_file_path, X_scalerFilePath, y_scalerFilePath):
     model_info_meta ={
         "trainDataInfo":data_meta,
