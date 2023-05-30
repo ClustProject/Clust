@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import math
-import numpy as np
 class Train:
     """Clustering Train Super Class"""
 
@@ -101,5 +100,29 @@ class Test:
                     ax[i][j].plot(cluster_centers_[clust_num].ravel(), "r-")
             
         return plt
+    
+    
+    def select_specific_label_df(self, label, df, y):
+        """select only specific column data of dataframe based on label
+
+        Args:
+            label (int): specific class name
+            df (pd.DataFrame): input dataframe (each column data is input)
+            y (numpy.ndarray): 1d array (label result)   
+
+        Returns:
+            final_df: final selected df
+        """
+        column_list=list(df.columns)
+
+        label_column = []
+        for i, result_class  in enumerate(y):
+            if label == result_class:
+                column_name = column_list[i]
+                label_column.append(column_name)
+        final_df = df[label_column]
+        column_list=list(final_df.columns)
+
+        return final_df 
     
     
