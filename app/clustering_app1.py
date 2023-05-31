@@ -35,7 +35,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
 
     # 2. one DF preparation
     from Clust.clust.integration import integration_interface
-    integration_param ={"feature_name":feature_name, "duration":duration, "frequency":timedelta_frequency_min }
+    integration_param ={"feature_name":feature_name, "duration":duration, "integration_frequency":timedelta_frequency_min }
     data_DF = integration_interface.get_data_result("one_feature_based_integration", data_set, integration_param)
     
     # 3. quality check
