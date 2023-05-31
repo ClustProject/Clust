@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import datetime
 
 sys.path.append("../../")
 sys.path.append("../../..")
@@ -121,8 +122,9 @@ def get_process_param(clean_param):
 
 
 def getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration):
+    timedelta_frequency_min = datetime.timedelta(seconds= integration_freq_sec)
     integration_param = {
-        "integration_frequency": integration_freq_sec,
+        "integration_frequency": timedelta_frequency_min,
         "integration_duration" : integration_duration,
         "param": method_param,
         "method": integration_method

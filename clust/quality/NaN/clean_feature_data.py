@@ -140,7 +140,7 @@ class CleanFeatureData:
             NanInfoForCleanData (dictionary): selection condition 
 
         Returns:
-            ImputedData(dataframe): filtered and imputed data
+            DataFrame: filtered and imputed data
 
         """
 

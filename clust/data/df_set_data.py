@@ -1,4 +1,5 @@
 import sys
+import datetime
 sys.path.append("../")
 sys.path.append("../../")
 
@@ -139,10 +140,11 @@ class DfSetData():
             multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset)
             #############
             # data Integration
-            integration_freq_sec    = int(ingestion_param['integration_freq_min']) * 60 
+            integration_freq_min = datetime.timedelta(minutes = ingestion_param['integration_freq_min'])
+            #integration_freq_sec    = int(ingestion_param['integration_freq_min']) * 60 
             integration_param   = {
                 "integration_duration":"common",
-                "integration_frequency":integration_freq_sec,
+                "integration_frequency":integration_freq_min,
                 "param":{},
                 "method":"meta"
             }

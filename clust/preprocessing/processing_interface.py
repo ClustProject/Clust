@@ -10,12 +10,12 @@ def get_data_result(processing_type, data_input, processing_param=None):
     It is processing interface.
     Produce processing data according to processing_type and processing_param.
 
-    Args
+    Args:
         processing_type (string) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
         processing_param (dict)  or None   
         data_input (pandas.dataFrame or dict)
 
-    Returns         
+    Returns:         
         pandas.dataFrame or dict: New Data (Dataset) after processing
             
     """

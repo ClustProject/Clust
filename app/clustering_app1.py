@@ -32,6 +32,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     # 1. preprocessing for oneDF
     from Clust.clust.preprocessing import processing_interface
     process_param = processing_interface.get_default_processing_param(min_max, timedelta_frequency_min)
+    # TODO JW ERROR preprocessing 처리
 
     # 2. one DF preparation
     from Clust.clust.integration import integration_interface

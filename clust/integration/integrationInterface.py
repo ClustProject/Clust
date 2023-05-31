@@ -33,11 +33,11 @@ class IntegrationInterface():
 
         Example:
             >>> re_frequency_min = 3
-            >>> re_frequency_sec = re_frequency_min*60
+            >>> timedelta_frequency_min = datetime.timedelta(minutes= re_frequency_min)
 
             >>> integration_param   = {
             ...    "integration_duration":"common",
-            ...    "integration_frequency":re_frequency_sec,
+            ...    "integration_frequency":timedelta_frequency_min,
             ...    "param":{},
             ...    "method":"meta"}
         """ 
@@ -45,7 +45,7 @@ class IntegrationInterface():
             multiple_dataset[df_name] = multiple_dataset[df_name].add_suffix('_'+str(i))
             
         integrationMethod = integration_param['method']
-        integration_freq_sec    = integration_param["integration_frequency"]
+        integration_freq_min    = integration_param["integration_frequency"]
         integration_duration    = integration_param["integration_duration"]
         
         from Clust.clust.integration.meta import partialDataInfo
@@ -59,13 +59,13 @@ class IntegrationInterface():
         for key in multiple_dataset.keys():
             imputed_datas[key]=(multiple_dataset[key])
         if integrationMethod=="meta":
-            integrated_data = self.getIntegratedDataSetByMeta(imputed_datas, integration_freq_sec, partial_data_info)
+            integrated_data = self.getIntegratedDataSetByMeta(imputed_datas, integration_freq_min, partial_data_info)
         elif integrationMethod=="ML":
             integrated_data = self.getIntegratedDataSetByML(imputed_datas, integration_param['param'], overlap_duration)
         elif integrationMethod=="simple":
-            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
+            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_min, overlap_duration)
         else:
-            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_sec, overlap_duration)
+            integrated_data = self.IntegratedDataSetBySimple(imputed_datas, integration_freq_min, overlap_duration)
         print("===integrationEnd===")
        
 
@@ -103,13 +103,13 @@ class IntegrationInterface():
             
         return integratedDataSet
 
-    def getIntegratedDataSetByMeta(self, data_set, integration_freq_sec, partial_data_info):
+    def getIntegratedDataSetByMeta(self, data_set, integration_freq_min, partial_data_info):
         """ 
         Meta(column characteristics)을 활용한 데이터 병합 함수
 
         Args:
             data_set (json): 병합하고 싶은 데이터들의 셋
-            integration_freq_sec (json): 조정하고 싶은 second 단위의 Frequency
+            integration_freq_min (json): 조정하고 싶은 second 단위의 Frequency
             partial_data_info (json): column characteristics의 info
             
         Returns:
@@ -117,30 +117,28 @@ class IntegrationInterface():
         """
         ## Integration
         data_it = data_integration.DataIntegration(data_set)
-        
-        re_frequency = datetime.timedelta(seconds= integration_freq_sec)
 
-        integratedDataSet = data_it.dataIntegrationByMeta(re_frequency, partial_data_info.column_meta)
+        integratedDataSet = data_it.dataIntegrationByMeta(integration_freq_min, partial_data_info.column_meta)
         
         return integratedDataSet 
     
-    def IntegratedDataSetBySimple(self, data_set, integration_freq_sec, overlap_duration):
+    def IntegratedDataSetBySimple(self, data_set, integration_freq_min, overlap_duration):
         """ 
         Simple한 병합
 
         Args:
             data_set (json): 병합하고 싶은 데이터들의 셋
-            integration_freq_sec (json): 조정하고 싶은 second 단위의 Frequency
+            integration_freq_min (json): 조정하고 싶은 second 단위의 Frequency
             overlap_duration (json): 조정하고 싶은 second 단위의 Frequency
             
         Returns:
             DataFrame: integrated_data
         """
         ## simple integration
-        re_frequency = datetime.timedelta(seconds= integration_freq_sec)
+        #re_frequency = datetime.timedelta(seconds= integration_freq_sec)
         data_int = data_integration.DataIntegration(data_set)
         integratedDataSet = data_int.simple_integration(overlap_duration)
-        integratedDataSet = integratedDataSet.resample(re_frequency).mean()
+        integratedDataSet = integratedDataSet.resample(integration_freq_min).mean()
         
         return integratedDataSet
 
