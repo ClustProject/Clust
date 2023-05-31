@@ -14,6 +14,24 @@ def get_data_result(integration_type, data_set, integration_param):
 
     Returns:
         dataframe: integrated dataframe
+
+    Example:
+            >>> re_frequency_min = 3
+            >>> re_frequency_sec = re_frequency_min*60
+
+            * integration_type = 'one_feature_based_integration'
+            >>> integration_param   = {
+            ...    "duration":{'start_time': , 'end_time': },
+            ...    "integration_frequency":re_frequency_sec,
+            ...    "param":{},
+            ...    "method":"meta"}
+
+            * integration_type = 'multiple_dataset_integration'
+            >>> integration_param   = {
+            ...    "integration_duration":"common",
+            ...    "integration_frequency":re_frequency_sec,
+            ...    "param":{},
+            ...    "method":"meta"}
     """
     
     if integration_type =='one_feature_based_integration':
@@ -23,8 +41,8 @@ def get_data_result(integration_type, data_set, integration_param):
         else:
             duration = None
             
-        if 'frequency' in list(integration_param.keys()):
-            frequency = integration_param['frequency']
+        if 'integration_frequency' in list(integration_param.keys()):
+            frequency = integration_param['integration_frequency']
         else:
             frequency = None
             
