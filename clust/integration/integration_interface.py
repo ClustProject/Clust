@@ -17,20 +17,21 @@ def get_data_result(integration_type, data_set, integration_param):
 
     Example:
             >>> re_frequency_min = 3
-            >>> re_frequency_sec = re_frequency_min*60
+            >>> timedelta_re_freq_min = datetime.timedelta(minutes=re_frequency_min)
+            
             >>> start_time = pd.to_datetime("2021-09-12 00:00:00")
             >>> end_time = pd.to_datetime("2021-12-30 00:00:00")
 
             * integration_type = 'one_feature_based_integration'
             >>> integration_param   = {
             ...    "duration":{'start_time': start_time , 'end_time': end_time},
-            ...    "integration_frequency":re_frequency_sec,
+            ...    "integration_frequency":timedelta_re_freq_min,
             ...    "feature_name": "in_co2"}
 
             * integration_type = 'multiple_dataset_integration'
             >>> integration_param   = {
             ...    "integration_duration_type":"common",
-            ...    "integration_frequency":re_frequency_sec,
+            ...    "integration_frequency":timedelta_re_freq_min,
             ...    "param":{},
             ...    "method":"meta"}
     """
