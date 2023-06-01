@@ -18,7 +18,7 @@ def clean_nan_df(data_set, nan_processing_param, timedelta_frequency_sec):
     Args:
         data_set (dataframe): data set
         nan_processing_param (dict): feature cycle parameter
-        timedelta_frequency_sec (datetime): time frequency seconds
+        timedelta_frequency_sec (datetime): time frequency seconds, timedelta type
 
     Returns:
         clean_data (dataframe) : clean data

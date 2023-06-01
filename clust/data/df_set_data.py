@@ -141,7 +141,6 @@ class DfSetData():
             #############
             # data Integration
             integration_freq_min = datetime.timedelta(minutes = ingestion_param['integration_freq_min'])
-            #integration_freq_sec    = int(ingestion_param['integration_freq_min']) * 60 
             integration_param   = {
                 "integration_duration":"common",
                 "integration_frequency":integration_freq_min,
