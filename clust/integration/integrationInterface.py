@@ -36,7 +36,7 @@ class IntegrationInterface():
             >>> timedelta_frequency_min = datetime.timedelta(minutes= re_frequency_min)
 
             >>> integration_param   = {
-            ...    "integration_duration":"common",
+            ...    "integration_duration_type":"common",
             ...    "integration_frequency":timedelta_frequency_min,
             ...    "param":{},
             ...    "method":"meta"}
@@ -46,10 +46,10 @@ class IntegrationInterface():
             
         integrationMethod = integration_param['method']
         integration_freq_min    = integration_param["integration_frequency"]
-        integration_duration    = integration_param["integration_duration"]
+        integration_duration_type    = integration_param["integration_duration_type"]
         
         from Clust.clust.integration.meta import partialDataInfo
-        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration)
+        partial_data_info = partialDataInfo.PartialData(multiple_dataset, integration_duration_type)
         overlap_duration = partial_data_info.column_meta["overlap_duration"]
         ## Integration
         imputed_datas = {}

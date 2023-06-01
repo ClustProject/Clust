@@ -142,7 +142,7 @@ class DfSetData():
             # data Integration
             integration_freq_min = datetime.timedelta(minutes = ingestion_param['integration_freq_min'])
             integration_param   = {
-                "integration_duration":"common",
+                "integration_duration_type":"common",
                 "integration_frequency":integration_freq_min,
                 "param":{},
                 "method":"meta"

@@ -29,10 +29,10 @@ def save_influx_data(db_name, data_name, data, db_client):
     db_client.write_db(bk_name, ms_name, data)
 
 
-def getData(db_client, dataInfo, integration_freq_sec, process_param, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
+def getData(db_client, dataInfo, integration_freq_sec, process_param, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration_type = 'common'):
     intDataInfo = param.makeIntDataInfoSet(dataInfo, startTime, endTime)
 
-    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration_type)
 
     from Clust.app.integration_app1 import integration_from_influx_info
     data = integration_from_influx_info(db_client, intDataInfo, process_param, integration_param)
@@ -51,8 +51,8 @@ def integrated_data_meta(dataInfo, start_time, end_time, integration_freq_sec, c
     
     return integrated_data_meta
 
-def getIntDataFromDataset(integration_freq_sec, processParam, multiple_dataset, integration_method = 'meta', method_param = {}, integration_duration = 'common'):
-    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration)
+def getIntDataFromDataset(integration_freq_sec, processParam, multiple_dataset, integration_method = 'meta', method_param = {}, integration_duration_type = 'common'):
+    integration_param = getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration_type)
     ## Preprocessing
     from Clust.clust.preprocessing import processing_interface
     multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, processParam)
@@ -121,11 +121,11 @@ def get_process_param(clean_param):
     return process_param
 
 
-def getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration):
+def getIntegrationParam(integration_freq_sec, integration_method, method_param, integration_duration_type):
     timedelta_frequency_min = datetime.timedelta(seconds= integration_freq_sec)
     integration_param = {
         "integration_frequency": timedelta_frequency_min,
-        "integration_duration" : integration_duration,
+        "integration_duration_type" : integration_duration_type,
         "param": method_param,
         "method": integration_method
     }
