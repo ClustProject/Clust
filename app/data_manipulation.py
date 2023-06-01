@@ -20,7 +20,7 @@ def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     db_client.write_db(bucket_name, ms_name, data)
     # 3. Save Meta##########################
     meta_info['integration_param']['integration_frequency'] = meta_info['integration_param']['integration_frequency'].total_seconds()
-    mongo_client.insert_document(bucket_name, collection_name, meta_info)
+    mongo_client.insert_document(bucket_name, ms_name, meta_info)
     
 def ingestion_processing_integration(db_client, ingestion_type, ingestion_param, processing_type, process_param, integration_param):
     
