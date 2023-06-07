@@ -162,6 +162,7 @@ class CycleData():
         """
         Split the data by time ('Monday 00:00:00 ~ Sunday 23:59:59').
         If num is 2 or more, split num*week units.
+        예를 들어서 num이 2일 경우, 2주 단위로 자름
 
         Args:
             data (dataframe): timeseires data
