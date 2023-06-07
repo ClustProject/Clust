@@ -182,7 +182,7 @@ def CLUST_regresstion_train(train_parameter, model_method, modelParameter, model
 
 # Test pieline
 from Clust.clust.ML.regression.test import RegressionTest as RT
-def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
+def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, model_parameter):
     """ Regression Test
 
     Args:
@@ -191,7 +191,7 @@ def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_meth
         testParameter (dict): 테스트 파라미터
         model_method (str): 주요 테스트 메서드
         model_file_path (str): 모델 파일 패스
-        modelParameter (dict): 파라미터
+        model_parameter (dict): 파라미터
 
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
@@ -199,7 +199,7 @@ def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_meth
         
     rt = RT()
     rt.set_param(testParameter)
-    rt.set_model(model_method, model_file_path, modelParameter)
+    rt.set_model(model_method, model_file_path, model_parameter)
     rt.set_data(test_X_array, test_y_array)
     preds, trues = rt.test()
     
@@ -250,15 +250,26 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
     return df_result, result_metrics
 
 
+# regression inference pipeline
+from Clust.clust.ML.regression.inference import RegressionInference as RI
+def CLUST_regression_inference(infer_X,inference_parameter, model_method, model_file_path, model_parameter):
+    ri = RI()
+    ri.set_param(inference_parameter)
+    ri.set_model(model_method, model_file_path, model_parameter)
+    ri.set_data(infer_X)
+    preds = ri.inference()
+    
+    return preds
+
 
 
 # classification train pipeline
 from Clust.clust.ML.classification.train import ClassificationTrain as CML
-def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_array, train_parameter, model_method, model_file_path, modelParameter):
+def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_array, train_parameter, model_method, model_file_path, model_parameter):
 
     cml = CML()
     cml.set_param(train_parameter)
-    cml.set_model(model_method, modelParameter)
+    cml.set_model(model_method, model_parameter)
     cml.set_data(train_X_array, train_y_array, val_X_array, val_y_array)
     cml.train()
     cml.save_best_model(model_file_path)
@@ -266,11 +277,21 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
 
 # classification test pipeline
 from Clust.clust.ML.classification.test import ClassificationTest as CT
-def clust_classification_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, modelParameter):
+def clust_classification_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, model_parameter):
     ct = CT()
     ct.set_param(testParameter)
-    ct.set_model(model_method, model_file_path, modelParameter)
+    ct.set_model(model_method, model_file_path, model_parameter)
     ct.set_data(test_X_array, test_y_array)
     preds, probs, trues, acc = ct.test()
     
     return preds, probs, trues, acc
+
+
+from Clust.clust.ML.classification.inference import ClassificationInference as CI
+def clust_classification_inference(infer_X,inference_parameter, model_method, model_file_path, model_parameter):
+    ci = CI()
+    ci.set_param(inference_parameter)
+    ci.set_model(model_method, model_file_path, model_parameter)
+    ci.set_data(infer_X)
+    preds = ci.inference()
+    return preds

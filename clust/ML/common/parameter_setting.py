@@ -117,6 +117,7 @@ def get_classification_model_parameter(model_method, model_info, seq_len, input_
         model_parameter = {
             'input_size': input_size,
             'seq_len': seq_len,
+            'output_dim': model_info['output_dim'],
             'num_classes': model_info['num_classes'],
             'num_layers': model_info['num_layers'],  # recurrent layers의 수, int(default: 2, 범위: 1 이상)
             'hidden_size': model_info['hidden_size'],  # hidden state의 차원, int(default: 64, 범위: 1 이상)

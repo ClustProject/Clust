@@ -86,7 +86,7 @@ class MongoClient():
             List: document list
         """
         database = self.DBClient.get_database(db_name)
-        cursor = database[collection_name].find(search)
+        cursor = database[collection_name].find(search)  
         document_list = list(cursor)
 
         for cursor_info in document_list:
@@ -94,8 +94,8 @@ class MongoClient():
 
         document_list = loads(dumps(document_list))
 
-        return document_list     
-
+        return document_list
+    
 
     def get_document_by_table(self, db_name, collection_name, table_name):
         """
