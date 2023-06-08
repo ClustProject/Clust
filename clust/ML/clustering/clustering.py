@@ -73,27 +73,31 @@ class Test:
             cluster_centers_ = []
             n_clusters = max(y)+1
             for i in range(0, n_clusters):
-                cluster_result = X[y == i]
-                if center_type == 'dtw_barycenter_averaging':
-                    from tslearn.barycenters import dtw_barycenter_averaging
-                    cluster_centers_[i] = dtw_barycenter_averaging(cluster_result)
+                if i in y:
+                    cluster_result = X[y == i]
+                    if center_type == 'dtw_barycenter_averaging':
+                        from tslearn.barycenters import dtw_barycenter_averaging
+                        cluster_centers_[i] = dtw_barycenter_averaging(cluster_result)
+                    else:
+                        cluster_centers_.append(cluster_result.mean(axis=0)) 
                 else:
-                    cluster_centers_.append(cluster_result.mean(axis=0)) 
+                    cluster_centers_.append([]) 
             return cluster_centers_
     
         cluster_centers_ = get_cluster_centers('mean')
-        n_clusters = y.max()+1
+        class_list = list(set(y))
+        n_clusters = max(class_list)
         custom_xlim = [0, X.shape[1]]
         custom_ylim = [0, X.max()]
+        
         col_num = 2
         row_num = math.ceil(n_clusters/col_num)
-        print(row_num)
         fig, ax = plt.subplots(row_num, col_num, figsize=(20, row_num * 5))
         plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
         for i in range(0, row_num):
             for j in range(0, col_num):
                 clust_num = (col_num*i+j)
-                if clust_num <=n_clusters:
+                if clust_num <= n_clusters:
                     ax[i][j].set_title('Clust '+str(clust_num))
                     for xx in X[y == clust_num]:
                         ax[i][j].plot(xx.ravel(), "k-", alpha=.2)

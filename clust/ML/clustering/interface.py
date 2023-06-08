@@ -74,7 +74,6 @@ def clusteringByMethod(data, parameter, model_path):
         import matplotlib.pyplot as plt
         
         plt.rcParams['figure.figsize'] =(18, 5)
-        
         plt1 = clust_test.plot_ts_by_label(data_series, result)
         
     
