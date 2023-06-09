@@ -6,13 +6,6 @@ sys.path.append("../../../")
 
 from Clust.clust.ML.common import ML_pipeline
 
-def update_meta_data(meta, param_name, param):
-    # 
-    meta[param_name] = param
-
-    return meta
-
-
 def check_model_name(model_name, model_name_info):
     """It makes model name by default value and additional information
 
@@ -65,16 +58,26 @@ def ML_data_preparation(param, influxdb_client):
                                                                                      data_y, 
                                                                                      param['scaler_param'])
     
+    
+    
     # 3.clean column
-    dataX_scaled = ML_pipeline.clean_low_quality_column(dataX_scaled, param['transform_param'])
+    dataX_scaled = ML_pipeline.clean_low_quality_column(dataX_scaled, 
+                                                        param['transform_param'])
 
     # 4. split train/Val
     split_ratio = 0.8
-    train_X, val_X, train_y, val_y, param['transform_param']= ML_pipeline.split_data_by_mode(dataX_scaled, datay_scaled, split_ratio, param['transform_param'])
+    train_X, val_X, train_y, val_y, param['transform_param']= ML_pipeline.split_data_by_mode(dataX_scaled, 
+                                                                                             datay_scaled, 
+                                                                                             split_ratio, 
+                                                                                             param['transform_param'])
     
     # 5. Transform array style
-    train_X_array, train_y_array = ML_pipeline.transform_data_by_split_mode(param['transform_param'], train_X, train_y)
-    val_X_array, val_y_array = ML_pipeline.transform_data_by_split_mode(param['transform_param'], val_X, val_y)
+    train_X_array, train_y_array = ML_pipeline.transform_data_by_split_mode(param['transform_param'], 
+                                                                            train_X, 
+                                                                            train_y)
+    val_X_array, val_y_array = ML_pipeline.transform_data_by_split_mode(param['transform_param'], 
+                                                                        val_X, 
+                                                                        val_y)
         
         
     
