@@ -1,48 +1,24 @@
 
-import torch
-device = "cuda" if torch.cuda.is_available() else "cpu"
-print(f"{device}" " is available.")
-
-
-def set_train_parameter(train_info):
-    """train_parameter를 생헝함
-
-    Args:
-        train_info (dict): CLUST platform에 필요한 information을 전달함
-
-    Returns:
-        train_parameter: 실제 CLUST의 ML이 필요한 train_parameter를 생성하고 동작함
-    """
-    
-    train_parameter = {
-        'lr': train_info['lr'],
-        'weight_decay': train_info['weight_decay'],
-        'device': device, 
-        'n_epochs': train_info['n_epochs'], 
-        'batch_size': train_info['batch_size']
-    }
-    return train_parameter
-
-
-def set_model_parameter(model_method, model_info, seq_len, input_size):
+def set_model_parameter(model_info):
     """set model parameter
     Args:
-        model_method (_type_): _description_
-        model_info (_type_): _description_
-        seq_len (_type_): _description_
-        input_size (_type_): _description_
+        model_info (dict): model information    
+            seq_len (_type_): _description_
+            input_size (_type_): _description_
 
     Returns:
         model_parameter(dict):model_parameter
     """
-    
+    model_method = model_info['model_method']
+    seq_len = model_info['seq_len']
+    input_size = model_info['input_size']
     regression_model_list = ['LSTM_rg' , 'GRU_rg',  'CNN_1D_rg', 'LSTM_FCNs_rg',  'FC_rg']
     classification_model_list = [ 'LSTM_cf', 'GRU_cf', 'LSTM_cf', 'CNN_1D_cf', 'LSTM_FCNs_cf', 'FC_cf']
     
     if model_method in regression_model_list:
-        model_parameter = get_regression_model_parameter(model_method, model_info, seq_len, input_size)
+        model_parameter = get_regression_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
     elif model_method in classification_model_list:
-        model_parameter = get_classification_model_parameter(model_method, model_info, seq_len, input_size)
+        model_parameter = get_classification_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
     else:
         model_parameter = None
         

@@ -1,10 +1,6 @@
 db_name ='model'
 collection_name ='meta'
 
-def get_model_meta_data(mongodb_client, search):
-    meta = mongodb_client.get_document_by_json(db_name, collection_name, search)
-    model_meta = meta[0]
-    return model_meta
 
 def save_model_meta_data(mongodb_client, model_meta):
     try :

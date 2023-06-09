@@ -52,7 +52,7 @@ def get_default_model_name(model_name, app_name, model_method, model_clean):
         pass
     return model_name
 
-def get_default_model_path(model_name,data_name, model_method, train_parameter):
+def get_default_model_path(model_name, data_name, model_method, train_parameter):
     """ 모델 이름에 따른 모델 패스를 지정
 
     Args:
