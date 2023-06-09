@@ -6,6 +6,24 @@ sys.path.append("../../../")
 
 from Clust.clust.ML.common import ML_pipeline
 
+def chagne_type_str_to_bool(dict_data):
+
+    for key, value in dict_data.items():
+
+        if isinstance(value, dict):
+            dict_data[key] = chagne_type_str_to_bool(value)
+
+        elif isinstance(value, str):
+
+            if value.lower() == 'true':
+                dict_data[key] = True
+            elif value.lower() == 'false':
+                dict_data[key] = False
+            elif value.lower() == 'none':
+                dict_data[key] = None
+                
+    return dict_data
+
 def check_model_name(model_name, model_name_info):
     """It makes model name by default value and additional information
 
@@ -17,7 +35,7 @@ def check_model_name(model_name, model_name_info):
         model_name(str): final model name
     """
     # model name & path
-    if model_name is None or model_name is 'None':
+    if model_name is None or model_name == 'None':
         model_name=""
         for key in model_name_info:
             model_name+=key+'_'
