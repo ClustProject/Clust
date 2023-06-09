@@ -86,7 +86,7 @@ class Test:
     
         cluster_centers_ = get_cluster_centers('mean')
         class_list = list(set(y))
-        n_clusters = max(class_list)
+        n_clusters = max(class_list)+1
         custom_xlim = [0, X.shape[1]]
         custom_ylim = [0, X.max()]
         
@@ -97,7 +97,7 @@ class Test:
         for i in range(0, row_num):
             for j in range(0, col_num):
                 clust_num = (col_num*i+j)
-                if clust_num <= n_clusters:
+                if clust_num+1 <= n_clusters:
                     ax[i][j].set_title('Clust '+str(clust_num))
                     for xx in X[y == clust_num]:
                         ax[i][j].plot(xx.ravel(), "k-", alpha=.2)

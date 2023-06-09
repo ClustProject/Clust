@@ -126,7 +126,7 @@ class PlotPlt():
         ax.set_xticks(bins+0.5)
         """
         plt.figure() 
-        y.hist()
+        y.hist(bins=20)
         
         return plt
     
