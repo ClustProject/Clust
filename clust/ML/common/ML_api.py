@@ -21,7 +21,7 @@ def chagne_type_str_to_bool(dict_data):
                 dict_data[key] = False
             elif value.lower() == 'none':
                 dict_data[key] = None
-                
+
     return dict_data
 
 def check_model_name(model_name, model_name_info):
@@ -139,6 +139,6 @@ def ML_training(train_X_array,  train_y_array, val_X_array, val_y_array, param):
                                                param['model_info'])
 
 
-
+    return param
 
 
