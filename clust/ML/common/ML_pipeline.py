@@ -56,14 +56,14 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
     datay_scaled, y_scalerFilePath = scaler.get_data_scaler(scaler_param['scaler_flag'], scalerRootPath_y, data_y, scaler_param['scale_method'])
     
     scale_file_path_info = {
-    "XScalerFile":{
-        "fileName":"scaler.pkl",
-        "filePath":X_scalerFilePath       
-    },
-    "yScalerFile":{
-        "fileName":"scaler.pkl",
-        "filePath":y_scalerFilePath
-    }
+        "XScalerFile":{
+            "fileName":"scaler.pkl",
+            "filePath":X_scalerFilePath       
+        },
+        "yScalerFile":{
+            "fileName":"scaler.pkl",
+            "filePath":y_scalerFilePath
+        }
     }
 
     return dataX_scaled, datay_scaled, scale_file_path_info
