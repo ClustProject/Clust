@@ -55,7 +55,7 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
     scalerRootPath_y = os.path.join(scaler_param['scaler_path'], data_name_y)
     datay_scaled, y_scalerFilePath = scaler.get_data_scaler(scaler_param['scaler_flag'], scalerRootPath_y, data_y, scaler_param['scale_method'])
     
-    scale_file_path_info = {
+    scaler_param['scaler_file_path'] = {
         "XScalerFile":{
             "fileName":"scaler.pkl",
             "filePath":X_scalerFilePath       
@@ -66,7 +66,7 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
         }
     }
 
-    return dataX_scaled, datay_scaled, scale_file_path_info
+    return dataX_scaled, datay_scaled
 
 from Clust.clust.ML.tool import scaler as ml_scaler
 def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path, scaler_param):
