@@ -12,23 +12,6 @@ from Clust.clust.integration.utils import param
 # JH TODO 아래 코드에 대한 주석 작성
 # JH TODO Influx Save Load 부분 작성 보완해야함
 
-
-# ============================== data 관련 ==============================
-def save_csv_data(data_folder_path, data_name, data):
-    if not os.path.exists(data_folder_path):
-        os.makedirs(data_folder_path)
-
-    file_name = os.path.join(data_folder_path, data_name + '.csv')
-    data.to_csv(file_name)
-    return file_name
-
-
-def save_influx_data(db_name, data_name, data, db_client):
-    bk_name = db_name
-    ms_name = data_name
-    db_client.write_db(bk_name, ms_name, data)
-
-
 def getData(db_client, dataInfo, integration_freq_sec, process_param, startTime, endTime, integration_method = 'meta', method_param = {}, integration_duration_type = 'common'):
     intDataInfo = param.makeIntDataInfoSet(dataInfo, startTime, endTime)
 
