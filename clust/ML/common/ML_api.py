@@ -153,7 +153,7 @@ def test_data_preparation(params, model_meta, db_client):
     test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, model_meta['scaler_param']['scaler_file_path']['XScalerFile']['filePath'], model_meta['scaler_param']['scaler_flag'])
     test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, model_meta['scaler_param']['scaler_file_path']['yScalerFile']['filePath'], model_meta['scaler_param']['scaler_flag'])
 
-    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(model_meta['transform_param']['split_mode'], model_meta["transform_param"], test_X, test_y)
+    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(model_meta["transform_param"], test_X, test_y)
 
     return test_X_array, test_y_array, scaler_X, scaler_y
 
@@ -161,13 +161,15 @@ def test_data_preparation(params, model_meta, db_client):
 
 def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
 
-    if model_meta['model_purpose'] == 'regression':
-        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, model_meta["train_parameter"], model_meta['model_method'], model_meta['model_files']['modelFile']["filePath"], model_meta['model_parameter'])
-        result_metrics =  metrics.calculate_metrics_df(df_result)
-        df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'], scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
+    model_info = model_meta['model_info']
 
-    elif model_meta['model_purpose'] == 'classification':
-        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_meta["train_parameter"], model_meta['model_method'], model_meta['model_files']['modelFile']["filePath"], model_meta['model_parameter'])
+    if model_info['model_purpose'] == 'regression':
+        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, model_info["train_parameter"], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
+        df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'], scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
+        result_metrics =  metrics.calculate_metrics_df(df_result)
+
+    elif model_info['model_purpose'] == 'classification':
+        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_info["train_parameter"], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
         result_metrics = classification_report(trues, preds, output_dict = True)
         df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'],  scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
 
