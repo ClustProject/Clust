@@ -10,7 +10,55 @@ from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
 from Clust.clust.ML.common import ML_pipeline
 import numpy as np
+
+import torch
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"{device}" " is available.")
+
+def convert_param_for_backend(params):
+    """frontend에서 전달하는 파라미터를 백엔드에서 원활하게 사용하고, 필요한 데이터를 추가하여 백엔드로 보내기 위함 
+    # 향후 서비스에 맞게 수정해야함
+
+    Args:
+        params (dict): dictionary data input
+
+    Returns:
+        params (dict): dictionary data output
+    """
+    # chage tpye string to bool -> ex) 'true' -> True
+    params = chagne_type_str_to_bool(params)
+    
+    # model name check  
+    params['model_info']['model_name'] = check_model_name(params['model_info']['model_name'],
+                                        [params['ingestion_param_X']['ms_name'], params['model_info']['model_purpose'], params['model_info']['model_method']])
+    
+    # system 
+    params['model_info']['train_parameter']['device'] = device
+    
+    # float to integer
+    if 'past_step' in list(params['transform_param'].keys()):
+        params['transform_param']['past_step'] = int(params['transform_param']['past_step'])
+        params['transform_param']['future_step'] = int(params['transform_param']['future_step'])
+    
+    
+    # hard parameter setting
+    if params['transform_param']['data_clean_option']:
+        params['transform_param']['nan_process_info']= {'type':'num', 'ConsecutiveNanLimit':10, 'totalNaNLimit':100}
+        params['transform_param']['max_nan_limit_ratio'] = 0.9
+    else:
+        params['transform_param']['nan_process_info'] = {'type':'num', 'ConsecutiveNanLimit':10000, 'totalNaNLimit':100000}
+        params['transform_param']['max_nan_limit_ratio'] = 0.5
+    return params
+
 def chagne_type_str_to_bool(dict_data):
+    """frontend에서 전달하는 dictionary json data를 python에서 활용 가능한 형태로 bool string을 변형함
+
+    Args:
+        dict_data (dict): dictionary data input
+
+    Returns:
+        dict_data (dict): dictionary data output
+    """
 
     for key, value in dict_data.items():
 
