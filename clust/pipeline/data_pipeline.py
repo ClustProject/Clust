@@ -128,8 +128,6 @@ def pipeline_connection_check(pipeline, input_type):
      Returns:
         output_type(Bool): True or False, 유효성 여부 전달
     """
-    input_type = 'DF'
-    
     for pipe in pipeline:
         method = pipe[0]
         output_type = pipeline_module_check(method, input_type)
@@ -137,9 +135,10 @@ def pipeline_connection_check(pipeline, input_type):
             input_type = output_type
             valid = True
         else:
-            print(pipe, "is not working")
+            print(method, "is not working. ", "Input_type is", input_type)
             valid = False
             break
+        print(method, input_type, output_type)
     return valid
 
 def pipeline_module_check(method, input_type):
