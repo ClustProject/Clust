@@ -9,7 +9,7 @@ from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
 from Clust.clust.ML.common import ML_pipeline
-
+import numpy as np
 def chagne_type_str_to_bool(dict_data):
 
     for key, value in dict_data.items():
@@ -25,6 +25,8 @@ def chagne_type_str_to_bool(dict_data):
                 dict_data[key] = False
             elif value.lower() == 'none':
                 dict_data[key] = None
+            elif value.lower() == 'nan':
+                dict_data[key] = np.nan
 
     return dict_data
 
