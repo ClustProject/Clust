@@ -19,9 +19,8 @@ def pipeline(data, module_list):
             >>> pipeline_list = 
             ...     [['data_refinement', refine_param],
             ...     ['data_outlier', outlier_param],
-            ...     ['data_split', holiday_split_param],
+            ...     ['data_split', split_param],
             ...     ['data_selection', select_param],
-            ...     ['data_split', cycle_split_param],
             ...     ['data_integration', integration_param],
             ...     ['data_quality_check', quality_param],
             ...     ['data_imputation', imputation_param],
