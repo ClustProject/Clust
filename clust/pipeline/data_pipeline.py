@@ -99,13 +99,12 @@ def set_default_param():
         "uncertain_error_to_NaN":{'flag': False}}
     
     ## 3. split_param
-    default_param['data_split']['cycle']={
+    default_param['data_split']={
         "split_method":"cycle",
         "split_param":{
             'feature_cycle' : "Day",
             'feature_cycle_times' : 1}
     }
-    #default_param['data_split']['holiday']
     
     ## 4. select_param
     default_param['data_selection']={
