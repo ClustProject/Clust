@@ -1,8 +1,44 @@
 import sys
 sys.path.append("../")
 sys.path.append("../..")
-import datetime
-
+DF = "DF"
+DFSet ="DFSet"
+# Pipeline에 대해 각 모듈별 가능한 인풋과 아웃풋의 연결을 서술하는 전역 변수로 추후 수정될 수 있음
+pipeline_rule = {
+    "data_refinement":{
+        DF:DF, 
+        DFSet:DFSet
+    },
+        "data_outlier":{
+        DF:DF, 
+        DFSet:DFSet
+    },
+    "data_imputation":{
+        DF:DF, 
+        DFSet:DFSet
+    },
+    "data_smoothing":{
+        DF:DF, 
+        DFSet:DFSet
+    },
+    "data_scaling":{
+        DF:DF,  
+        DFSet:DFSet
+    },
+    "data_split":{
+        DF:DFSet,
+        DFSet:DFSet
+    },
+    "data_selection":{
+        DFSet:DFSet
+    },
+    "data_integration":{
+        DFSet:DF
+    },
+    "data_quality_check":{
+        DF:DF
+    }
+}
 
 def pipeline(data, module_list):
     """ 
@@ -81,73 +117,63 @@ def pipeline(data, module_list):
     return data
 
 
-            
-def set_default_param():
-    default_param={}
-    ## 1. refine_param
-    data_freq_min = 60
-    refine_frequency = datetime.timedelta(minutes= data_freq_min)
+def pipeline_connection_check(pipeline, input_type):
+    """pipeline의 in-output module 결합 유효성을 검사한다.
 
-    default_param['data_refinement'] = {"remove_duplication": {'flag': True}, 
-                    "static_frequency": {'flag': True, 'frequency': refine_frequency}}
+    Args:
+        module1 (string): 선모듈 이름
+        module2 (string): 후모듈 이름
+        input_type (string): 데이터 인풋타입, "DF" or "DFSet"
+        
+     Returns:
+        output_type(Bool): True or False, 유효성 여부 전달
+    """
+    input_type = 'DF'
     
-    ## 2. outlier_param
+    for pipe in pipeline:
+        method = pipe[0]
+        output_type = pipeline_module_check(method, input_type)
+        if output_type:
+            input_type = output_type
+            valid = True
+        else:
+            print(pipe, "is not working")
+            valid = False
+            break
+    return valid
 
-    default_param['data_outlier'] ={
-        "certain_error_to_NaN": {'flag': True, }, 
-        "uncertain_error_to_NaN":{'flag': False}}
-    
-    ## 3. split_param
-    default_param['data_split']={
-        "split_method":"cycle",
-        "split_param":{
-            'feature_cycle' : "Day",
-            'feature_cycle_times' : 1}
-    }
-    
-    ## 4. select_param
-    default_param['data_selection']={
-        "select_method":"keyword_data_selection", 
-        "select_param":{
-            "keyword":"*"
-        }
-    }
-    
-    ## 5. integration_param
-    data_freq_min = 60 
-    integration_frequency = datetime.timedelta(minutes= data_freq_min)
+def pipeline_module_check(method, input_type):
+    """pipeline module의 인풋과 메소드가 유효한지를 체크함, 유효한 경우 output type을 뱉고 유효하지 않을 경우 None을 리턴함
 
-    default_param['data_integration']={
-        "integration_param":{"feature_name":"in_co2", "duration":None, "integration_frequency":integration_frequency},
-        "integration_type": "one_feature_based_integration"
-    }
+    Args:
+        method (string): pipeline module
+        input_type (string): 데이터 인풋타입, "DF" or "DFSet"
+
+    Returns:
+        output_type(string): 데이터 output 타입, "DF" or "DFSet"/ or None
     
-    ## 6. quality_param
-    default_param['data_quality_check'] = {
-        "quality_method" : "data_with_clean_feature", 
-        "quality_param" : {
-            "nan_processing_param":{
-                'type':"num", 
-                'ConsecutiveNanLimit':4, 
-                'totalNaNLimit':24}}
-    }
+    """
     
-    ## 7. imputation_param
-    default_param['data_imputation'] = {
-                        "flag":True,
-                        "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
-                                            {"min":0,"max":10000,"method":"mean", "parameter":{}}],
-                        "total_non_NaN_ratio":1 }
     
-    ## 8. smoothing_param
-    default_param['data_smoothing']={'flag': True, 'emw_param':0.3}
-    
-    ## 9. scaling_param
-    default_param['data_scaling']={'flag': True, 'method':'minmax'} 
-    return default_param
+    rule = pipeline_rule[method]
+    if input_type in rule.keys():
+        output_type = rule[input_type]
+    else:
+        output_type = None
+        
+    return output_type 
+
 
 import pandas as pd
 def get_shape(data):
+    """data의 형태를 리턴함
+
+    Args:
+        data (dataFrame or dataFrameSet): 입력 데이터
+
+    Returns:
+        data shape : 각 데이터의 쉐입을 전달함
+    """
     if isinstance(data, pd.DataFrame):
         return data.shape
     else:
