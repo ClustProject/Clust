@@ -88,7 +88,7 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod
     model_path = "model.pkl"
-    result, plt1= clusteringByMethod(data, parameter, model_path)
+    x_data_series, result, plt1= clusteringByMethod(data, parameter, model_path)
     
     
     # histogram by label
