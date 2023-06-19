@@ -40,14 +40,13 @@ def set_outlier_param(param):
         }
     }
     
-    
     if param['certain_error_to_NaN']['flag']:
-        outler_alg_param = get_outlier_detection_param(outlierDetectionParam['algorithm'], int(outlierDetectionParam['algorithmParameter']))
+        outler_alg_param = get_outlier_detection_param(get_outlier_detection_param2['algorithm'], int(get_outlier_detection_param2['algorithmParameter']))
     else:
         pass
     
     return data_outlier_param
-
+"""
     if (outlierDetection == True):
         outler_alg_param = get_outlier_detection_param2(outlierDetectionParam['algorithm'], int(outlierDetectionParam['algorithmParameter']))
         uncertainParam = {
@@ -63,7 +62,7 @@ def set_outlier_param(param):
     outlier_param = {"certain_error_to_NaN": certainParam,
                      "uncertain_error_to_NaN": uncertainParam}
 
-
+"""
 
 def get_outlier_detection_param2(algorithm, period, percentile):
     #Parameter = period = 60 * 24  # 1분단위 * 60 * 24
