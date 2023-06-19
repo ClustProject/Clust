@@ -131,6 +131,7 @@ def pipeline_connection_check(pipeline, input_type):
     for pipe in pipeline:
         method = pipe[0]
         output_type = pipeline_module_check(method, input_type)
+        print(method, input_type, output_type)
         if output_type:
             input_type = output_type
             valid = True
@@ -138,7 +139,7 @@ def pipeline_connection_check(pipeline, input_type):
             print(method, "is not working. ", "Input_type is", input_type)
             valid = False
             break
-        print(method, input_type, output_type)
+        
     return valid
 
 def pipeline_module_check(method, input_type):
