@@ -82,7 +82,7 @@ def clusteringByMethod(data, parameter, model_path):
         
     
         
-        return data_series, result, plt1
+    return data_series, result, plt1
 
 
 
