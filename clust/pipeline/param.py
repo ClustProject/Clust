@@ -3,108 +3,6 @@ sys.path.append("../")
 sys.path.append("../..")
 import datetime
 
-def set_refinement_param(param):
-    """refinement를 위한 param을 생성함
-
-    Args:
-        param(dict): refinement param
-        - flag
-        >>> param = { 
-            "remove_duplication": {'flag': True},
-            "static_frequency": {'flag': True, 'frequency': None}
-        } 
-    Returns:
-        data_refinement_param(dict) : data_refinement 파라미터
-    """
-    
-    data_refinement_param = param
-    
-    return data_refinement_param
-
-def set_outlier_param(param):
-    """ 외부 파라미터를 입력받아 다시 한번 outlier parameter로 생성하는 함수
-
-    Args:
-        param (dict): outlier 관련 파라미터
-        >>> param = {'certain_error_to_NaN': {'flag': True},
-                     'uncertain_error_to_NaN': 
-                        {'flag': True, 
-                        'algorithm':'SR',
-                        'period':24}                     
-    }
-
-    Returns:
-        data_outlier_param: 최종 파라미터
-    """
-    
-    data_outlier_param = {}
-    certain_param=param['certain_error_to_NaN']
-    if certain_param['flag']:
-        certain_param['abnormal_value_list'] = [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] # TODO
-        certain_param['data_min_max_limit']  = {'max_num': {'in_temp': 80,
-            'in_humi': 100,
-            'in_co2': 10000,
-            'in_voc': 60000,
-            'in_noise': 90,
-            'in_pm10': 1000,
-            'in_pm25': 1000,
-            'in_pm01': 1000},
-            'min_num': {'in_temp': -40,
-            'in_humi': 0,
-            'in_co2': 0,
-            'in_voc': 0,
-            'in_noise': 35,
-            'in_pm10': 0,
-            'in_pm25': 0,
-            'in_pm01': 0}} # TODO
-        
-    uncertain_param=param['uncertain_error_to_NaN']  
-    if uncertain_param['flag']:
-        outler_alg_param = get_outlier_detection_param2(param['uncertain_error_to_NaN']['algorithm'], param['uncertain_error_to_NaN'])
-        uncertain_param ['param'] ={
-                "outlierDetectorConfig": [{
-                'algorithm': param['uncertain_error_to_NaN']['algorithm'],
-                'percentile':int(param['uncertain_error_to_NaN']['percentile']),
-                'alg_parameter':outler_alg_param}]
-        }
-        
-    data_outlier_param['certain_error_to_NaN'] = certain_param
-    data_outlier_param['uncertain_error_to_NaN'] = uncertain_param
-    
-
-    return data_outlier_param
-
-def set_split_param(param):
-    """parameter를 기반으로 스플릿 할 수 있도록 
-    Args:
-        param (dict): split 관련 파라미터     
-    >>> param = {
-        "split_method":"cycle" # or "holiday"
-        "split_param":{
-            'feature_cycle' : "Day",
-            'feature_cycle_times' : 1
-        }
-    }
-    Returns:
-        split_param: 최종 파라미터
-
-    """
-    data_split_param = param
-    return data_split_param
-    
-def set_selection_param(param): 
-    """parameter를 기반으로 데이터를 선택할 수 있도록 함 할 수 있도록 
-    Args:
-        param (dict): selection 관련 파라미터     
-    >>> param = {'select_method': 'keyword_data_selection',
-                'select_param': {'keyword': '*'}}
-    }
-    Returns:
-        data_selection_param(dict) : 최종 파라미터
-
-    """
-    data_selection_param = param
-    return data_selection_param
 
 def set_integration_param(param):   
     """parameter를 기반으로 데이터를 결합 가능하도록
@@ -117,69 +15,10 @@ def set_integration_param(param):
         data_selection_param(dict) : 최종 파라미터
 
     """
-    data_integration_param = param
+    param['integration_param']['integration_frequency'] = datetime.timedelta(minutes= param['integration_param']['integration_frequency'])
+    data_integration_param = param 
     return data_integration_param
 
-def set_quality_check_param():
-    data_quality_check_parameter = {
-        "data_quality_check_parameter":{
-        "quality_method" : "data_with_clean_feature", 
-        "quality_param" : {
-            "nan_processing_param":{
-                'type':"num", 
-                'ConsecutiveNanLimit':4, 
-                'totalNaNLimit':24}}
-        }
-    }
-    return data_quality_check_parameter
-
-def set_imputation_param():
-    """ 데이터를 무조건 imputation하는 파라미터
-    Returns:
-        data_imputation_param(dict) : 최종 파라미터
-    """
-    data_imputation_param = {
-            "flag":True,
-            "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
-                            {"min":0,"max":10000,"method":"mean", "parameter":{}}],
-            "total_non_NaN_ratio":1 
-    }
-    return data_imputation_param
-    
-    
-def set_smoothing_param(param):
-    """parameter를 기반으로 데이터를 부드럽게 함
-    
-    Args:
-        param (dict): smoothing 관련 파라미터     
-    >>> param = {"flag":True , "weight":0.3}
-    
-    Returns:
-        data_smothing_param(dict) : 최종 파라미터
-
-    """
-    
-    data_smothing_param = {'flag': param['flag'], 'emw_param':param['weight']} 
-    return data_smothing_param
-    
-def set_scaling_param(param):
-    """ minmax scaling
-    
-    Args:
-        param (dict): scaling 관련 파라미터     
-    >>> param = {"flag":True }
-    
-    
-    Returns:
-        data_scaling_param(dict) : 최종 파라미터
-    """
-
-    data_scaling_param = {'flag': param['flag'], 'method':'minmax'} 
-
-    return data_scaling_param
-      
-    
-    
 def set_default_param():
     default_param={}
     ## 1. refine_param
@@ -244,6 +83,130 @@ def set_default_param():
     default_param['data_scaling']={'flag': True, 'method':'minmax'} 
     return default_param
 
+def set_outlier_param(param):
+    """ 
+    외부 파라미터를 입력받아 다시 한번 outlier parameter로 생성하는 함수
+
+    Args:
+        param (dict): outlier 관련 파라미터
+    
+    Note
+    -------
+    uncertain_error_to_NaN.flag가 True일 경우 uncertain_error_to_NaN.algorithm 에 따라 uncertain_error_to_NaN 에서 입력 받는 key들이 달라짐.  
+
+    Example:
+        uncertain_error_to_NaN의 Parameter 예시
+        1. algorithm : SR
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True,
+        ...         'algorithm': 'SR',
+        ...         'percentile': 95
+        ...         'period': 24
+        ...     }}
+        
+        2. algorithm : IF
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'IF',
+        ...         'percentile': 95
+        ...         'estimator': 100
+        ...     }}
+
+        3. algorithm : KDE
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'KDE',
+        ...         'percentile': 95
+        ...         'leaf_size': 40
+        ...     }}
+
+        4. algorithm : LOF
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'LOF',
+        ...         'percentile': 95
+        ...         'neighbors': 20
+        ...     }}
+
+        5. algorithm : MoG
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'MoG',
+        ...         'percentile': 95
+        ...         'component': 1
+        ...     }}
+
+        6. algorithm : IQR
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'IQR',
+        ...         'percentile': 95
+        ...         'weight': 100
+        ...     }}
+
+        7. algorithm : SD
+        >>> param = {
+        ...     'certain_error_to_NaN': {'flag': True},
+        ...     'uncertain_error_to_NaN': {
+        ...         'flag': True, 
+        ...         'algorithm': 'SD',
+        ...         'percentile': 95
+        ...         'period': 24
+        ...         'limit': 15
+        ...     }}
+
+    Returns:
+        data_outlier_param: 최종 파라미터
+    """
+    
+    data_outlier_param = {}
+    certain_param=param['certain_error_to_NaN']
+    if certain_param['flag']:
+        certain_param['abnormal_value_list'] = [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] # TODO
+        certain_param['data_min_max_limit']  = {'max_num': {'in_temp': 80,
+            'in_humi': 100,
+            'in_co2': 10000,
+            'in_voc': 60000,
+            'in_noise': 90,
+            'in_pm10': 1000,
+            'in_pm25': 1000,
+            'in_pm01': 1000},
+            'min_num': {'in_temp': -40,
+            'in_humi': 0,
+            'in_co2': 0,
+            'in_voc': 0,
+            'in_noise': 35,
+            'in_pm10': 0,
+            'in_pm25': 0,
+            'in_pm01': 0}} # TODO
+        
+    uncertain_param=param['uncertain_error_to_NaN']  
+    if uncertain_param['flag']:
+        outler_alg_param = get_outlier_detection_param2(param['uncertain_error_to_NaN']['algorithm'], param['uncertain_error_to_NaN'])
+        uncertain_param ['param'] ={
+                "outlierDetectorConfig": [{
+                'algorithm': param['uncertain_error_to_NaN']['algorithm'],
+                'percentile':int(param['uncertain_error_to_NaN']['percentile']),
+                'alg_parameter':outler_alg_param}]
+        }
+        
+    data_outlier_param['certain_error_to_NaN'] = certain_param
+    data_outlier_param['uncertain_error_to_NaN'] = uncertain_param
+    
+
+    return data_outlier_param
 
 def get_outlier_detection_param2(algorithm, param):
     """ outlier detection을 위한 parameter로 알고리즘과 이에 근거한 parameter를 입력 받으
@@ -268,7 +231,6 @@ def get_outlier_detection_param2(algorithm, param):
         period = param['period'] # period는 신호의 몇개 단위가 주기인지에 대한 적절한 값
         result = { 
             # Multivariable 불가능
-            # percentile만 조절
             'SR_series_window_size': int(period/2), # less than period, int, 데이터 크기에 적합하게 설정
             'SR_spectral_window_size': period, # as same as period, int, 데이터 크기에 적합하게 설정
             'SR_score_window_size': period *  2 
@@ -282,7 +244,7 @@ def get_outlier_detection_param2(algorithm, param):
             'IF_max_samples': 'auto', # 각 모델에 사용하는 샘플 개수(샘플링 적용), int or float(default: 'auto') 
             'IF_contamination': (100-percentile)/100, #'auto', # 모델 학습시 활용되는 데이터의 outlier 비율, ‘auto’ or float(default: ’auto’, float인 경우 0 초과, 0.5 이하로 설정)
             'IF_max_features': 1.0, # 각 모델에 사용하는 변수 개수(샘플링 적용), int or float(default: 1.0)
-            'IF_bootstrap': True}, # bootstrap적용 여부, bool(default: False)
+            'IF_bootstrap': True} # bootstrap적용 여부, bool(default: False)
         
     elif algorithm == 'KDE':
         leaf_size = param['leaf_size'] # 40
@@ -293,12 +255,12 @@ def get_outlier_detection_param2(algorithm, param):
             'KDE_kernel': 'gaussian', # kernel 종류, {'gaussian’, ‘tophat’, ‘epanechnikov’, ‘exponential’, ‘linear’, ‘cosine’}(default: ’gaussian’) 중 택 1
             'KDE_metric': 'euclidean', # 사용할 거리 척도, str(default: ’euclidean’)
             'KDE_breadth_first': True, # breadth(너비) / depth(깊이) 중 우선순위 방식 정의, bool, True: breadth or False: depth
-            'KDE_leaf_size': leaf_size}, # tree 알고리즘에서의 leaf node 개수, int(default: 40)}
+            'KDE_leaf_size': leaf_size} # tree 알고리즘에서의 leaf node 개수, int(default: 40)}
         
     elif algorithm == 'LOF':
         percentile = param['percentile'] # 1~100
         neighbors = param['neighbors']
-        result ={ # Neighbors (1~100) , leafSize (1~100, Integer)
+        result ={ # Neighbors (1~100) 
             # percentile만 조절
             'LOF_neighbors': neighbors, # 가까운 이웃 개수, int(default: 20)
             'LOF_algorithm': 'auto', # 가까운 이웃을 정의하기 위한 알고리즘, {‘auto’, ‘ball_tree’, ‘kd_tree’, ‘brute’}(default: ’auto’) 중 택 1
