@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../")
 sys.path.append("../..")
+from . import param
 DF = "DF"
 DFSet ="DFSet"
 # Pipeline에 대해 각 모듈별 가능한 인풋과 아웃풋의 연결을 서술하는 전역 변수로 추후 수정될 수 있음
@@ -71,45 +72,57 @@ def pipeline(data, module_list):
         print(module_name) 
         
         if module_name == 'data_refinement': 
+            module_param = param.set_refinement_param(module_param)
             from Clust.clust.preprocessing import processing_interface
             data= processing_interface.get_data_result('refinement', data, module_param)
             
         if module_name =="data_outlier":
+            module_param = param.set_outlier_param(module_param)
+            print(module_param)
             from Clust.clust.preprocessing import processing_interface
             data= processing_interface.get_data_result('error_to_NaN', data, module_param)
             
-        elif module_name =='data_split':           
+        elif module_name =='data_split':    
+            module_param = param.set_split_param(module_param)       
             split_method = module_param['split_method']
             split_param = module_param['split_param']
             from Clust.clust.transformation.general import split_interface
             data = split_interface.get_data_result(split_method, data, split_param)
             
         elif module_name == 'data_selection':          
+            module_param = param.set_selection_param(module_param)
             from Clust.clust.transformation.general import select_interface
             select_method = module_param['select_method']
             select_param = module_param['select_param']
             data = select_interface.get_data_result(select_method, data,  select_param)
             
         elif module_name =='data_integration':
+            module_param = param.set_integration_param(module_param)
             integration_type =module_param['integration_type']
             integration_param = module_param['integration_param']
             from Clust.clust.integration import integration_interface
             data = integration_interface.get_data_result(integration_type, data, integration_param)
             
         elif module_name == 'data_quality_check':
+            module_param = param.set_quality_check_param(module_param)
             from Clust.clust.quality import quality_interface
             quality_method = module_param['quality_method']
             quality_param = module_param['quality_param']
             data = quality_interface.get_data_result(quality_method, data, quality_param)
             
         elif module_name == 'data_imputation': 
+            module_param = param.set_imputation_param(module_param)
             from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('imputation', data, module_param)
             
         elif module_name =='data_smoothing':
+            module_param = param.set_smoothing_param(module_param)
+            from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('smoothing', data, module_param)
             
         elif module_name =='data_scaling': 
+            module_param = param.set_scaling_param(module_param)
+            from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('scaling', data, module_param)
 
         print(get_shape(data))
