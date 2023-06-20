@@ -4,20 +4,20 @@ sys.path.append("../..")
 import datetime
 
 
-def set_integration_param(param):   
-    """parameter를 기반으로 데이터를 결합 가능하도록
+# def set_integration_param(param):   
+#     """parameter를 기반으로 데이터를 결합 가능하도록
     
-    Args:
-        param (dict): selection 관련 파라미터     
-    >>> param = {"feature_name":"in_co2", "duration":None, "integration_frequency":60} # integration frequency = minutes
-    }
-    Returns:
-        data_selection_param(dict) : 최종 파라미터
+#     Args:
+#         param (dict): selection 관련 파라미터     
+#     >>> param = {"feature_name":"in_co2", "duration":None, "integration_frequency":60} # integration frequency = minutes
+#     }
+#     Returns:
+#         data_selection_param(dict) : 최종 파라미터
 
-    """
-    param['integration_param']['integration_frequency'] = datetime.timedelta(minutes= param['integration_param']['integration_frequency'])
-    data_integration_param = param 
-    return data_integration_param
+#     """
+#     param['integration_param']['integration_frequency'] = datetime.timedelta(minutes= param['integration_param']['integration_frequency'])
+#     data_integration_param = param 
+#     return data_integration_param
 
 def set_default_param():
     default_param={}
@@ -192,19 +192,30 @@ def set_outlier_param(param):
             'in_pm25': 0,
             'in_pm01': 0}} # TODO
         
-    uncertain_param=param['uncertain_error_to_NaN']  
-    if uncertain_param['flag']:
-        outler_alg_param = get_outlier_detection_param2(param['uncertain_error_to_NaN']['algorithm'], param['uncertain_error_to_NaN'])
+    uncertain_param_flag = param['uncertain_error_to_NaN']['flag']
+    del param['uncertain_error_to_NaN']['flag']
+    if uncertain_param_flag:
+        uncertain_param = {'flag': uncertain_param_flag}
+        outler_alg_param = get_outlier_detection_param2(param['uncertain_error_to_NaN']['algorithm'], param['uncertain_error_to_NaN']['alg_parameter'])
+        param['uncertain_error_to_NaN']['alg_parameter'] = outler_alg_param
+        
         uncertain_param ['param'] ={
-                "outlierDetectorConfig": [{
-                'algorithm': param['uncertain_error_to_NaN']['algorithm'],
-                'percentile':int(param['uncertain_error_to_NaN']['percentile']),
-                'alg_parameter':outler_alg_param}]
+                "outlierDetectorConfig": [param['uncertain_error_to_NaN']]
         }
+
+    # uncertain_param=param['uncertain_error_to_NaN']
+
+    # if uncertain_param['flag']:
+    #     outler_alg_param = get_outlier_detection_param2(param['uncertain_error_to_NaN']['algorithm'], param['uncertain_error_to_NaN']['alg_param'])
+    #     uncertain_param ['param'] ={
+    #             "outlierDetectorConfig": [{
+    #             'algorithm': param['uncertain_error_to_NaN']['algorithm'],
+    #             'percentile':int(param['uncertain_error_to_NaN']['percentile']),
+    #             'alg_parameter':outler_alg_param}]
+    #     }
         
     data_outlier_param['certain_error_to_NaN'] = certain_param
     data_outlier_param['uncertain_error_to_NaN'] = uncertain_param
-    
 
     return data_outlier_param
 

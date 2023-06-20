@@ -93,7 +93,6 @@ def pipeline(data, module_list):
             data = select_interface.get_data_result(select_method, data,  select_param)
             
         elif module_name =='data_integration':
-            module_param = param.set_integration_param(module_param)
             integration_type =module_param['integration_type']
             integration_param = module_param['integration_param']
             from Clust.clust.integration import integration_interface
