@@ -90,6 +90,8 @@ def get_one_feature_based_integration(dataSet, feature_name, duration, frequency
         data = dataSet[data_name]
         if duration:
             data = _get_multipleDF_sameDuration(data, duration, frequency)
+        else:
+            data = data.resample(frequency).mean()
 
         if feature_name in list(data.columns):
             if len(data) > 0:

@@ -74,7 +74,7 @@ def pipeline(data, module_list):
         if module_name == 'data_refinement': 
             from Clust.clust.preprocessing import processing_interface
             data= processing_interface.get_data_result('refinement', data, module_param)
-            
+
         if module_name =="data_outlier":
             module_param = param.set_outlier_param(module_param)
             from Clust.clust.preprocessing import processing_interface
@@ -117,6 +117,17 @@ def pipeline(data, module_list):
             data = processing_interface.get_data_result('scaling', data, module_param)
 
         print(get_shape(data))
+        
+        if isinstance(data, dict):
+            for processing_data in data.values():
+                if processing_data.empty:
+                    print("========= pipeline stop ::: data is empty =========")
+                    break
+
+        elif isinstance(data, pd.DataFrame):
+            if data.empty:
+                print("========= pipeline stop ::: data is empty =========")
+                break
         
     return data
 
