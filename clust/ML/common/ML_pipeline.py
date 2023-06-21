@@ -292,7 +292,7 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
     train_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
     model_parameter = model_info['model_parameter']
-    model_file_path = model_info['model_file_path']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
     
     cml = CML()
     cml.set_param(train_parameter)
