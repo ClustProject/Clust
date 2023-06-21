@@ -46,9 +46,12 @@ def get_data_result(integration_type, data_set, integration_param):
         if 'integration_frequency' in list(integration_param.keys()):
             frequency = integration_param['integration_frequency']
         else:
-            frequency = None
-            
+            frequency = None            
+        
+        
         result = get_one_feature_based_integration(data_set, feature_name, duration, frequency)
+
+        
         
     if integration_type =="multiple_dataset_integration":
         from Clust.clust.integration.integrationInterface import IntegrationInterface
@@ -72,6 +75,7 @@ def get_one_feature_based_integration(dataSet, feature_name, duration, frequency
     """
     def _get_multipleDF_sameDuration(data, duration, frequency):
         # Make Data with Full Duration [query_start_time ~ query_end_time]
+     
         
         start_time =duration['start_time']
         end_time = duration['end_time']
@@ -91,7 +95,8 @@ def get_one_feature_based_integration(dataSet, feature_name, duration, frequency
         if duration:
             data = _get_multipleDF_sameDuration(data, duration, frequency)
         else:
-            data = data.resample(frequency).mean()
+            pass #에러 발생하여 임시 주석처리
+            #data = data.resample(frequency).mean()
 
         if feature_name in list(data.columns):
             if len(data) > 0:
