@@ -132,6 +132,7 @@ def split_data_by_mode(X, y, split_ratio, transform_param):
     if transform_param['split_mode'] =='window_split':
         transform_param['future_step'] = None
         transform_param['past_step'] = tool.get_default_day_window_size(X)
+        print(transform_param)
         train_x, val_x = ML.split_data_by_ratio(X, split_ratio, transform_param['split_mode'], transform_param['past_step'])
 
     else:
@@ -291,7 +292,7 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
     train_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
     model_parameter = model_info['model_parameter']
-    model_file_path = model_info['model_file_path']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
     
     cml = CML()
     cml.set_param(train_parameter)
