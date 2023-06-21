@@ -132,6 +132,7 @@ def split_data_by_mode(X, y, split_ratio, transform_param):
     if transform_param['split_mode'] =='window_split':
         transform_param['future_step'] = None
         transform_param['past_step'] = tool.get_default_day_window_size(X)
+        print(transform_param)
         train_x, val_x = ML.split_data_by_ratio(X, split_ratio, transform_param['split_mode'], transform_param['past_step'])
 
     else:
