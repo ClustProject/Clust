@@ -95,8 +95,9 @@ def get_one_feature_based_integration(dataSet, feature_name, duration, frequency
         if duration:
             data = _get_multipleDF_sameDuration(data, duration, frequency)
         else:
-            pass #에러 발생하여 임시 주석처리
-            #data = data.resample(frequency).mean()
+            print(frequency)
+            if frequency:
+                data = data.resample(frequency).mean()
 
         if feature_name in list(data.columns):
             if len(data) > 0:
