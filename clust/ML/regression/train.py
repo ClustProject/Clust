@@ -31,20 +31,13 @@ class RegressionTrain():
 
         Example:
 
-            >>> params = { 'num_layers': 2, 
-            ...            'hidden_size': 64, 
-            ...            'dropout': 0.1,
-            ...            'bidirectional': True,
+            >>> params = { 'weight_decay': 0.00001, 
             ...            'lr':0.0001,
             ...            'device':"cpu",
             ...            'batch_size':16,
             ...            'n_epochs':10    }
         """
-        # TODO: parameters refactoring 
         self.train_params = train_params
-        # self.batch_size = params['batch_size']
-        # self.n_epochs = params['n_epochs']
-        # self.device = params['device']
 
     def set_model(self, model_method, model_params):
         """
@@ -52,6 +45,7 @@ class RegressionTrain():
 
         Args:
             model_method (string): model method name  
+            model_params (dictionary) : hyperparameter for model
         """
         self.model_params = model_params
 
@@ -72,10 +66,10 @@ class RegressionTrain():
 
         # regression task
         Args:
-            train_x (dataframe): train X data
-            train_y (dataframe): train y data (optional)
-            val_x (dataframe): validation X data
-            val_y (dataframe): validation y data (optional)
+            train_x (np.array): train X data
+            train_y (np.array): train y data (optional)
+            val_x (np.array): validation X data
+            val_y (np.array): validation y data (optional)
         """
         self.train_loader, self.valid_loader = self.model.create_trainloader(self.train_params['batch_size'], train_x, train_y, val_x, val_y)
 

@@ -34,7 +34,7 @@ class RegressionInference():
         Args:
             model_method (string): model method name  
             model_file_path (string): path for trained model  
-            model_params (dict): parameters to create a model
+            model_params (dict): hyperparameter for model
         """
         self.model_params = model_params
 
@@ -56,13 +56,8 @@ class RegressionInference():
         set data for inference & transform data
 
         Args:
-            infer_X (dataframe): Inference data
+            infer_X (np.array)): Inference data
     
-        Example:
-
-        >>> set_data(infer_X)
-        ...         infer_X : inference data
-
         """  
         self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], infer_X)
 

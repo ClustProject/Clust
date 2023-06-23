@@ -35,7 +35,7 @@ class RegressionTest():
         Args:
             model_method (string): model method name  
             model_file_path (string): path for trained model  
-            model_params (dict): parameters to create a model
+            model_params (dict): hyperparameter for model
         """
         self.model_params = model_params
 
@@ -57,15 +57,9 @@ class RegressionTest():
         set data for test
 
         Args:
-            test_X (dataframe): Test X data
-            test_y (dataframe): Test y data
+            test_X (np.array): Test X data
+            test_y (np.array): Test y data
 
-
-        Example:
-
-            >>> set_data(test_X, test_y, window_num)
-            ...         test_X : test X data
-            ...         test_y : test y data
 
         """  
         self.test_loader = self.model.create_testloader(self.test_params['batch_size'], test_X, test_y)
