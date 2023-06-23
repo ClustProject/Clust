@@ -192,7 +192,7 @@ def set_outlier_param(param):
     uncertain_param = param['uncertain_error_to_NaN']
     if uncertain_param['flag']:
         outler_alg_config = uncertain_param['outlier_detector_config']
-        outler_alg_config['alg_parameter'] = get_outlier_detection_param2(outler_alg_config['algorithm'], outler_alg_config['alg_parameter'])
+        outler_alg_config['alg_parameter'] = get_outlier_detection_param(outler_alg_config['algorithm'], outler_alg_config['alg_parameter'])
         uncertain_param ['param'] = {'outlierDetectorConfig' : [outler_alg_config]}
         del uncertain_param['outlier_detector_config']
         
@@ -201,7 +201,7 @@ def set_outlier_param(param):
 
     return data_outlier_param
 
-def get_outlier_detection_param2(algorithm, param):
+def get_outlier_detection_param(algorithm, param):
     """ outlier detection을 위한 parameter로 알고리즘과 이에 근거한 parameter를 입력 받으
 
     Args:
@@ -284,7 +284,7 @@ def get_outlier_detection_param2(algorithm, param):
     return result
 
 
-def get_outlier_detection_param(algorithm, algorithmParam):
+def get_outlier_detection_param_meta_server(algorithm, algorithmParam):
     Parameter = {
         "IF": {  # Estimators (1~100)
             # ensemble에 활용하는 모델 개수, i(default: 100, 데이터 크기에 적합하게 설정)
