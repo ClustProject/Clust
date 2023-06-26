@@ -7,7 +7,7 @@ from Clust.clust.pipeline import data_pipeline, param
 # KETIAppdataServer/dataDomainExploration
 # KETIAppTestCode/Domain, Cycle Data
 # 기타 EDA에서 활용되고 있음
-def clustering_app_c1(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam, model_type, cluster_num):
+def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam, model_type, cluster_num):
     # 1-1-1
 
     """_customized clustering function_ 
@@ -33,7 +33,6 @@ def clustering_app_c1(data_set, feature_name, min_max, timedelta_frequency_min, 
     # 1. preprocessing for oneDF
     from Clust.clust.preprocessing import processing_interface
     process_param = processing_interface.clustering_app_t1(min_max, timedelta_frequency_min)
-    # TODO JW ERROR preprocessing 처리
 
     # 2. preprocessing pipeline
     pipeline = [
@@ -56,7 +55,7 @@ def clustering_app_c1(data_set, feature_name, min_max, timedelta_frequency_min, 
     result_dic, plt1, plt2 = app_clustering(data,cluster_num )
     return result_dic, plt1, plt2
 
-def app_clustering(data, cluster_num ):
+def app_clustering(data, cluster_num, model_type ='som' ):
     """
     # SOM
     """
