@@ -56,7 +56,7 @@ class RegressionInference():
         set data for inference & transform data
 
         Args:
-            infer_X (np.array)): Inference data
+            infer_X (np.array): Inference data
     
         """  
         self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], infer_X)
@@ -68,7 +68,7 @@ class RegressionInference():
         Returns:
             preds (ndarray): prediction data
         """
-        print("\nStart inference\n")
+        print("\nStart inference\n") 
         preds = self.model.inference(self.infer_params, self.inference_loader)
 
         return preds

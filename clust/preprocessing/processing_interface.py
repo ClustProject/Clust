@@ -20,7 +20,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
             
     """
     if processing_param is None:
-        processing_param = get_default_processing_param()
+        processing_param = clustering_app_t1()
         
     if isinstance(data_input, dict):
         result = get_preprocessed_dataset(processing_type, processing_param, data_input)
@@ -31,7 +31,7 @@ def get_data_result(processing_type, data_input, processing_param=None):
 
     return result
 
-def get_default_processing_param(min_max={'min_num':{}, "max_num":{}}, timedelta_frequency_sec=None):
+def clustering_app_t1(min_max={'min_num':{}, "max_num":{}}, timedelta_frequency_sec=None):
     """
     get default_processing_param  (refining, min_max check(if min_max is not empty), sampling (if timedelta_frequency_sec is not None))
     

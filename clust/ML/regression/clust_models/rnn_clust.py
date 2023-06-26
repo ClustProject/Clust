@@ -236,8 +236,8 @@ class RNNClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            test_x (dataframe): test X data
-            test_y (dataframe): test y data
+            test_x (np.array): test X data
+            test_y (np.array): test y data
         
         Returns:
             test_loader (DataLoader) : test data loader
@@ -257,7 +257,7 @@ class RNNClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            infer_x (dataframe): inference X data
+            infer_x (np.array): inference X data
         
         Returns:
             inference_loader (DataLoader) : inference data loader

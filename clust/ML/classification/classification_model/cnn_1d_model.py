@@ -35,11 +35,9 @@ class CNNModel(BaseRegressionModel):
         train function for the regression task.
 
         Args:
-            params (dict): parameters for train
+            train_params (dict): parameters for train
             train_loader (Dataloader): train data loader
             valid_loader (Dataloader): validation data loader
-            num_epochs (integer): the number of train epochs
-            device (string): device for train
         """
         device = train_params['device']
         n_epochs = train_params['n_epochs']
@@ -135,9 +133,8 @@ class CNNModel(BaseRegressionModel):
         Predict Regression result for test dataset based on the trained model
 
         Args:
-            params (dict): parameters for test  # TBD
+            test_params (dict): parameters for test  # TBD
             test_loader (DataLoader): data loader
-            device (string): device for test
 
         Returns:
             preds (ndarray): prediction data
@@ -199,9 +196,8 @@ class CNNModel(BaseRegressionModel):
         Predict regression result for inference dataset based on the trained model
 
         Args:
-            params (dict): parameters for inference     # TBD
+            infer_params (dict): parameters for inference     # TBD
             inference_loader (DataLoader): inference data loader
-            device (string): device for inference
 
         Returns:
             preds (ndarray) : Inference result data
@@ -274,11 +270,10 @@ class CNNModel(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            train_x (dataframe): train X data
-            train_y (dataframe): train y data
-            val_x (dataframe): validation X data
-            val_y (dataframe): validation y data
-            window_num (integer): slice window number
+            train_x (np.array): train X data
+            train_y (np.array): train y data
+            val_x (np.array): validation X data
+            val_y (np.array): validation y data
 
         Returns:
             train_loader (DataLoader): train data loader
@@ -319,9 +314,8 @@ class CNNModel(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            test_x (dataframe): test X data
-            test_y (dataframe): test y data
-            window_num (integer): slice window number
+            test_x (np.array): test X data
+            test_y (np.array): test y data
         
         Returns:
             test_loader (DataLoader) : test data loader
@@ -343,8 +337,7 @@ class CNNModel(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            x_data (dataframe): inference X data
-            window_num (integer): slice window number
+            x_data (np.array): inference X data
         
         Returns:
             inference_loader (DataLoader) : inference data loader

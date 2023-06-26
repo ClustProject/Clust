@@ -25,19 +25,13 @@ class ClassificationTest():
 
         Example:
 
-            >>> param = { 'num_layers': 2, 
-            ...            'hidden_size': 64, 
-            ...            'dropout': 0.1,
-            ...            'bidirectional': True,
-            ...            "lr":0.0001,
+            >>> param = { "lr":0.0001,
             ...            "device":"cpu",
             ...            "batch_size":16,
             ...            "n_epochs":10    }
 
         """
         self.test_params = test_params
-        # self.batch_size = params['batch_size']
-        # self.device = params['device']
 
 
     def set_model(self, model_method, model_file_path, model_params):
@@ -46,12 +40,9 @@ class ClassificationTest():
 
         Args:
             model_method (string): model method name
+            model_file_path (string): path for trained model  
+            model_params (dict) : parameter for test
         """
-
-        # if model_method == 'LSTM_cf':
-        #     self.params["rnn_type"] = 'lstm'
-        # elif self.model_method == 'GRU_cf':
-        #     self.params["rnn_type"] = 'gru'
 
         self.model_params = model_params
         
@@ -75,17 +66,8 @@ class ClassificationTest():
         set data for test
 
         Args:
-            test_X (dataframe): Test X data
-            test_y (dataframe): Test y data
-            window_num (integer) : window size
-
-
-        Example:
-
-            >>> set_data(test_X, test_y, window_num)
-            ...         test_X : test X data
-            ...         test_y : test y data
-            ...         window_num : window size
+            test_X (np.array): Test X data
+            test_y (np.array): Test y data
 
         """  
         self.test_loader = self.model.create_testloader(self.test_params['batch_size'], test_X, test_y)

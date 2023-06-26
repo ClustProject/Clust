@@ -2,12 +2,13 @@ import pandas as pd
 import sys
 sys.path.append("../")
 import math
-
+from Clust.clust.pipeline import data_pipeline, param
 
 # KETIAppdataServer/dataDomainExploration
 # KETIAppTestCode/Domain, Cycle Data
 # 기타 EDA에서 활용되고 있음
-def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam, model_type, cluster_num):
+def clustering_app_c1(data_set, feature_name, min_max, timedelta_frequency_min, duration, NaNProcessingParam, model_type, cluster_num):
+    # 1-1-1
 
     """_customized clustering function_ 
         1) preprocessing for making one DF
@@ -31,38 +32,35 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     """
     # 1. preprocessing for oneDF
     from Clust.clust.preprocessing import processing_interface
-    process_param = processing_interface.get_default_processing_param(min_max, timedelta_frequency_min)
+    process_param = processing_interface.clustering_app_t1(min_max, timedelta_frequency_min)
     # TODO JW ERROR preprocessing 처리
 
-    # 2. one DF preparation
-    from Clust.clust.integration import integration_interface
-    integration_param ={"feature_name":feature_name, "duration":duration, "integration_frequency":timedelta_frequency_min }
-    data_DF = integration_interface.get_data_result("one_feature_based_integration", data_set, integration_param)
+    # 2. preprocessing pipeline
+    pipeline = [
+        ['data_integration',{'integration_type': 'one_feature_based_integration',
+                             'integration_param': {'feature_name': feature_name,
+                            'duration': duration,
+                            'integration_frequency': timedelta_frequency_min}}],
+        ['data_quality_check',{'quality_method': 'data_with_clean_feature','quality_param': {'nan_processing_param': NaNProcessingParam}}],
+        ['data_imputation',
+            {'flag': True,
+            'imputation_method': [{'min': 0,
+                'max': 30000,
+                'method': 'linear',
+                'parameter': {}}],
+            'total_non_NaN_ratio': 1}],
+        ['data_smoothing', {'flag': True, 'emw_param': 0.3}],
+        ['data_scaling', {'flag': True, 'method': 'minmax'}]]
     
-    # 3. quality check
-    from Clust.clust.quality import quality_interface
-    quality_param = {"nan_processing_param":NaNProcessingParam}
-    data = quality_interface.get_data_result("data_with_clean_feature", data_DF, quality_param)
+    data = data_pipeline.pipeline(data_set, pipeline)
+    result_dic, plt1, plt2 = app_clustering(data,cluster_num )
+    return result_dic, plt1, plt2
 
-    result_dic={}
-
-    #if len(data.columns) > 1:
-    # 4. preprocessing for clustering
-    from Clust.clust.preprocessing import processing_interface
-    imputation_param = {
-        "flag":True,
-        "imputation_method":[{"min":0,"max":300,"method":"linear", "parameter":{}}, 
-                            {"min":0,"max":10000,"method":"mean", "parameter":{}}],
-        "total_non_NaN_ratio":1 }
-    data = processing_interface.get_data_result('imputation', data, imputation_param)
-    process_param={'flag': True, 'emw_param':0.3}
-    data = processing_interface.get_data_result('smoothing', data, process_param)
-    process_param={'flag': True, 'method':'minmax'} 
-    data = processing_interface.get_data_result('scaling', data, process_param)
-    
+def app_clustering(data, cluster_num ):
     """
     # SOM
     """
+    model_type = 'som'
 
     if model_type =='som':
         parameter = {
@@ -99,9 +97,9 @@ def get_somClustering_result_from_dataSet(data_set, feature_name, min_max, timed
     from Clust.clust.ML.tool import util
     data_name = list(data.columns)
     result_dic = util.get_dict_from_two_array(data_name, result)
-
+    
     return result_dic, plt1, plt2
-
+    
 
 
 
