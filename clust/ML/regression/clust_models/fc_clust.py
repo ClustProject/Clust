@@ -199,10 +199,10 @@ class FCClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            train_x (dataframe): train X data
-            train_y (dataframe): train y data
-            val_x (dataframe): validation X data
-            val_y (dataframe): validation y data
+            train_x (np.array): train X data
+            train_y (np.array): train y data
+            val_x (np.array): validation X data
+            val_y (np.array): validation y data
 
         Returns:
             train_loader (DataLoader): train data loader
@@ -228,8 +228,8 @@ class FCClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            test_x (dataframe): test X data
-            test_y (dataframe): test y data
+            test_x (np.array): test X data
+            test_y (np.array): test y data
         
         Returns:
             test_loader (DataLoader) : test data loader
@@ -246,7 +246,7 @@ class FCClust(BaseRegressionModel):
 
         Args:
             batch_size (integer): batch size
-            infer_x (dataframe): inference X data
+            infer_x (np.array): inference X data
         
         Returns:
             inference_loader (DataLoader) : inference data loader

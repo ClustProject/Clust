@@ -30,18 +30,12 @@ class ClassificationInference():
 
         Example:
 
-            >>> param = { 'num_layers': 2, 
-            ...            'hidden_size': 64, 
-            ...            'dropout': 0.1,
-            ...            'bidirectional': True,
-            ...            "lr":0.0001,
+            >>> param = { "lr":0.0001,
             ...            "device":"cpu",
             ...            "batch_size":16,
             ...            "n_epochs":10    }
         """
         self.infer_params = infer_params
-        # self.batch_size = params['batch_size']
-        # self.device = params['device']
 
         
     def set_model(self, model_method, model_file_path, model_params):
@@ -51,12 +45,8 @@ class ClassificationInference():
         Args:
             model_method (string): model method name 
             model_file_path (string): path for trained model  
+            model_params (dict) : parameter for inference
         """
-        # model_method = model_method
-        # if model_method == 'LSTM_cf':
-        #     self.params["rnn_type"] = 'lstm'
-        # elif self.model_method == 'GRU_cf':
-        #     self.params["rnn_type"] = 'gru'
 
         self.model_params = model_params
         
@@ -80,15 +70,7 @@ class ClassificationInference():
         set data for inference & transform data
 
         Args:
-            data (dataframe): Inference data
-            window_num (integer) : window size
-    
-
-        Example:
-
-        >>> set_data(test_X, window_num)
-        ...         test_X : inference data
-        ...         window_num : window size
+            data (np.array): Inference data
 
         """  
         self.inference_loader = self.model.create_inferenceloader(self.infer_params['batch_size'], data)

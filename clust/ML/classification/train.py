@@ -36,10 +36,6 @@ class ClassificationTrain():
                          "n_epochs":10,}
         """
         self.train_params = train_params
-        # self.n_epochs = train_params['n_epochs']
-        # self.num_classes = train_params['num_classes']
-        # self.device = train_params['device']
-        # self.batch_size = train_params['batch_size']
 
 
     def set_model(self, model_method, model_params):
@@ -49,11 +45,7 @@ class ClassificationTrain():
         Args:
             model_method (string): model method name
         """
-        # if model_method == 'LSTM_cf':
-        #     self.model_params["rnn_type"] = 'lstm'
-        # elif self.model_method == 'GRU_cf':
-        #     self.model_params["rnn_type"] = 'gru'
-        
+       
         self.model_params = model_params
 
         # build initialized model
@@ -74,11 +66,10 @@ class ClassificationTrain():
         transform data for train
 
         Args:
-            train_x (dataframe): train X data
-            train_y (dataframe): train y data
-            val_x (dataframe): validation X data
-            val_y (dataframe): validation y data
-            window_num (integer) : window size
+            train_x (np.array): train X data
+            train_y (np.array): train y data
+            val_x (np.array): validation X data
+            val_y (np.array): validation y data
         """
         self.train_loader, self.valid_loader = self.model.create_trainloader(self.train_params['batch_size'], train_x, train_y, val_x, val_y)
         
@@ -90,8 +81,6 @@ class ClassificationTrain():
         """
         Train and return model
 
-        Returns:
-            model: train model
         """
         print("Start training model")
         
