@@ -10,6 +10,7 @@ from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
 from Clust.clust.ML.common import ML_pipeline
+from Clust.clust.ML.common import echart
 import numpy as np
 
 import torch
@@ -215,7 +216,17 @@ def test_data_preparation(params, model_meta, db_client):
 
 
 def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
+    """_summary_
 
+    Args:
+        model_meta (_type_): _description_
+        test_X_array (_type_): _description_
+        test_y_array (_type_): _description_
+        scaler_feature_dict (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     model_info = model_meta['model_info']
 
     if model_info['model_purpose'] == 'regression':
@@ -225,14 +236,14 @@ def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
 
     elif model_info['model_purpose'] == 'classification':
         preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_info["train_parameter"], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
-        result_metrics = classification_report(trues, preds, output_dict = True)
         df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'],  scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
 
-    result = {'df_result':df_result, 'result_metrics':result_metrics}
+        result_metrics = classification_report(trues, preds, output_dict = True)
+        
+    result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
+
 
     return result
-
-
 
 
 # --------------------------------- inference ---------------------------------------------------
