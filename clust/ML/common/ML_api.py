@@ -10,6 +10,7 @@ from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
 from Clust.clust.ML.common import ML_pipeline
+from Clust.clust.ML.common import echart
 import numpy as np
 
 import torch
@@ -228,7 +229,7 @@ def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
         result_metrics = classification_report(trues, preds, output_dict = True)
         df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'],  scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
 
-    result = {'df_result':df_result, 'result_metrics':result_metrics}
+    result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
 
     return result
 
