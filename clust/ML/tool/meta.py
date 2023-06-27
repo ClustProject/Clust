@@ -44,7 +44,8 @@ def read_model_meta_from_mongodb(mongodb_client, db_name, collection_name, model
     return model_meta 
 
 ##################Local Document 
-def read_model_meta_from_local(json_file_path, model_name):
+
+def read_model_meta_from_local(json_file_path, model_name=None):
     """model_name에 따른 메타를 읽음
 
     Args:
@@ -55,9 +56,26 @@ def read_model_meta_from_local(json_file_path, model_name):
         model_meta: 해당 model name의 모델 메타
     """
     model_meta = read_json(json_file_path)
-    model_meta = model_meta[model_name]
-    return model_meta
     
+    if model_name:
+        model_meta = model_meta[model_name]
+    else:
+        pass
+    return model_meta
+
+def read_model_list_from_local(json_file_path):
+    """model_info를 통해 model list를 읽어옴
+
+    Args:
+        json_file_path (str): model info가 적힌 file path
+
+    Returns:
+        model_list[array]: 모델 리스트
+    """
+    model_meta = read_json(json_file_path)
+    model_list = list(model_meta.keys())
+    return model_list
+
 def save_model_meta_into_local(json_file_path, new_model_meta):
     """model meta의 인포를 local에 기록함
 
