@@ -14,6 +14,70 @@ def save_model_meta_into_mongodb(mongodb_client, model_meta):
         return 500
 
 
+
+def read_model_meta_from_mongodb(mongodb_client, db_name, collection_name, model_name):
+    """read mongo db meta
+
+    Args:
+        mongodb_client (mongodb instance): meta mongodb instance
+        db name (string) : name
+        collection name (string): collection
+        model_name(string) : model or meta name
+
+    Returns:
+        model_meta (dict): mongo meta result
+        
+    """
+    model_meta = mongodb_client.get_document_by_json(db_name, collection_name,{'model_info.model_name':model_name} )
+    
+    return model_meta 
+    
+def read_model_meta_from_local(json_file_path):
+    model_meta = read_json(json_file_path)[0]
+    return model_meta
+    
+def save_model_meta_into_local(json_file_path, model_meta):
+    model_meta = write_json(json_file_path)
+    return model_meta
+    
+def read_json(json_file_path):
+    """
+    The function can read json file.  
+    Args:
+        json_file_path(string): json file path
+
+    Returns:
+        json_result(json): json file text
+    """
+    check_json_file (json_file_path)
+    if os.path.isfile(json_file_path):
+        with open(json_file_path, 'r') as json_file:
+            json_result = json.load(json_file)
+    return json_result
+
+def write_json(json_file_path, text):
+    """
+    The function writes text into json_file 
+    Args:
+        json_file_path(string): json file path
+        text(dict): text to be written 
+    """
+    with open(json_file_path, 'w') as outfile:
+        outfile.write(json.dumps(text))
+    
+def check_json_file (json_file_path):
+    if os.path.isfile(json_file_path):
+        pass
+    else: 
+        directory = os.path.dirname(json_file_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(json_file_path, 'w') as f:
+            data={}
+            json.dump(data, f, indent=2)
+            print("New json file is created")
+            
+"""
 def set_meta_for_train_data(data_meta, split_mode, feature_X_list, feature_y_list, data_y_flag, data_clean_option, transform_parameter, scaler_param, data_name_X, data_name_y, X_scalerFilePath, y_scalerFilePath):
     model_info_meta ={
         "trainDataInfo":data_meta,
@@ -99,7 +163,7 @@ def model_meta_update(data_meta, model_name, split_mode, feature_X_list, feature
 
     return  model_info_meta
 
-
+"""
 
 # def set_meta_for_train_data(model_info_meta, data_meta, split_mode, feature_X_list, feature_y_list, data_y_flag, data_clean_option, transform_parameter, scaler_param, data_name_X, data_name_y, X_scalerFilePath, y_scalerFilePath):
 
