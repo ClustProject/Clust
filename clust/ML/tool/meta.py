@@ -55,7 +55,7 @@ def read_model_meta_from_local(json_file_path, model_name):
         model_meta: 해당 model name의 모델 메타
     """
     model_meta = read_json(json_file_path)
-    model_meta = model_meta['model_name']
+    model_meta = model_meta[model_name]
     return model_meta
     
 def save_model_meta_into_local(json_file_path, new_model_meta):
@@ -69,7 +69,7 @@ def save_model_meta_into_local(json_file_path, new_model_meta):
         _type_: _description_
     """
     meta_info = read_json(json_file_path)
-    meta_info[new_model_meta["model_name"]] = new_model_meta
+    meta_info[new_model_meta['model_info']["model_name"]] = new_model_meta
     
     try :
         write_json(json_file_path, meta_info)
