@@ -230,12 +230,12 @@ def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
     model_info = model_meta['model_info']
 
     if model_info['model_purpose'] == 'regression':
-        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, model_info["train_parameter"], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
+        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, model_info)
         df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'], scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
         result_metrics =  metrics.calculate_metrics_df(df_result)
 
     elif model_info['model_purpose'] == 'classification':
-        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_info["train_parameter"], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
+        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_info)
         df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'],  scaler_feature_dict['scaler'], scaler_feature_dict['feature_list'], scaler_feature_dict['target'])
 
         result_metrics = classification_report(trues, preds, output_dict = True)
@@ -282,11 +282,7 @@ def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
     target = model_meta['ingestion_param_y']['feature_list']
 
     if model_info['model_purpose'] == 'regression':
-        preds = ML_pipeline.CLUST_regression_inference(infer_X, model_info['train_parameter'], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
-        print("==============================")
-        print(preds)
-        print(len(preds))
-        print(target)
+        preds = ML_pipeline.CLUST_regression_inference(infer_X, model_info)
 
         if model_meta['data_y_flag'] == True:
             if model_meta['scaler_param']['scaler_flag'] =='scale':
@@ -306,17 +302,12 @@ def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
                 prediction_result = pd.DataFrame(data={target: preds}, index=range(len(preds)))
 
     elif model_info['model_purpose'] == 'classification':
-        preds = ML_pipeline.clust_classification_inference(infer_X, model_info['train_parameter'], model_info['model_method'], model_info['model_file_path']['modelFile']["filePath"], model_info['model_parameter'])
-        print("==============================")
-        print(preds)
-        print(len(preds))
-        print(target)
+        preds = ML_pipeline.clust_classification_inference(infer_X, model_info)
+
         if model_meta['scaler_param']['scaler_flag'] =='scale':
             base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
             base_df_for_inverse[target[0]] = preds
-            print("base_df_for_inverse")
-            print(base_df_for_inverse)
-            prediction_result = pd.DataFrame(scaler_X.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
+            prediction_result = pd.DataFrame(scaler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
         else:
             prediction_result = pd.DataFrame(data={'value':preds}, index=range(len(preds)))
             

@@ -95,6 +95,7 @@ def read_model_list_from_local(json_file_path):
     """
     model_meta = read_json(json_file_path)
     model_list = list(model_meta.keys())
+    
     return model_list
 
 def save_model_meta_into_local(json_file_path, new_model_meta):

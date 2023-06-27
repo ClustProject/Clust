@@ -194,6 +194,7 @@ def CLUST_regresstion_train(train_X_array, train_y_array, val_X_array, val_y_arr
     model_method = model_info['model_method']
     model_parameter = model_info['model_parameter']
     model_file_path = model_info['model_file_path']['modelFile']['filePath']
+
     rml = RML()
     rml.set_param(train_parameter)
     rml.set_model(model_method, model_parameter)
@@ -204,7 +205,7 @@ def CLUST_regresstion_train(train_X_array, train_y_array, val_X_array, val_y_arr
 
 # Test pieline
 from Clust.clust.ML.regression.test import RegressionTest as RT
-def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, model_parameter):
+def CLUST_regresstion_test(test_X_array, test_y_array, model_info):
     """ Regression Test
 
     Args:
@@ -218,9 +219,13 @@ def CLUST_regresstion_test(test_X_array, test_y_array, testParameter, model_meth
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
     """
-    
+    test_parameter = model_info['train_parameter']
+    model_method = model_info['model_method']
+    model_parameter = model_info['model_parameter']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
+
     rt = RT()
-    rt.set_param(testParameter)
+    rt.set_param(test_parameter)
     rt.set_model(model_method, model_file_path, model_parameter)
     rt.set_data(test_X_array, test_y_array)
     preds, trues = rt.test()
@@ -274,7 +279,13 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
 
 # regression inference pipeline
 from Clust.clust.ML.regression.inference import RegressionInference as RI
-def CLUST_regression_inference(infer_X,inference_parameter, model_method, model_file_path, model_parameter):
+def CLUST_regression_inference(infer_X, model_info):
+
+    inference_parameter = model_info['train_parameter']
+    model_method = model_info['model_method']
+    model_parameter = model_info['model_parameter']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
+
     ri = RI()
     ri.set_param(inference_parameter)
     ri.set_model(model_method, model_file_path, model_parameter)
@@ -304,9 +315,15 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
 
 # classification test pipeline
 from Clust.clust.ML.classification.test import ClassificationTest as CT
-def clust_classification_test(test_X_array, test_y_array, testParameter, model_method, model_file_path, model_parameter):
+def clust_classification_test(test_X_array, test_y_array, model_info):
+
+    test_parameter = model_info['train_parameter']
+    model_method = model_info['model_method']
+    model_parameter = model_info['model_parameter']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
+
     ct = CT()
-    ct.set_param(testParameter)
+    ct.set_param(test_parameter)
     ct.set_model(model_method, model_file_path, model_parameter)
     ct.set_data(test_X_array, test_y_array)
     preds, probs, trues, acc = ct.test()
@@ -315,10 +332,17 @@ def clust_classification_test(test_X_array, test_y_array, testParameter, model_m
 
 
 from Clust.clust.ML.classification.inference import ClassificationInference as CI
-def clust_classification_inference(infer_X,inference_parameter, model_method, model_file_path, model_parameter):
+def clust_classification_inference(infer_X, model_info):
+
+    inference_parameter = model_info['train_parameter']
+    model_method = model_info['model_method']
+    model_parameter = model_info['model_parameter']
+    model_file_path = model_info['model_file_path']['modelFile']['filePath']
+
     ci = CI()
     ci.set_param(inference_parameter)
     ci.set_model(model_method, model_file_path, model_parameter)
     ci.set_data(infer_X)
     preds = ci.inference()
+    
     return preds
