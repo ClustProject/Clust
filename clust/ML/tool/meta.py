@@ -2,7 +2,7 @@ db_name ='model'
 collection_name ='meta'
 
 
-def save_model_meta_data(mongodb_client, model_meta):
+def save_model_meta_into_mongodb(mongodb_client, model_meta):
     try :
         result = mongodb_client.insert_document(db_name, collection_name, model_meta)
         print("======== OK ========")
