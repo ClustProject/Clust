@@ -32,21 +32,41 @@ def read_model_meta_from_mongodb(mongodb_client, db_name, collection_name, model
     
     return model_meta 
     
-def read_model_meta_from_local(json_file_path):
+def read_model_meta_from_local(json_file_path, model_name):
+    """model_name에 따른 메타를 읽음
+
+    Args:
+        json_file_path (str): model info가 적힌 file path
+        model_name (str): 정보를 읽으련ㄴ model name
+
+    Returns:
+        model_meta: 해당 model name의 모델 메타
+    """
     model_meta = read_json(json_file_path)
+    model_meta = model_meta['model_name']
     return model_meta
     
-def save_model_meta_into_local(json_file_path, model_meta):
+def save_model_meta_into_local(json_file_path, new_model_meta):
+    """model meta의 인포를 local에 기록함
+
+    Args:
+        json_file_path (str): model info json file의 패스
+        new_model_meta (dict): 정보를 새롭게 기록하려는 메타 데이터
+
+    Returns:
+        _type_: _description_
+    """
+    meta_info = read_json(json_file_path)
+    meta_info[new_model_meta["model_name"]] = new_model_meta
+    
     try :
-        write_json(json_file_path, model_meta)
+        write_json(json_file_path, meta_info)
         print("======== OK ========")
         return 200
     except Exception as e : 
         print("======== Fail ========")
         print(e)
         return 500
-    
-    return model_meta
     
 def read_json(json_file_path):
     """
@@ -70,11 +90,19 @@ def write_json(json_file_path, text):
         json_file_path(string): json file path
         text(dict): text to be written 
     """
+    check_json_file (json_file_path)
     with open(json_file_path, 'w') as outfile:
         outfile.write(json.dumps(text))
         
     
 def check_json_file (json_file_path):
+    """해당 json 파일이 있는지, 없다면 생성함 초기 정보는 {}
+    
+    Args:
+        json_file_path(string): json file path
+        
+    """
+    
     if os.path.isfile(json_file_path):
         pass
     else: 
