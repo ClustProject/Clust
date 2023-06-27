@@ -37,7 +37,15 @@ def read_model_meta_from_local(json_file_path):
     return model_meta
     
 def save_model_meta_into_local(json_file_path, model_meta):
-    model_meta = write_json(json_file_path)
+    try :
+        write_json(json_file_path)
+        print("======== OK ========")
+        return 200
+    except Exception as e : 
+        print("======== Fail ========")
+        print(e)
+        return 500
+    
     return model_meta
     
 def read_json(json_file_path):
@@ -64,6 +72,7 @@ def write_json(json_file_path, text):
     """
     with open(json_file_path, 'w') as outfile:
         outfile.write(json.dumps(text))
+        
     
 def check_json_file (json_file_path):
     if os.path.isfile(json_file_path):
