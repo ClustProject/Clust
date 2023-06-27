@@ -118,8 +118,19 @@ def get_univariate_df_by_selecting_clustering_data(data, clust_result, start_tim
             if class_value == str(clust_class):
                 result_df = pd.concat([result_df, data[ms_name]])
     result_df.columns = [feature]
-    # start time 지정 ???
     time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(result_df))
     result_df.set_index(time_index, inplace = True)
     
     return result_df
+
+def get_train_test_data_by_days(data, freq):
+    data_day_length = int(len(data)/(24*60/freq))
+    print("data_day_length : ", data_day_length)
+    split_day_length = int(data_day_length*0.8)
+    print("train_day_length : ", split_day_length)
+    split_length = int(split_day_length*(24*60/freq))
+
+    train = data[:split_length]
+    test = data[split_length:]
+
+    return train, test
