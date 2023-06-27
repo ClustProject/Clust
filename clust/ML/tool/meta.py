@@ -1,8 +1,8 @@
-db_name ='model'
-collection_name ='meta'
+import json
+import os
 
 
-def save_model_meta_into_mongodb(mongodb_client, model_meta):
+def save_model_meta_into_mongodb(mongodb_client, model_meta,db_name,collection_name):
     try :
         result = mongodb_client.insert_document(db_name, collection_name, model_meta)
         print("======== OK ========")
@@ -33,12 +33,12 @@ def read_model_meta_from_mongodb(mongodb_client, db_name, collection_name, model
     return model_meta 
     
 def read_model_meta_from_local(json_file_path):
-    model_meta = read_json(json_file_path)[0]
+    model_meta = read_json(json_file_path)
     return model_meta
     
 def save_model_meta_into_local(json_file_path, model_meta):
     try :
-        write_json(json_file_path)
+        write_json(json_file_path, model_meta)
         print("======== OK ========")
         return 200
     except Exception as e : 
