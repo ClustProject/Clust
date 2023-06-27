@@ -1,6 +1,27 @@
 import json
 import os
 
+def read_model_meta_by_db_style(model_meta_db_style, meta_json_path, model_name): 
+    """db style에 따라 model meta를 읽어옴, 아직 모듈화 안되어 있음 우선 여기에..
+    # TODO 수정해야함
+
+    Args:
+        model_meta_db_style (str): document/influxdb
+        meta_json_path (str): json의 meta path
+        model_name (str): model name
+
+    Returns:
+        model_meta(str): model meta
+    """
+    if  model_meta_db_style == "document":
+        from Clust.clust.ML.tool import meta
+        model_meta = read_model_meta_from_local(meta_json_path, model_name)
+    else:
+        # TODO 나중에 고쳐야 함
+        model_meta = read_model_meta_from_mongodb(mongodb_client, 'model', 'meta', model_name)
+        model_meta = model_meta[0]
+    return model_meta
+
 ##################Mongo DB
 def save_model_meta_into_mongodb(mongodb_client, model_meta,db_name,collection_name):
     """model meta 를 몽고디비에 저장함
