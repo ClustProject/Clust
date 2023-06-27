@@ -55,9 +55,18 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
     result_dic, plt1, plt2 = app_clustering(data,cluster_num )
     return result_dic, plt1, plt2
 
-def app_clustering(data, cluster_num, model_type ='som' ):
-    """
-    # SOM
+def app_clustering(data, cluster_num, model_type ='som'):
+
+    """clustering number에 기반하녀 model type을 설정하고 클러스터링을 수행함
+    Args:
+        data(pd.DataFrame)
+        cluster_num(int)
+        model_type(str):som, kmeans
+        
+    Returns:
+        result_dic (dict)
+        plt1
+        plt2
     """
     model_type = 'som'
 
