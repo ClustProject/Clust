@@ -240,7 +240,7 @@ def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
 
         result_metrics = classification_report(trues, preds, output_dict = True)
         
-    result = {'df_result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
+    result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
 
 
     return result
