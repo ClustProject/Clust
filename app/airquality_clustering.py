@@ -1,63 +1,21 @@
 import sys
-sys.path.append("../../../")
 sys.path.append("../..")
+sys.path.append("../../../")
 
 import math
-import datetime
 import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 
 from Clust.clust.pipeline import data_pipeline
-from Clust.setting import influx_setting_KETI as ins
-from Clust.clust.ingestion.mongo import mongo_client
-from Clust.clust.meta.metaDataManager import bucketMeta
-
 from Clust.clust.ML.clustering.interface import clusteringByMethod
 from Clust.clust.tool.plot import plot_interface
 from Clust.clust.ML.tool import util
 
-def set_case_111_pipeparam(bucket, integration_freq_min, feature_name):
-    # 1. refine_param
-    mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
-    min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, bucket)
-    timedelta_frequency_min = datetime.timedelta(minutes= integration_freq_min)
-
-    refine_param = {"remove_duplication": {'flag': True}, 
-                    "static_frequency": {'flag': True, 'frequency': timedelta_frequency_min}}
-
-    outlier_param ={
-        "certain_error_to_NaN": {'flag': True, 'data_min_max_limit':min_max}, 
-        "uncertain_error_to_NaN":{'flag': False}}
-
-
-    cycle_split_param={
-        "split_method":"cycle",
-        "split_param":{
-            'feature_cycle' : 'Day',
-            'feature_cycle_times' : 1}
-    }
-
-    integration_param={
-        "integration_param":{"feature_name":feature_name, "duration":None, "integration_frequency":timedelta_frequency_min },
-        "integration_type":"one_feature_based_integration"
-    }
-        
-    quality_param = {
-        "quality_method":"data_with_clean_feature", 
-        "quality_param":{"nan_processing_param":{'type':'num', 'ConsecutiveNanLimit':4, 'totalNaNLimit':19}}
-    }
-
-    pipeline = [['data_refinement', refine_param],
-                ['data_outlier', outlier_param],
-                ['data_split', cycle_split_param],
-                ['data_integration', integration_param],
-                ['data_quality_check', quality_param]]
-    
-    return pipeline
-
-
-def clustering_case_111(processing_data, cluster_num):
+def pipeline_clustering(processing_data, cluster_num):
+    """
+    공기질 시나리오의 Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 imputation&smoothing preprocessing 처리를 더한 모듈
+    """
     # 1. Imputation & Smoothing
     ## 1.1. Set imputation & smoothing param
     imputation_param = {"flag":True,
@@ -98,20 +56,23 @@ def clustering_case_111(processing_data, cluster_num):
     plt1.show()
     plt2.show()
 
-    return result_dic
-
-def get_clustering_result_distribution(clust_result, clust_class_list):
-    distribution_result = {}
-    for clust_class in clust_class_list:
+    ## clust class 별 존재하는 데이터 이름과 개수를 출력
+    clustering_result_by_class = {}
+    for num in range(cluster_num):
         name_list = []
-        for name, c_value in clust_result.items():
-            if str(clust_class) == c_value:
+        for name, c_value in result_dic.items():
+            if str(num) == c_value:
                 name_list.append(name)
+        class_num = len(name_list)
         unique_name_list= set([n.split("/")[0] for n in name_list])
-        distribution_result[clust_class] = unique_name_list
-    return distribution_result
+        clustering_result_by_class[num] = [unique_name_list, class_num]
+
+    return result_dic, clustering_result_by_class
 
 def get_univariate_df_by_selecting_clustering_data(data, clust_result, start_time, feature, frequency, clust_class_list):
+    """
+    Clustering 결과에서 선택한 데이터을 기반으로 integration vertical 진행하는 모듈
+    """
     result_df = pd.DataFrame()
     for clust_class in clust_class_list:
         for ms_name, class_value in clust_result.items():
@@ -123,14 +84,18 @@ def get_univariate_df_by_selecting_clustering_data(data, clust_result, start_tim
     
     return result_df
 
-def get_train_test_data_by_days(data, freq):
-    data_day_length = int(len(data)/(24*60/freq))
-    print("data_day_length : ", data_day_length)
-    split_day_length = int(data_day_length*0.8)
-    print("train_day_length : ", split_day_length)
-    split_length = int(split_day_length*(24*60/freq))
 
-    train = data[:split_length]
-    test = data[split_length:]
-
-    return train, test
+# def get_clustering_result_by_input_clust_class(clust_result, clust_class_list):
+#     """
+#     입력한 Clust Class 번호에 존재하는 데이터 이름을 출력하는 모듈
+#     """
+#     distribution_result = {}
+#     for clust_class in clust_class_list:
+#         name_list = []
+#         for name, c_value in clust_result.items():
+#             if str(clust_class) == c_value:
+#                 name_list.append(name)
+#         class_num = len(name_list)
+#         unique_name_list= set([n.split("/")[0] for n in name_list])
+#         distribution_result[clust_class] = [unique_name_list, class_num]
+#     return distribution_result

@@ -15,12 +15,17 @@ from Clust.clust.ML.tool import util
 
 def set_case_113_pipeparam(bucket, integration_freq_min, feature_name):
     timedelta_frequency_min = datetime.timedelta(minutes= integration_freq_min)
+    
+    refine_param = {"remove_duplication": {'flag': True}, 
+                    "static_frequency": {'flag': True, 'frequency': timedelta_frequency_min}}
+
     integration_param={
         "integration_param":{"feature_name":feature_name, "duration":None, "integration_frequency":timedelta_frequency_min},
         "integration_type":"one_feature_based_integration"
     }
 
-    pipeline = [['data_integration', integration_param]]
+    pipeline = [['data_refinement', refine_param],
+                ['data_integration', integration_param]]
     
     return pipeline
 
