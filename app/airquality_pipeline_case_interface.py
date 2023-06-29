@@ -84,7 +84,7 @@ def air_case_1_1_case_1_2(bucket_name, processing_freq, feature_name, mongo_clie
 
     pipeline = [['data_refinement', param["refine_param"]],
                 ['data_outlier', param["outlier_param"]],
-                ['data_split', param["cycle_split_param"]],
+                ['data_split', param["split_param"]],
                 ['data_integration', param["integration_param"]],
                 ['data_quality_check', param["quality_param"]]]
     
@@ -95,7 +95,7 @@ def air_case_1_3(bucket_name, processing_freq, feature_name, mongo_client):
 
     pipeline = [['data_refinement', param["refine_param"]],
                 ['data_outlier', param["outlier_param"]],
-                ['data_split', param["cycle_split_param"]],
+                ['data_split', param["split_param"]],
                 ['data_integration', param["integration_param"]]]
     return pipeline
 
@@ -108,6 +108,19 @@ def air_case_1_4(processing_freq, feature_name):
     return pipeline
 
 def get_univariate_df_by_integrating_vertical(processing_data, start_time, feature, frequency):
+    """
+    입력 DataSet 혹은 DataFrame(Horizontal integration)을 하나의 Feature만 갖는 데이터로 변형하는 모듈
+    즉, DataSet의 Data들 혹은 Horizontal integration data의 각 열들을 vertical integration을 하여 하나의 Feature만 갖는 데이터로 변형
+
+    Args:
+        processing_data (Dictionary or Dataframe) : 입력 Data set 혹은 Horizontal integration data
+        start_time (pd.to_datetime) : 데이터 통합시 새로 설정하고 싶은 시작 시간
+        feature (string) : 통합된 데이터의 컬럼 명
+        frequency (int) : 데이터 통합시 새로 설정하고 싶은 freq
+
+    Return:
+        DataFrame (result_df) : univariate df
+    """
     result_df = pd.DataFrame()
     for name in processing_data:
         result_df = pd.concat([result_df, processing_data[name]])
