@@ -42,7 +42,7 @@ def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
     
     
 #YK
-def transDFtoNP(dfX, windowNum = 0, dim = None):
+def transDFtoNP_infer(dfX, windowNum = 0, dim = None):
     """
     Make NumpyArray by input DataFrame.
     if windowNum = 0 ----> slice X by day

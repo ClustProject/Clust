@@ -5,7 +5,7 @@ sys.path.append("../../")
 sys.path.append("../../../")
 
 from sklearn.metrics import classification_report
-from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf
+from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf, transDFtoNP_infer
 from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
@@ -247,34 +247,28 @@ def ML_test(model_meta, test_X_array, test_y_array, scaler_feature_dict):
 
 
 # --------------------------------- inference ---------------------------------------------------
-def infer_data_preparation(params, model_meta, db_client):
-
-    scaled_infer_X, scaler_X, scaler_y = get_scaled_data(params, model_meta, db_client)
-    infer_X = transfrom_infer_data(model_meta, scaled_infer_X)
-
-    return infer_X, scaler_X, scaler_y
-
-
-def get_scaled_data(params, model_meta, db_client):
-
-    data_X = db_client.get_data(params['ingestion_param_X']['bucket_name'], params['ingestion_param_X']['ms_name'])
-    scaled_infer_X, scaler_X = ml_scaler.get_scaled_test_data(data_X[model_meta['ingestion_param_X']['feature_list']], model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
-    scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
-
-    return scaled_infer_X, scaler_X, scaler_y
-
-def transfrom_infer_data(model_meta, scaled_infer_X):
-
-    if model_meta['model_info']['model_purpose'] == 'regression':
-        infer_X = trans_df_to_np_inf(scaled_infer_X)
+def get_scaled_np_data(data, scaler, scaler_param):
+    if scaler_param=='scale':
+        scaled_data = scaler.transform(data)
     else:
-        dim = None
-        if model_meta['model_info']['model_method'] == "FC_cf":
-            dim = 2
-        infer_X = trans_df_to_np_inf(scaled_infer_X, model_meta["transform_param"]["past_step"], dim)
-    
-    return infer_X
+        scaled_data = data.copy()
+    return scaled_data
 
+def get_scaled_infer_data(data, scaler_file_path, scaler_param):
+
+    scaler =None
+    result = data
+    if scaler_param =='scale':
+        if scaler_file_path:
+            scaler = ml_scaler.get_scaler_file(scaler_file_path)
+            result = get_scaled_np_data(data, scaler, scaler_param)
+    return result, scaler
+
+def infer_data_preparation(model_meta, data):
+    scaled_infer_X, scaler_X = get_scaled_infer_data(data, model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
+    scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
+    
+    return scaled_infer_X, scaler_X, scaler_y
 
 def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
 
@@ -321,3 +315,32 @@ def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
 
 
 # df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'], scaler, target, target[0])
+
+
+# def infer_data_preparation(params, model_meta, db_client):
+
+#     scaled_infer_X, scaler_X, scaler_y = get_scaled_data(params, model_meta, db_client)
+#     infer_X = transfrom_infer_data(model_meta, scaled_infer_X)
+
+#     return infer_X, scaler_X, scaler_y
+
+
+# def get_scaled_data(params, model_meta, db_client):
+
+#     data_X = db_client.get_data(params['ingestion_param_X']['bucket_name'], params['ingestion_param_X']['ms_name'])
+#     scaled_infer_X, scaler_X = ml_scaler.get_scaled_test_data(data_X[model_meta['ingestion_param_X']['feature_list']], model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
+#     scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
+
+#     return scaled_infer_X, scaler_X, scaler_y
+
+# def transfrom_infer_data(model_meta, scaled_infer_X):
+
+#     if model_meta['model_info']['model_purpose'] == 'regression':
+#         infer_X = trans_df_to_np_inf(scaled_infer_X)
+#     else:
+#         dim = None
+#         if model_meta['model_info']['model_method'] == "FC_cf":
+#             dim = 2
+#         infer_X = trans_df_to_np_inf(scaled_infer_X, model_meta["transform_param"]["past_step"], dim)
+    
+#     return infer_X
