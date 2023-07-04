@@ -155,7 +155,7 @@ class RNNClust(BaseRegressionModel):
 
             for x_infer in inference_loader:
 
-                x_infer = x_infer.view(batch_size, -1, n_features).to(device)
+                x_infer = x_infer.view([batch_size, -1, n_features]).to(device)
 
                 self.model.to(device)
                 

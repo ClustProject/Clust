@@ -268,9 +268,10 @@ def infer_data_preparation(model_meta, data):
     scaled_infer_X, scaler_X = get_scaled_infer_data(data, model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
     scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
     
-    return scaled_infer_X, scaler_X, scaler_y
+    return scaled_infer_X, scaler_y
 
-def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
+
+def ML_inference(model_meta, infer_X, scaler_y):
 
     model_info = model_meta['model_info']
     target = model_meta['ingestion_param_y']['feature_list']
@@ -278,69 +279,14 @@ def ML_inference(model_meta, infer_X, scaler_X, scaler_y):
     if model_info['model_purpose'] == 'regression':
         preds = ML_pipeline.CLUST_regression_inference(infer_X, model_info)
 
-        if model_meta['data_y_flag'] == True:
-            if model_meta['scaler_param']['scaler_flag'] =='scale':
-                base_df_for_inverse = pd.DataFrame(columns=model_meta['ingestion_param_y']['feature_list'], index=range(len(preds)))
-                base_df_for_inverse[model_meta['ingestion_param_y']['feature_list'][0]] = preds
-                prediction_result = pd.DataFrame(scaler_y.inverse_transform(base_df_for_inverse), columns=model_meta['ingestion_param_y']['feature_list'], index=base_df_for_inverse.index)
-            else:
-                prediction_result = pd.DataFrame(data={"value": preds}, index=range(len(preds)))
-        else:
-            if model_meta['scaler_param']['scaler_flag'] =='scale':
-                base_df_for_inverse = pd.DataFrame(columns=model_meta['ingestion_param_X']['feature_list'], index=range(len(preds)))
-                base_df_for_inverse[target[0]] = preds
-                inverse_result = pd.DataFrame(scaler_X.inverse_transform(base_df_for_inverse), columns=model_meta['ingestion_param_X']['feature_list'], index=base_df_for_inverse.index)
-                target_data = inverse_result[target[0]]
-                prediction_result = pd.DataFrame(data={target: target_data}, index=range(len(preds)))
-            else:
-                prediction_result = pd.DataFrame(data={target: preds}, index=range(len(preds)))
-
     elif model_info['model_purpose'] == 'classification':
         preds = ML_pipeline.clust_classification_inference(infer_X, model_info)
 
-        if model_meta['scaler_param']['scaler_flag'] =='scale':
-            base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
-            base_df_for_inverse[target[0]] = preds
-            prediction_result = pd.DataFrame(scaler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
-        else:
-            prediction_result = pd.DataFrame(data={'value':preds}, index=range(len(preds)))
+    if model_meta['scaler_param']['scaler_flag'] =='scale':
+        base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
+        base_df_for_inverse[target[0]] = preds
+        prediction_result = pd.DataFrame(scaler_y.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
+    else:
+        prediction_result = pd.DataFrame(data={"value": preds}, index=range(len(preds)))
             
     return prediction_result
-
-
-
-
-
-
-
-
-# df_result = ml_data.get_prediction_df_result(preds, trues, model_meta['scaler_param']['scaler_flag'], scaler, target, target[0])
-
-
-# def infer_data_preparation(params, model_meta, db_client):
-
-#     scaled_infer_X, scaler_X, scaler_y = get_scaled_data(params, model_meta, db_client)
-#     infer_X = transfrom_infer_data(model_meta, scaled_infer_X)
-
-#     return infer_X, scaler_X, scaler_y
-
-
-# def get_scaled_data(params, model_meta, db_client):
-
-#     data_X = db_client.get_data(params['ingestion_param_X']['bucket_name'], params['ingestion_param_X']['ms_name'])
-#     scaled_infer_X, scaler_X = ml_scaler.get_scaled_test_data(data_X[model_meta['ingestion_param_X']['feature_list']], model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
-#     scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
-
-#     return scaled_infer_X, scaler_X, scaler_y
-
-# def transfrom_infer_data(model_meta, scaled_infer_X):
-
-#     if model_meta['model_info']['model_purpose'] == 'regression':
-#         infer_X = trans_df_to_np_inf(scaled_infer_X)
-#     else:
-#         dim = None
-#         if model_meta['model_info']['model_method'] == "FC_cf":
-#             dim = 2
-#         infer_X = trans_df_to_np_inf(scaled_infer_X, model_meta["transform_param"]["past_step"], dim)
-    
-#     return infer_X
