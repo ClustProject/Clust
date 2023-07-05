@@ -43,7 +43,7 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
             - scale_method (string): 스케일 방법
 
     Returns:
-        _data_X(pd.DataFrame), data_y(pd.DataFrame):스케일링을 거친 각각의 데이터프레임
+        dataX_scaled (pd.DataFrame), datay_scaled (pd.DataFrame):스케일링을 거친 X, y 데이터프레임
     """
 
     # X Data Scaling
@@ -68,24 +68,46 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
 
     return dataX_scaled, datay_scaled
 
-from Clust.clust.ML.tool import scaler as ml_scaler
 def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path, scaler_param):
-    """_summary_
+    """X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
 
     Args:
-        data_X (_type_): _description_
-        data_y (_type_): _description_
-        X_scaler_file_path (_type_): _description_
-        y_scaler_file_path (_type_): _description_
-        scaler_param (_type_): _description_
+        data_X (pd.DataFrame): X 데이터
+        data_y (pd.DataFrame): y 데이터
+        X_scaler_file_path (str): X 스케일러 파일 path
+        y_scaler_file_path (str): y 스케일러 파일 path
+        scaler_param (dict): scaler 관련 파라미터
 
     Returns:
-        _type_: _description_
+        test_X (pd.DataFrame): scaled X
+        scaler_X (scaler): X scaler
+        test_y (pd.DataFrame): scaled y
+        scaler_y (scaler): y scaler
     """
-    
+    from Clust.clust.ML.tool import scaler as ml_scaler
     test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
     test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, y_scaler_file_path, scaler_param)
+    
     return test_X, scaler_X , test_y, scaler_y 
+
+def X_data_scaling_infer(data_X, X_scaler_file_path, y_scaler_file_path, scaler_param):
+    """X 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
+
+    Args:
+        data_X (pd.DataFrame): X 데이터
+        X_scaler_file_path (str): X 스케일러 파일 path
+        y_scaler_file_path (str): y 스케일러 파일 path
+        scaler_param (dict): scaler 관련 파라미터
+
+    Returns:
+        infer_X (pd.DataFrame): scaled X
+        scaler_y (scaler): y scaler
+    """
+    from Clust.clust.ML.tool import scaler as ml_scaler
+    infer_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
+    scaler_y = ml_scaler.get_scaler_file(y_scaler_file_path)
+    
+    return infer_X, scaler_y
 
 ############# Clean
 def clean_low_quality_column(data, transform_info):
