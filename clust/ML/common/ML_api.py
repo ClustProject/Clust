@@ -146,20 +146,15 @@ def train_data_preparation(params, influxdb_client):
                                                                                      params['ingestion_param_y']['ms_name'], 
                                                                                      data_y, 
                                                                                      params['scaler_param'])
-    
-    
-    
     # 3.clean column
     dataX_scaled = ML_pipeline.clean_low_quality_column(dataX_scaled, 
                                                         params['transform_param'])
-
     # 4. split train/Val
     split_ratio = 0.8
     train_X, val_X, train_y, val_y, params['transform_param']= ML_pipeline.split_data_by_mode(dataX_scaled, 
                                                                                              datay_scaled, 
                                                                                              split_ratio, 
                                                                                              params['transform_param'])
-    
     # 5. Transform array style
     train_X_array, train_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], 
                                                                             train_X, 
@@ -167,31 +162,31 @@ def train_data_preparation(params, influxdb_client):
     val_X_array, val_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], 
                                                                         val_X, 
                                                                         val_y)
-        
-        
     
     return train_X_array, train_y_array, val_X_array, val_y_array
 
-def ML_training(params, train_X_array, train_y_array, val_X_array, val_y_array):
+def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
+    """ train using train/val data and given model information
+    Args:
+        params (dict): parameters including 'model_info' and 'ingestion_param_X'.
+        train_X_array (ndarray): train X data
+        train_y_array (ndarray): train y data
+        val_X_array (ndarray): validation X data
+        val_y_array (ndarray): validation y data
+    Returns:
+        params: trained model info including model file path.
+    """
     # model info update
-
     from Clust.clust.ML.common import model_parameter_setting
     params['model_info']['seq_len'] = train_X_array.shape[1] 
     params['model_info']['input_size'] = train_X_array.shape[2] 
     params['model_info']['model_parameter'] = model_parameter_setting.set_model_parameter(params['model_info']) 
-    model_info = params['model_info']
-
-    # model info update
-    from Clust.clust.ML.common import model_parameter_setting
-    model_info['seq_len'] = train_X_array.shape[1] 
-    model_info['input_size'] = train_X_array.shape[2] 
-    model_info['model_parameter'] = model_parameter_setting.set_model_parameter(params['model_info']) 
 
     from Clust.clust.ML.tool import model as ml_model
-    train_data_path_list = [model_info['model_name'] , params['ingestion_param_X']['ms_name']]
-    model_file_path = ml_model.get_model_file_path(train_data_path_list, model_info['model_method'] )
+    train_data_path_list = [params['model_info']['model_name'] , params['ingestion_param_X']['ms_name']]
+    model_file_path = ml_model.get_model_file_path(train_data_path_list, params['model_info']['model_method'] )
 
-    model_info['model_file_path'] = {
+    params['model_info']['model_file_path'] = {
         "modelFile":{
             "fileName":"model.pth",
             "filePath":model_file_path
@@ -200,22 +195,20 @@ def ML_training(params, train_X_array, train_y_array, val_X_array, val_y_array):
 
     # model training
     # input 순서 일관되도록 펑션 수정
-    if model_info['model_purpose'] == 'regression':    
+    if params['model_info']['model_purpose'] == 'regression':    
         ML_pipeline.CLUST_regresstion_train(train_X_array, 
                                             train_y_array, 
                                             val_X_array, 
                                             val_y_array,
-                                            model_info)
-    elif model_info['model_purpose']  == 'classification':
+                                            params['model_info'])
+    elif params['model_info']['model_purpose']  == 'classification':
         ML_pipeline.CLUST_classification_train(train_X_array, 
                                                train_y_array, 
                                                val_X_array, 
                                                val_y_array, 
-                                               model_info)
+                                               params['model_info'])
 
     return params
-
-
 
 # --------------------------------- test ---------------------------------------------------
 def test_data_preparation(params, influxdb_client):
@@ -223,7 +216,7 @@ def test_data_preparation(params, influxdb_client):
         1. Ingest 2. Scale 3. Transform
 
     Args:
-        params (dict): parameters including ingestion info, 'scaler_info', and 'transform_info'.
+        params (dict): parameters including 'ingestion_param_X', 'ingestion_param_y', 'scaler_param', and 'transform_param'.
         influxdb_client (influxdb client): influxdb client.
 
     Returns:
@@ -232,15 +225,13 @@ def test_data_preparation(params, influxdb_client):
         scaler_X (scaler): X scaler
         scaler_y (scaler): y scaler
     """
-    scaler_info = params['scaler_info']
-
     # 1. Oirignla data ingestion
     data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], params['data_y_flag'], params['ingestion_param_y'], 'ms_all', influxdb_client)
 
-    test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, params['scaler_info']['scaler_file_path']['XScalerFile']['filePath'], params['scaler_info']['scaler_flag'])
-    test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, params['scaler_info']['scaler_file_path']['yScalerFile']['filePath'], params['scaler_info']['scaler_flag'])
+    test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, params['scaler_param']['scaler_file_path']['XScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
+    test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, params['scaler_param']['scaler_file_path']['yScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
 
-    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(params["transform_info"], test_X, test_y)
+    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], test_X, test_y)
 
     return test_X_array, test_y_array, scaler_X, scaler_y
 
@@ -255,35 +246,32 @@ def test_data_preparation(params, influxdb_client):
 
 #     return test_X_array, test_y_array, scaler_X, scaler_y
 
-def ml_test(params, test_X_array, test_y_array, scaler):
+def ML_test(params, test_X_array, test_y_array, scaler):
     """test using given data and model information
 
     Args:
-        params (dict): parameters including 'model_info', 'scaler_info', 'ingestion_param_X' and 'ingestion_param_y'.
+        params (dict): parameters including 'model_info', 'scaler_param', 'ingestion_param_X' and 'ingestion_param_y'.
         test_X_array (ndarray): test X data
         test_y_array (ndarray): test y data
         scaler (scaler): X or y sclaer
 
     Returns:
-        result: dictionary contains Echart format Dataframe result and result metrics
+        result (dict): dictionary contains Echart format Dataframe result and result metrics
     """
-    model_info = params['model_info']
-    scaler_info = params['scaler_param']
-
     if params['data_y_flag']:
         feature_list = params['ingestion_param_y']['feature_list']
     else:
         feature_list = params['ingestion_param_X']['feature_list']
     target = params['ingestion_param_y']['feature_list'][0]
 
-    if model_info['model_purpose'] == 'regression':
-        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, model_info)
-        df_result = ml_data.get_prediction_df_result(preds, trues, scaler_info['scaler_flag'], scaler['scaler'], feature_list, target)
+    if params['model_info']['model_purpose'] == 'regression':
+        preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, params['model_info'])
+        df_result = ml_data.get_prediction_df_result(preds, trues, params['scaler_param']['scaler_flag'], scaler, feature_list, target)
         result_metrics =  metrics.calculate_metrics_df(df_result)
 
-    elif model_info['model_purpose'] == 'classification':
-        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, model_info)
-        df_result = ml_data.get_prediction_df_result(preds, trues, scaler_info['scaler_flag'],  scaler, feature_list, target)
+    elif params['model_info']['model_purpose'] == 'classification':
+        preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, params['model_info'])
+        df_result = ml_data.get_prediction_df_result(preds, trues, params['scaler_param']['scaler_flag'],  scaler, feature_list, target)
 
         result_metrics = classification_report(trues, preds, output_dict = True)
         
@@ -341,7 +329,15 @@ def _get_scaled_np_data(data, scaler, scaler_param):
     return scaled_data
 
 def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
-
+    """return scaled data and scaler
+    Args:
+        data (ndarray): given data
+        scaler_file_path (str): scaler file path
+        scaler_param (bool): scaler flag
+    Returns:
+        result (ndarray): scaled data
+        scaler (scaler): scaler
+    """
     scaler =None
     result = data
     if scaler_param =='scale':
@@ -365,24 +361,20 @@ def ML_inference(params, infer_X_array, scaler):
     """_summary_
 
     Args:
-        params (dict): parameters including 'model_info', 'scaler_info', and 'ingestion_param_y'
+        params (dict): parameters including 'model_info', 'scaler_param', and 'ingestion_param_y'
         infer_X_array (ndarray): inference X data
         scaler (scaler): y scaler
 
     Returns:
         prediction_result (pd.DataFrame): prediction result 
     """
-
-    model_info = params['model_info']
-    scaler_info = params['scaler_param']
-
-    if model_info['model_purpose'] == 'regression':
-        preds = ML_pipeline.CLUST_regression_inference(infer_X_array, model_info)
-    elif model_info['model_purpose'] == 'classification':
-        preds = ML_pipeline.clust_classification_inference(infer_X_array, model_info)
+    if params['model_info']['model_purpose'] == 'regression':
+        preds = ML_pipeline.CLUST_regression_inference(infer_X_array, params['model_info'])
+    elif params['model_info']['model_purpose'] == 'classification':
+        preds = ML_pipeline.clust_classification_inference(infer_X_array, params['model_info'])
     target = params['ingestion_param_y']['feature_list']
 
-    if scaler_info['scaler_flag'] =='scale':
+    if params['scaler_param']['scaler_flag'] =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
         base_df_for_inverse[target[0]] = preds
         prediction_result = pd.DataFrame(scaler.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
