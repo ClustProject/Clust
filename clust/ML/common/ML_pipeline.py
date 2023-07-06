@@ -114,8 +114,8 @@ def clean_low_quality_column(data, transform_info):
     """퀄러티가 좋지 않은 컬럼은 삭제함
 
     Args:
-        transform_info (dict): 어느정도의 퀄러티까지의 컬럼을 삭제할 것인가에 대한 기준
         data (pd.DataFrame):입력 데이터
+        transform_info (dict): 어느정도의 퀄러티까지의 컬럼을 삭제할 것인가에 대한 기준
 
     Returns:
         data (pd.DataFrame):처리 데이터
@@ -149,7 +149,7 @@ def split_data_by_mode(X, y, split_ratio, transform_param):
             day_window_size (int): 일을 기준으로 한 윈도우 사이즈
 
     Returns:
-        train_x, val_x, train_y, val_y (pd.DataFrame), transform_param(dict): 분할된 데이터
+        train_x, val_x, train_y, val_y (pd.DataFrame), transform_param(dict): 분할된 데이터 및 transform 파라미터
     """
     if transform_param['split_mode'] =='window_split':
         transform_param['future_step'] = None
@@ -168,8 +168,8 @@ def transform_data_by_split_mode(transformParameter, X, y):
     """학습 직전의 배열 형태의 데이터 생성 (split 모드에 의해 준비)
 
     Args:
-        split_mode (str): _description_
         transformParameter (dict): split mode 에 따른 변형을 위한 파라미터
+            split_mode (str): split mode, window_split or step_split
         X (pd.DataFrame): x 데이터
         y (pd.DataFrame): y 데이터
 
@@ -187,14 +187,14 @@ def transform_data_by_split_mode(transformParameter, X, y):
 
 
 ######train pipeline
-def CLUST_regresstion_train(train_X_array, train_y_array, val_X_array, val_y_array, model_info):
+def CLUST_regression_train(train_X_array, train_y_array, val_X_array, val_y_array, model_info):
     """regression 수행하고 적절한 모델을 저장함
 
     Args:
         train_X_array (np.array): 입력 train X
-        train_y_array (np.array):입력 train X
-        val_X_array (np.array): 입력 train X
-        val_y_array (np.array):입력 train X
+        train_y_array (np.array):입력 train y
+        val_X_array (np.array): 입력 val X
+        val_y_array (np.array):입력 val y
         model_info (dict): 모델 학습 정보
     >>> train_parameter = {'lr': 0.0001,
             'weight_decay': 1e-06,
@@ -233,10 +233,10 @@ def CLUST_regresstion_test(test_X_array, test_y_array, model_info):
     Args:
         test_X_array (np.array): 입력 test X
         test_y_array np.array): 입력 test y
-        testParameter (dict): 테스트 파라미터
-        model_method (str): 주요 테스트 메서드
-        model_file_path (str): 모델 파일 패스
-        model_parameter (dict): 파라미터
+        model_info (dict): 모델 파라미터
+            model_method (str): 모델 메서드
+            model_file_path (str): 모델 파일 패스
+            model_parameter (dict): 파라미터
 
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
@@ -284,7 +284,7 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
         preds (np.array): prediction value array
         trues (np.array): true value array
         scaler_param (string): with/without scaler
-        scaler (_type_): scaler of prediction value
+        scaler (scaler): scaler of prediction value
         feature_list (array): full featurelist of scaler
         target (string): target feature
 
@@ -302,6 +302,14 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
 # regression inference pipeline
 from Clust.clust.ML.regression.inference import RegressionInference as RI
 def CLUST_regression_inference(infer_X, model_info):
+    """get inference prediction for regression model
+    Args:
+        infer_X (np.array): inference data X
+        model_info (dict): model parameters
+
+    Returns:
+        preds (np.array): prediction value array
+    """
 
     inference_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
@@ -321,6 +329,29 @@ def CLUST_regression_inference(infer_X, model_info):
 # classification train pipeline
 from Clust.clust.ML.classification.train import ClassificationTrain as CML
 def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_array, model_info):
+    """classification 수행하고 적절한 모델을 저장함
+
+    Args:
+        train_X_array (np.array): 입력 train X
+        train_y_array (np.array):입력 train y
+        val_X_array (np.array): 입력 val X
+        val_y_array (np.array):입력 val y
+        model_info (dict): 모델 학습 정보
+    >>> train_parameter = {'lr': 0.0001,
+            'weight_decay': 1e-06,
+            'device': 'cpu',
+            'n_epochs': 10,
+            'batch_size': 16}
+    >>> model_method = [LSTM_cf|GRU_cf|CNN_1D_cf|LSTM_FCNs_cf|FC_cf]
+    >>> modelParameter = {'rnn_type': 'lstm',
+                'hidden_size': 64,
+                'num_layers': 2,
+                'output_dim': 1,
+                'dropout': 0.1,
+                'bidirectional': True,
+                'num_classes': 6}
+            
+    """
 
     train_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
@@ -338,6 +369,20 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
 # classification test pipeline
 from Clust.clust.ML.classification.test import ClassificationTest as CT
 def clust_classification_test(test_X_array, test_y_array, model_info):
+    """ Classification Test
+
+    Args:
+        test_X_array (np.array): 입력 test X
+        test_y_array np.array): 입력 test y
+        model_info (dict): 모델 파라미터
+            train_parameter (dict): 학습 파라미터
+            model_method (str): 모델 메서드
+            model_parameter (dict): 파라미터
+            model_file_path (str): 모델 파일 패스
+
+    Returns:
+        preds, trues (np.arrau): 예측값, 실제값
+    """
 
     test_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
@@ -355,6 +400,14 @@ def clust_classification_test(test_X_array, test_y_array, model_info):
 
 from Clust.clust.ML.classification.inference import ClassificationInference as CI
 def clust_classification_inference(infer_X, model_info):
+    """get inference prediction for classification model
+    Args:
+        infer_X (np.array): inference data X
+        model_info (dict): model parameters
+
+    Returns:
+        preds (np.array): prediction value array
+    """
 
     inference_parameter = model_info['train_parameter']
     model_method = model_info['model_method']

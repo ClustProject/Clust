@@ -196,7 +196,7 @@ def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
     # model training
     # input 순서 일관되도록 펑션 수정
     if params['model_info']['model_purpose'] == 'regression':    
-        ML_pipeline.CLUST_regresstion_train(train_X_array, 
+        ML_pipeline.CLUST_regression_train(train_X_array, 
                                             train_y_array, 
                                             val_X_array, 
                                             val_y_array,
