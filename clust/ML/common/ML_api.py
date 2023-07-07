@@ -5,7 +5,6 @@ sys.path.append("../../")
 sys.path.append("../../../")
 
 from sklearn.metrics import classification_report
-from Clust.clust.transformation.type.DFToNPArray import trans_df_to_np_inf, transDFtoNP_infer
 from Clust.clust.tool.stats_table import metrics
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
