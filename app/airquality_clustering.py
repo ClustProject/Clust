@@ -83,19 +83,3 @@ def get_univariate_df_by_selecting_clustering_data(data, clust_result, start_tim
     result_df.set_index(time_index, inplace = True)
     
     return result_df
-
-
-# def get_clustering_result_by_input_clust_class(clust_result, clust_class_list):
-#     """
-#     입력한 Clust Class 번호에 존재하는 데이터 이름을 출력하는 모듈
-#     """
-#     distribution_result = {}
-#     for clust_class in clust_class_list:
-#         name_list = []
-#         for name, c_value in clust_result.items():
-#             if str(clust_class) == c_value:
-#                 name_list.append(name)
-#         class_num = len(name_list)
-#         unique_name_list= set([n.split("/")[0] for n in name_list])
-#         distribution_result[clust_class] = [unique_name_list, class_num]
-#     return distribution_result
