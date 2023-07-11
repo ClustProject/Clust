@@ -14,10 +14,16 @@ from Clust.clust.meta.metaDataManager import bucketMeta
 def set_pipeline_preprocessing_param(processing_freq, feature_name, bucket_name = None, mongo_client = None):
     param_dict = {}
     if bucket_name:
+
         min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client, bucket_name)
+
+        ## pipeline의 set_outlier_param 함수 input 에 맞춰서 넣기
+        #un_certain = {"algorithm": "SD", "percentile":95, "alg_parameter":{"period":7, "limit":5}}
+        un_certain = {'algorithm': 'SR', 'percentile': 95, 'alg_parameter' : {'period': 144}}
+
         outlier_param ={
             "certain_error_to_NaN": {'flag': True, 'data_min_max_limit':min_max}, 
-            "uncertain_error_to_NaN":{'flag': False}}
+            "uncertain_error_to_NaN":{'flag': True, "outlier_detector_config": un_certain}}
         param_dict["outlier_param"] = outlier_param
     
     timedelta_frequency_min = datetime.timedelta(minutes= processing_freq)
@@ -36,7 +42,7 @@ def set_pipeline_preprocessing_param(processing_freq, feature_name, bucket_name 
     }
     quality_param = {
         "quality_method":"data_with_clean_feature", 
-        "quality_param":{"nan_processing_param":{'type':'num', 'ConsecutiveNanLimit':4, 'totalNaNLimit':19}}
+        "quality_param":{"nan_processing_param":{'type':'num', 'ConsecutiveNanLimit':4, 'totalNaNLimit':18}}
     }
     param_dict["refine_param"] = refine_param
     param_dict["split_param"] = cycle_split_param
