@@ -10,7 +10,7 @@ pipeline_rule = {
         DF:DF, 
         DFSet:DFSet
     },
-        "data_outlier":{
+    "data_outlier":{
         DF:DF, 
         DFSet:DFSet
     },
@@ -68,9 +68,7 @@ def pipeline(data, module_list):
     """
     for module in module_list:
         module_name, module_param = module[0], module[1]
-        
         print(module_name) 
-        
         if module_name == 'data_refinement': 
             from Clust.clust.preprocessing import processing_interface
             data= processing_interface.get_data_result('refinement', data, module_param)
@@ -115,9 +113,8 @@ def pipeline(data, module_list):
         elif module_name =='data_scaling': 
             from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('scaling', data, module_param)
-
-        print(get_shape(data))
         
+        print(get_shape(data))
         if isinstance(data, dict):
             for processing_data in data.values():
                 if processing_data.empty:

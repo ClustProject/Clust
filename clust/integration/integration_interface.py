@@ -48,7 +48,6 @@ def get_data_result(integration_type, data_set, integration_param):
         else:
             frequency = None            
         
-        
         result = get_one_feature_based_integration(data_set, feature_name, duration, frequency)
 
         
@@ -97,8 +96,8 @@ def get_one_feature_based_integration(dataSet, feature_name, duration, frequency
         else:
             if frequency:
                 data = data.resample(frequency).mean()
-
         if feature_name in list(data.columns):
+            
             if len(data) > 0:
                 newDF[data_name] = data[feature_name].values # 이 부분 문제 생길수 있음
 

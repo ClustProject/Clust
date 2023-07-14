@@ -58,7 +58,7 @@ def set_case_11_pipeparam(bucket, integration_freq_min, feature_name):
 
 
 #def clustering_case_11(processing_data, cluster_num):
-def pipeline_clustering(processing_data, cluster_num):
+def get_clustering_test_result(processing_data, cluster_num):
     # 1. Imputation & Smoothing
     ## 1.1. Set imputation & smoothing param
     imputation_param = {"flag":True,

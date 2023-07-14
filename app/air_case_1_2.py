@@ -36,7 +36,7 @@ def set_case_112_pipeparam(bucket, integration_freq_min, feature_name):
     cycle_split_param={
         "split_method":"cycle",
         "split_param":{
-            'feature_cycle' : 'Day',
+            'feature_cycle' : 'Week',
             'feature_cycle_times' : 1}
     }
 
