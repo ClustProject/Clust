@@ -1,4 +1,7 @@
 # TODO 지수 제가 시간이 없어서 정리를 하다 말았어요. 이 파일만 고치면 수월하게 되도록 부탁
+# 다음번 것들도.. 테스트 할때 다른사람이 쉽게 하도록... 최대한 신경 (테스트 코드와 파라미터 변경할 부분 신경써서 분리)
+# 이외에도 많이 고치다 말았어요. 시간 부족...
+# 테스트쪽도, 학습 부분도... 계속 여러 파라미터로고치면서 해야하는데 코드와 파람이 섞이면 불가함... 
 # 각 Test에 대해 체계적 테스트 되도록
 
 import sys
@@ -63,9 +66,9 @@ min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, data_param[
 new_start_time = pd.to_datetime("2015-01-01 00:00:00")
 
 ## bucket name 은 고정
-new_data_bk_name = "kweather_data_regression_test_jw" # <<- 이런것들 체계적으로 수정
+new_data_bk_name = "kweather_data_regression_test_jw" # 
 ## ms name 만 수정
-new_data_train_ms_name = bucket + "all_ms"+ "train_casenum_" + str(case_num)
+new_data_train_ms_name = bucket + "all_ms"+ "train_casenum_" + str(case_num) # <<- 이런것들 체계적으로 수정 해야함 나중에 데이터만 보고 편하게 분석하려면 수정 요
 
 ########################################################################################################################################################################
 ########################################################################################################################################################################
