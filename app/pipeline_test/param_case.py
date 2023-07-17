@@ -23,10 +23,11 @@ case_num = 0  # change pipeline case num (0~4)
 uncertain_flag = False
 cluster_num = 4 # change cluster num (2~8)
 
+# [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4]
 case_list =[["processing_1", True], ["processing_1", False], ["processing_2", False], ["processing_3", False]]
 
 ########################################################################
-# automatically make additional variables
+#### automatically make additional variables
 
 if task_name =='air_quality':
     from . import param_data_airquality as param_data
@@ -48,7 +49,9 @@ test_pipe_param['data_split']['split_param']['feature_cycle_times'] = feature_cy
 
 ingestion_method = "all_ms_in_one_bucket"
 min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, bucket )
-############################ preprocessing and clustering method Setting
+
+########################################################################
+#### preprocessing and clustering method Setting
 preprocessing_case = case_list[case_num][0]
 clustering_case = case_list[case_num][1]
 
@@ -75,5 +78,5 @@ processing_case_param = {
 
 new_start_time = pd.to_datetime("2015-01-01 00:00:00")
 new_bk_name ="task_" +task_name
-cluster_result_name = new_bk_name + "_case_"+str(case_num)
+cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(level) # TODO clustering 유무 차이 넣어야함 : 함수화 할지 말지 고민 중
 new_ms_name_train = cluster_result_name +'train'
