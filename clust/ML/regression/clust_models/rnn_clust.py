@@ -33,6 +33,7 @@ class RNNClust(BaseRegressionModel):
             hidden_size = self.model_params['hidden_size'],
             num_layers = self.model_params['num_layers'],
             output_dim = self.model_params['output_dim'],
+            seq_len = self.model_params['seq_len'],
             dropout_prob = self.model_params['dropout'],
             bidirectional = self.model_params['bidirectional']
         )
@@ -154,7 +155,6 @@ class RNNClust(BaseRegressionModel):
             preds = []
 
             for x_infer in inference_loader:
-
                 x_infer = x_infer.view([batch_size, -1, n_features]).to(device)
 
                 self.model.to(device)
@@ -163,7 +163,7 @@ class RNNClust(BaseRegressionModel):
                 # input을 model에 넣어 output을 도출
                 outputs = self.model(x_infer)
 
-                # 예측 값 및 실제 값 축적
+                # 예측 값
                 preds.extend(outputs.detach().cpu().numpy())
 
         preds = np.array(preds).reshape(-1)
@@ -262,6 +262,10 @@ class RNNClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
+
+        # match dimension
+        if len(infer_x.shape) != 3:
+            infer_x = np.expand_dims(infer_x, axis=0)
 
         infer_x = torch.Tensor(infer_x)
         inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=False)

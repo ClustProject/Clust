@@ -31,6 +31,7 @@ class RNNModel(BaseRegressionModel):
             hidden_size = self.model_params['hidden_size'],
             num_layers = self.model_params['num_layers'],
             output_dim = self.model_params['num_classes'],
+            seq_len = self.model_params['seq_len'],
             dropout_prob = self.model_params['dropout'],
             bidirectional = self.model_params['bidirectional']
         )
@@ -329,7 +330,7 @@ class RNNModel(BaseRegressionModel):
         return test_loader
 
     # for inference data
-    def create_inferenceloader(self, batch_size, x_data):
+    def create_inferenceloader(self, batch_size, infer_x):
         """
         Create inference data loader for torch
 
@@ -340,10 +341,12 @@ class RNNModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # x_data = trans_df_to_np_inf(x_data, window_num, dim)
-
-        # x_data = np.array(x_data)
-        inference_data = torch.Tensor(x_data)
-        inference_loader = DataLoader(inference_data, batch_size=batch_size, shuffle=True)
+        # match dimension
+        if len(infer_x.shape) != 3:
+            infer_x = np.expand_dims(infer_x, axis=0)
+        
+        inference_data = torch.Tensor(infer_x)
+        inference_loader = DataLoader(inference_data, batch_size=batch_size, shuffle=False)
+        print("inference data shape:", inference_data.shape)
 
         return inference_loader

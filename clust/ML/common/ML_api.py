@@ -226,7 +226,6 @@ def test_data_preparation(params, influxdb_client):
     """
     # 1. Oirignla data ingestion
     data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], params['data_y_flag'], params['ingestion_param_y'], 'ms_all', influxdb_client)
-
     test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, params['scaler_param']['scaler_file_path']['XScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
     test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, params['scaler_param']['scaler_file_path']['yScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
 
@@ -346,15 +345,14 @@ def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
     return result, scaler
 
 def infer_data_preparation(params, data):
-    scaled_infer_X, scaler_X = _get_scaled_infer_data(data, params['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], params['scaler_param']['scaler_flag'])
+    # local data do not need scaling
+    if params['dataX_src'] == 'database':
+        scaled_infer_X, scaler_X = _get_scaled_infer_data(data, params['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], params['scaler_param']['scaler_flag'])
+    elif params['dataX_src'] == 'local':
+        scaled_infer_X = data
     scaler_y = ml_scaler.get_scaler_file(params['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
     
     return scaled_infer_X, scaler_y
-# def infer_data_preparation(model_meta, data):
-#     scaled_infer_X, scaler_X = _get_scaled_infer_data(data, model_meta['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], model_meta['scaler_param']['scaler_flag'])
-#     scaler_y = ml_scaler.get_scaler_file(model_meta['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
-    
-#     return scaled_infer_X, scaler_y
 
 def ML_inference(params, infer_X_array, scaler):
     """_summary_
@@ -367,11 +365,12 @@ def ML_inference(params, infer_X_array, scaler):
     Returns:
         prediction_result (pd.DataFrame): prediction result 
     """
+    target = params['ingestion_param_y']['feature_list']
+
     if params['model_info']['model_purpose'] == 'regression':
         preds = ML_pipeline.CLUST_regression_inference(infer_X_array, params['model_info'])
     elif params['model_info']['model_purpose'] == 'classification':
         preds = ML_pipeline.clust_classification_inference(infer_X_array, params['model_info'])
-    target = params['ingestion_param_y']['feature_list']
 
     if params['scaler_param']['scaler_flag'] =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
