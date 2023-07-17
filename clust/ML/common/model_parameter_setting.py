@@ -41,7 +41,8 @@ def get_regression_model_parameter(model_method, model_info, seq_len, input_size
             'input_size': input_size, 
             'hidden_size': model_info['hidden_size'],
             'num_layers': model_info['num_layers'],
-            'output_dim': model_info['output_dim'], 
+            'output_dim': model_info['output_dim'],
+            'seq_len': seq_len,
             'dropout': model_info['dropout'], 
             'bidirectional': model_info['bidirectional']
         }

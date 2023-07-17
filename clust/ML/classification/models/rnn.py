@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 
 class RNN(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, output_dim, dropout_prob, bidirectional, rnn_type):
+    def __init__(self, input_size, hidden_size, num_layers, output_dim, seq_len, dropout_prob, bidirectional, rnn_type):
         """The __init__ method that initiates an RNN instance.
 
         Args:
@@ -10,6 +10,7 @@ class RNN(nn.Module):
             hidden_size (int): The number of nodes in each layer
             num_layers (int): The number of layers in the network
             output_dim (int): The number of nodes in the output layer
+            seq_len (int): The length of input sequence
             dropout_prob (float): The probability of nodes being dropped out
             bidirectional (boolean): Whether bidirectional or not
             rnn_type (string): The type of RNN structure (i.e., rnn, lstm, gru)
@@ -41,7 +42,8 @@ class RNN(nn.Module):
             )
 
         # Fully connected layer according to wheter bidirectional
-        self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
+        # self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
+        self.fc = nn.Linear(self.num_directions * hidden_size * seq_len, output_dim)
 
     def forward(self, x):
         """The forward method takes input tensor x and does forward propagation
@@ -71,7 +73,8 @@ class RNN(nn.Module):
 
         # Reshaping the outputs in the shape of (batch_size, seq_length, hidden_size)
         # so that it can fit into the fully connected layer
-        out = out[:, -1, :]
+        # out = out[:, -1, :]
+        out = out.contiguous().view(out.shape[0], -1)   # Flatten lstm out
 
         # Convert the final state to our desired output shape (batch_size, output_dim)
         out = self.fc(out)
