@@ -4,7 +4,7 @@ sys.path.append("../../../")
 import pandas as pd
 import datetime, math
 
-from Clust.clust.pipeline import param, data_pipeline
+from Clust.clust.pipeline import data_pipeline
 
 from Clust.clust.ML.clustering.interface import clusteringByMethod
 from Clust.clust.tool.plot import plot_interface
@@ -51,7 +51,7 @@ def get_preprocessing_test_pipeline(pipeline_case_param, uncertain_error_to_NaN_
 ############# Clustering
 def get_clustering_test_result(processing_data, cluster_num):
     """
-    공기질 시나리오의 Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 imputation&smoothing preprocessing 처리를 더한 모듈
+Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 imputation&smoothing preprocessing 처리를 더한 모듈
     """
     data_scaling_param = {'flag': True, 'method':'minmax'} 
     clustering_clean_pipeline = [['data_scaling', data_scaling_param]]
@@ -108,7 +108,7 @@ def select_clustering_data_result(data, clust_class_list, clust_result):
 
 def select_preprocessed_data_result(data):
     result_df = pd.DataFrame()
-    for name in processing_data:
+    for name in data:
         result_df = pd.concat([result_df, data[name]])
     return result_df
     
