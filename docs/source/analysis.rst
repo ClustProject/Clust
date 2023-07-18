@@ -8,4 +8,4 @@ Clust : analysis
 
    analysis/analysis.timeAnalyzer
 
-   analysis/analysis.bucketReport
+   analysis/analysis.analysis_py
