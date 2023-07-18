@@ -13,6 +13,8 @@ def get_data_conidtion_by_level(level = 0):
         processing_freq = 10 # refinement, integration frequency
         # feature
         feature_name = 'in_co2' # integration, prediction feature
+        # ingestion method
+        ingestion_method = "all_ms_in_one_bucket"
         
     elif level == 1:
         bucket ='air_indoor_체육시설'
@@ -21,9 +23,24 @@ def get_data_conidtion_by_level(level = 0):
         data_param['bucket_name'] = bucket
         processing_freq = 10 # refinement, integration frequency
         # feature
-        feature_name = 'in_noise' # integration, prediction feature    
+        feature_name = 'in_noise' # integration, prediction feature
+        # ingestion method
+        ingestion_method = "all_ms_in_one_bucket"
+
+    elif level == 2:
+        # test data ingestion info : ingestion_method(multiple_ms_by_time)
+        bucket ='air_indoor_체육시설'
+        data_param['start_time'] = pd.to_datetime("2021-09-13 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-09-17 23:59:59")
+        data_param['ms_list_info'] = [[bucket, 'ICW0W2001037'], [bucket, 'ICW0W2001044']]
+        processing_freq = 10 # train data 와 freq를 맞춰주기 위해서 필요
+        # feature
+        feature_name = 'in_co2'
+        data_param['feature_list']= [[feature_name], [feature_name]]
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
         
-    return bucket, data_param, processing_freq, feature_name 
+    return bucket, data_param, processing_freq, feature_name, ingestion_method
 
 
 def get_data_preprocessing_param(case):

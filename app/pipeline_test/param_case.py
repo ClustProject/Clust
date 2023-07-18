@@ -13,18 +13,18 @@ pipe_pre_case = 0
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-level = 0
+level = 2
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 
 ## TODO change case_num and cluster_num for test
-case_num = 0  # change pipeline case num (0~4)
+case_num = 4  # change pipeline case num (0~4)
 uncertain_flag = False
 cluster_num = 4 # change cluster num (2~8)
 
-# [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4]
-case_list =[["processing_1", True], ["processing_1", False], ["processing_2", False], ["processing_3", False]]
+# [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
+case_list =[["processing_1", True], ["processing_1", False], ["processing_2", False], ["processing_3", False], ["test_data_processing_1", False]]
 
 ########################################################################
 #### automatically make additional variables
@@ -34,7 +34,7 @@ if task_name =='air_quality':
 else:
     pass
 
-bucket, data_param, processing_freq, feature_name  = param_data.get_data_conidtion_by_level(level)
+bucket, data_param, processing_freq, feature_name, ingestion_method  = param_data.get_data_conidtion_by_level(level)
 test_pipe_param = param_data.get_data_preprocessing_param(pipe_pre_case)
 
 if cycle_condition == "day_1":
@@ -47,7 +47,6 @@ elif cycle_condition == "week_1":
 test_pipe_param['data_split']['split_param']['feature_cycle'] = feature_cycle
 test_pipe_param['data_split']['split_param']['feature_cycle_times'] = feature_cycle_times
 
-ingestion_method = "all_ms_in_one_bucket"
 min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, bucket )
 
 ########################################################################
@@ -64,6 +63,9 @@ elif preprocessing_case == "processing_2":
 
 elif preprocessing_case == "processing_3":
     processing_task_list = ['data_refinement', 'data_outlier', 'data_imputation']
+
+elif preprocessing_case == "test_data_processing_1":
+    processing_task_list = ['data_refinement']
     
 ## 2. preprocessing 
 processing_case_param = {
