@@ -29,6 +29,8 @@ class unCertainErrorRemove():
         self.outlierIndex={}
         for outlierDetectorConfig in outlierDetectorConfigs:
             algorithm = outlierDetectorConfig['algorithm']
+           
+
             if algorithm in MLList:
                 IndexResult = self.getOutlierIndexByMLOutlierDetector(outlierDetectorConfig)
             elif algorithm == "IQR" :
@@ -110,7 +112,8 @@ class unCertainErrorRemove():
         data_outlier = dataOutlier.DataOutlier(self.data)
         data_imputed = data_outlier.imputationForOutlierDetection()
 
-        outlier_index={}
+        outlier_index={}        
+
         for feature in data_imputed.columns:
             result = seasonal_decompose(data_imputed[feature],model='additive', period = period)
             n = result.seasonal.mean()+result.trend.mean()
@@ -118,9 +121,10 @@ class unCertainErrorRemove():
             print("Limit Num:", n)
             NoiseIndex = result.resid[abs(result.resid)> n].index
             outlier_index[feature]= NoiseIndex
-            import matplotlib.pyplot as plt
-            result.plot()
-            plt.show()
+            #아래 소스로 웹 사이트에서 에러 발생하여 주석 처리 2023.07.19.
+            #import matplotlib.pyplot as plt
+            #result.plot()
+            #plt.show()
             
         return outlier_index
 
