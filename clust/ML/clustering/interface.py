@@ -32,7 +32,7 @@ def clusteringByMethod(data, parameter, model_path):
     result = None
     param = parameter['param']
     model_name = parameter['method']
-
+    data_series = ''
     if (len(data.columns) > 0):
         # Train/Test 클래스 생성
         # 모델 저장/로드 경로
@@ -44,10 +44,10 @@ def clusteringByMethod(data, parameter, model_path):
             clust_train = KMeansTrain()
             clust_train.set_param(param)
             clust_test = KMeansTest()
-        print("start..........................")
+        
         # 1. 데이터 준비
         data_series = DF_to_series(data)
-        
+               
 
         # 2. Train
         clust_train.set_param(param)

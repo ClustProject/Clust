@@ -8,14 +8,17 @@ class SerialImputation():
         """ Define Imputation Methods
         """
         self.ScikitLearnMethods =['KNN','MICE']
-        self.simpleMethods =['most_frequent', 'mean', 'median', ' constant']
+        self.simpleMethods =['most_frequent', 'mean', 'median', 'constant']
         self.fillNAMethods = ['bfill','ffill']
         self.simpleIntMethods= ['linear', 'time', 'nearest', 'zero', 'slinear','quadratic', 'cubic', 'barycentric']
         self.orderIntMethods = [ 'polynomial', 'spline']
         #self.deepMethods = ['brits']
  
     def get_dataWithSerialImputationMethods(self, data, imputation_param):
-        """ This function cleans the data by applying several missing data handling methods.
+        """ This function cleans the data by applying several missing data handling methods. 
+
+
+        
 
         Args:
             data (DataFrame): input data
@@ -146,6 +149,8 @@ class SerialImputation():
         from Clust.clust.preprocessing.imputation import DLMethod 
         basicImpute = basicMethod.BasicImputation(data, method, max_limit, parameter)
 
+        print("========method")
+        print(method)
         if method in self.ScikitLearnMethods:
             result = basicImpute.ScikitLearnMethod()       
         elif method in self.simpleMethods:
