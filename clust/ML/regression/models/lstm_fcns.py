@@ -64,8 +64,6 @@ class LSTMFCNs(nn.Module):
         #                                           T = Time sampels
         #                                           F = features
 
-        x = x.permute(0, 2, 1)
-
         x1, (ht,ct) = self.lstm(x)
         x1 = x1[:,-1,:]
 

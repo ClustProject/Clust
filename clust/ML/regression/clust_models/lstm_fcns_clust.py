@@ -60,8 +60,7 @@ class LSTMFCNsClust(BaseRegressionModel):
         for epoch in range(1, epochs + 1):
             batch_losses = []
             for x_batch, y_batch in train_loader:
-                x_batch = x_batch.view([batch_size, -1, n_features])
-                x_batch = x_batch.transpose(1, 2).to(device)    # LSTM_FCNs condtition
+                x_batch = x_batch.view([batch_size, -1, n_features]).to(device)
                 y_batch = y_batch.view([batch_size, 1]).to(device)
                 loss = self._train_step(x_batch, y_batch)
                 batch_losses.append(loss)
@@ -71,8 +70,7 @@ class LSTMFCNsClust(BaseRegressionModel):
             with torch.no_grad():
                 batch_val_losses = []
                 for x_val, y_val in valid_loader:
-                    x_val = x_val.view([batch_size, -1, n_features])
-                    x_val = x_val.transpose(1, 2).to(device)    # LSTM_FCNs condtition
+                    x_val = x_val.view([batch_size, -1, n_features]).to(device)
                     y_val = y_val.view([batch_size, 1]).to(device)
                     self.model.eval()
                     yhat = self.model(x_val)
@@ -113,8 +111,7 @@ class LSTMFCNsClust(BaseRegressionModel):
             preds, trues = [], []
 
             for x_test, y_test in test_loader:
-                x_test = x_test.view([batch_size, -1, n_features])
-                x_test = x_test.transpose(1, 2).to(device)      # LSTM_FCNs condtition
+                x_test = x_test.view([batch_size, -1, n_features]).to(device)
                 y_test = y_test.view([batch_size, 1]).to(device, dtype=torch.float)
 
                 self.model.to(device)
@@ -153,8 +150,7 @@ class LSTMFCNsClust(BaseRegressionModel):
         with torch.no_grad():
             preds = []
             for x_infer in inference_loader:
-                x_infer = x_infer.view([batch_size, -1, n_features])
-                x_infer = x_infer.transpose(1, 2).to(device)    # LSTM_FCNs condtition
+                x_infer = x_infer.view([batch_size, -1, n_features]).to(device)
                 
                 self.model.to(device)
                 
@@ -258,6 +254,9 @@ class LSTMFCNsClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
+        # match dimension
+        if len(infer_x.shape) != 3:
+            infer_x = np.expand_dims(infer_x, axis=0)
 
         infer_x = torch.Tensor(infer_x)
         inference_loader = DataLoader(infer_x, batch_size=batch_size, shuffle=True)

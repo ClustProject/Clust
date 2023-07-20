@@ -262,7 +262,6 @@ class RNNClust(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-
         # match dimension
         if len(infer_x.shape) != 3:
             infer_x = np.expand_dims(infer_x, axis=0)

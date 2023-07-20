@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch
 import torch.nn.functional as F
-import torch.optim as optim
 
 class SELayer(nn.Module):
     def __init__(self, channel, reduction=16):
@@ -66,8 +65,6 @@ class LSTMFCNs(nn.Module):
         # input x should be in size [B,T,F] , where B = Batch size
         #                                           T = Time sampels
         #                                           F = features
-
-        x = x.permute(0, 2, 1)
 
         x1, (ht,ct) = self.lstm(x)
         x1 = x1[:,-1,:]

@@ -73,8 +73,7 @@ class LSTMFCNsModel(BaseRegressionModel):
 
                 # training과 validation 단계에 맞는 dataloader에 대하여 학습/검증 진행
                 for inputs, labels in data_loaders_dict[phase]:
-                    inputs = inputs.view([batch_size, -1, input_size])
-                    inputs = inputs.transpose(1, 2).to(device)
+                    inputs = inputs.view([batch_size, -1, input_size]).to(device)
                     labels = labels.squeeze(dim=-1).to(device, dtype=torch.long)
                     # seq_lens = seq_lens.to(self.parameter['device'])
                     
@@ -154,8 +153,7 @@ class LSTMFCNsModel(BaseRegressionModel):
             probs = []
             trues = []
             for inputs, labels in test_loader:
-                inputs = inputs.view([batch_size, -1, input_size])
-                inputs = inputs.transpose(1, 2).to(device)
+                inputs = inputs.view([batch_size, -1, input_size]).to(device)
                 labels = labels.to(device, dtype=torch.long)
 
                 self.model.to(device)
@@ -210,8 +208,7 @@ class LSTMFCNsModel(BaseRegressionModel):
         with torch.no_grad():
             preds = []
             for inputs in inference_loader:
-                inputs = inputs.view([batch_size, -1, input_size])
-                inputs = inputs.transpose(1, 2).to(device)
+                inputs = inputs.view([batch_size, -1, input_size]).to(device)
 
                 self.model.to(device)
                 
@@ -329,7 +326,7 @@ class LSTMFCNsModel(BaseRegressionModel):
         return test_loader
 
     # for inference data
-    def create_inferenceloader(self, batch_size, x_data):
+    def create_inferenceloader(self, batch_size, infer_x):
         """
         Create inference data loader for torch
 
@@ -340,10 +337,11 @@ class LSTMFCNsModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # x_data = trans_df_to_np_inf(x_data, window_num)
+        # match dimension
+        if len(infer_x.shape) != 3:
+            infer_x = np.expand_dims(infer_x, axis=0)
 
-        # x_data = np.array(x_data)
-        inference_data = torch.Tensor(x_data)
+        inference_data = torch.Tensor(infer_x)
         inference_loader = DataLoader(inference_data, batch_size=batch_size, shuffle=True)
 
         return inference_loader
