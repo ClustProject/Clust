@@ -42,8 +42,8 @@ class RNN(nn.Module):
             )
 
         # Fully connected layer according to wheter bidirectional
-        # self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
-        self.fc = nn.Linear(self.num_directions * hidden_size * seq_len, output_dim)
+        self.fc = nn.Linear(self.num_directions * hidden_size, output_dim)
+        # self.fc = nn.Linear(self.num_directions * hidden_size * seq_len, output_dim)                                                                                                                   
 
     def forward(self, x):
         """The forward method takes input tensor x and does forward propagation
@@ -73,8 +73,8 @@ class RNN(nn.Module):
 
         # Reshaping the outputs in the shape of (batch_size, seq_length, hidden_size)
         # so that it can fit into the fully connected layer
-        # out = out[:, -1, :]
-        out = out.contiguous().view(out.shape[0], -1)   # Flatten lstm out
+        out = out[:, -1, :]
+        # out = out.contiguous().view(out.shape[0], -1)   # Flatten lstm out
 
         # Convert the final state to our desired output shape (batch_size, output_dim)
         out = self.fc(out)
