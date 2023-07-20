@@ -61,11 +61,11 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
         unit = "W"
         unit_delta_time = datetime.timedelta(weeks=feature_cycle_times)
     elif feature_cycle.lower() in ['month', 'm']:
-        unit = "M" # 확인 안해봄
-        unit_delta_time = datetime.timedelta(months=feature_cycle_times)
+        unit = "M" # TODO 확인 바람 지훈님   
+        unit_delta_time = datetime.timedelta(days=30 * feature_cycle_times)
     elif feature_cycle.lower() in ['year', 'y']:
-        unit = "A" # 확인 안해봄     
-        unit_delta_time = datetime.timedelta(years=feature_cycle_times)
+        unit = "A" # TODO 확인 바람 지훈님   
+        unit_delta_time = datetime.timedelta(days=365*feature_cycle_times)
         
     data = cycle_data_set(output_data, unit, unit_delta_time, feature_cycle_times, True)
     
@@ -98,7 +98,6 @@ def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):
     Returns:
         split_data_set(List): 분할된 데이터에 대한 list
     """""
-    import datetime
     split_data_set = []
 
     d_frequency = data.index[1]- data.index[0]
@@ -113,7 +112,7 @@ def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):
         split_d = split_d.set_index(index_name)
         split_d.index = pd.to_datetime(split_d.index)
         if FullCycle:
-            if split_d_length == max_num:
+            if split_d_length >= max_num:
                 split_data_set.append(split_d)  
             else:
                 pass
