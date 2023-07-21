@@ -1,11 +1,11 @@
 import pandas as pd
 
-def get_data_conidtion_by_level(level = 0):
+def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
 
     # set Level 0 
-    if level == 0:
+    if data_level == 0:
         bucket ='air_indoor_체육시설'
         data_param['start_time']= pd.to_datetime("2021-08-01 00:00:00")
         data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
@@ -16,7 +16,7 @@ def get_data_conidtion_by_level(level = 0):
         # ingestion method
         ingestion_method = "all_ms_in_one_bucket"
         
-    elif level == 1:
+    elif data_level == 1:
         bucket ='air_indoor_체육시설'
         data_param['start_time']= pd.to_datetime("2021-08-01 00:00:00")
         data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
@@ -27,16 +27,51 @@ def get_data_conidtion_by_level(level = 0):
         # ingestion method
         ingestion_method = "all_ms_in_one_bucket"
 
-    elif level == 2:
+    elif data_level == 2:
         # test data ingestion info : ingestion_method(multiple_ms_by_time)
         bucket ='air_indoor_체육시설'
-        data_param['start_time'] = pd.to_datetime("2021-09-13 00:00:00")
-        data_param['end_time'] = pd.to_datetime("2021-09-17 23:59:59")
+        data_param['start_time'] = pd.to_datetime("2021-09-27 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-22 23:59:59")
         data_param['ms_list_info'] = [[bucket, 'ICW0W2001037'], [bucket, 'ICW0W2001044']]
         processing_freq = 10 # train data 와 freq를 맞춰주기 위해서 필요
         # feature
         feature_name = 'in_co2'
         data_param['feature_list']= [[feature_name], [feature_name]]
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
+
+    elif data_level == 3:
+        bucket ='air_indoor_체육시설'
+        data_param['start_time']= pd.to_datetime("2021-01-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        processing_freq = 10 # refinement, integration frequency
+        # feature
+        feature_name = 'in_co2' # integration, prediction feature
+        # ingestion method
+        ingestion_method = "all_ms_in_one_bucket"
+
+    elif data_level == 4:
+        bucket ='air_indoor_초등학교'
+        data_param['start_time']= pd.to_datetime("2021-03-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        processing_freq = 10 # refinement, integration frequency
+        # feature
+        feature_name = 'in_co2' # integration, prediction feature
+        # ingestion method
+        ingestion_method = "all_ms_in_one_bucket"
+    
+    elif data_level == 5:
+        bucket ='air_indoor_초등학교'
+        data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-11-26 23:59:59")
+        data_param['ms_list_info'] = [[bucket, 'ICW0W2000023'], [bucket, 'ICW0W2000024'], [bucket, 'ICW0W2000025'], [bucket, 'ICW0W2000031'], [bucket, 'ICW0W2000034']]
+        #data_param['bucket_name'] = bucket
+        processing_freq = 10 # refinement, integration frequency
+        # feature
+        feature_name = 'in_co2' # integration, prediction feature
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
         # ingestion method
         ingestion_method = "multiple_ms_by_time"
         

@@ -3,6 +3,8 @@ sys.path.append("../../../")
 sys.path.append("../..")
 
 import pandas as pd
+from dateutil.relativedelta import relativedelta
+
 from Clust.clust.meta.metaDataManager import bucketMeta
 from Clust.setting import influx_setting_KETI as ins
 from Clust.clust.ingestion.mongo import mongo_client
@@ -13,7 +15,7 @@ pipe_pre_case = 0
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-level = 2
+data_level = 5
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
@@ -21,7 +23,7 @@ cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 ## TODO change case_num and cluster_num for test
 case_num = 4  # change pipeline case num (0~4)
 uncertain_flag = False
-cluster_num = 4 # change cluster num (2~8)
+cluster_num = 8 # change cluster num (2~8)
 
 # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
 case_list =[["processing_1", True], ["processing_1", False], ["processing_2", False], ["processing_3", False], ["test_data_processing_1", False]]
@@ -34,7 +36,7 @@ if task_name =='air_quality':
 else:
     pass
 
-bucket, data_param, processing_freq, feature_name, ingestion_method  = param_data.get_data_conidtion_by_level(level)
+bucket, data_param, processing_freq, feature_name, ingestion_method  = param_data.get_data_conidtion_by_data_level(data_level)
 test_pipe_param = param_data.get_data_preprocessing_param(pipe_pre_case)
 
 if cycle_condition == "day_1":
@@ -62,7 +64,7 @@ elif preprocessing_case == "processing_2":
     processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
 
 elif preprocessing_case == "processing_3":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_imputation']
+    processing_task_list = ['data_refinement', 'data_integration']
 
 elif preprocessing_case == "test_data_processing_1":
     processing_task_list = ['data_refinement']
@@ -76,9 +78,15 @@ processing_case_param = {
 }
 
 ## 3. save result 
-# TODO 우선 이렇게 해놨는데, 나중 테스트 확장과 결과 관리를 위해 수정할 필요가..
+delta = relativedelta(years=5)
+new_start_time = data_param['start_time'] - delta
+new_bk_name ="task_" + task_name
+cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(data_level)+"_clustering_"+str(clustering_case) # TODO 
 
-new_start_time = pd.to_datetime("2015-01-01 00:00:00")
-new_bk_name ="task_" +task_name
-cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(level) # TODO clustering 유무 차이 넣어야함 : 함수화 할지 말지 고민 중
-new_ms_name_train = cluster_result_name +'train'
+def get_new_ms_name(data_type, select_class = None, cluster_result_name = cluster_result_name):
+    if select_class:
+        select_class_str = ''.join(str(c) for c in select_class)
+        cluster_result_name = cluster_result_name +"_"+select_class_str
+    new_ms_name = cluster_result_name + "_" + data_type
+
+    return new_ms_name

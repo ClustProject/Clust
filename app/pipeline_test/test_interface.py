@@ -32,6 +32,7 @@ def get_preprocessing_test_pipeline(pipeline_case_param, uncertain_error_to_NaN_
     processing_task_list = pipeline_case_param["processing_task_list"]
 
     print("featureName", feature_name)
+    param['data_refinement']['static_frequency']['frequency'] = timedelta_frequency_min
     param['data_integration']['integration_param']['integration_frequency'] = timedelta_frequency_min
     param['data_integration']['integration_param']['feature_name'] = feature_name
     param['data_outlier']['certain_error_to_NaN']['data_min_max_limit'] = data_min_max
