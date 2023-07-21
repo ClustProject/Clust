@@ -116,7 +116,7 @@ def get_classification_model_parameter(model_method, model_info, seq_len, input_
         'kernel_size': model_info['kernel_size'], # convolutional layer의 filter 크기, int(default: 3, 범위: 3 이상, 홀수로 설정 권장)
         'stride': model_info['stride'], # convolution layer의 stride 크기, int(default: 1, 범위: 1 이상)
         'padding': model_info['padding'], # padding 크기, int(default: 0, 범위: 0 이상)
-        'drop_out': model_info['drop_out'] # dropout 확률, float(default: 0.1, 범위: 0 이상 1 이하)
+        'dropout': model_info['dropout'] # dropout 확률, float(default: 0.1, 범위: 0 이상 1 이하)
         }
         
     # LSTM_FCNs model parameters
@@ -126,8 +126,8 @@ def get_classification_model_parameter(model_method, model_info, seq_len, input_
         'seq_len': seq_len,
         'num_classes': model_info['num_classes'],
         'num_layers': model_info['num_layers'],  # recurrent layers의 수, int(default: 1, 범위: 1 이상)
-        'lstm_drop_out': model_info['lstm_drop_out'], # LSTM dropout 확률, float(default: 0.4, 범위: 0 이상 1 이하)
-        'fc_drop_out': model_info['fc_drop_out'] # FC dropout 확률, float(default: 0.1, 범위: 0 이상 1 이하)
+        'lstm_dropout': model_info['lstm_dropout'], # LSTM dropout 확률, float(default: 0.4, 범위: 0 이상 1 이하)
+        'fc_dropout': model_info['fc_dropout'] # FC dropout 확률, float(default: 0.1, 범위: 0 이상 1 이하)
         }
         
     # FC model parameters

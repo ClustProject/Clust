@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
 from Clust.clust.ML.classification.interface import BaseRegressionModel
-from Clust.clust.ML.classification.models.lstm_fcns import LSTMFCNs as lstm_fcns
+from Clust.clust.ML.classification.models.lstm_fcns import LSTMFCNs
 
 
 
@@ -26,7 +26,13 @@ class LSTMFCNsModel(BaseRegressionModel):
         """
         self.model_params = model_params
         # model 생성
-        self.model = lstm_fcns(**self.model_params)
+        self.model = LSTMFCNs(
+            input_size=self.model_params['input_size'],
+            num_layers=self.model_params['num_layers'],
+            lstm_drop_p=self.model_params['lstm_dropout'],
+            fc_drop_p=self.model_params['fc_dropout'],
+            num_classes=self.model_params['num_classes']
+        )
 
     def train(self, train_params, train_loader, valid_loader):
         """
@@ -274,19 +280,6 @@ class LSTMFCNsModel(BaseRegressionModel):
             train_loader (DataLoader): train data loader
             val_loader (DataLoader): validation data loader
         """
-        # dim = 3
-        # # if self.model_name == "FC_cf":
-        # #    dim = 2
-        # if type(train_x) !=  np.ndarray:
-        #     train_x, train_y = transDFtoNP(train_x, train_y, window_num, dim)
-        #     val_x, val_y = transDFtoNP(val_x, val_y, window_num, dim)
-
-        # self.params['input_size'] = train_x.shape[1]
-        # if dim != 2:
-        #     self.params['seq_len']  = train_x.shape[2] # seq_length
-
-        # input_size = train_x.shape[1]
-        # seq_len = train_x.shape[2]
 
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
@@ -315,11 +308,7 @@ class LSTMFCNsModel(BaseRegressionModel):
         Returns:
             test_loader (DataLoader) : test data loader
         """
-        # test_x, test_y = trans_df_to_np(test_x, test_y, window_num)
-
-        # x_data = np.array(test_x)
-        # y_data = test_y
-
+        
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
         test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
 

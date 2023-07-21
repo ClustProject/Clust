@@ -11,7 +11,7 @@ from Clust.clust.transformation.type.DFToNPArray import transDFtoNP, trans_df_to
 from Clust.clust.ML.tool import model as ml_model
 
 from Clust.clust.ML.classification.interface import BaseRegressionModel
-from Clust.clust.ML.classification.models.cnn_1d import CNN1D as cnn_1d
+from Clust.clust.ML.classification.models.cnn_1d import CNN1D
 
 
 
@@ -28,7 +28,16 @@ class CNNModel(BaseRegressionModel):
         """
         self.model_params = model_params
         # model 생성
-        self.model = cnn_1d(**self.model_params)
+        self.model = CNN1D(
+            input_channels = self.model_params['input_size'],
+            input_seq = self.model_params['seq_len'],
+            output_channels = self.model_params['output_channels'],
+            kernel_size = self.model_params['kernel_size'],
+            stride = self.model_params['stride'],
+            padding = self.model_params['padding'],
+            drop_out = self.model_params['dropout'],
+            num_classes = self.model_params['num_classes']
+        )
 
     def train(self, train_params, train_loader, valid_loader):
         """
@@ -331,7 +340,7 @@ class CNNModel(BaseRegressionModel):
         return test_loader
 
     # for inference data
-    def create_inferenceloader(self, batch_size, x_data):
+    def create_inferenceloader(self, batch_size, infer_x):
         """
         Create inference data loader for torch
 
@@ -342,10 +351,11 @@ class CNNModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # x_data = trans_df_to_np_inf(x_data, window_num)
-
-        # x_data = np.array(x_data)
-        inference_data = torch.Tensor(x_data)
+        # match dimension
+        if len(infer_x.shape) != 3:
+            infer_x = np.expand_dims(infer_x, axis=0)
+        
+        inference_data = torch.Tensor(infer_x)
         inference_loader = DataLoader(inference_data, batch_size=batch_size, shuffle=True)
 
         return inference_loader
