@@ -4,13 +4,19 @@ model_num = 0
 
 # TODO # set data info
 task_name = "air_quality"
-ms_name = "task_air_quality_case_0_level_4_clustering_True_0_Train"
 feature_list = ["in_co2"]
 
-# TODO # set predict step (int)
+############# Train (Model info)
+# TODO # set train data info
+train_ms_name = "task_air_quality_case_0_level_4_pre_param_1_clustering_True_4_Train"
+
+# TODO # (Train) set predict step (int)
 past_step = 24
 future_step = 12
 
+############ Test
+# TODO # set test data info
+test_ms_name = "task_air_quality_case_4_level_5_clustering_False_Test"
 
 
 ##############################################################
@@ -35,20 +41,22 @@ model_param_dict = {
 model_method = model_list[model_num]
 model_param = model_param_dict[model_method]
 
-model_name = ms_name+"_"+str(past_step)+"_"+str(future_step)+"_"+model_method
+model_name = train_ms_name+"_"+str(past_step)+"_"+str(future_step)+"_"+model_method
 
 
 
-# forecasting
-params = {
+##############################################################
+## Train : forecasting
+# set train param
+train_params = {
     "ingestion_param_X" :{
         "bucket_name": bucket_name,
-        "ms_name" : ms_name,
+        "ms_name" : train_ms_name,
         "feature_list":feature_list
     },
     "ingestion_param_y":{
         "bucket_name": bucket_name,
-        "ms_name" : ms_name,
+        "ms_name" : train_ms_name,
         "feature_list":feature_list
     },
     'data_y_flag' : 'false',
@@ -74,6 +82,23 @@ params = {
     }
 }
 
+##############################################################
+## Test : forecasting
+# set test param
+test_params = {
+    "ingestion_param_X" :{
+        "bucket_name": bucket_name,
+        "ms_name" : test_ms_name,
+        "feature_list": feature_list
+    },
+    "ingestion_param_y":{
+        "bucket_name": bucket_name,
+        "ms_name" : test_ms_name,
+        "feature_list": feature_list
+    },
+    'data_y_flag' : "None",
+    'model_name':model_name
+}
 ##############################################################
 ## save model meta
 db_name ='model'

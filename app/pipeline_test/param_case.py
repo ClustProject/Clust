@@ -11,22 +11,22 @@ from Clust.clust.ingestion.mongo import mongo_client
 mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
 
 # TODO change value
-pipe_pre_case = 0
+pipe_pre_case = 1
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-data_level = 5
+data_level = 4
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 
 ## TODO change case_num and cluster_num for test
-case_num = 4  # change pipeline case num (0~4)
+case_num = 0  # change pipeline case num (0~4)
 uncertain_flag = False
 cluster_num = 8 # change cluster num (2~8)
 
 # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
-case_list =[["processing_1", True], ["processing_1", False], ["processing_2", False], ["processing_3", False], ["test_data_processing_1", False]]
+case_list =[["processing_1", True], ["processing_2", False], ["processing_3", False], ["processing_4", False], ["test_data_processing_1", False]]
 
 ########################################################################
 #### automatically make additional variables
@@ -61,10 +61,13 @@ if preprocessing_case == "processing_1":
     processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing']
 
 elif preprocessing_case == "processing_2":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
+    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_quality_check','data_imputation']
 
 elif preprocessing_case == "processing_3":
-    processing_task_list = ['data_refinement', 'data_integration']
+    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
+
+elif preprocessing_case == "processing_4":
+    processing_task_list = ['data_refinement', 'data_integration', 'data_imputation']
 
 elif preprocessing_case == "test_data_processing_1":
     processing_task_list = ['data_refinement']
@@ -81,7 +84,7 @@ processing_case_param = {
 delta = relativedelta(years=5)
 new_start_time = data_param['start_time'] - delta
 new_bk_name ="task_" + task_name
-cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(data_level)+"_clustering_"+str(clustering_case) # TODO 
+cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(data_level)+"_pre_param_"+pipe_pre_case+"_clustering_"+str(clustering_case) # TODO 
 
 def get_new_ms_name(data_type, select_class = None, cluster_result_name = cluster_result_name):
     if select_class:
