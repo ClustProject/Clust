@@ -10,12 +10,15 @@ from Clust.setting import influx_setting_KETI as ins
 from Clust.clust.ingestion.mongo import mongo_client
 mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
 
+# TODO eda flag
+eda_flag = False
+
 # TODO change value
-pipe_pre_case = 1
+pipe_pre_case = 2
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-data_level = 4
+data_level = 6
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
@@ -23,7 +26,7 @@ cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 ## TODO change case_num and cluster_num for test
 case_num = 0  # change pipeline case num (0~4)
 uncertain_flag = False
-cluster_num = 8 # change cluster num (2~8)
+cluster_num = 4 # change cluster num (2~8)
 
 # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
 case_list =[["processing_1", True], ["processing_2", False], ["processing_3", False], ["processing_4", False], ["test_data_processing_1", False]]
@@ -84,7 +87,7 @@ processing_case_param = {
 delta = relativedelta(years=5)
 new_start_time = data_param['start_time'] - delta
 new_bk_name ="task_" + task_name
-cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(data_level)+"_pre_param_"+pipe_pre_case+"_clustering_"+str(clustering_case) # TODO 
+cluster_result_name = new_bk_name + "_case_"+str(case_num) +"_level_"+str(data_level)+"_pre_param_"+str(pipe_pre_case)+"_clustering_"+str(clustering_case) # TODO 
 
 def get_new_ms_name(data_type, select_class = None, cluster_result_name = cluster_result_name):
     if select_class:
