@@ -351,7 +351,7 @@ class CNNModel(BaseRegressionModel):
         Returns:
             inference_loader (DataLoader) : inference data loader
         """
-        # match dimension
+        # ensure input shape is [batch_size, seq_len, input_size]
         if len(infer_x.shape) != 3:
             infer_x = np.expand_dims(infer_x, axis=0)
         

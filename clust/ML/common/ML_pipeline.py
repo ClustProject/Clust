@@ -201,7 +201,7 @@ def CLUST_regression_train(train_X_array, train_y_array, val_X_array, val_y_arra
             'device': 'cpu',
             'n_epochs': 10,
             'batch_size': 16}
-    >>> model_method = [LSTM_rg|GRU_rg|CNN_1D_rg|LSTM_FCNs_rg|FC_rg]
+    >>> model_method = [LSTM_rg|GRU_rg|CNN_1D_rg|LSTM_FCNs_rg]
     >>> modelParameter = {'rnn_type': 'lstm',
                 'input_size': 3,
                 'hidden_size': 64,
@@ -342,7 +342,7 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
             'device': 'cpu',
             'n_epochs': 10,
             'batch_size': 16}
-    >>> model_method = [LSTM_cf|GRU_cf|CNN_1D_cf|LSTM_FCNs_cf|FC_cf]
+    >>> model_method = [LSTM_cf|GRU_cf|CNN_1D_cf|LSTM_FCNs_cf]
     >>> modelParameter = {'rnn_type': 'lstm',
                 'hidden_size': 64,
                 'num_layers': 2,

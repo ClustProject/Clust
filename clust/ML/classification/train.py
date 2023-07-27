@@ -6,7 +6,6 @@ sys.path.append("..")
 sys.path.append("../..")
 
 from Clust.clust.ML.classification.classification_model.cnn_1d_model import CNNModel
-from Clust.clust.ML.classification.classification_model.fc_model import FCModel
 from Clust.clust.ML.classification.classification_model.lstm_fcns_model import LSTMFCNsModel
 from Clust.clust.ML.classification.classification_model.rnn_model import RNNModel
 
@@ -55,8 +54,6 @@ class ClassificationTrain():
             self.model = CNNModel(self.model_params)
         elif model_method == 'LSTM_FCNs_cf':
             self.model = LSTMFCNsModel(self.model_params)
-        elif model_method == 'FC_cf':
-            self.model = FCModel(self.model_params)
         else:
             print('Choose the model correctly')
 

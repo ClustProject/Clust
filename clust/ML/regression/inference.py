@@ -6,7 +6,6 @@ sys.path.append("../..")
 from Clust.clust.ML.regression.clust_models.rnn_clust import RNNClust
 from Clust.clust.ML.regression.clust_models.cnn1d_clust import CNN1DClust
 from Clust.clust.ML.regression.clust_models.lstm_fcns_clust import LSTMFCNsClust
-from Clust.clust.ML.regression.clust_models.fc_clust import FCClust
 
 
 class RegressionInference():
@@ -44,8 +43,6 @@ class RegressionInference():
             self.model = CNN1DClust(self.model_params)
         elif model_method == 'LSTM_FCNs_rg':
             self.model = LSTMFCNsClust(self.model_params)
-        elif model_method == 'FC_rg':
-            self.model = FCClust(self.model_params)
         else:
             print('Choose the model correctly')
 
