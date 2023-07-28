@@ -1,13 +1,15 @@
 import matplotlib.pyplot as plt
 import seaborn as sns 
 
-def get_plt_result(graph_type, df):
+def get_plt_result(graph_type, df, param):
     """ 
     # Description         
      graph_type에 따라 plt을 생성하여 리턴함.
 
     # Args
      * graph_type(_str_) = [ heat_map | line chart | bar chart ]
+     * df : input data
+     * param: 필요 파람
       
     # Returns      
      * df(_pandas.dataFrame_) 
@@ -18,23 +20,23 @@ def get_plt_result(graph_type, df):
     pp = PlotPlt()
     
     if graph_type == 'heat_map' :            
-        plt_ = pp.plot_heatmap(df)
+        plt_ = pp.plot_heatmap(df, param)
     elif graph_type == 'line_chart' :
-        plt_ = pp.plot_all_feature_line_chart(df)
-    elif graph_type =='bar_chart':
-        plt_ = pp.plot_bar_chart(df)  
-    elif graph_type =='scatter':
-        plt_ = pp.plot_scatter(df)  
-    elif graph_type =='histogram':
-        plt_ = pp.plot_histogram(df)      
+        plt_ = pp.plot_all_feature_line_chart(df, param)
     elif graph_type =='box_plot':
-        plt_ = pp.plot_box_plot(df) 
+        plt_ = pp.plot_box_plot(df, param) 
+    elif graph_type =='scatter':
+        plt_ = pp.plot_scatter(df, param)  
+    elif graph_type =='histogram':
+        plt_ = pp.plot_histogram(df, param)      
+    elif graph_type =='bar_chart':
+        plt_ = pp.plot_bar_chart(df, param)  
     
     return plt_
  
  
 class PlotPlt():
-    def plot_heatmap(self, data):
+    def plot_heatmap(self, data, param):
         """
         # Description 
          plot heatmap plt
@@ -55,7 +57,7 @@ class PlotPlt():
         return plt
 
     #plot_features->plot_plt
-    def plot_all_feature_line_chart(self, data):
+    def plot_all_feature_line_chart(self, data, param):
         """
         # Description 
         This function plots all column data by index. graphs are lines.
@@ -75,7 +77,7 @@ class PlotPlt():
         
         return plt
 
-    def plot_bar_chart(self, data):
+    def plot_bar_chart(self, data, param):
         """
         # Description 
          This function plots bar chart
@@ -91,7 +93,7 @@ class PlotPlt():
         data.plot.bar(subplots=True)
         return plt
     
-    def plot_scatter(self, data):
+    def plot_scatter(self, data, param):
         """
         # Description 
          This function plots scatter chart with only the front two columns
@@ -103,13 +105,21 @@ class PlotPlt():
          * plt(_pyplot module_)
 
         """
+        if param: 
+            first_col = param["first_col"]
+            second_col = param['second_col']
+        else:
+            first_col = data.columns[0]
+            second_col = data.columns[1]
+            
+        first_col
         plt.figure()
-        data.plot.scatter(x=data.columns[0], y=data.columns[1], c='DarkBlue')
+        data.plot.scatter(x=first_col, y=second_col, c='DarkBlue')
 
         return plt
     
     # TODO
-    def plot_histogram(self, y):
+    def plot_histogram(self, y, param):
         """
             Show histogram result 
             
@@ -118,19 +128,13 @@ class PlotPlt():
             Returns:
                 histogram plt instance
         """
-        """
-    
-        bins = np.arange(0, y.max()+1.5)-0.5
-        fig, ax = plt.subplots()
-        _ = ax.hist(y, bins)
-        ax.set_xticks(bins+0.5)
-        """
+            
         plt.figure() 
         y.hist(bins=20)
         
         return plt
     
-    def plot_box_plot(self, data):
+    def plot_box_plot(self, data, param):
         """
         # Description 
          This function plots scatter chart
