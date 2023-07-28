@@ -7,7 +7,7 @@ def get_plt_result(graph_type, df, param):
      graph_type에 따라 plt을 생성하여 리턴함.
 
     # Args
-     * graph_type(_str_) = [ heat_map | line chart | bar chart ]
+     * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot'] 
      * df : input data
      * param: 필요 파람
       
@@ -20,11 +20,11 @@ def get_plt_result(graph_type, df, param):
     pp = PlotPlt()
     
     if graph_type == 'heat_map' :            
-        plt_ = pp.plot_heatmap(df, param)
+        plt_ = pp.plot_heatmap(df)
     elif graph_type == 'line_chart' :
-        plt_ = pp.plot_all_feature_line_chart(df, param)
+        plt_ = pp.plot_all_feature_line_chart(df)
     elif graph_type =='box_plot':
-        plt_ = pp.plot_box_plot(df, param) 
+        plt_ = pp.plot_box_plot(df) 
     elif graph_type =='scatter':
         plt_ = pp.plot_scatter(df, param)  
     elif graph_type =='histogram':
@@ -36,7 +36,7 @@ def get_plt_result(graph_type, df, param):
  
  
 class PlotPlt():
-    def plot_heatmap(self, data, param):
+    def plot_heatmap(self, data):
         """
         # Description 
          plot heatmap plt
@@ -57,7 +57,7 @@ class PlotPlt():
         return plt
 
     #plot_features->plot_plt
-    def plot_all_feature_line_chart(self, data, param):
+    def plot_all_feature_line_chart(self, data):
         """
         # Description 
         This function plots all column data by index. graphs are lines.
@@ -119,22 +119,29 @@ class PlotPlt():
         return plt
     
     # TODO
-    def plot_histogram(self, y, param):
+    def plot_histogram(self, data, param):
         """
             Show histogram result 
             
             Args:
-                y (numpy.ndarray): 1d array (label result)    
+                * data(_pandas.dataFrame_) =  Input data 
+                * param ={"column_name": "apple"}
             Returns:
                 histogram plt instance
         """
+        if param: 
+            column_name = param["column_name"]
             
+        else:
+            column_name = data.columns[0]
+            
+        data_h = data[[column_name]].astype(float)
         plt.figure() 
-        y.hist(bins=20)
+        data_h.hist(bins=20)
         
         return plt
     
-    def plot_box_plot(self, data, param):
+    def plot_box_plot(self, data):
         """
         # Description 
          This function plots scatter chart
