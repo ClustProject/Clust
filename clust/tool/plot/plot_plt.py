@@ -7,7 +7,7 @@ def get_plt_result(graph_type, data, param):
      graph_type에 따라 plt을 생성하여 리턴함.
 
     # Args
-     * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot'] 
+     * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
      * data : input data
      * param: 필요 파라미터 (None이거나 dict)
           - feature_list ()
@@ -41,6 +41,8 @@ def get_plt_result(graph_type, data, param):
         plt_ = pp.plot_bar_chart(df)  
     elif graph_type == 'area':
         plt_ = pp.plot_area_chart(df)
+    elif graph_type == 'density':
+        plt_ = pp.plot_density(df)
     
     return plt_
  
@@ -174,6 +176,23 @@ class PlotPlt():
         """
         plt.figure()
         data.plot.area()
+        
+        return plt
+    
+    def plot_density(self, data):
+        """
+        # Description 
+         This function plots area plot
+    
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
+
+        """
+        plt.figure()
+        data.plot.density()
         
         return plt
         
