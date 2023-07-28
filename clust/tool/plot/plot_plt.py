@@ -1,24 +1,32 @@
 import matplotlib.pyplot as plt
 import seaborn as sns 
 
-def get_plt_result(graph_type, df, param):
+def get_plt_result(graph_type, data, param):
     """ 
     # Description         
      graph_type에 따라 plt을 생성하여 리턴함.
 
     # Args
      * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot'] 
-     * df : input data
-     * param: 필요 파람
+     * data : input data
+     * param: 필요 파라미터 (None이거나 dict)
+          - feature_list ()
       
     # Returns      
-     * df(_pandas.dataFrame_) 
+     * plt(plot instance) 
             
     """
-    # TODO plt인 경우 바깥, 안에서 무분별하게 param을 설정하는 경우가 많은데. .이부분을 공부해서 어떻게 해야 원하는 사이즈로 이미지를 뽑을 수 있는지
-    # # 그렇게 하려면 외부 변수를 어떤 식으로 받아들여야 하는지 정리 필요함
-    pp = PlotPlt()
     
+    if param:
+        if "feature_list" in param.keys():
+            feature_list = param["feature_list"]
+            df = data[feature_list]
+        else:
+            df = data
+    else:
+        df = data
+    pp = PlotPlt()
+
     if graph_type == 'heat_map' :            
         plt_ = pp.plot_heatmap(df)
     elif graph_type == 'line_chart' :
@@ -26,11 +34,13 @@ def get_plt_result(graph_type, df, param):
     elif graph_type =='box_plot':
         plt_ = pp.plot_box_plot(df) 
     elif graph_type =='scatter':
-        plt_ = pp.plot_scatter(df, param)  
+        plt_ = pp.plot_scatter(df)  
     elif graph_type =='histogram':
-        plt_ = pp.plot_histogram(df, param)      
+        plt_ = pp.plot_histogram(df)      
     elif graph_type =='bar_chart':
-        plt_ = pp.plot_bar_chart(df, param)  
+        plt_ = pp.plot_bar_chart(df)  
+    elif graph_type == 'area':
+        plt_ = pp.plot_area_chart(df)
     
     return plt_
  
@@ -48,6 +58,7 @@ class PlotPlt():
          * plt(_pyplot module_)
             
         """
+        plt.figure()
         ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.index.values, annot =True, annot_kws ={'size': 4})
         bottom, top = ax.get_ylim() 
         heat_map = plt.gcf()
@@ -69,6 +80,7 @@ class PlotPlt():
          * plt(_pyplot module_)
 
         """
+        plt.figure()
         plot_cols = data.columns
         plot_features = data[plot_cols]
         _ = plot_features.plot(subplots=True)
@@ -77,7 +89,7 @@ class PlotPlt():
         
         return plt
 
-    def plot_bar_chart(self, data, param):
+    def plot_bar_chart(self, data):
         """
         # Description 
          This function plots bar chart
@@ -93,54 +105,27 @@ class PlotPlt():
         data.plot.bar(subplots=True)
         return plt
     
-    def plot_scatter(self, data, param):
+    def plot_scatter(self, data):
         """
         # Description 
          This function plots scatter chart with only the front two columns
                
         # Args
-         * data(_pandas.dataFrame_) =  Input data
+         * data(_pandas.dataFrame_) =  Input data, 입력은 두개의 컬럼만 가져야 함
+         * param(dict) : 
+            - feature_list
 
         # Returns
          * plt(_pyplot module_)
 
         """
-        if param: 
-            first_col = param["first_col"]
-            second_col = param['second_col']
-        else:
-            first_col = data.columns[0]
-            second_col = data.columns[1]
-            
-        first_col
+        feature_list = list(data.columns)
         plt.figure()
-        data.plot.scatter(x=first_col, y=second_col, c='DarkBlue')
+        data.plot.scatter(x=feature_list[0], y=feature_list[1], c='DarkBlue')
 
         return plt
     
-    # TODO
-    def plot_histogram(self, data, param):
-        """
-            Show histogram result 
-            
-            Args:
-                * data(_pandas.dataFrame_) =  Input data 
-                * param ={"column_name": "apple"}
-            Returns:
-                histogram plt instance
-        """
-        if param: 
-            column_name = param["column_name"]
-            
-        else:
-            column_name = data.columns[0]
-            
-        data_h = data[[column_name]].astype(float)
-        plt.figure() 
-        data_h.hist(bins=20)
-        
-        return plt
-    
+
     def plot_box_plot(self, data):
         """
         # Description 
@@ -157,5 +142,38 @@ class PlotPlt():
         data.boxplot()
 
         return plt
+    
+    def plot_histogram(self, data):
+        """
+            Show histogram result 
+            Args:
+                * data(_pandas.dataFrame_) =  Input data  , 입력은 하나의 column만 가져야 함
+                * param(dict) : 
+                  - feature_list
+            Returns:
+                histogram plt instance
+        """
+            
+        data_h = data.astype(float)
+        plt.figure() 
+        data_h.plot.hist(bins=20, alpha = 0.5)
         
+        return plt
+    
+    def plot_area_chart(self, data):
+        """
+        # Description 
+         This function plots area plot
+    
+        # Args
+         * data(_pandas.dataFrame_) =  Input data
+
+        # Returns
+         * plt(_pyplot module_)
+
+        """
+        plt.figure()
+        data.plot.area()
+        
+        return plt
         
