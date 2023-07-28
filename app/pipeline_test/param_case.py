@@ -60,6 +60,7 @@ preprocessing_case = case_list[case_num][0]
 clustering_case = case_list[case_num][1]
 
 ## 1. preprocessing param setup
+"""
 if preprocessing_case == "processing_1":
     processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing']
 
@@ -74,7 +75,21 @@ elif preprocessing_case == "processing_4":
 
 elif preprocessing_case == "test_data_processing_1":
     processing_task_list = ['data_refinement']
-    
+"""
+if preprocessing_case == "processing_1":
+    processing_task_list = ['data_outlier', 'data_refinement', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing']
+
+elif preprocessing_case == "processing_2":
+    processing_task_list = [ 'data_outlier', 'data_refinement','data_split', 'data_integration','data_quality_check','data_imputation']
+
+elif preprocessing_case == "processing_3":
+    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
+
+elif preprocessing_case == "processing_4":
+    processing_task_list = ['data_refinement', 'data_integration', 'data_imputation']
+
+elif preprocessing_case == "test_data_processing_1":
+    processing_task_list = ['data_refinement']
 ## 2. preprocessing 
 processing_case_param = {
     "processing_task_list" : processing_task_list, 
