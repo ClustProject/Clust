@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns 
 
-def get_plt_result(graph_type, data, param):
+def get_plt_result(graph_type, data):
     """ 
     # Description         
      graph_type에 따라 plt을 생성하여 리턴함.
@@ -9,22 +9,12 @@ def get_plt_result(graph_type, data, param):
     # Args
      * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
      * data : input data
-     * param: 필요 파라미터 (None이거나 dict)
-          - feature_list ()
       
     # Returns      
      * plt(plot instance) 
             
     """
     
-    if param:
-        if "feature_list" in param.keys():
-            feature_list = param["feature_list"]
-            df = data[feature_list]
-        else:
-            df = data
-    else:
-        df = data
     pp = PlotPlt()
 
     if graph_type == 'heat_map' :            

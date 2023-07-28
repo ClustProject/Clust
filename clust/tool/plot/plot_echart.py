@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-def get_echart_json_result(graph_type, df, param)  :
+def get_echart_json_result(graph_type, df)  :
     """ 
     # Description       
      graph_type에 따라 df를 echart에서 쓰일 x_arr, y_arr, data_arr로 가공 후 리턴함.

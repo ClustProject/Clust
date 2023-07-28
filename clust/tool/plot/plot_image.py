@@ -5,7 +5,7 @@ sys.path.append("../../")
 
 from Clust.clust.tool.plot import plot_plt
 
-def get_img_result(graph_type, df, param):
+def get_img_result(graph_type, df):
     """ 
     # Description    
      graph_type에 따라 생성한 plt이미지를 byte string으로 변환하여 리턴함.    
@@ -19,7 +19,7 @@ def get_img_result(graph_type, df, param):
     """
     #TODO 명확히 정의할 것 프로그램이 independent 하도록
     
-    plt_ = plot_plt.get_img_result(graph_type, df, param)
+    plt_ = plot_plt.get_img_result(graph_type, df)
     jpg_data = plt_to_image(plt_)
     
     return jpg_data
