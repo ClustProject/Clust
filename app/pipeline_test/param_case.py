@@ -11,7 +11,7 @@ from Clust.clust.ingestion.mongo import mongo_client
 mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
 
 # TODO eda flag
-eda_flag = False
+eda_flag = True
 
 # TODO change value
 pipe_pre_case = 2
