@@ -18,21 +18,21 @@ def get_plt_result(graph_type, data):
     pp = PlotPlt()
 
     if graph_type == 'heat_map' :            
-        plt_ = pp.plot_heatmap(df)
+        plt_ = pp.plot_heatmap(data)
     elif graph_type == 'line_chart' :
-        plt_ = pp.plot_all_feature_line_chart(df)
+        plt_ = pp.plot_all_feature_line_chart(data)
     elif graph_type =='box_plot':
-        plt_ = pp.plot_box_plot(df) 
+        plt_ = pp.plot_box_plot(data) 
     elif graph_type =='scatter':
-        plt_ = pp.plot_scatter(df)  
+        plt_ = pp.plot_scatter(data)  
     elif graph_type =='histogram':
-        plt_ = pp.plot_histogram(df)      
+        plt_ = pp.plot_histogram(data)      
     elif graph_type =='bar_chart':
-        plt_ = pp.plot_bar_chart(df)  
+        plt_ = pp.plot_bar_chart(data)  
     elif graph_type == 'area':
-        plt_ = pp.plot_area_chart(df)
+        plt_ = pp.plot_area_chart(data)
     elif graph_type == 'density':
-        plt_ = pp.plot_density(df)
+        plt_ = pp.plot_density(data)
     
     return plt_
  
