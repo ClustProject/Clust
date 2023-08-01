@@ -77,7 +77,7 @@ elif preprocessing_case == "test_data_processing_1":
     processing_task_list = ['data_refinement']
 """
 if preprocessing_case == "processing_1":
-    processing_task_list = ['data_outlier', 'data_refinement', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing']
+    processing_task_list = ['data_outlier', 'data_refinement', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing'] # +clustering
 
 elif preprocessing_case == "processing_2":
     processing_task_list = [ 'data_outlier', 'data_refinement','data_split', 'data_integration','data_quality_check','data_imputation']
