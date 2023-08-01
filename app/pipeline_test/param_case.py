@@ -14,19 +14,19 @@ mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
 eda_flag = True
 
 # TODO change value
-pipe_pre_case = 2
+pipe_pre_case = 3
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-data_level = 6
+data_level = 9
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 
 ## TODO change case_num and cluster_num for test
-case_num = 0  # change pipeline case num (0~4)
+case_num = 3  # change pipeline case num (0~4)
 uncertain_flag = False
-cluster_num = 4 # change cluster num (2~8)
+cluster_num = 8 # change cluster num (2~8)
 
 # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
 case_list =[["processing_1", True], ["processing_2", False], ["processing_3", False], ["processing_4", False], ["test_data_processing_1", False]]
@@ -81,11 +81,12 @@ if preprocessing_case == "processing_1":
 
 elif preprocessing_case == "processing_2":
     processing_task_list = [ 'data_outlier', 'data_refinement','data_split', 'data_integration','data_quality_check','data_imputation']
-
+## processing_2에서 quality check 만 빼는 pipeline 은??
 elif preprocessing_case == "processing_3":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
+    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration', 'data_imputation']
 
 elif preprocessing_case == "processing_4":
+    test_pipe_param['data_integration']['integration_param']['duration'] = {'start_time': data_param['start_time'], 'end_time': data_param['end_time']}
     processing_task_list = ['data_refinement', 'data_integration', 'data_imputation']
 
 elif preprocessing_case == "test_data_processing_1":

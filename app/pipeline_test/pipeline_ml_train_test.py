@@ -8,7 +8,7 @@ feature_list = ["in_co2"]
 
 ############# Train (Model info)
 # TODO # set train data info
-train_ms_name = "task_air_quality_case_0_level_4_pre_param_1_clustering_True_4_Train"
+train_ms_name = "task_air_quality_case_3_level_9_pre_param_3_clustering_False_Train"
 
 # TODO # (Train) set predict step (int)
 past_step = 24
@@ -16,7 +16,7 @@ future_step = 12
 
 ############ Test
 # TODO # set test data info
-test_ms_name = "task_air_quality_case_4_level_5_clustering_False_Test"
+test_ms_name = "task_air_quality_case_4_level_10_pre_param_3_clustering_False_Test"
 
 
 ##############################################################
