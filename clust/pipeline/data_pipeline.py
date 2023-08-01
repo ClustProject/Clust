@@ -204,6 +204,14 @@ def pipeline_result_EDA(data, module_name, feature_name):
     # For EDA
     import math
     import matplotlib.pyplot as plt
+
+    def _plot_data(data, module_name, feature_name=None):
+        plt.figure(figsize=(15, 5))
+        plt.title(module_name)
+        plt.plot(data)
+        if feature_name:
+            print("Nan : ", data.isna().sum()[feature_name])
+
     def _plot_dataset(dataset, module_name, feature_name=None):
         row = math.ceil(len(dataset)/2)
         plt.figure(figsize=(20,row*3.5))
@@ -226,18 +234,24 @@ def pipeline_result_EDA(data, module_name, feature_name):
             plt.title("{}_{}".format(data_name, module_name))
             plt.plot(column_data)
     
+    def _plot_interface(data, module_name, feature_name=None):
+        if isinstance(data, dict):
+            _plot_dataset(data, module_name, feature_name)
+        elif isinstance(data, pd.DataFrame):
+            _plot_data(data, module_name, feature_name)
+
     ##############################################################
     if module_name == 'data_refinement': 
-        _plot_dataset(data, module_name, feature_name)
+        _plot_interface(data, module_name, feature_name)
 
     if module_name =="data_outlier":
-        _plot_dataset(data, module_name, feature_name)
+        _plot_interface(data, module_name, feature_name)
         
     elif module_name =='data_split':          
-        _plot_dataset(data, module_name, feature_name)
+        _plot_interface(data, module_name, feature_name)
         
     elif module_name == 'data_selection':          
-        _plot_dataset(data, module_name, feature_name)
+        _plot_interface(data, module_name, feature_name)
         
     elif module_name =='data_integration':
         print(data.isna().sum())
