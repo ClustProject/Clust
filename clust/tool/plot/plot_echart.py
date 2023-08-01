@@ -37,7 +37,7 @@ def get_echart_json_result(graph_type, df)  :
         index_value = get_index_value_by_columns(df)
     
     elif graph_type == 'scatter' :
-        index_value = get_index_value_by_columns(df)
+        index_value = get_scatter_data(df)
 
     result  = json.dumps(index_value)
 
@@ -73,5 +73,41 @@ def get_index_value_by_columns(df):
     for column in df.columns:
         value = df.loc[:, column].values.tolist()
         result['value'][column] = value
+    
+    return result
+
+def get_scatter_data(df):
+    """
+    
+    This is the function to create result for scatter graph 
+    in echart format when input parameter is dataframe.
+
+    :param df: This is Time Series Dataframe.
+    :type df: DataFrame
+
+    :returns: echart format result
+    
+    :rtype: dictionary
+    
+    Output Example :
+                    {
+                        "value" : {
+                            "scatter" : [value1, value2, value3]                            
+                            },
+                        "index" : ["2021-02-03 17:18", "2021-02-03 17:19", "2021-02-03 17:20"]
+                    }
+    """
+
+    result = {}
+
+    df = df.replace({np.nan:None})     
+    
+    result['value'] = { 'scatter' : [], 'keys' : [df.columns[0], df.columns[1]]}
+
+    size = len(df[df.columns[0]])   
+
+    for x in range(size):        
+        result['value']['scatter'].append([  df[df.columns[0]][x], df[df.columns[1]][x]] )       
+
     
     return result
