@@ -18,13 +18,13 @@ pipe_pre_case = 3
 
 # TODO define dynamic parameter, import proper resource base on task_name
 task_name = "air_quality"
-data_level = 9
+data_level = 13
 
 # TODO define cycle condition
 cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
 
 ## TODO change case_num and cluster_num for test
-case_num = 3  # change pipeline case num (0~4)
+case_num = 1  # change pipeline case num (0~4)
 uncertain_flag = False
 cluster_num = 8 # change cluster num (2~8)
 
