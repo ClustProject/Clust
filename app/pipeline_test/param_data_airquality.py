@@ -371,6 +371,45 @@ def get_data_preprocessing_param(case):
             'data_scaling': {'flag': True, 'method':'minmax'} 
         }
         
+    elif case == 4:
+        pipe_param = {
+            'data_refinement': { 
+                "remove_duplication": {'flag': True},
+                "static_frequency": {'flag': True, 'frequency': None}
+            }, 
+
+            'data_outlier': {
+                'certain_error_to_NaN': {'flag': True},
+                'uncertain_error_to_NaN': {'flag': False}
+            },
+
+            'data_split': {
+                'split_method': 'cycle',
+                'split_param': {'feature_cycle': None, 'feature_cycle_times': None}
+            },
+            
+            'data_selection': {'select_method': 'keyword_data_selection',
+                            'select_param': {'keyword': '*'}
+            },
+            
+            'data_integration': {
+                'integration_type': 'one_feature_based_integration',
+                'integration_param': {'feature_name': None,'duration': None,'integration_frequency': None }
+            },
+
+            'data_quality_check': {
+                'quality_method': 'data_with_clean_feature',
+                'quality_param': {'nan_processing_param': {'type': 'num','ConsecutiveNanLimit': 12,'totalNaNLimit': 100}}
+            },
+
+            'data_imputation': {'flag': True,
+                                'imputation_method': [{'min': 0,'max': 20000,'method': 'linear','parameter': {}}],
+                                'total_non_NaN_ratio': 1},
+
+            'data_smoothing': {"flag": True, "emw_param":0.3},
+
+            'data_scaling': {'flag': True, 'method':'minmax'} 
+        }
         
     return pipe_param
         

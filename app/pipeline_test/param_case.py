@@ -81,7 +81,7 @@ if preprocessing_case == "processing_1":
 
 elif preprocessing_case == "processing_2":
     processing_task_list = [ 'data_outlier', 'data_refinement','data_split', 'data_integration','data_quality_check','data_imputation']
-## processing_2에서 quality check 만 빼는 pipeline 은??
+
 elif preprocessing_case == "processing_3":
     processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration', 'data_imputation']
 
