@@ -190,6 +190,22 @@ def get_data_conidtion_by_data_level(data_level = 0):
 
         # ingestion method
         ingestion_method = "multiple_ms_by_time"
+
+    elif data_level == 14:
+        bucket = 'air_indoor_경로당'
+        data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000271'], [bucket, 'ICL1L2000238'], [bucket, 'ICL1L2000279'], 
+                                      [bucket, 'ICL1L2000276'], [bucket, 'ICL1L2000278'], [bucket, 'ICL1L2000242'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000283']]
+        processing_freq = 10
+
+        # feature
+        feature_name = 'in_co2'
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
+
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
         
     return bucket, data_param, processing_freq, feature_name, ingestion_method
 
