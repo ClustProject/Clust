@@ -241,6 +241,7 @@ def pipeline_result_EDA(data, module_name, feature_name):
             _plot_data(data, module_name, feature_name)
 
     ##############################################################
+    
     if module_name == 'data_refinement': 
         _plot_interface(data, module_name, feature_name)
 

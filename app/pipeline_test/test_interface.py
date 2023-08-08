@@ -11,10 +11,15 @@ from Clust.clust.tool.plot import plot_interface
 from Clust.clust.ML.tool import util
 
 
-def get_preprocessing_test_pipeline(pipeline_case_param, uncertain_error_to_NaN_flag, param):
+def get_DFSet_preprocessing_test_pipeline(pipeline_case_param, uncertain_error_to_NaN_flag, param):
     """
-    공기질 시나리오의 Processing Data 단계를 pipeline case 별 진행하는 interface
+    Data Set input과 파라미터 값을 의거하여 유효한 테스트 파이프라인 파라미터를 생성함
+    Args:
+        preprocessing_case_param(dict)
+        uncertain_error_to_NaN_flag (str)
+        param (str)test_pipe_param
 
+        
     Example:
         >>> processing_case_param = {
         ... "processing_task_list" : processing_task_list, 
@@ -100,11 +105,26 @@ Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 imputat
     return result_dic, clustering_result_by_class
 
 def select_clustering_data_result(data, clust_class_list, clust_result):
-    result_df = pd.DataFrame()
+    import pandas as pd 
+    import numpy as np
+    from sklearn.preprocessing import MinMaxScaler
+    # make total scaler
+    result_df = pd.DataFrame(pd.Series(data.values.ravel('F')))
+    scaler_total = MinMaxScaler()
+    scaler_total.fit_transform(result_df)
+    
+    inverse_scaled_data_indi= np.array([])
     for clust_class in clust_class_list:
         for ms_name, class_value in clust_result.items():
             if class_value == str(clust_class):
-                result_df = pd.concat([result_df, data[ms_name]])
+                scaler_indi = MinMaxScaler()
+                scaled_data_indi = scaler_indi.fit_transform(data[[ms_name]])
+                import matplotlib.pyplot as plt
+                inverse_scaled_data_indi_temp = scaler_total.inverse_transform(scaled_data_indi)
+                
+                inverse_scaled_data_indi_temp = inverse_scaled_data_indi_temp.reshape(-1)
+                inverse_scaled_data_indi = np.concatenate((inverse_scaled_data_indi,inverse_scaled_data_indi_temp),axis=0)
+    result_df = pd.DataFrame(inverse_scaled_data_indi)   
     return result_df
 
 def select_preprocessed_data_result(data):
@@ -118,6 +138,7 @@ def get_univariate_df_by_integration(result_df, start_time, feature, frequency):
     result_df.columns = [feature]
     time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(result_df))
     result_df.set_index(time_index, inplace = True)
+    result_df.index.name = "time"
     
     return result_df
 
