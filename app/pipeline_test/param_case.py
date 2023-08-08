@@ -14,7 +14,7 @@ mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
 #### automatically make additional variables
 task_name = "air_quality"
 
-def get_processing_task_list(preprocessing_case, data_param):
+def get_processing_task_list(preprocessing_case, data_param, test_pipe_param):
     if preprocessing_case == "processing_1":
         processing_task_list = ['data_outlier', 'data_refinement', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing'] # +clustering
 
@@ -30,7 +30,7 @@ def get_processing_task_list(preprocessing_case, data_param):
 
     elif preprocessing_case == "test_data_processing_1":
         processing_task_list = ['data_refinement']
-    return processing_task_list
+    return processing_task_list, test_pipe_param
 
 if task_name =='air_quality':
     from . import param_data_airquality as param_data
@@ -73,7 +73,7 @@ def define_processing_case_param(preprocessing_case, data_level, pipe_pre_case, 
     #### preprocessing and clustering method Setting
     
     ## 1. preprocessing param setup
-    processing_task_list = get_processing_task_list(preprocessing_case, data_param)
+    processing_task_list, test_pipe_param = get_processing_task_list(preprocessing_case, data_param, test_pipe_param)
     
     ## 2. preprocessing 
     processing_case_param = {
