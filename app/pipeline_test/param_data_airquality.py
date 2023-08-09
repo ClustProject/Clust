@@ -218,6 +218,36 @@ def get_data_conidtion_by_data_level(data_level = 0):
 
         # ingestion method
         ingestion_method = "multiple_ms_by_time"
+
+    elif data_level == 15:
+        bucket = 'air_indoor_경로당'
+        data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
+        processing_freq = 10
+
+        # feature
+        feature_name = 'in_co2'
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
+
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
+
+    elif data_level == 16:
+        bucket = 'air_indoor_경로당'
+        data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
+        processing_freq = 1
+
+        # feature
+        feature_name = 'in_co2'
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
+
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
         
     return bucket, data_param, processing_freq, feature_name, ingestion_method
 
@@ -271,16 +301,20 @@ def get_data_preprocessing_param(case):
     elif case == 1:
         pipe_param['data_imputation']['imputation_method'][0]['max'] = 300
         pipe_param['data_quality_check']['quality_param']['nan_processing_param']['ConsecutiveNanLimit'] = 17
+        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['totalNaNLimit'] = 100
 
     elif case == 2:
         pipe_param['data_quality_check']['quality_param']['nan_processing_param']['ConsecutiveNanLimit'] = 31
+        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['totalNaNLimit'] = 100
 
     elif case == 3:
-        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['ConsecutiveNanLimit'] = 20
+        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['ConsecutiveNanLimit'] = 60
+        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['totalNaNLimit'] = 100
         
         
     elif case == 4:
         pipe_param['data_quality_check']['quality_param']['nan_processing_param']['ConsecutiveNanLimit'] = 12
+        pipe_param['data_quality_check']['quality_param']['nan_processing_param']['totalNaNLimit'] = 100
         
     return pipe_param
         
