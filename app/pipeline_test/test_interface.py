@@ -127,51 +127,5 @@ def select_clustering_data_result(data, clust_class_list, clust_result):
     result_df = pd.DataFrame(inverse_scaled_data_indi)   
     return result_df
 
-def select_preprocessed_data_result(data, new_column_name):
-    """transform multivariate data to univariate data 
-    
-    Args:
-        data (pd.DataFrame): data frame with multiple columns
-        new_column_name (str): new univariate column name
 
-    Returns:
-        result_df (pd.DataFrame): data frame with one column
-    """
-    result_df = pd.DataFrame()
-    for name in data:
-        result_df = pd.concat([result_df, data[name]])
-    result_df.columns = [new_column_name]
-    
-    return result_df
-    
-
-def get_univariate_df_by_integration(data, start_time, frequency):
-    """add timeindex for data frame
-    
-    Args:
-        data (pd.DataFrame): data frame 
-        start_time(datetime): start time
-        frequency(int): minutes, time series data description duration
-
-    Returns:
-        data (pd.DataFrame): data frame with time index (index name = time)
-    """
-    time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(data))
-    data.set_index(time_index, inplace = True)
-    data.index.name = "time"
-    
-    return data
-
-def make_uni_variate_with_time_index(data, start_time, frequency, new_column_name):
-    """"sumary_line
-    
-    Keyword arguments:
-    argument -- description
-    Return: return_description
-    """
-    
-    select_preprocessed_data_result(data, new_column_name)
-    get_univariate_df_by_integration(data, start_time, frequency)
-    return data
-    
 
