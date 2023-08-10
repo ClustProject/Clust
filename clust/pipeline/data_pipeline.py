@@ -38,7 +38,11 @@ pipeline_rule = {
     },
     "data_quality_check":{
         DF:DF
+    },
+    "data_flattening":{
+        DF:DF
     }
+
 }
 
 def pipeline(data, module_list, feature_name = None):
@@ -63,7 +67,8 @@ def pipeline(data, module_list, feature_name = None):
             ...     ['data_quality_check', quality_param],
             ...     ['data_imputation', imputation_param],
             ...     ['data_smoothing', smoothing_param],
-            ...     ['data_scaling', scaling_param]]
+            ...     ['data_scaling', scaling_param],
+            ...     ['data_flattening', flattening_param]]
 
       
     """
@@ -117,6 +122,10 @@ def pipeline(data, module_list, feature_name = None):
         elif module_name =='data_scaling': 
             from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('scaling', data, module_param)
+
+        elif module_name == 'data_flattening':
+            from Clust.clust.transformation.general import flatten_interface
+            data = flatten_interface.make_uni_variate_with_time_index(data, module_param)
         
         if feature_name: #우선 EDA 선별자
             pipeline_result_EDA(data, module_name, feature_name)
