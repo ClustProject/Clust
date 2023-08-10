@@ -146,7 +146,7 @@ class CleanFeatureData:
 
         DRN = data_remove_byNaN.DataRemoveByNaNStatus()
         nan_removed_data = DRN.removeNaNData(data, NanInfoForCleanData)
-
+        print("Cleaning Results: (old column num) ---> (new column num)")
         print(len(data.columns), "--->", len(nan_removed_data.columns))
 
         return nan_removed_data

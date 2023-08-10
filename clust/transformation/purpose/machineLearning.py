@@ -67,7 +67,7 @@ def trans_by_step_info(X, y, transformParameter):
     m_steps = transformParameter['future_step']
     max_nan_limit_ratio = transformParameter['max_nan_limit_ratio']
     nan_limit_num = int(n_steps*max_nan_limit_ratio)
-    print("nan_limit_num: ", nan_limit_num)
+    print("한 독립 데이터에", nan_limit_num, " 만큼의 에러를 포함한 데이터는 학습에 포함하지 않음")
     for i in range(n_steps, len(X)-m_steps):
         np_X = X.iloc[i-n_steps:i, :].values
         np_y = y.iloc[i+m_steps, :].values

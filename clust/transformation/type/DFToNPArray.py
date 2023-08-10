@@ -21,6 +21,7 @@ def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
     # 144개 인덱스 간격으로 데이터프레임을 쪼갬
     splitted_df = [X.iloc[i:i+window_size] for i in range(0, len(X), window_size)]
     X_array, y_array=[], []
+    print(nan_limit_num, "만큼의 에러가 있는 데이터는 생략함")
     for i, splitted in enumerate(splitted_df):
         #list_cols = [splitted[col_name].tolist() for col_name in splitted.columns]
         np_X = np.array(splitted.values.tolist())

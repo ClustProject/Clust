@@ -37,8 +37,8 @@ if task_name =='air_quality':
 else:
     pass
 
-def get_test_pipe_param(task_name, pipe_pre_case, cycle_condition):
-    test_pipe_param = param_data.get_data_preprocessing_param(pipe_pre_case)
+def get_test_pipe_param(task_name, consecutive_nan_limit_number, cycle_condition):
+    test_pipe_param = param_data.get_data_preprocessing_param(consecutive_nan_limit_number)
 
     if cycle_condition == "day_1":
         feature_cycle = 'Day'
@@ -62,12 +62,14 @@ def get_new_ms_name(data_type, cluster_result_name, select_class = None):
     return new_ms_name
 
 
-def define_processing_case_param(preprocessing_case, data_level, pipe_pre_case, cycle_condition):
+def define_processing_case_param(preprocessing_case, data_level, consecutive_nan_limit_minute, cycle_condition):
     # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
 
     ########################################################################
     bucket, data_param, processing_freq, feature_name, ingestion_method  = param_data.get_data_conidtion_by_data_level(data_level)
-    test_pipe_param = get_test_pipe_param(task_name, pipe_pre_case, cycle_condition)
+    consecutive_nan_limit_num = int(consecutive_nan_limit_minute/processing_freq)
+    print("consecutive_nan_limit_num:", consecutive_nan_limit_num)
+    test_pipe_param = get_test_pipe_param(task_name, consecutive_nan_limit_num, cycle_condition)
     min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, bucket )
     ########################################################################
     #### preprocessing and clustering method Setting

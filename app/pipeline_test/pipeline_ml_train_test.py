@@ -45,7 +45,7 @@ def get_model_param(ms_name, past_step, future_step, model_num, feature_list):
             'scaler_path' :'./scaler/'
         },
         "transform_param":{
-            'data_clean_option' : "false",
+            'data_clean_option' : "True",
             'split_mode' : 'step_split', # 현재 data_y_flag=Ture --> 모두 window_split # data_y = False --> step_split
             'past_step':past_step, #step_split일 경우만 past_step과 future_step이 존재
             'future_step':future_step
