@@ -104,27 +104,37 @@ Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 imputat
 
     return result_dic, clustering_result_by_class
 
-def select_clustering_data_result(data, clust_class_list, clust_result):
+def select_clustering_data_result(data, clust_class_list, clust_result, scaling = False):
     import pandas as pd 
     import numpy as np
     from sklearn.preprocessing import MinMaxScaler
     # make total scaler
-    result_df = pd.DataFrame(pd.Series(data.values.ravel('F')))
-    scaler_total = MinMaxScaler()
-    scaler_total.fit_transform(result_df)
-    
-    inverse_scaled_data_indi= np.array([])
-    for clust_class in clust_class_list:
-        for ms_name, class_value in clust_result.items():
-            if class_value == str(clust_class):
-                scaler_indi = MinMaxScaler()
-                scaled_data_indi = scaler_indi.fit_transform(data[[ms_name]])
-                import matplotlib.pyplot as plt
-                inverse_scaled_data_indi_temp = scaler_total.inverse_transform(scaled_data_indi)
-                
-                inverse_scaled_data_indi_temp = inverse_scaled_data_indi_temp.reshape(-1)
-                inverse_scaled_data_indi = np.concatenate((inverse_scaled_data_indi,inverse_scaled_data_indi_temp),axis=0)
-    result_df = pd.DataFrame(inverse_scaled_data_indi)   
+    if scaling == True:
+        result_df = pd.DataFrame(pd.Series(data.values.ravel('F')))
+        scaler_total = MinMaxScaler()
+        scaler_total.fit_transform(result_df)
+        
+        inverse_scaled_data_indi= np.array([])
+        
+        for clust_class in clust_class_list:
+            for ms_name, class_value in clust_result.items():
+                if class_value == str(clust_class):
+                    scaler_indi = MinMaxScaler()
+                    scaled_data_indi = scaler_indi.fit_transform(data[[ms_name]])
+                    import matplotlib.pyplot as plt
+                    inverse_scaled_data_indi_temp = scaler_total.inverse_transform(scaled_data_indi)
+                    
+                    inverse_scaled_data_indi_temp = inverse_scaled_data_indi_temp.reshape(-1)
+                    inverse_scaled_data_indi = np.concatenate((inverse_scaled_data_indi,inverse_scaled_data_indi_temp),axis=0)
+        result_df = pd.DataFrame(inverse_scaled_data_indi)  
+         
+    else:
+        result_df = pd.DataFrame()
+        for clust_class in clust_class_list:
+            for ms_name, class_value in clust_result.items():
+                if class_value == str(clust_class):
+                    result_df = pd.concat([result_df, data[[ms_name]]])
+                    
     return result_df
 
 

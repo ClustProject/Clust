@@ -94,6 +94,7 @@ class Test:
         row_num = math.ceil(n_clusters/col_num)
         fig, ax = plt.subplots(row_num, col_num, figsize=(20, row_num * 5))
         plt.setp(ax, xlim=custom_xlim, ylim=custom_ylim)
+        print(cluster_centers_)
         for i in range(0, row_num):
             for j in range(0, col_num):
                 clust_num = (col_num*i+j)
