@@ -176,6 +176,7 @@ def transform_data_by_split_mode(transformParameter, X, y):
     Returns:
         X_array, y_array (np.array): 학습을 위해 최종적으로 준비된 데이터
     """
+    print("transformParameter['split_mode']: ", transformParameter['split_mode'])
     if transformParameter['split_mode'] =='window_split':
         from Clust.clust.transformation.type import DFToNPArray
         X_array, y_array= DFToNPArray.trans_DF_to_NP_by_windowNum(X, y, transformParameter)

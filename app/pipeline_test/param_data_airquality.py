@@ -267,12 +267,29 @@ def get_data_conidtion_by_data_level(data_level = 0):
         # ingestion method
         ingestion_method = "multiple_ms_by_time"
         
+    elif data_level == 21:
+        bucket = 'air_indoor_경로당'
+        data_param['start_time']= pd.to_datetime("2020-10-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2022-10-31 23:59:59")
+        data_param['bucket_name'] = bucket
+        data_param['ms_list_info'] = [[bucket, 'ICL1L2000275']]
+        processing_freq = 60
+
+        # feature
+        feature_name = 'in_co2'
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
+
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
+        
+        
     return bucket, data_param, processing_freq, feature_name, ingestion_method
 
 
 def get_data_preprocessing_param(consecutive_nan_limit_number):
     quality_limit = consecutive_nan_limit_number
     total_nan_limit = 100000
+    total_imputation_limit = 100000000000
     pipe_param = {
         'data_refinement': { 
                 "remove_duplication": {'flag': True},
@@ -295,7 +312,7 @@ def get_data_preprocessing_param(consecutive_nan_limit_number):
             'quality_param': {'nan_processing_param': {'type': 'num','ConsecutiveNanLimit': quality_limit,'totalNaNLimit': total_nan_limit}}
         },
         'data_imputation': {'flag': True,
-                                'imputation_method': [{'min': 0,'max': 10000000000,'method': 'linear','parameter': {}}],
+                                'imputation_method': [{'min': 0,'max': total_imputation_limit,'method': 'linear','parameter': {}}],
                                 'total_non_NaN_ratio': 1},
         'data_outlier': {
             'certain_error_to_NaN': {'flag': True},
