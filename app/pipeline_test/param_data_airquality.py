@@ -295,7 +295,7 @@ def get_data_preprocessing_param(consecutive_nan_limit_number):
             'quality_param': {'nan_processing_param': {'type': 'num','ConsecutiveNanLimit': quality_limit,'totalNaNLimit': total_nan_limit}}
         },
         'data_imputation': {'flag': True,
-                                'imputation_method': [{'min': 0,'max': quality_limit,'method': 'linear','parameter': {}}],
+                                'imputation_method': [{'min': 0,'max': 10000000000,'method': 'linear','parameter': {}}],
                                 'total_non_NaN_ratio': 1},
         'data_outlier': {
             'certain_error_to_NaN': {'flag': True},
