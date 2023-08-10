@@ -269,8 +269,8 @@ def get_data_conidtion_by_data_level(data_level = 0):
         
     elif data_level == 21:
         bucket = 'air_indoor_경로당'
-        data_param['start_time']= pd.to_datetime("2020-10-01 00:00:00")
-        data_param['end_time'] = pd.to_datetime("2022-10-31 23:59:59")
+        data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
         data_param['bucket_name'] = bucket
         data_param['ms_list_info'] = [[bucket, 'ICL1L2000275']]
         processing_freq = 60

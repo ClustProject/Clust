@@ -156,7 +156,7 @@ def get_univariate_df_by_integration(data, start_time, frequency):
     Returns:
         data (pd.DataFrame): data frame with time index (index name = time)
     """
-    time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(result_df))
+    time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(data))
     data.set_index(time_index, inplace = True)
     data.index.name = "time"
     
@@ -172,5 +172,6 @@ def make_uni_variate_with_time_index(data, start_time, frequency, new_column_nam
     
     select_preprocessed_data_result(data, new_column_name)
     get_univariate_df_by_integration(data, start_time, frequency)
+    return data
     
 
