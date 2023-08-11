@@ -5,14 +5,17 @@ sys.path.append("../..")
 import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-from Clust.clust.meta.metaDataManager import bucketMeta
-from Clust.setting import influx_setting_KETI as ins
-from Clust.clust.ingestion.mongo import mongo_client
-mongo_client_ = mongo_client.MongoClient(ins.CLUSTMetaInfo2)
+
 
 ########################################################################
 #### automatically make additional variables
 task_name = "air_quality"
+
+if task_name =='air_quality':
+    from . import param_data_airquality as param_data
+else:
+    pass
+
 
 def get_processing_task_list(preprocessing_case, data_param, test_pipe_param):
     if preprocessing_case == "processing_1":
@@ -32,12 +35,8 @@ def get_processing_task_list(preprocessing_case, data_param, test_pipe_param):
         processing_task_list = ['data_refinement']
     return processing_task_list, test_pipe_param
 
-if task_name =='air_quality':
-    from . import param_data_airquality as param_data
-else:
-    pass
 
-def get_test_pipe_param(task_name, consecutive_nan_limit_number, cycle_condition):
+def get_test_pipe_param(consecutive_nan_limit_number, cycle_condition):
     test_pipe_param = param_data.get_data_preprocessing_param(consecutive_nan_limit_number)
 
     if cycle_condition == "day_1":
@@ -60,29 +59,3 @@ def get_new_ms_name(data_type, cluster_result_name, select_class = None):
     new_ms_name = cluster_result_name + "_" + data_type
 
     return new_ms_name
-
-
-def define_processing_case_param(preprocessing_case, data_level, consecutive_nan_limit_minute, cycle_condition):
-    # [[pipeline_case_num, clustering_flag]] -> [pipeline1-1, pipeline1-2, pipeline1-3, pipeline1-4, test pipeline]
-
-    ########################################################################
-    bucket, data_param, processing_freq, feature_name, ingestion_method  = param_data.get_data_conidtion_by_data_level(data_level)
-    consecutive_nan_limit_num = int(consecutive_nan_limit_minute/processing_freq)
-    print("consecutive_nan_limit_num:", consecutive_nan_limit_num)
-    test_pipe_param = get_test_pipe_param(task_name, consecutive_nan_limit_num, cycle_condition)
-    min_max = bucketMeta.get_min_max_info_from_bucketMeta(mongo_client_, bucket )
-    ########################################################################
-    #### preprocessing and clustering method Setting
-    
-    ## 1. preprocessing param setup
-    processing_task_list, test_pipe_param = get_processing_task_list(preprocessing_case, data_param, test_pipe_param)
-    
-    ## 2. preprocessing 
-    processing_case_param = {
-        "processing_task_list" : processing_task_list, 
-        "processing_freq" : processing_freq,
-        "feature_name" : feature_name,
-        "data_min_max" : min_max
-    }
-
-    return processing_case_param, test_pipe_param, ingestion_method, data_param 
