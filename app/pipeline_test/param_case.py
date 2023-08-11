@@ -86,27 +86,3 @@ def define_processing_case_param(preprocessing_case, data_level, consecutive_nan
     }
 
     return processing_case_param, test_pipe_param, ingestion_method, data_param 
-
-
-## 3. save result 
-def get_new_start_time (start_time):
-    delta = relativedelta(years=5)
-    new_start_time = start_time- delta
-    return new_start_time
-    
-"""
-if preprocessing_case == "processing_1":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing']
-
-elif preprocessing_case == "processing_2":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_quality_check','data_imputation']
-
-elif preprocessing_case == "processing_3":
-    processing_task_list = ['data_refinement', 'data_outlier', 'data_split', 'data_integration','data_imputation']
-
-elif preprocessing_case == "processing_4":
-    processing_task_list = ['data_refinement', 'data_integration', 'data_imputation']
-
-elif preprocessing_case == "test_data_processing_1":
-    processing_task_list = ['data_refinement']
-"""

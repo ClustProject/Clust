@@ -30,6 +30,8 @@ def make_data_with_time_index(data, start_time, frequency):
         data (pd.DataFrame): data frame with time index (index name = time)
     """
     time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(data))
+    print(len(time_index))
+    print(len(data))
     data.set_index(time_index, inplace = True)
     data.index.name = "time"
     
