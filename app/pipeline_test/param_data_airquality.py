@@ -32,8 +32,8 @@ def get_data_conidtion_by_data_level(data_level = 0):
     elif data_level == 2:
         # test data ingestion info : ingestion_method(multiple_ms_by_time)
         bucket ='air_indoor_체육시설'
-        data_param['start_time'] = pd.to_datetime("2021-09-27 00:00:00")
-        data_param['end_time'] = pd.to_datetime("2021-10-22 23:59:59")
+        data_param['start_time'] = pd.to_datetime("2021-09-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-09-20 23:59:59")
         data_param['ms_list_info'] = [[bucket, 'ICW0W2001037'], [bucket, 'ICW0W2001044']]
         # feature
         feature_name = 'in_co2'
