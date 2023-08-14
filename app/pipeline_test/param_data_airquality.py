@@ -324,7 +324,6 @@ def get_data_conidtion_by_data_level(data_level = 0):
 
 def get_data_preprocessing_param(consecutive_nan_limit_number):
     quality_limit = consecutive_nan_limit_number
-    print("consecutive_nan_limit_number: ", consecutive_nan_limit_number)
     total_nan_limit = 100000
     total_imputation_limit = 100000000000
     pipe_param = {

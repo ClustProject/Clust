@@ -22,7 +22,7 @@ def get_data_frame(param, db_client = None):
         
     return data
 
-def save_data_frame(data, param, db_client = None):
+def save_data_frame(data, o_param, db_client = None):
     """data를 influx 혹은 CSV로 저장함
 
     Args:
@@ -31,14 +31,16 @@ def save_data_frame(data, param, db_client = None):
         db_client (influx client, optional): influx information. Defaults to None.
     """
     
-    data_type = param['data_type']
-    param = param['param']
+    data_type = o_param['data_type']
+    param = o_param['param']
     
-    if data_type == 'csv':
+    if data_type.lower() == 'csv':
         file_path = param['file_path']
-        from Clust.clust.ingestion.DataToCSV import dfToCSV
-        dfToCSV.save_data(data, file_path)
-    elif data_type =='influx':
+        file_name = param['file_name']
+        from Clust.clust.data import store_data
+        store_data.save_csv_data(file_path, file_name, data)
+
+    elif data_type.lower() =='influx':
         bucket_name = param['bucket_name']
         measurement_name = param['measurement_name']
         db_client.write_db(bucket_name, measurement_name, data)

@@ -77,11 +77,12 @@ def read_model_meta_from_local(json_file_path, model_name=None):
         model_meta: 해당 model name의 모델 메타
     """
     model_meta = read_json(json_file_path)
-    
+    model_meta_first_key = list(model_meta.keys())[0]
     if model_name:
         model_meta = model_meta[model_name]
     else:
-        pass
+        model_meta = model_meta[model_meta_first_key
+                                ]
     return model_meta
 
 def read_model_list_from_local(json_file_path):

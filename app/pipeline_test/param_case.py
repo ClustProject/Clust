@@ -52,10 +52,10 @@ def get_test_pipe_param(consecutive_nan_limit_number, cycle_condition):
     
     return test_pipe_param
 
-def get_new_ms_name(data_type, cluster_result_name, select_class = None):
+def get_new_ms_name(cluster_result_name, select_class = None):
     if select_class:
         select_class_str = ''.join(str(c) for c in select_class)
         cluster_result_name = cluster_result_name +"_"+select_class_str
-    new_ms_name = cluster_result_name + "_" + data_type
+    new_ms_name = cluster_result_name 
 
     return new_ms_name
