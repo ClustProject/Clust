@@ -1,5 +1,6 @@
 import pandas as pd
-
+# JW: 22- 23, 3- 2
+# JS (Good) 16
 def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
@@ -249,6 +250,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
 
         # ingestion method
         ingestion_method = "multiple_ms_by_time"
+        
     
         ## JW
     elif data_level == 20:
