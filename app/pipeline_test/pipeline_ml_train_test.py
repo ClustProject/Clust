@@ -56,7 +56,7 @@ def get_model_param(ms_name, past_step, future_step, model_num, feature_list):
             'model_method' : model_method,    # 'GRU_rg', 'LSTM_rg', 'CNN_1D_rg', 'LSTM_FCNs_rg'
             'model_name' : model_name,
             'model_tags' : task_name+"_forecasting",
-            'train_parameter' : {"lr":0.0001,"weight_decay":0.000001,"n_epochs":100,"batch_size":16},
+            'train_parameter' : {"lr":0.0001,"weight_decay":0.000001,"n_epochs":15,"batch_size":16},
             'model_parameter' : model_param
         }
     }
