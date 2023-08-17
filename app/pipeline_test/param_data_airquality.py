@@ -1,7 +1,7 @@
 import pandas as pd
-# JW: 22- 23, 3- 2
-# JS (Good) 16-17, 9-10
-# JS (Test) 4-5, 6-7
+# JW: 22- 23 (Bad), 3- 2 (Good)
+# JS  16-17(Best), 9-10 (Good)
+# (Test중) 4-5(Bad), 6-7 ()
 def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
