@@ -1,7 +1,7 @@
 import pandas as pd
 # JW: 22- 23, 3- 2
 # JS (Good) 16-17, 9-10
-# JS: 4-5, 6-7
+# JS (Test) 4-5, 6-7
 def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
@@ -151,7 +151,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
         # ingestion method
         ingestion_method = "ms_by_time"
     
-        ## JW
+    ## JW
     elif data_level == 20:
         bucket = 'air_indoor_경로당'
         data_param['start_time']= pd.to_datetime("2021-09-15 00:00:00")
