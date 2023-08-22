@@ -45,14 +45,14 @@ pipeline_rule = {
 
 }
 
-def pipeline(data, module_list, feature_name = None):
+def pipeline(data, module_list, edafalg =False):
     """ 
     data pipeline 작업을 수행함 (다수개의 모듈연산(모듈+모듈의 파라미터)을 순서대로 수행), feature name을 입력하는 경우 이에 대한 specific EDA 수행
 
     Args:
         data(dataframe or dictionary (set of dataframe)) : input data
         pipleline_list(list of list) : list of [module_name, module_param] 
-        feature_name: specific feature name for EDA
+        edafalg: eda flag
     
     Returns:
         DataFrame or Dictionary : data
@@ -72,9 +72,13 @@ def pipeline(data, module_list, feature_name = None):
 
       
     """
+    print("############################################ module_name:", "Original") 
+    pipeline_result_EDA(data, "Original")
+    print(get_shape(data))
+       
     for module in module_list:
         module_name, module_param = module[0], module[1]
-        print(module_name) 
+        print("############################################ module_name:", module_name) 
         if module_name == 'data_refinement': 
             from Clust.clust.preprocessing import processing_interface
             data= processing_interface.get_data_result('refinement', data, module_param)
@@ -118,7 +122,6 @@ def pipeline(data, module_list, feature_name = None):
             from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('smoothing', data, module_param)
 
-            
         elif module_name =='data_scaling': 
             from Clust.clust.preprocessing import processing_interface
             data = processing_interface.get_data_result('scaling', data, module_param)
@@ -127,8 +130,8 @@ def pipeline(data, module_list, feature_name = None):
             from Clust.clust.transformation.general import flatten_interface
             data = flatten_interface.make_uni_variate_with_time_index(data, module_param)
         
-        if feature_name: #우선 EDA 선별자
-            pipeline_result_EDA(data, module_name, feature_name)
+        if edafalg: #우선 EDA 선별자
+            pipeline_result_EDA(data, module_name)
             
         print(get_shape(data))
         if isinstance(data, dict):
@@ -208,74 +211,60 @@ def get_shape(data):
         d2 = data[first_key].shape
         return (d1, d2)
     
-def pipeline_result_EDA(data, module_name, feature_name):
+def pipeline_result_EDA(data, module_name):
     # For EDA
     import math
     import matplotlib.pyplot as plt
 
-    def _plot_data(data, module_name, feature_name=None):
+    def _plot_data(data, module_name):
         plt.figure(figsize=(15, 5))
         plt.title(module_name)
         plt.plot(data)
-        if feature_name:
-            print("Nan : ", data.isna().sum()[feature_name])
+            
 
-    def _plot_dataset(dataset, module_name, feature_name=None):
+    def _plot_dataset(dataset, module_name):
         row = math.ceil(len(dataset)/2)
         plt.figure(figsize=(20,row*3.5))
+        
         for i, data_name in enumerate(dataset):
             data = dataset[data_name]
             plt.rc('font', size=8)
             plt.subplot(row, 2, i+1)
             plt.title("{}_{}".format(data_name, module_name))
             plt.plot(data)
-            if feature_name:
-                print("{}_{}_Nan : ".format(data_name, feature_name), data.isna().sum()[feature_name])
 
-    def _plot_data_by_column(data, module_name):
-        row = math.ceil(len(data.columns)/2)
-        plt.figure(figsize=(20,row*3))
-        for i, data_name in enumerate(data):
-            column_data = data[data_name]
-            plt.rc('font', size=8)
-            plt.subplot(row, 2, i+1)
-            plt.title("{}_{}".format(data_name, module_name))
-            plt.plot(column_data)
-    
-    def _plot_interface(data, module_name, feature_name=None):
+            
+    def _count_nan_dataset(dataset):
+        previous_nan = 0 
+            
+        for i, data_name in enumerate(dataset):
+            data = dataset[data_name]
+            total_nan = data.isna().sum() + previous_nan
+                
+        print("data_length:", len(dataset))
+        print("Feature NaN number : ", total_nan)
+        
+        
+    def _count_nan(data):
+        print("data_length:", 1)
+        #print("Feature NaN number  : ", data.isna().sum())
+        print("All NaN number  : ", data.isna().sum().sum())
+            
+    def _plot_interface(data, module_name):
         if isinstance(data, dict):
-            _plot_dataset(data, module_name, feature_name)
+            _plot_dataset(data, module_name)
         elif isinstance(data, pd.DataFrame):
-            _plot_data(data, module_name, feature_name)
-
+            _plot_data(data, module_name)
+            
+    def _count_nan_interface(data):
+        if isinstance(data, dict):
+            _count_nan_dataset(data)
+        elif isinstance(data, pd.DataFrame):
+            _count_nan(data)
+                    
+    
     ##############################################################
     
-    if module_name == 'data_refinement': 
-        _plot_interface(data, module_name, feature_name)
-
-    if module_name =="data_outlier":
-        _plot_interface(data, module_name, feature_name)
-        
-    elif module_name =='data_split':          
-        _plot_interface(data, module_name, feature_name)
-        
-    elif module_name == 'data_selection':          
-        _plot_interface(data, module_name, feature_name)
-        
-    elif module_name =='data_integration':
-        print(data.isna().sum())
-        
-    elif module_name == 'data_quality_check':
-        print(data.isna().sum())
-        
-    elif module_name == 'data_imputation': 
-        _plot_data_by_column(data, module_name)
-        print(data.isna().sum())
-        
-    elif module_name =='data_smoothing':
-        _plot_data_by_column(data, module_name)
-        
-    elif module_name =='data_scaling': 
-        pass
-
+    _plot_interface(data, module_name)
+    _count_nan_interface(data)
 

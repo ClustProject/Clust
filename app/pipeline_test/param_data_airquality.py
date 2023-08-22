@@ -1,12 +1,28 @@
 import pandas as pd
 # JW: 22- 23 (Bad), 3- 2 (Good)
 # JS  16-17(Best), 9-10 (Good)
-# (Test중) 4-5(Bad), 6-7 ()
+# 4-5(Bad), 6-7 (Good)
+# (test) 0-1
 def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
+    
+    if data_level in [0, 1]:
+        feature_name = 'in_noise' # integration, prediction feature
+        processing_freq = 1 # refinement, integration frequency
+        bucket ='air_indoor_중학교'
+        data_param['bucket_name'] = bucket
+        data_param['feature_list']= [feature_name]
+        ingestion_method = "all_ms_in_one_bucket"
+        if data_level == 0: #train
+            data_param['start_time'] = pd.to_datetime("2022-05-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2022-08-30 23:59:59")
 
-    # set Level 0 
+        if data_level == 1: #test
+            data_param['start_time'] = pd.to_datetime("2022-09-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2022-09-14 23:59:59")
+            
+        
     if data_level == 2:
         # test data ingestion info : ingestion_method(multiple_ms_by_time)
         bucket ='air_indoor_체육시설'
@@ -47,6 +63,34 @@ def get_data_conidtion_by_data_level(data_level = 0):
         # ingestion method
         ingestion_method = "all_ms_in_one_bucket"
     
+    elif data_level == 53:
+        # train
+        bucket ='air_indoor_체육시설'
+        data_param['start_time']= pd.to_datetime("2021-01-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
+        
+        # feature
+        feature_name = 'in_co2' # integration, prediction feature
+        processing_freq = 5 # refinement, integration frequency
+        
+        # ingestion method
+        data_param['bucket_name'] = bucket
+        ingestion_method = "all_ms_in_one_bucket"
+
+    elif data_level == 52:
+        # test
+        bucket ='air_indoor_체육시설'
+        data_param['start_time'] = pd.to_datetime("2021-09-01 00:00:00")
+        data_param['end_time'] = pd.to_datetime("2021-09-20 23:59:59")
+        data_param['ms_list_info'] = [[bucket, 'ICW0W2001037'], [bucket, 'ICW0W2001044']]
+        # feature
+        feature_name = 'in_co2'
+        processing_freq = 5 # train data 와 freq를 맞춰주기 위해서 필요
+        
+        data_param['feature_list']= [[feature_name], [feature_name]]
+        # ingestion method
+        ingestion_method = "multiple_ms_by_time"
+        
     elif data_level == 5:
         bucket ='air_indoor_초등학교'
         data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
@@ -63,7 +107,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
 
     elif data_level == 6:
         bucket ='air_indoor_초등학교'
-        data_param['start_time']= pd.to_datetime("2021-03-01 00:00:00")
+        data_param['start_time']= pd.to_datetime("2021-07-01 00:00:00")
         data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
         data_param['bucket_name'] = bucket
         
@@ -75,7 +119,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
         ingestion_method = "all_ms_in_one_bucket"
     
     elif data_level == 7:
-        bucket ='air_indoor_초등학교'
+        bucket ='air_indoor_초등학교' # 초등학교가 양질의 데이터가 많음, 체육시설도
         data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
         data_param['end_time'] = pd.to_datetime("2021-11-26 23:59:59")
         data_param['ms_list_info'] = [[bucket, 'ICW0W2000023'], [bucket, 'ICW0W2000024'], [bucket, 'ICW0W2000025'], [bucket, 'ICW0W2000031'], [bucket, 'ICW0W2000034']]
@@ -89,7 +133,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
         ingestion_method = "multiple_ms_by_time"
 
     elif data_level == 9:
-        bucket = 'air_indoor_경로당'
+        bucket = 'air_indoor_경로당' # 경로당 좋지 않은 데이터가 많음
         data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
         data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
         data_param['bucket_name'] = bucket
