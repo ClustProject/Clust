@@ -74,7 +74,7 @@ def pipeline(data, module_list, edafalg =False):
     """
     print("############################################ module_name:", "Original") 
     pipeline_result_EDA(data, "Original")
-    print(get_shape(data))
+    print("Original Shape: ", get_shape(data))
        
     for module in module_list:
         module_name, module_param = module[0], module[1]
@@ -133,7 +133,7 @@ def pipeline(data, module_list, edafalg =False):
         if edafalg: #우선 EDA 선별자
             pipeline_result_EDA(data, module_name)
             
-        print(get_shape(data))
+        print("after module processing shape:", get_shape(data))
         if isinstance(data, dict):
             for processing_data in data.values():
                 if processing_data.empty:

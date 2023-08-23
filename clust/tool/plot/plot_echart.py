@@ -13,9 +13,7 @@ def get_echart_json_result(graph_type, df)  :
     # Returns         
      * result_json(_json_)
             
-    """    
-    print(df)
-
+    """   
     if graph_type == 'heat_map' :  
         '''
                 CO2     Noise      PM10      PM25      Temp      VoCs     humid
@@ -82,7 +80,6 @@ def get_index_value_by_columns(df):
     for column in df.columns:
         value = df.loc[:, column].values.tolist()
         result['value'][column] = value
-    
     return result
 
 def get_scatter_data(df):
