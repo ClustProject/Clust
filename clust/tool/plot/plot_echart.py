@@ -46,7 +46,7 @@ def get_echart_json_result(graph_type, df)  :
     
     #elif graph_type == 'density' : echart 제공 안 됨
      #   index_value = get_index_value_by_columns(df)
-
+    
     result  = json.dumps(index_value)
 
     return result
@@ -77,6 +77,7 @@ def get_index_value_by_columns(df):
     
     #index라는 컬럼이 없다. 
     result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
+    print(index_value)
     result['value']={}
     for column in df.columns:
         value = df.loc[:, column].values.tolist()
