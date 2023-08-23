@@ -77,7 +77,7 @@ def get_index_value_by_columns(df):
     
     #index라는 컬럼이 없다. 
     result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
-    print(index_value)
+    print(df.index)
     result['value']={}
     for column in df.columns:
         value = df.loc[:, column].values.tolist()
