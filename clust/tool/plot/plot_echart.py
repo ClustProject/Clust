@@ -41,11 +41,16 @@ def get_echart_json_result(graph_type, df)  :
     elif graph_type == 'area' :
         index_value = get_index_value_by_columns(df)
     
-    #elif graph_type == 'histogram' : echart 제공 안 됨
-     #   index_value = get_index_value_by_columns(df)    
+    elif graph_type == 'histogram' : 
+        #echart 제공 안 됨
+        index_value = get_index_value_by_columns(df)    
     
-    #elif graph_type == 'density' : echart 제공 안 됨
-     #   index_value = get_index_value_by_columns(df)
+    elif graph_type == 'density' : 
+        #echart 제공 안 됨
+        index_value = get_index_value_by_columns(df)
+    
+    else   :
+        index_value = {}
     
     result  = json.dumps(index_value)
 
