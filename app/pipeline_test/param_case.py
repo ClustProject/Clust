@@ -29,10 +29,8 @@ def get_processing_task_list(preprocessing_case, data_param, test_pipe_param):
 
     elif preprocessing_case == "processing_4":
         test_pipe_param['data_integration']['integration_param']['duration'] = {'start_time': data_param['start_time'], 'end_time': data_param['end_time']}
-        processing_task_list = ['data_refinement', 'data_integration', 'data_imputation']
+        processing_task_list = ['data_refinement',  'data_imputation']
 
-    elif preprocessing_case == "processing_5":
-        processing_task_list = ['data_refinement']
     return processing_task_list, test_pipe_param
 
 

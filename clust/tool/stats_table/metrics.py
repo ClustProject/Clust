@@ -17,11 +17,14 @@ def get_RMSE_with_original_and_processedData(original,  processed, partial_numbe
         print("RMSE of raw & processed_",i,":", mean_squared_error(a, b, squared=False))
         print("The number of different values ",i,":", np.sum(a != b), "(Total number: ", len(a),")")
 
-
+def smape(a, f):
+    return 1/len(a)* np.sum(2*np.abs(f-a)/(np.abs(a)+np.abs(f))*100)
 
 def calculate_metrics_df(df):
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
     return {'mae' : mean_absolute_error(df.value, df.prediction),
             'rmse' : mean_squared_error(df.value, df.prediction) ** 0.5,
-            'r2' : r2_score(df.value, df.prediction),
-           'mape' : np.mean(np.abs((df.value-df.prediction)/df.value))*100 }
+            'mape' : np.mean(np.abs((df.value-df.prediction)/df.value))*100,
+            'smape': smape(df.value, df.prediction),
+            'r2' : r2_score(df.value, df.prediction)
+    }

@@ -236,18 +236,22 @@ def pipeline_result_EDA(data, module_name):
             
     def _count_nan_dataset(dataset):
         previous_nan = 0 
-            
+        previous_leng = 0 
         for i, data_name in enumerate(dataset):
             data = dataset[data_name]
-            total_nan = data.isna().sum() + previous_nan
+            current_nan = data.isna().sum()
+            previous_nan = current_nan + previous_nan
+            previous_leng = len(data)+ previous_leng
+            
                 
-        print("data_length:", len(dataset))
-        print("Feature NaN number : ", total_nan)
+        print("data_length:", previous_leng)
+        print("Feature NaN number : ", previous_nan)
         
         
     def _count_nan(data):
         print("data_length:", 1)
         #print("Feature NaN number  : ", data.isna().sum())
+        print("data_length:", len(data))
         print("All NaN number  : ", data.isna().sum().sum())
             
     def _plot_interface(data, module_name):
