@@ -51,7 +51,7 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
         ['data_smoothing', {'flag': True, 'emw_param': 0.3}],
         ['data_scaling', {'flag': True, 'method': 'minmax'}]]
     
-    data = data_pipeline.pipeline(data_set, pipeline)
+    data = data_pipeline.pipeline(data_set, pipeline, False)
     result_dic, plt1, plt2 = app_clustering(data,cluster_num )
     return result_dic, plt1, plt2
 
@@ -100,7 +100,7 @@ def app_clustering(data, cluster_num, model_type ='som'):
     # histogram by label
     from Clust.clust.tool.plot import plot_interface
     y_df = pd.DataFrame(result)
-    plt2 = plot_interface.get_graph_result('plt', 'histogram', y_df)
+
             
     from Clust.clust.ML.tool import util
     data_name = list(data.columns)
