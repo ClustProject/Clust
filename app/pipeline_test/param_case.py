@@ -18,16 +18,16 @@ else:
 
 
 def get_processing_task_list(preprocessing_case, data_param, test_pipe_param):
-    if preprocessing_case == "processing_1":
+    if preprocessing_case == "processing_0":
         processing_task_list = ['data_outlier', 'data_refinement', 'data_split', 'data_integration','data_quality_check','data_imputation', 'data_smoothing'] # +clustering
 
-    elif preprocessing_case == "processing_2":
+    elif preprocessing_case == "processing_1":
         processing_task_list = [ 'data_outlier', 'data_refinement','data_split', 'data_integration','data_quality_check','data_imputation']
 
-    elif preprocessing_case == "processing_3":
+    elif preprocessing_case == "processing_2":
         processing_task_list = ['data_refinement', 'data_outlier', 'data_imputation']
 
-    elif preprocessing_case == "processing_4":
+    elif preprocessing_case == "processing_3":
         test_pipe_param['data_integration']['integration_param']['duration'] = {'start_time': data_param['start_time'], 'end_time': data_param['end_time']}
         processing_task_list = ['data_refinement',  'data_imputation']
 

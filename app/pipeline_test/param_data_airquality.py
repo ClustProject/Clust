@@ -12,12 +12,14 @@ def get_data_conidtion_by_data_level(data_level = 0):
         bucket = 'air_indoor_중학교'
         data_param['bucket_name'] = bucket
         data_param['feature_list']= [feature_name]
-        ingestion_method = "all_ms_in_one_bucket"
+        
         if data_level == 0: #train
+            ingestion_method = "all_ms_in_one_bucket"
             data_param['start_time'] = pd.to_datetime("2022-05-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2022-08-30 23:59:59")
 
         elif data_level == 1: #test
+            ingestion_method = "all_ms_in_one_bucket"
             data_param['start_time'] = pd.to_datetime("2022-09-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2022-09-14 23:59:59")
     
@@ -26,9 +28,9 @@ def get_data_conidtion_by_data_level(data_level = 0):
         feature_name = 'in_co2'
         bucket = 'air_indoor_체육시설'  
         data_param['bucket_name'] = bucket
-        ingestion_method = "all_ms_in_one_bucket"
         
         if data_level == 2:
+            ingestion_method = "all_ms_in_one_bucket"
             data_param['start_time']= pd.to_datetime("2021-01-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
         elif data_level == 3:
@@ -45,13 +47,14 @@ def get_data_conidtion_by_data_level(data_level = 0):
         processing_freq = 10 # refinement, integration frequency
         
         if data_level == 4:
+            ingestion_method = "all_ms_in_one_bucket"
             data_param['start_time']= pd.to_datetime("2021-03-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
-            ingestion_method = "all_ms_in_one_bucket"
+            
         elif data_level == 5:
+            ingestion_method = "multiple_ms_by_time"
             data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-11-26 23:59:59")
-            ingestion_method = "multiple_ms_by_time"
             data_param['ms_list_info'] = [[bucket, 'ICW0W2000023'], [bucket, 'ICW0W2000024'], [bucket, 'ICW0W2000025'], [bucket, 'ICW0W2000031'], [bucket, 'ICW0W2000034']]
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
       
@@ -74,7 +77,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
             ingestion_method = "multiple_ms_by_time"
     
     if data_level in [8, 9]:
-        bucket = air_indoor_경로당'
+        bucket = 'air_indoor_경로당'
         data_param['bucket_name'] = bucket # 경로당 좋지 않은 데이터가 많음
         processing_freq = 10
         feature_name = 'in_co2'
@@ -88,13 +91,14 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]           
 
         elif data_level == 10:
+            ingestion_method = "ms_by_time"
             data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-11-14 23:59:59")
-            ingestion_method = "ms_by_time"
             data_param['ms_name'] = "ICL1L2000252"
             data_param['feature_list'] = [feature_name]      
             
     if data_level in [16, 17]:
+        # 16, 17 유사 버전에 대해서 (116, 117 216 217등으로 복제 및 수정하여) 해보셔요 , frequency, feature등 바꿔가며
         bucket = 'air_indoor_경로당'
         data_param['bucket_name'] = bucket
         processing_freq = 1
@@ -102,23 +106,29 @@ def get_data_conidtion_by_data_level(data_level = 0):
         if data_level == 16:
             data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+            ingestion_method = "all_ms_in_one_bucket"
+            """
             ingestion_method = "multiple_ms_by_time"
             data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
-
+            """
         elif data_level == 17:
+            data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-11-12 23:59:59")
+            ingestion_method = "all_ms_in_one_bucket"
+            """
             data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
-            data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
+            data_param['end_time'] = pd.to_datetime("2021-11-2 23:59:59")
             ingestion_method = "ms_by_time"
             data_param['ms_name'] = "ICL1L2000252"
             data_param['feature_list'] = [feature_name]
-            
+            """
     if data_level in [53, 54]:
         feature_name = 'in_co2' # integration, prediction feature
         processing_freq = 5 # refinement, integration frequency\
         bucket ='air_indoor_체육시설'
         data_param['bucket_name'] = bucket
-        elif data_level == 53:
+        if data_level == 53:
             data_param['start_time']= pd.to_datetime("2021-01-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
             ingestion_method = "all_ms_in_one_bucket"

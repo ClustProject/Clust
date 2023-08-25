@@ -22,9 +22,9 @@ def smape(a, f):
 
 def calculate_metrics_df(df):
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-    return {'mae' : mean_absolute_error(df.value, df.prediction),
-            'rmse' : mean_squared_error(df.value, df.prediction) ** 0.5,
-            'mape' : np.mean(np.abs((df.value-df.prediction)/df.value))*100,
-            'smape': smape(df.value, df.prediction),
-            'r2' : r2_score(df.value, df.prediction)
+    return {'mae' : round(mean_absolute_error(df.value, df.prediction),2),
+            'rmse' : round(mean_squared_error(df.value, df.prediction) ** 0.5,2),
+            'mape' : round(np.mean(np.abs((df.value-df.prediction)/df.value))*100,2),
+            'smape': round(smape(df.value, df.prediction),2),
+            'r2' : round(r2_score(df.value, df.prediction),2)
     }
