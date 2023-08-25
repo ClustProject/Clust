@@ -108,25 +108,22 @@ def get_data_conidtion_by_data_level(data_level = 0):
         feature_name = 'in_co2'
         data_param['feature_list']= [feature_name]
         if data_level == 16:
+            ingestion_method = "multiple_ms_by_time"
             data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
-            ingestion_method = "all_ms_in_one_bucket"
-            """
-            ingestion_method = "multiple_ms_by_time"
             data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
-            """
+
+            # ingestion method
+            
         elif data_level == 17:
-            data_param['start_time']= pd.to_datetime("2021-11-01 00:00:00")
-            data_param['end_time'] = pd.to_datetime("2021-11-12 23:59:59")
-            ingestion_method = "all_ms_in_one_bucket"
-            """
+            ingestion_method = "ms_by_time"
             data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
-            data_param['end_time'] = pd.to_datetime("2021-11-2 23:59:59")
+            data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
             ingestion_method = "ms_by_time"
             data_param['ms_name'] = "ICL1L2000252"
             data_param['feature_list'] = [feature_name]
-            """
+            
     if data_level in [53, 54]:
         feature_name = 'in_co2' # integration, prediction feature
         processing_freq = 5 # refinement, integration frequency\
