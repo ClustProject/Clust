@@ -2,11 +2,14 @@ import pandas as pd
 # Good: 2-3, 6-7, 8-9, 16-17(Best)
 # Bad: 4-5, 22- 23
 # (test) 0-1
+# processing_freq 높은걸 찾을 수록 좋음 (1분)
+# 학습 기간은 최소 한달은 활용
+
 def get_data_conidtion_by_data_level(data_level = 0):
     ##############################################################################################
     data_param={}
     
-    if data_level in [0, 1]:
+    if data_level in [0, 1]: # JW
         feature_name = 'in_noise' # integration, prediction feature
         processing_freq = 1 # refinement, integration frequency
         bucket = 'air_indoor_중학교'
