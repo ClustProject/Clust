@@ -51,11 +51,12 @@ class PlotPlt():
             
         """
         plt.figure()
-        ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.index.values, annot =True, annot_kws ={'size': 4})
+        ax = sns.heatmap(data, xticklabels = data.columns.values, yticklabels = data.index.values, 
+                         cmap="Blues", annot =True, annot_kws ={'size': 8})
         bottom, top = ax.get_ylim() 
         heat_map = plt.gcf()
         ax.set_ylim(bottom+0.5, top-0.5)
-        heat_map.set_size_inches(10, 6)
+        #heat_map.set_size_inches(10, 6)
     
         return plt
 

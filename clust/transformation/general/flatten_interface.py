@@ -12,6 +12,7 @@ def make_univariate_df(data, new_column_name):
     """
     result_df = pd.DataFrame()
     for name in data:
+        print(data)
         result_df = pd.concat([result_df, data[name]])
     result_df.columns = [new_column_name]
     

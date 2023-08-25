@@ -62,7 +62,6 @@ class DataAnalysis():
 
         try:
             split_dataset = dataByCycle.getCycleselectDataFrame(data, y_frequency_unit, y_frequency_num, downsampling_freq)
-
             
             if split_dataset:
                 z = []
