@@ -14,11 +14,14 @@ def set_model_parameter(model_info):
     input_size = model_info['input_size']
     regression_model_list = ['LSTM_rg' , 'GRU_rg',  'CNN_1D_rg', 'LSTM_FCNs_rg',  'FC_rg']
     classification_model_list = [ 'LSTM_cf', 'GRU_cf', 'LSTM_cf', 'CNN_1D_cf', 'LSTM_FCNs_cf', 'FC_cf']
-    
+    anomaly_detection_model_list = ['BeatGAN_ad', 'LSTM_VAE_ad']
+
     if model_method in regression_model_list:
         model_parameter = get_regression_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
     elif model_method in classification_model_list:
         model_parameter = get_classification_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
+    elif model_method in anomaly_detection_model_list:
+        model_parameter = get_anomaly_detection_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
     else:
         model_parameter = None
         
@@ -141,4 +144,27 @@ def get_classification_model_parameter(model_method, model_info, seq_len, input_
 
     return model_parameter
 
+def get_anomaly_detection_model_parameter(model_method, model_info, seq_len, input_size):
+    """ anomaly detection model method parameter 
+    
+    Args:
+        model_method (string): model_method
+        model_info (dict): model_info
+        seq_len (int): seq_len
+        input_size (int): input_size
+    """
+
+    # BeatGAN model parameter
+    if model_method == 'BeatGAN_ad':
+        model_parameter = {
+            'input_size': input_size,
+            'seq_len': seq_len,
+            'in_c': model_info['in_c'],
+            'hidden_c': model_info['hidden_c'],
+            'latent_c': model_info['latent_c']
+        }
+    elif model_method == 'LSTM_VAE_ad':
+        pass
+                
+    return model_parameter
 

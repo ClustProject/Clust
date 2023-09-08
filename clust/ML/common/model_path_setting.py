@@ -55,5 +55,10 @@ my_model_info_list = {
             "FC_rg":{
                 "model_root_path": my_model_root_path, 
                 "model_info_path": ["FC_rg"],
+                "model_file_names":['model.pkl']},
+            # Anomaly Detection Model
+            "BeatGAN_ad":{
+                "model_root_path": my_model_root_path, 
+                "model_info_path": ["beatgan_ad"],
                 "model_file_names":['model.pkl']}
 }
