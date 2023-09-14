@@ -1,6 +1,7 @@
 import json
 import numpy as np
 
+
 def get_echart_json_result(graph_type, df)  :
     """ 
     # Description       
@@ -49,7 +50,8 @@ def get_echart_json_result(graph_type, df)  :
     
     else   :
         index_value = {}
-    
+
+        
     result  = json.dumps(index_value)
 
     return result
@@ -74,17 +76,21 @@ def get_index_value_by_columns(df):
                             },
                         "index" : ["2021-02-03 17:18", "2021-02-03 17:19", "2021-02-03 17:20"]
                     }
+
     """
     result ={}
-    df = df.replace({np.nan:None})   
+    df = df.replace({np.nan:None})    
+
+    import pandas as pd
+    if isinstance(df.index, pd.DatetimeIndex):
+        result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
     
-    #index라는 컬럼이 없다. 
-    result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
-    print(df.index)
     result['value']={}
+    
     for column in df.columns:
         value = df.loc[:, column].values.tolist()
         result['value'][column] = value
+
     return result
 
 def get_scatter_data(df):
@@ -110,11 +116,8 @@ def get_scatter_data(df):
     """
 
     result = {}
-
-    df = df.replace({np.nan:None})     
-    
+    df = df.replace({np.nan:None})         
     result['value'] = {'scatter' : [], 'keys' : [df.columns[0], df.columns[1]]}
-
     size = len(df[df.columns[0]])   
 
     for x in range(size):        
@@ -137,14 +140,19 @@ def get_bar_data(df):
     :rtype: dictionary
     
     Output Example :
+                    (1)
                     {
-                        "value" :  [['product', '2015', '2016', '2017'],
-                                    ['Matcha Latte', 43.3, 85.8, 93.7],
-                                    ['Milk Tea', 83.1, 73.4, 55.1],
-                                    ['Cheese Cocoa', 86.4, 65.2, 82.5],
-                                    ['Walnut Brownie', 72.4, 53.9, 39.1]]
+                        "value" :  [ 
+                                    { 'product' : ['2015', '2016', '2017']},
+                                    {'Matcha Latte' : [43.3, 85.8, 93.7]},
+                                    {'Milk Tea': [83.1, 73.4, 55.1]},
+                                    {'Cheese Cocoa' : [86.4, 65.2, 82.5]},
+                                    {'Walnut Brownie' : [72.4, 53.9, 39.1]}
+                                    ]
+                        ,"index" : ["2021-02-03 17:18", "2021-02-03 17:19", "2021-02-03 17:20"]
                      
                     }
+
     """
 
     result = {}
@@ -152,10 +160,30 @@ def get_bar_data(df):
     
     result['value'] = []
 
+    # 2023.09 수정 진행
+    #for column in df.columns:      
+    #    value = df.loc[:, column].values.tolist()           
+    #    value.insert(0, column)
+    #    result['value'].append(value)
+    
+    import pandas as pd 
+
+    #index 생성
+    if isinstance(df.index, pd.DatetimeIndex) :
+        result['index']=list(df.index.strftime('%Y-%m-%d %H:%M'))
+    else : 
+        result['index']=list(df.index)
+
+    #value 생성
     for column in df.columns:      
-        value = df.loc[:, column].values.tolist()           
-        value.insert(0, column)
-        result['value'].append(value)
+        part = {}
+        value = [ float(round(x,3)) for x in df.loc[:, column].values ]       
+                
+        part[column] = value
+        result['value'].append(part)    
+
     
 
     return result
+
+

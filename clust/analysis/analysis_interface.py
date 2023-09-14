@@ -63,6 +63,7 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
 
     elif analysis_method == 'correlation':
         df_analysis = input_df.corr()
+        df_analysis = round(df_analysis, 2)
 
     elif analysis_method == 'scaling':
         from Clust.clust.transformation.general import basicTransform
@@ -98,6 +99,7 @@ def get_analysis_by_data_set(analysis_method, analysis_param, input_df_set):
      * df_analysis (_pd.dataframe_) : 분석 결과
         
     TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것
+    
     """
     
     dsa = dataSetAnalysis.DataSetAnalysis()

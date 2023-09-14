@@ -121,9 +121,9 @@ class ReadData():
         data_nopreprocessing = influx_instance.get_data_by_days(end_time, days, bucket_name, measurement_name)
         # preprocessing
         from Clust.clust.preprocessing import processing_interface
-        multiple_dataset = processing_interface.get_data_result('step_3', multiple_dataset, self.process_param)
+        multiple_dataset = processing_interface.get_data_result('step_3', data_nopreprocessing, self.process_param)
         
-        return dataframe
+        return multiple_dataset
     
     def get_ms_data(self, bucket_name, measurement_name, influx_instance):
         """
