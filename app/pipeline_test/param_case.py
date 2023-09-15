@@ -2,11 +2,6 @@ import sys
 sys.path.append("../../../")
 sys.path.append("../..")
 
-import pandas as pd
-from dateutil.relativedelta import relativedelta
-
-
-
 ########################################################################
 #### automatically make additional variables
 task_name = "air_quality"

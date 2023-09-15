@@ -3,7 +3,7 @@
 ## set data info
 task_name = "air_quality"
 bucket_name = "task_" + task_name
-epochs_num = 5
+epochs_num = 100
 def get_model_param(ms_name, past_step, future_step, model_num, feature_list):
     ## set model param 
     ### forecasting model parameter samples
@@ -80,4 +80,4 @@ def get_test_param(test_ms_name, feature_list):
         'data_y_flag' : "None",
         'model_name':model_name
     }
-    return test_param
+    return test_params

@@ -27,6 +27,9 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['end_time'] = pd.to_datetime("2022-09-14 23:59:59")
     
     if data_level in [2, 3]:
+        cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
+        nan_limit_minute = 30 # limit minute에서 frequency 만큼 나눠준 갯수만큼만 limit num으로 계산
+        """ (0)
         processing_freq = 10 # refinement, integration frequency
         feature_name = 'in_co2'
         bucket = 'air_indoor_체육시설'  
@@ -34,6 +37,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
         
         if data_level == 2:
             ingestion_method = "all_ms_in_one_bucket"
+            data_param['feature_list']= [feature_name]
             data_param['start_time']= pd.to_datetime("2021-01-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
         elif data_level == 3:
@@ -42,6 +46,23 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['feature_list']= [[feature_name], [feature_name]]
             data_param['start_time'] = pd.to_datetime("2021-09-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-09-20 23:59:59")
+        """
+        processing_freq = 10 # refinement, integration frequency
+        feature_name = 'in_co2'
+        bucket = 'air_indoor_체육시설'  
+        data_param['bucket_name'] = bucket
+        
+        if data_level == 2:
+            ingestion_method = "all_ms_in_one_bucket"
+            data_param['feature_list']= [feature_name]
+            data_param['start_time']= pd.to_datetime("2021-06-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-08-31 23:59:59")
+        elif data_level == 3:
+            ingestion_method = "multiple_ms_by_time"
+            data_param['ms_list_info'] = [[bucket, 'ICW0W2001044']]
+            data_param['feature_list']= [[feature_name], [feature_name]]
+            data_param['start_time'] = pd.to_datetime("2021-09-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-09-30 23:59:59")
             
     if data_level in [4, 5]:
         bucket ='air_indoor_초등학교'
@@ -101,15 +122,19 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['feature_list'] = [feature_name]      
             
     if data_level in [16, 17]:
-        # 16, 17 유사 버전에 대해서 (116, 117 216 217등으로 복제 및 수정하여) 해보셔요 , frequency, feature등 바꿔가며
+
         bucket = 'air_indoor_경로당'
         data_param['bucket_name'] = bucket
+        """
+        # 1번째
+        cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
+        nan_limit_minute = 30 # limit minute에서 frequency 만큼 나눠준 갯수만큼만 limit num으로 계산
         processing_freq = 1
         feature_name = 'in_co2'
         data_param['feature_list']= [feature_name]
         if data_level == 16:
             ingestion_method = "multiple_ms_by_time"
-            data_param['start_time']= pd.to_datetime("2021-10-01 00:00:00")
+            data_param['start_time']= pd.to_datetime("2021-08-01 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
             data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
@@ -123,6 +148,47 @@ def get_data_conidtion_by_data_level(data_level = 0):
             ingestion_method = "ms_by_time"
             data_param['ms_name'] = "ICL1L2000252"
             data_param['feature_list'] = [feature_name]
+        # 2번째
+        cycle_condition = "week_1" # TODO change value ['week_1", "day_1"]
+        nan_limit_minute = 600 # limit minute에서 frequency 만큼 나눠준 갯수만큼만 limit num으로 계산
+        processing_freq = 60
+        feature_name = 'in_noise'
+        data_param['feature_list']= [feature_name]
+        if data_level == 16:
+            ingestion_method = "multiple_ms_by_time"
+            data_param['start_time']= pd.to_datetime("2021-08-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+            data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
+            data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
+
+            # ingestion method
+            
+        elif data_level == 17:
+            ingestion_method = "ms_by_time"
+            data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
+            ingestion_method = "ms_by_time"
+            data_param['ms_name'] = "ICL1L2000252"
+            data_param['feature_list'] = [feature_name]
+        """
+        #in_temp는 성능이 너무 나쁨
+        # 3번째
+        cycle_condition = "day_1" # TODO change value ['week_1", "day_1"]
+        nan_limit_minute = 180 # limit minute에서 frequency 만큼 나눠준 갯수만큼만 limit num으로 계산
+        processing_freq = 60
+        feature_name = 'in_temp'
+        data_param['feature_list']= [feature_name]
+        ingestion_method = "multiple_ms_by_time"
+        if data_level == 16:
+            data_param['start_time']= pd.to_datetime("2021-08-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+     
+        elif data_level == 17:
+            ingestion_method = "ms_by_time"
+            data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
+        data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
+        data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
             
     if data_level in [53, 54]:
         feature_name = 'in_co2' # integration, prediction feature
@@ -174,7 +240,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['ms_list_info'] = [[bucket, 'ICL1L2000271']]
             data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]      
         
-    return bucket, data_param, processing_freq, feature_name, ingestion_method
+    return bucket, data_param, processing_freq, feature_name, ingestion_method, nan_limit_minute, cycle_condition
 
 
 def get_data_preprocessing_param(consecutive_nan_limit_number):

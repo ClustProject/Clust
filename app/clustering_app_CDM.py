@@ -1,9 +1,7 @@
-from Clust.app import clustering_app_CDM
 from Clust.clust.pipeline import data_pipeline
 from Clust.clust.ML.clustering.interface import clusteringByMethod
 import math
 import pandas as pd
-import numpy as np
 from Clust.clust.tool.plot import plot_interface
 from Clust.clust.ML.tool import util
 
@@ -71,17 +69,15 @@ def select_clustering_data_result(data, clust_class_list, clust_result, scaling 
     # make total scaler
     if scaling == True:
         from sklearn.preprocessing import MinMaxScaler
-        result_df = pd.DataFrame(pd.Series(data.values.ravel('F')))
+        result_df_new = pd.DataFrame(pd.Series(data.values.ravel('F')))
         scaler_total = MinMaxScaler()
-        scaler_total.fit_transform(result_df)
-        inverse_scaled_data_indi= np.array([])
+        scaler_total.fit_transform(result_df_new)
         
         for clust_class in clust_class_list:
             for ms_name, class_value in clust_result.items():
                 if class_value == str(clust_class):
                     scaler_indi = MinMaxScaler()
                     scaled_data_indi = scaler_indi.fit_transform(data[[ms_name]])
-                    import matplotlib.pyplot as plt
                     inverse_scaled_data_indi_temp = scaler_total.inverse_transform(scaled_data_indi)
                     result_df[ms_name] =  inverse_scaled_data_indi_temp.reshape(-1)
          
