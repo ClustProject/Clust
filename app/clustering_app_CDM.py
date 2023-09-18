@@ -5,6 +5,25 @@ import pandas as pd
 from Clust.clust.tool.plot import plot_interface
 from Clust.clust.ML.tool import util
 
+
+def get_summarized_clustering_reulst(cluster_num, processing_data, result_y):
+    from Clust.clust.ML.tool import util
+    data_name = list(processing_data.columns)
+    result_dic = util.get_dict_from_two_array(data_name, result_y)
+
+    ## clust class 별 존재하는 데이터 이름과 개수를 출력
+    clustering_result_by_class = {}
+    for num in range(cluster_num):
+        name_list = []
+        for name, c_value in result_dic.items():
+            if str(num) == c_value:
+                name_list.append(name)
+        class_num = len(name_list)
+        unique_name_list= set([n.split("/")[0] for n in name_list])
+        clustering_result_by_class[num] = [unique_name_list, class_num]
+
+    return result_dic, clustering_result_by_class
+
 def get_clustering_result(processing_data, cluster_num):
     """
     Processing 단계에서 쓰이는 Clustering으로 기존 Som Cluster에 scaling 전처리를 더한 모듈
@@ -36,21 +55,10 @@ def get_clustering_result(processing_data, cluster_num):
     y_df = pd.DataFrame(result)
     plt2 = plot_interface.get_graph_result('plt', 'histogram', y_df)
     plt2.show()
-    data_name = list(processing_data.columns)
-    result_dic = util.get_dict_from_two_array(data_name, result)
-
-    ## clust class 별 존재하는 데이터 이름과 개수를 출력
-    clustering_result_by_class = {}
-    for num in range(cluster_num):
-        name_list = []
-        for name, c_value in result_dic.items():
-            if str(num) == c_value:
-                name_list.append(name)
-        class_num = len(name_list)
-        unique_name_list= set([n.split("/")[0] for n in name_list])
-        clustering_result_by_class[num] = [unique_name_list, class_num]
+    result_dic, clustering_result_by_class = get_summarized_clustering_reulst(cluster_num, processing_data, result)
 
     return result_dic, clustering_result_by_class
+
 
 def select_clustering_data_result(data, clust_class_list, clust_result, scaling = False):
     """clustering result에서 선택된클래스 정보만 전달한다.
