@@ -34,7 +34,7 @@ class errorToNaN():
             >>> from Clust.clust.preprocessing.errorDetection import errorToNaN
 
             >>> min_max = {'max_num': {'in_temp': 80, 'in_humi': 100}, 'min_num': {'in_temp': -40, 'in_humi': 0}}
-            >>> abnormal_value_list =[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] 
+            >>> abnormal_value_list ={'all':[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] }
             >>> certain_param= {'flag': True, 'abnormal_value_list': abnormal_value_list, 'data_min_max_limit': min_max}
             
             >>> data_with_more_certain_nan = errorToNaN.errorToNaN().getDataWithCertainNaN(data, certain_param)
@@ -49,7 +49,7 @@ class errorToNaN():
             if 'abnormal_value_list' in list(certain_param.keys()):
                 abnormal_value_list = certain_param['abnormal_value_list']
             else:
-                abnormal_value_list = [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] 
+                abnormal_value_list = {'all': [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] }
                 
             #anomal_value_list=[]
             datawithMoreCertainNaN = certainError.CertainErrorRemove(data, self.limit_min_max, abnormal_value_list).getDataWitoutcertainError()  

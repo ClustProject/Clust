@@ -3,7 +3,7 @@
 ## set data info
 task_name = "air_quality"
 bucket_name = "task_" + task_name
-epochs_num = 100
+epochs_num = 1000
 def get_model_param(ms_name, past_step, future_step, model_num, feature_list):
     ## set model param 
     ### forecasting model parameter samples

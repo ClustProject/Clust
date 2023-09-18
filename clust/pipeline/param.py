@@ -171,7 +171,7 @@ def set_outlier_param(param):
     data_outlier_param = {}
     certain_param=param['certain_error_to_NaN']
     if certain_param['flag']:
-        certain_param['abnormal_value_list'] = [99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] # TODO
+        certain_param['abnormal_value_list'] = {'all':[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0]} 
         certain_param['data_min_max_limit']  = {'max_num': {'in_temp': 80,
             'in_humi': 100,
             'in_co2': 10000,

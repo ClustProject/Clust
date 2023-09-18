@@ -184,7 +184,7 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
      
         elif data_level == 17:
-            ingestion_method = "ms_by_time"
+            ingestion_method = "multiple_ms_by_time"
             data_param['start_time']= pd.to_datetime("2021-11-08 00:00:00")
             data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
         data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]

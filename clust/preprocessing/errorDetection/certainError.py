@@ -9,7 +9,7 @@ class CertainErrorRemove():
 
             ``Sensor Min Max Check``, ``Remove no numeric data``
     """
-    def __init__(self, data, min_max_limit, abnormal_value_list=[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] ):
+    def __init__(self, data, min_max_limit, abnormal_value_list={'all':[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] }):
         # TODO JW min_max 통과하는 모듈도 업그레이드 해야함
         self.abnormal_value_list = abnormal_value_list
         self.data = data
@@ -72,7 +72,7 @@ class CertainErrorRemove():
 
         Args:
             data (DataFrame): input data
-            x2min_max_limit(json): min_max_limit information
+            anomal_value_list(json): min_max_limit information
             
         Returns:
             DataFrame: New Dataframe having more (or same) NaN
@@ -83,7 +83,14 @@ class CertainErrorRemove():
         """
 
         # 특정 이상치 nan 처리 
-        anomal_data = anomal_value_list 
-        for index in anomal_data:
-            data = data.replace(index, np.NaN)
+
+        for abnomal_value_feature in anomal_value_list:
+            abnomal_value_set = anomal_value_list[abnomal_value_feature]
+            if abnomal_value_feature =='all':
+                for anomal_value in abnomal_value_feature:
+                    data = data.replace(anomal_value, np.NaN)
+            else:
+                if abnomal_value_feature in list(data.columns):
+                    for anomal_value in abnomal_value_set:
+                        data[abnomal_value_feature] = data[abnomal_value_feature].replace(anomal_value, np.NaN)
         return data
