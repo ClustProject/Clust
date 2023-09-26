@@ -23,36 +23,36 @@ def get_echart_json_result(graph_type, df)  :
         PM10   0.316684  0.157772  1.000000  0.994489 -0.059075  0.361747  0.609859
         
         '''   
-        index_value = df.to_json()
+        data = df.round(1).to_json()
                 
     elif graph_type == 'line_chart' :
-        index_value = get_index_value_by_columns(df)
+        data = get_index_value_by_columns(df)
     
     elif graph_type == 'bar_chart' :
-        index_value = get_bar_data(df)
+        data = get_bar_data(df)
 
     elif graph_type == 'box_plot' :
-        index_value = get_index_value_by_columns(df)
+        data = get_index_value_by_columns(df)
     
     elif graph_type == 'scatter' :
-        index_value = get_scatter_data(df)
+        data = get_scatter_data(df)
     
     elif graph_type == 'area' :
-        index_value = get_index_value_by_columns(df)
+        data = get_index_value_by_columns(df)
     
     elif graph_type == 'histogram' : 
         #echart 제공 안 됨
-        index_value = get_index_value_by_columns(df)    
+        data = get_index_value_by_columns(df)    
     
     elif graph_type == 'density' : 
         #echart 제공 안 됨
-        index_value = get_index_value_by_columns(df)
+        data = get_index_value_by_columns(df)
     
     else   :
-        index_value = {}
+        data = {}
 
         
-    result  = json.dumps(index_value)
+    result  = json.dumps(data)
 
     return result
 
@@ -79,8 +79,7 @@ def get_index_value_by_columns(df):
 
     """
     result ={}
-    df = df.replace({np.nan:None})    
-
+    df = df.replace({np.nan:None}).round(2)
     import pandas as pd
     if isinstance(df.index, pd.DatetimeIndex):
         result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))

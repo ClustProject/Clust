@@ -189,7 +189,28 @@ def get_data_conidtion_by_data_level(data_level = 0):
             data_param['end_time'] = pd.to_datetime("2021-11-28 23:59:59")
         data_param['ms_list_info'] = [[bucket, 'ICL1L2000251'], [bucket, 'ICL1L2000252'], [bucket, 'ICL1L2000275'], [bucket, 'ICL1L2000277'], [bucket, 'ICL1L2000279']]
         data_param['feature_list']= [[feature_name], [feature_name], [feature_name], [feature_name], [feature_name]]
-            
+    
+    if data_level in [116, 117]:
+        bucket = 'air_indoor_경로당'
+        data_param['bucket_name'] = bucket
+
+        # 2번째
+        cycle_condition = "day_1" # TODO change value ['week_1", "day_1"]
+        nan_limit_minute = 200 # limit minute에서 frequency 만큼 나눠준 갯수만큼만 limit num으로 계산
+        processing_freq = 60
+        feature_name = 'in_noise'
+        data_param['feature_list']= [feature_name]
+        data_param['ms_name'] = "ICL1L2000279"
+        data_param['feature_list'] = [feature_name]
+        ingestion_method = "ms_by_time"
+        if data_level == 116:
+            data_param['start_time']= pd.to_datetime("2021-05-01 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-09-15 23:59:59")
+        elif data_level == 117:
+            data_param['start_time']= pd.to_datetime("2021-09-16 00:00:00")
+            data_param['end_time'] = pd.to_datetime("2021-10-31 23:59:59")
+
+  
     if data_level in [53, 54]:
         feature_name = 'in_co2' # integration, prediction feature
         processing_freq = 5 # refinement, integration frequency\
