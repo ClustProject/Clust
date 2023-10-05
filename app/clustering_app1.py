@@ -50,10 +50,13 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
             'total_non_NaN_ratio': 1}],
         ['data_smoothing', {'flag': True, 'emw_param': 0.3}],
         ['data_scaling', {'flag': True, 'method': 'minmax'}]]
+        
     
-    data = data_pipeline.pipeline(data_set, pipeline, False)
-    result_dic, plt1, plt2 = app_clustering(data,cluster_num )
-    return result_dic, plt1, plt2
+    data = data_pipeline.pipeline(data_set, pipeline, False)    
+
+    result_dic, plt1 = app_clustering(data, cluster_num )    
+
+    return result_dic, plt1
 
 def app_clustering(data, cluster_num, model_type ='som'):
 
@@ -94,19 +97,18 @@ def app_clustering(data, cluster_num, model_type ='som'):
 
     from Clust.clust.ML.clustering.interface import clusteringByMethod
     model_path = "model.pkl"
-    x_data_series, result, plt1= clusteringByMethod(data, parameter, model_path)
-    
+    x_data_series, result, plt1= clusteringByMethod(data, parameter, model_path)    
     
     # histogram by label
     from Clust.clust.tool.plot import plot_interface
     y_df = pd.DataFrame(result)
-
             
     from Clust.clust.ML.tool import util
     data_name = list(data.columns)
+
     result_dic = util.get_dict_from_two_array(data_name, result)
     
-    return result_dic, plt1, plt2
+    return result_dic, plt1
     
 
 
