@@ -1,15 +1,15 @@
-preprocessing.refinement
+refinement
 =================================
 
 
-preprocessing.frequency
+frequency
 -----------------------------------
 .. automodule:: clust.preprocessing.refinement.frequency
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.redundancy
+redundancy
 -----------------------------------
 .. automodule:: clust.preprocessing.refinement.redundancy
    :members:

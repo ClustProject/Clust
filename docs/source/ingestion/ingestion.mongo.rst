@@ -1,8 +1,8 @@
-ingestion.mongo
+Mongo
 =================================
 
 
-ingestion.mongo_client
+mongo_client
 ------------------------------
 .. automodule:: clust.ingestion.mongo.mongo_client
    :members:
@@ -10,7 +10,7 @@ ingestion.mongo_client
    :show-inheritance:
 
 
-ingestion.custom_modules
+custom_modules
 ------------------------------
 .. automodule:: clust.ingestion.mongo.custom_modules
    :members:

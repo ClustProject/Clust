@@ -1,7 +1,7 @@
-integration.utils
+utils
 =================================
 
-integration.param
+param
 ------------------------------
 .. automodule:: clust.integration.utils.param
    :members:

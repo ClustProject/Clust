@@ -1,4 +1,4 @@
-integration.ML
+ML
 =================================
 .. toctree::
    :maxdepth: 2

@@ -1,14 +1,14 @@
-integration.meta
+meta
 =================================
 
-integration.data_integration
+data_integration
 ------------------------------
 .. automodule:: clust.integration.meta.data_integration
    :members:
    :undoc-members:
    :show-inheritance:
 
-integration.partialDataInfo
+partialDataInfo
 ------------------------------
 .. automodule:: clust.integration.meta.partialDataInfo
    :members:

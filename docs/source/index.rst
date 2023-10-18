@@ -3,11 +3,44 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Clust Documentation
+Introduction
 =================================
+
+What is Clust?
+-----------
+
+
+설명 1
+----------------
+example 1
+
+
+
+
+설명 2
+-------------------
+example 2
+
+::
+   
+   example
+
+
+
+설명 3
+----------------------------
+example 3
+
+
+
+
+
+
+
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Repository:
    
    analysis
    ingestion
@@ -19,6 +52,7 @@ Clust Documentation
    tool
    transformation
    data
+   pipeline
 
 
 
@@ -34,9 +68,9 @@ This Project
 
 
 
-Indices and tables
-==================
+.. Indices and tables
+.. ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

@@ -1,23 +1,42 @@
-ML.clustering
+clustering
 =================================
 
-ML.interface
+
+kMeans
+------------------------------
+.. automodule:: clust.ML.clustering.kMeans
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+som
+------------------------------
+.. automodule:: clust.ML.clustering.som
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+clustering
+------------------------------
+.. automodule:: clust.ML.clustering.clustering
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+interface
 ------------------------------
 .. automodule:: clust.ML.clustering.interface
    :members:
    :undoc-members:
    :show-inheritance:
 
-ML.plot_seriesDataSet
-------------------------------
-.. automodule:: clust.ML.clustering.plot_seriesDataSet
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
-ML.somClustering
+etc
 ------------------------------
-.. automodule:: clust.ML.clustering.somClustering
+.. automodule:: clust.ML.clustering.etc
    :members:
    :undoc-members:
    :show-inheritance:

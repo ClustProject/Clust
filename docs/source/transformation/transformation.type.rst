@@ -1,8 +1,8 @@
-transformation.type
+type
 =================================
 
 
-transformation.DFToNPArray
+DF to NPArray
 ------------------------------
 .. automodule:: clust.transformation.type.DFToNPArray
    :members:
@@ -10,7 +10,7 @@ transformation.DFToNPArray
    :show-inheritance:
 
 
-transformation.NPArrayToDF
+NPArray to DF
 ------------------------------
 .. automodule:: clust.transformation.type.NPArrayToDF
    :members:

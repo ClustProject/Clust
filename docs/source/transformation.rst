@@ -4,20 +4,16 @@ Clust: transformation
    :maxdepth: 2
    :caption: Contents:
 
-   transformation/transformation.splitDataByCycle
-
-   transformation/transformation.splitDataByCondition
-
    transformation/transformation.entropy
-
    transformation/transformation.featureExtension
-   
    transformation/transformation.featureReduction
-
    transformation/transformation.general
-
    transformation/transformation.purpose
-
    transformation/transformation.sampling
-
+   transformation/transformation.splitDataByCondition
+   transformation/transformation.splitDataByCycle
    transformation/transformation.type
+
+
+
+

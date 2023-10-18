@@ -1,17 +1,26 @@
-tool.stats_table
+stats table
 =================================
 
 
-tool.Corr
+Correlation
 ------------------------------
 .. automodule:: clust.tool.stats_table.correlation
    :members:
    :undoc-members:
    :show-inheritance:
 
-tool.metrics
+
+metrics
 ------------------------------
 .. automodule:: clust.tool.stats_table.metrics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+time lag Correlation
+------------------------------
+.. automodule:: clust.tool.stats_table.timelagCorr
    :members:
    :undoc-members:
    :show-inheritance:

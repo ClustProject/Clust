@@ -1,24 +1,26 @@
-tool.plot
+models
 =================================
 
 
-tool.plot_correlation
+cnn_1d 
 ------------------------------
-.. automodule:: clust.tool.plot.plot_correlation
+.. automodule:: clust.ML.regression.models.cnn_1d
    :members:
    :undoc-members:
    :show-inheritance:
 
-tool.plot_features
+
+lstm_fcns 
 ------------------------------
-.. automodule:: clust.tool.plot.plot_features
+.. automodule:: clust.ML.regression.models.lstm_fcns
    :members:
    :undoc-members:
    :show-inheritance:
 
-tool.plot_TwoData
+
+rnn 
 ------------------------------
-.. automodule:: clust.tool.plot.plot_TwoData
+.. automodule:: clust.ML.regression.models.rnn
    :members:
    :undoc-members:
    :show-inheritance:

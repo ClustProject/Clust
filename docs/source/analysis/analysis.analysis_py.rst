@@ -1,7 +1,7 @@
-analysis.analysis
+analysis
 =================================
 
-analysis.analysis_interface
+analysis_interface
 ------------------------------
 .. automodule:: clust.analysis.analysis_interface
    :members:
@@ -9,7 +9,7 @@ analysis.analysis_interface
    :show-inheritance:
 
 
-analysis.bucketReport
+bucketReport
 ------------------------------
 .. automodule:: clust.analysis.bucketReport
    :members:
@@ -17,7 +17,7 @@ analysis.bucketReport
    :show-inheritance:
 
 
-analysis.dataAnalysis
+dataAnalysis
 ------------------------------
 .. automodule:: clust.analysis.dataAnalysis
    :members:
@@ -25,7 +25,7 @@ analysis.dataAnalysis
    :show-inheritance:
 
 
-analysis.dataSetAnalysis
+dataSetAnalysis
 ------------------------------
 .. automodule:: clust.analysis.dataSetAnalysis
    :members:

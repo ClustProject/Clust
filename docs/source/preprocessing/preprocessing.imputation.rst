@@ -1,29 +1,29 @@
-preprocessing.imputation
+imputation
 =================================
 
 
-preprocessing.basicMethod
+basicMethod
 ------------------------------
 .. automodule:: clust.preprocessing.imputation.basicMethod
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.DLMethod
+DLMethod
 ------------------------------
 .. automodule:: clust.preprocessing.imputation.DLMethod
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.Imputation
+Imputation
 ---------------------------------------
 .. automodule:: clust.preprocessing.imputation.Imputation
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.nanMasking
+nanMasking
 ------------------------------
 .. automodule:: clust.preprocessing.imputation.nanMasking
    :members:

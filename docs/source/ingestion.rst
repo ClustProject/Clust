@@ -8,4 +8,5 @@ Clust: ingestion
    ingestion/ingestion.mongo
    ingestion/ingestion.DataToCSV
    ingestion/ingestion.CSVtoInflux
+   ingestion/ingestion.interface
    

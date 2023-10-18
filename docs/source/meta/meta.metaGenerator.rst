@@ -1,8 +1,8 @@
-meta.metaGenerator
+metaGenerator
 =================================
 
 
-meta.analysisDBMetaGenerator
+analysisDBMetaGenerator
 -----------------------------------
 .. automodule:: clust.meta.metaGenerator.analysisDBMetaGenerator
    :members:
@@ -10,7 +10,7 @@ meta.analysisDBMetaGenerator
    :show-inheritance:
 
 
-meta.analysisMSMetaGenerator
+analysisMSMetaGenerator
 -----------------------------------
 .. automodule:: clust.meta.metaGenerator.analysisMSMetaGenerator
    :members:
@@ -18,7 +18,7 @@ meta.analysisMSMetaGenerator
    :show-inheritance:
 
 
-meta.fileMetaGenerator
+fileMetaGenerator
 -----------------------------------
 .. automodule:: clust.meta.metaGenerator.fileMetaGenerator
    :members:

@@ -1,9 +1,12 @@
-analysis.statisticAnalyzer
+statisticAnalyzer
 =================================
 
-analysis.statistics
+statistics
 ------------------------------
-.. automodule:: clust.analysis.statisticAnalyzer.statistics
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   statisticAnalyzer/analysis.statisticAnalyzer_py
+   
+

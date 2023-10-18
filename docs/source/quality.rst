@@ -5,3 +5,4 @@ Clust: quality
    :caption: Contents:
 
    quality/quality.NaN
+   quality/quality.quality_interface

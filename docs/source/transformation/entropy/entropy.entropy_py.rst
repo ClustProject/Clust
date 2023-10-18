@@ -1,7 +1,10 @@
-meta.analysisMeta
+entropy.entropy
 =================================
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
-   
-   analysisMeta/meta.analysisMeta.basicTool
+
+   entropy/entropy.MCRDE
+   entropy/entropy.MDE

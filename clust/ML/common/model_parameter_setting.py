@@ -1,13 +1,16 @@
 
 def set_model_parameter(model_info):
-    """set model parameter
+    """
+    set model parameter
+
     Args:
         model_info (dict): model information    
-            seq_len (_type_): _description_
-            input_size (_type_): _description_
+        seq_len (_type_): _description_
+        input_size (_type_): _description_
 
     Returns:
         model_parameter(dict):model_parameter
+
     """
     model_method = model_info['model_method']
     seq_len = model_info['seq_len']
@@ -28,13 +31,15 @@ def set_model_parameter(model_info):
     return model_parameter
 
 def get_regression_model_parameter(model_method, model_info, seq_len, input_size):
-    """ regression & forecasting model method parameter 
+    """ 
+    regression & forecasting model method parameter 
     
     Args:
         model_method (string): model_method
         model_info (dict): model_info
         seq_len (int): seq_len
         input_size (int): input_size
+
     """
 
     if model_method == 'LSTM_rg' or model_method == 'GRU_rg':

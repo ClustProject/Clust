@@ -4,7 +4,7 @@ Clust: meta
    :maxdepth: 2
    :caption: Contents:
 
-   meta/meta.analysisMeta
+   meta/meta.metaFormatCheck
 
    meta/meta.metaDataManager
    

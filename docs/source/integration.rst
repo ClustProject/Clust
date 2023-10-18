@@ -10,6 +10,4 @@ Clust: integration
 
    integration/integration.utils
    
-   integration/integration.integration
-
-   integration/ML/integration
+   integration/integration.integration_py

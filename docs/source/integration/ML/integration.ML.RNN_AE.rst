@@ -1,8 +1,8 @@
-integration.ML.RNN_AE
+ML.RNN_AE
 =================================
 
 
-integration.RNN_AE.model
+RNN_AE.model
 ------------------------------
 .. automodule:: clust.integration.ML.RNN_AE.model
    :members:
@@ -11,7 +11,7 @@ integration.RNN_AE.model
 
 
 
-integration.RNN_AE.train_model
+RNN_AE.train_model
 -------------------------------------
 .. automodule:: clust.integration.ML.RNN_AE.train_model
    :members:

@@ -1,36 +1,36 @@
-preprocessing.errorDetection
+errorDetection
 =================================
 
 
-preprocessing.certainError
+certainError
 ------------------------------
 .. automodule:: clust.preprocessing.errorDetection.certainError
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.dataOutlier
+dataOutlier
 ------------------------------
 .. automodule:: clust.preprocessing.errorDetection.dataOutlier
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.dataRangeInfo_manager
+dataRangeInfo_manager
 ---------------------------------------
 .. automodule:: clust.preprocessing.errorDetection.dataRangeInfo_manager
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.errorToNaN
+errorToNaN
 ------------------------------
 .. automodule:: clust.preprocessing.errorDetection.errorToNaN
    :members:
    :undoc-members:
    :show-inheritance:
 
-preprocessing.unCertainError
+unCertainError
 ------------------------------
 .. automodule:: clust.preprocessing.errorDetection.unCertainError
    :members:

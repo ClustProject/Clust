@@ -1,15 +1,15 @@
-ingestion.CSVtoInflux
+CSVtoInflux
 =================================
 
 
-ingestion.cleanDataByType
+cleanDataByType
 ------------------------------
 .. automodule:: clust.ingestion.CSVtoInflux.cleanDataByType
    :members:
    :undoc-members:
    :show-inheritance:
 
-ingestion.csvCollector
+csvCollector
 ------------------------------
 .. automodule:: clust.ingestion.CSVtoInflux.csvCollector
    :members:

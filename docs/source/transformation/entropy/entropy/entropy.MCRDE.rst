@@ -1,8 +1,8 @@
-transformation.entropy.entropy.MCRDE
+MCRDE
 ========================================
 
 
-transformation.cumulativeFunc
+cumulativeFunc
 -----------------------------------------------
 .. automodule:: clust.transformation.entropy.entropy.MCRDE.cumulativeFunc
    :members:
@@ -10,7 +10,7 @@ transformation.cumulativeFunc
    :show-inheritance:
 
 
-transformation.MCRDE
+MCRDE
 -------------------------------------------
 .. automodule:: clust.transformation.entropy.entropy.MCRDE.MCRDE
    :members:

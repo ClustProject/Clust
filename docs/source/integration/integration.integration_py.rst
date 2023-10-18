@@ -1,7 +1,7 @@
-integration.integration
+integration
 ============================================
 
-integration.integration_interface
+integration_interface
 ---------------------------------------
 .. automodule:: clust.integration.integration_interface
    :members:
@@ -9,7 +9,7 @@ integration.integration_interface
    :show-inheritance:
 
 
-integration.integrationInterface
+integrationInterface
 ---------------------------------------
 .. automodule:: clust.integration.integrationInterface
    :members:

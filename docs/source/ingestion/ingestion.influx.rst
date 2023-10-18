@@ -1,16 +1,16 @@
-ingestion.influx
+Influx
 =================================
 
 
-ingestion.influx_Client
+influx_client
 ------------------------------
-.. automodule:: clust.ingestion.influx.influx_Client
+.. automodule:: clust.ingestion.influx.influx_client
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-ingestion.influx_client_v2
+influx_client_v2
 ------------------------------
 .. automodule:: clust.ingestion.influx.influx_client_v2
    :members:

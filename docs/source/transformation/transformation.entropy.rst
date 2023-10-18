@@ -1,13 +1,11 @@
-transformation.entropy
-====================================
+entropy
+=================================
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   entropy/transformation.entropy.entropy
-
-   entropy/transformation.entropy.MCRDE
-
-   entropy/transformation.entropy.MDE
-
-   entropy/transformation.entropy.utils
+   entropy/entropy.utils
+   entropy/entropy.entropy
+   entropy/entropy.entropy_py
+..    entropy/entropy.MCRDE
+..    entropy/entropy.MDE

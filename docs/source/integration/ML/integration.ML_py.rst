@@ -1,7 +1,7 @@
-integration.ML
+ML
 =================================
 
-integration.RNNAEAlignment
+RNNAEAlignment
 ------------------------------
 .. automodule:: clust.integration.ML.RNNAEAlignment
    :members:

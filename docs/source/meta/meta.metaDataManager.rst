@@ -1,8 +1,16 @@
-meta.metaDataManager
+metaDataManager
 =================================
 
 
-meta.collector
+bucketMeta
+-----------------------------------
+.. automodule:: clust.meta.metaDataManager.bucketMeta
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+collector
 -----------------------------------
 .. automodule:: clust.meta.metaDataManager.collector
    :members:
@@ -10,7 +18,7 @@ meta.collector
    :show-inheritance:
 
 
-meta.descriptor
+descriptor
 -----------------------------------
 .. automodule:: clust.meta.metaDataManager.descriptor
    :members:
@@ -18,7 +26,7 @@ meta.descriptor
    :show-inheritance:
 
 
-meta.wizMongoDbApi
+wizMongoDbApi
 -----------------------------------
 .. automodule:: clust.meta.metaDataManager.wizMongoDbApi
    :members:

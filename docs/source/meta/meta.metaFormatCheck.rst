@@ -1,10 +1,11 @@
-preprocessing.dataPreprocessing
+metaFormatCheck
 =================================
 
 
-preprocessing.dataPreprocessing
+metaInfo
 -----------------------------------
-.. automodule:: clust.preprocessing.dataPreprocessing
+.. automodule:: clust.meta.metaFormatCheck.metaInfo
    :members:
    :undoc-members:
    :show-inheritance:
+

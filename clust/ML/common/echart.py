@@ -11,7 +11,8 @@ def getEChartFormatResult(data):
     
     :rtype: dictionary
     
-    Output Example :
+    Output Example ::
+
                     {
                         "value" : {
                             "column_name1" : [value1, value2, value3],
@@ -47,14 +48,16 @@ def getEchartFormatResultForJsonInput(data_json):
     
     :rtype: dictionary
     
-    Input Example :
+    Input Example ::
+
                     {
                         "columns":["column_name1","column_name2","column_name3"],
                         "index":["2021-02-03 17:18", "2021-02-03 17:19", "2021-02-03 17:20"],
                         "data":[[value1, value_x, value_a], [value2, value_y, value_b], [value_3, value_z, value_c]]
                     }
      
-    Output Example :
+    Output Example ::
+    
                     {
                         "value" : {
                             "column_name1" : [value1, value2, value3],
