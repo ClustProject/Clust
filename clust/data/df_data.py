@@ -5,25 +5,31 @@ sys.path.append("../../")
 class DfData():
     def __init__(self, db_client):
         """
-        This class makes dataframe style data based on ingestion type, and param
+        # Description
+            - This class makes dataframe style data based on ingestion type, and param
 
-        Args:
-            db_client (_instance_): Instance of InfluxClient class. Instance to get data from influx DB.
+        # Args
+            - db_client (_instance_): Instance of InfluxClient class. Instance to get data from influx DB.
+
+        # Returns
+            - No Returns
+
         """
         self.db_client = db_client
         
     def get_result(self, ingestion_type, ingestion_param):
         """       
-        Get dataframe result according to intestion_type, and ingestion_param
+        # Description
+            - Get dataframe result according to intestion_type, and ingestion_param
 
-        Args:
-            ingestion_type (String): ingestion_type (method)
-            ingestion_param (Dictionary): ingestion parameter depending on ingestion_type
+        # Args
+            - ingestion_type (_String_): ingestion_type (method)
+            - ingestion_param (_Dictionary_): ingestion parameter depending on ingestion_type
 
-        Returns:
-            DataFrame
+        # Returns
+            - result (_DataFrame_)
 
-        Example:
+        # Example
             >>> ingestion_type_list = ['ms_by_days', 'ms_by_time', 'ms_by_num']
             >>> ingestion_type = 'ms_by_num'
             >>> ingestion_param = {
@@ -54,15 +60,16 @@ class DfData():
     
     def ms_by_all(self, ingestion_parm):
         """
-        Get all data ingestion
+        # Description
+            - Get all data ingestion
 
-        Args:
-            ingestion_param (Dictionary): get data by all parameter 
+        # Args
+            - ingestion_param (_Dictionary_): get data by all parameter 
 
-        Returns:
-            DaraFrame : result data
+        # Returns
+            - data (_pd.DaraFrame_) : result data
 
-        Example:
+        # Example
             >>> ingestion_param = {
             ...    "bucket_name" : 'air_indoor_modelSchool',
             ...    'ms_name' : 'ICW0W2000014',
@@ -73,15 +80,16 @@ class DfData():
         
     def ms_by_days(self, ingestion_param):
         """
-        Get data by days 
+        # Description
+            - Get data by days 
 
-        Args:
-            ingestion_param (Dictionary): data by days parameter
+        # Args
+            - ingestion_param (_Dictionary_): data by days parameter
 
-        Returns:
-            DataFrame : result data
+        # Returns
+            - data (_DataFrame_) : result data
 
-        Example:       
+        # Example     
             >>> ingestion_param = {
             ...    'days' : 1,                                     
             ...    'end_time': '2021-09-11 00:00:00', 
@@ -98,15 +106,16 @@ class DfData():
     
     def ms_by_time(self, ingestion_param):
         """
-        Get data by time duration
+        # Description
+            - Get data by time duration
 
-        Args:
-            ingestion_param (Dictionary) : data by time duration parameter 
+        # Args
+            - ingestion_param (_Dictionary_) : data by time duration parameter 
 
-        Returns:
-            DaraFrame : result data
+        # Returns
+            - data (_DaraFrame_) : result data
 
-        Example:
+        # Example
             >>> ingestion_param = {
             ...    'bucket_name' : 'air_indoor_modelSchool', 
             ...    'ms_name' : 'ICW0W2000014', 
@@ -121,15 +130,16 @@ class DfData():
     
     def ms_by_num(self, ingestion_param):
         """
-        Get data by num 
+        # Description
+            - Get data by num 
 
-        Args:
-            ingestion_param (Dictionary): data by num parameter
+        # Args
+            - ingestion_param (_Dictionary_): data by num parameter
 
-        Returns:
-            DataFrame: result data
+        # Returns
+            - data (_DataFrame_): result data
 
-        Example:
+        # Example
             >>> ingestion_param = {
             ...        'bucket_name' : 'air_indoor_modelSchool',
             ...        'ms_name' : 'ICW0W2000014',
