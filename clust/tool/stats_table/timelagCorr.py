@@ -5,9 +5,9 @@ import pandas as pd
 class TimeLagCorr():
     def __init__(self):
         """
-        # Description
-         Calculate cross correlation with time lag. 
-         This class provides function for dataframe and series data input. 
+            # Description
+                - Calculate cross correlation with time lag. 
+                - This class provides function for dataframe and series data input. 
         
         """
         pass
@@ -16,16 +16,16 @@ class TimeLagCorr():
     def df_timelag_crosscorr(self, dataSet, column, lag_number:int):
         """
         # Description
-         Calculate timelag crosscorrelation for dataframe input
+            Calculate timelag crosscorrelation for dataframe input
 
         # Args
-         * dataSet (_pd.dataFrame_) : Input DataSet to be calculated
-         * column (_str_) : reference one column name
-         * lag_number (_int_) : max range to investigate time difference (-lag_number ~ lag_number)
+            - dataSet (_pd.dataFrame_) : Input DataSet to be calculated
+            - column (_str_) : reference one column name
+            - lag_number (_int_) : max range to investigate time difference (-lag_number ~ lag_number)
 
         # Returns
-         * result (_pd.dataFrame_) : cross-correlation dataFrame result with time_lag index            
-           (index = time_lag, columns = columns, value = cross-correlation values)
+            - result (_pd.dataFrame_) : cross-correlation dataFrame result with time_lag index      
+            - (index = time_lag, columns = columns, value = cross-correlation values)
 
         """
         lags    = np.arange(-lag_number, lag_number, 1)
@@ -45,15 +45,15 @@ class TimeLagCorr():
     def timelag_crosscorr(self, datax:pd.Series, datay:pd.Series, lags:int) -> pd.Series :
         """
         # Description
-        Calculate timelagged crosscorrelation for series data
+            Calculate timelagged crosscorrelation for series data
 
         # Args
-         * datax (_pd.Series_) : input series
-         * datay (_pd.Series_) : reference series
-         * lags (_int_) : max range to investigate time difference (-lag_number ~ lag_number)
+            - datax (_pd.Series_) : input series
+            - datay (_pd.Series_) : reference series
+            - lags (_int_) : max range to investigate time difference (-lag_number ~ lag_number)
 
         # Returns
-         * result : cross-correlation series result with time_lag index:
+            - result : cross-correlation series result with time_lag index
 
         """
         
@@ -65,14 +65,14 @@ class TimeLagCorr():
     def crosscorr(self, datax, datay, lag=0):
         """ 
         # Description
-         Lag-N cross correlation. Shifted data filled with NaNs. 
+            Lag-N cross correlation. Shifted data filled with NaNs. 
 
         # Args
-         * datax, datay (_pd.Series_) : Series objects of equal length
-         * lag (_int_) : default 0
+            - datax, datay (_pd.Series_) : Series objects of equal length
+            - lag (_int_) : default 0
         
         # Returns
-         * crosscorr (_float_)
+            - crosscorr (_float_)
         
         """
         return datax.corr(datay.shift(lag))
@@ -80,18 +80,17 @@ class TimeLagCorr():
     def get_absmax_index_and_values(self, data):
         """
         # Description
-         get dataframe with max cross correlation values and its index.
+            get dataframe with max cross correlation values and its index.
 
         # Args
-        * data (_pd.dataframe_)
+            - data (_pd.dataframe_)
 
         # Returns
-        * max_position_value (_pd.DataFrame_) 
+            - max_position_value (_pd.DataFrame_)  
+                - index = name of columns
+                - columns = ['value', 'index']
+                - value = 'value': max value, 'index':its index value
         
-            - index = name of columns
-            - columns = ['value', 'index']
-            - value = 'value': max value, 'index':its index value
-
         """
         
         max_position_value = pd.DataFrame(index = data.columns, columns =['value', 'index'])

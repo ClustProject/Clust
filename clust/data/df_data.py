@@ -23,8 +23,8 @@ class DfData():
             - Get dataframe result according to intestion_type, and ingestion_param
 
         # Args
-            - ingestion_type (_String_): ingestion_type (method)
-            - ingestion_param (_Dictionary_): ingestion parameter depending on ingestion_type
+            - ingestion_type (_String_) : ingestion_type (method)
+            - ingestion_param (_Dictionary_) : ingestion parameter depending on ingestion_type
 
         # Returns
             - result (_DataFrame_)
@@ -64,7 +64,7 @@ class DfData():
             - Get all data ingestion
 
         # Args
-            - ingestion_param (_Dictionary_): get data by all parameter 
+            - ingestion_param (_Dictionary_) : get data by all parameter 
 
         # Returns
             - data (_pd.DaraFrame_) : result data
@@ -76,6 +76,7 @@ class DfData():
             ...    'feature_list' : ['CO2']}
         """
         data = self.db_client.get_data(ingestion_parm["bucket_name"], ingestion_parm['ms_name'])
+
         return data
         
     def ms_by_days(self, ingestion_param):
@@ -84,7 +85,7 @@ class DfData():
             - Get data by days 
 
         # Args
-            - ingestion_param (_Dictionary_): data by days parameter
+            - ingestion_param (_Dictionary_) : data by days parameter
 
         # Returns
             - data (_DataFrame_) : result data
@@ -134,10 +135,10 @@ class DfData():
             - Get data by num 
 
         # Args
-            - ingestion_param (_Dictionary_): data by num parameter
+            - ingestion_param (_Dictionary_) : data by num parameter
 
         # Returns
-            - data (_DataFrame_): result data
+            - data (_DataFrame_) : result data
 
         # Example
             >>> ingestion_param = {

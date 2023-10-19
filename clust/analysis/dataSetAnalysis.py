@@ -8,18 +8,20 @@ from Clust.clust.analysis import dataAnalysis
 class DataSetAnalysis():
     def get_multiple_max_correlation_value_table_with_lag(self, analysis_param, df_set):
         """
-        # Description
+            # Description
+                - lag를 이용하여 가장 상관 관계가 높은 값의 value table 추출
 
-        # Args
-         * analysis_param (_dict_)
-         * df_set (_dict(pd.dataFrame)_)
+            # Args
+                - analysis_param (_Dictionary_)
+                - df_set (_Dictionary(pd.dataFrame)_)
 
-        # Returns
-         * max_correlation_value_timelag
+            # Returns
+                - max_correlation_value_timelag (_pd.dataFrame_)
 
         """
         column_list = next(iter((df_set.items())))[1].columns
         max_correlation_value_timelag = pd.DataFrame(index = column_list)
+        
         feature_key = analysis_param['feature_key'] #사용하는 값인지요?
         lag_number = analysis_param['lag_number'] #사용하는 값인지요?
 

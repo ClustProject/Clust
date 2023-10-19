@@ -9,17 +9,19 @@ class DataAnalysis():
     
     def get_max_correlation_table_with_lag(self, analysis_param, df):
         """
-        # Description
+            # Description
+                lag 값을 적용하여 구한 상관 관계중 가장 큰 값 추출
 
-        # Args
-         * analysis_method (_pd.dataFrame_)
-         ```example
-            'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
-         ```
-         * df (_pd.dataFrame_)
+            # Args
+                - analysis_param (_Dictionary_)
+                    -  example                
+                    ```            
+                        'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
+                    ```
+                - df (_pd.dataFrame_)
 
-        # Returns
-         * max_position_correlation_table (_type_) 
+            # Returns
+                - max_position_correlation_table (_pd.dataFrame_) 
 
         """
 
@@ -36,18 +38,22 @@ class DataAnalysis():
    
     def scale_different_x_y_frequency(self, time_scale, data, sampling_flag = True):
         """
-        데이터를 서로 다른 X, y 축 프리컨시로 샘플링한 결과를 생성함
+            # Description
+                데이터를 서로 다른 X, y 축 프리컨시로 샘플링한 결과를 생성함
 
-        Args:
-            data (dataframe): Input data
-            time_scale (dictionary): The time frequency scale of the x-axis and y-axis
-            sampling_flag (bool) : 입력 데이터의 빈도와 탐색하고 싶은 데이터의 기준 빈도가 같아서 빈도 다운 샘플링이 필요 없는 경우 False를 입력
-                                        
+            # Args
+                - data (_pd.dataframe_) : Input data
+                - time_scale (_Dictionary_) : The time frequency scale of the x-axis and y-axis
+                - sampling_flag (_bool_) : 입력 데이터의 빈도와 탐색하고 싶은 데이터의 기준 빈도가 같아서 빈도 다운 샘플링이 필요 없는 경우 False를 입력
+            
+            # Returns   
+                - result (_pd.dataframe_)                              
 
-        Example:
-            >>> time_scale = {"x_frequency" : {"unit":"H", "num":1}, 
-                    "y_frequency" : {"unit":"D", "num":1}}
+            # Example
+                >>> time_scale = {"x_frequency" : {"unit":"H", "num":1}, 
+                        "y_frequency" : {"unit":"D", "num":1}}
         """
+
         x_frequency_unit = time_scale["x_frequency"]['unit']
         x_frequency_num = time_scale["x_frequency"]['num']
         x_frequency = str(x_frequency_num)+x_frequency_unit
