@@ -4,15 +4,15 @@ import numpy as np
 
 def get_echart_json_result(graph_type, df)  :
     """ 
-    # Description       
-     graph_type에 따라 df를 echart에서 쓰일 x_arr, y_arr, data_arr로 가공 후 리턴함.
+    Description       
+    graph_type에 따라 df를 echart에서 쓰일 x_arr, y_arr, data_arr로 가공 후 리턴함.
 
-    # Args
-     * graph_type(_str_) : ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density'] 
-     * df(_pandas.dataFrame_)
+    Args:
+        graph_type(_str_) : ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density'] 
+        df(_pandas.dataFrame_)
 
-    # Returns         
-     * result_json(_json_)
+    Returns:       
+        result_json (dict) : result json
             
     """   
     if graph_type == 'heat_map' :  
@@ -68,7 +68,8 @@ def get_index_value_by_columns(df):
     
     :rtype: dictionary
     
-    Output Example :
+    Output Example ::
+
                     {
                         "value" : {
                             "column_name1" : [value1, value2, value3],
@@ -105,7 +106,8 @@ def get_scatter_data(df):
     
     :rtype: dictionary
     
-    Output Example :
+    Output Example ::
+
                     {
                         "value" : {
                             "scatter" : [value1, value2, value3]                            
@@ -138,8 +140,8 @@ def get_bar_data(df):
     
     :rtype: dictionary
     
-    Output Example :
-                    (1)
+    Output Example ::
+
                     {
                         "value" :  [ 
                                     { 'product' : ['2015', '2016', '2017']},

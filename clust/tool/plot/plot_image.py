@@ -7,14 +7,14 @@ from Clust.clust.tool.plot import plot_plt
 
 def get_img_result(graph_type, df):
     """ 
-    # Description    
-     graph_type에 따라 생성한 plt이미지를 byte string으로 변환하여 리턴함.    
+    Description    
+    graph_type에 따라 생성한 plt이미지를 byte string으로 변환하여 리턴함.    
 
-    # Args
-     * graph_type(_str_) = ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+    Args:
+        graph_type(_str_) = ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
 
-    # Returns
-     * df(_pandas.dataFrame_)        
+    Returns:
+        df(_pandas.dataFrame_)        
             
     """
     
@@ -26,10 +26,13 @@ def get_img_result(graph_type, df):
 def plt_to_image(plt):
     """
     Convert plt into real image
+
     Args:
-        plt (matplotlib.pyplot):
+        plt (matplotlib.pyplot)
+
     Return:
         image_base64 (image_base64)
+
     """
     # send images
     buf = io.BytesIO()

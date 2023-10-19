@@ -12,16 +12,22 @@ class KMeansTrain(Train):
 
     def set_param(self, param):
         """
+        set param
+
         Args:
-        param(dict): parameter for clustering
+            param(dict): parameter for clustering
+
             >>> param = {"n_clusters":3,
                         "metric":"euclidean"}
+
         """
         self.n_clusters = param.get('n_clusters')
         self.metric = param.get('metric')
 
     def train(self, data):
-        """ fit K-Means
+        """ 
+        fit K-Means
+
         Args:
             data(series):input data
         """
@@ -36,13 +42,15 @@ class KMeansTest(Test):
         super().__init__()
 
     def predict(self, data):
-        """get calustering label
+        """g
+        et calustering label
 
         Args:
             data(series):data
             
         Return:
             self.y(array): label result
+            
             >>> example> [1, 2, 0]
         """
 

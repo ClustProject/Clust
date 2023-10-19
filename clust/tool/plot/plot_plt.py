@@ -3,15 +3,15 @@ import seaborn as sns
 
 def get_plt_result(graph_type, data):
     """ 
-    # Description         
-     graph_type에 따라 plt을 생성하여 리턴함.
+    Description         
+    graph_type에 따라 plt을 생성하여 리턴함.
 
-    # Args
-     * graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
-     * data : input data
+    Args:
+        graph_type(_str_) =  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+        data : input data
       
-    # Returns      
-     * plt(plot instance) 
+    Returns:      
+        plt(plot instance) 
             
     """
     
@@ -40,14 +40,14 @@ def get_plt_result(graph_type, data):
 class PlotPlt():
     def plot_heatmap(self, data):
         """
-        # Description 
-         plot heatmap plt
+        Description 
+        plot heatmap plt
 
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(dataframe) : Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
             
         """
         plt.figure()
@@ -63,14 +63,14 @@ class PlotPlt():
     #plot_features->plot_plt
     def plot_all_feature_line_chart(self, data):
         """
-        # Description 
+        Description 
         This function plots all column data by index. graphs are lines.
         
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(_pandas.dataFrame_) :  Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         plt.figure()
@@ -84,14 +84,14 @@ class PlotPlt():
 
     def plot_bar_chart(self, data):
         """
-        # Description 
-         This function plots bar chart
+        Description 
+        This function plots bar chart
         
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(_pandas.dataFrame_) :  Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         plt.figure()
@@ -100,16 +100,15 @@ class PlotPlt():
     
     def plot_scatter(self, data):
         """
-        # Description 
-         This function plots scatter chart with only the front two columns
+        Description 
+        This function plots scatter chart with only the front two columns
                
-        # Args
-         * data(_pandas.dataFrame_) =  Input data, 입력은 두개의 컬럼만 가져야 함
-         * param(dict) : 
-            - feature_list
+        Args:
+            data(_pandas.dataFrame_) :  Input data, 입력은 두개의 컬럼만 가져야 함
+            param(dict) : feature_list
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         feature_list = list(data.columns)
@@ -121,14 +120,14 @@ class PlotPlt():
 
     def plot_box_plot(self, data):
         """
-        # Description 
-         This function plots scatter chart
+        Description 
+        This function plots scatter chart
     
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(_pandas.dataFrame_) :  Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         plt.figure()
@@ -138,13 +137,15 @@ class PlotPlt():
     
     def plot_histogram(self, data):
         """
-            Show histogram result 
-            Args:
-                * data(_pandas.dataFrame_) =  Input data  , 입력은 하나의 column만 가져야 함
-                * param(dict) : 
-                  - feature_list
-            Returns:
-                histogram plt instance
+        Show histogram result 
+
+        Args:
+            data(_pandas.dataFrame_) :  Input data  , 입력은 하나의 column만 가져야 함
+            param(dict) : feature_list
+
+        Returns:
+            histogram plt instance :  : plt
+
         """
             
         data_h = data.astype(float)
@@ -155,14 +156,14 @@ class PlotPlt():
     
     def plot_area_chart(self, data):
         """
-        # Description 
-         This function plots area plot
+        Description 
+        This function plots area plot
     
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(_pandas.dataFrame_) :  Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         plt.figure()
@@ -172,14 +173,14 @@ class PlotPlt():
     
     def plot_density(self, data):
         """
-        # Description 
-         This function plots area plot
+        escription 
+        This function plots area plot
     
-        # Args
-         * data(_pandas.dataFrame_) =  Input data
+        Args:
+            data(_pandas.dataFrame_) :  Input data
 
-        # Returns
-         * plt(_pyplot module_)
+        Returns:
+            plt(pyplot) : plt
 
         """
         plt.figure()

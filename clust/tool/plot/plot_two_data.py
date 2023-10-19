@@ -5,6 +5,8 @@ from plotly.offline import *
 
 def plot_predictions(df_result):
     """
+    plot predictions
+
     Args:
         df_result (dataFrame): input data 
         
