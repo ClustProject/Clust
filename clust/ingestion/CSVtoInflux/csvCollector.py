@@ -1,10 +1,8 @@
 from gc import collect
-import time
-from datetime import datetime, timedelta
 import pandas as pd
 from dateutil.parser import parse
 pd.set_option('mode.chained_assignment',  None)
-import re,logging
+
 import os
 import sys
 
@@ -16,13 +14,12 @@ from Clust.clust.ingestion.CSVtoInflux.cleanDataByType import CleanDataByType as
 class Collector():
     def __init__(self, collect_parameter, db_client):
         """
-        데이터 수집 및 저장하는 Class
+        # Description
+            데이터 수집 및 저장하는 Class
 
-        :param collect_parameter : 데이터를 저장하기에 필요한 Parameter
-        :type collect_parameter : dictionary
-        
-        :param db_client: instance to get data from influx DB
-        :type db_client: instance of InfluxClient class
+        # Args    
+            - collect_parameter (_Dictionary_) : 데이터를 저장하기에 필요한 Parameter
+            - db_client (_instance_) : instance to get data from influx DB       
         
         >>> collect_parameter = {
                 "uploadType" : upload_type,
@@ -63,6 +60,10 @@ class Collector():
         self.field_type = collect_parameter["fieldType"]
 
     def get_basic_data(self):
+        """
+        # Description
+            - csv에서 데이터를 읽어 변수에 저장하는 기능
+        """
         if type(self.time_column) == dict:
             time_key = list(self.time_column.keys())[0]
             self.data = pd.read_csv(self.file_path, header=0, index_col=False, encoding=self.encoding, dtype={self.time_column[time_key]:str})
@@ -71,8 +72,9 @@ class Collector():
             
     def get_data_by_condition(self):
         """
-        사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
-        - Data Upload Type2에 해당
+        # Description
+            - 사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
+            - Data Upload Type2에 해당
         """
         self.get_basic_data()
         for n in range(len(self.selected_datas[0]["Selected_columns"])):
@@ -90,15 +92,27 @@ class Collector():
                 self.data = self.data[self.data[self.selected_datas[0]["Selected_columns"][n]] != self.selected_datas[1]["Selected_values"][n]].copy()
 
     def get_high_capacity_data(self):
+        """
+        # Description
+            - 파일 사이즈가 큰 csv를 읽고 변수에 저장하는 기능
+        """
         self.dataset = pd.read_csv(self.file_path, chunksize=25000, encoding=self.encoding, error_bad_lines=False)        
     
     def set_selected_column(self):
+        """
+        # Description
+            - 사용할 칼럼들을 self.selected_columns 변수에 저장하는 기능
+        """
         if self.selected_columns == None:
             columns = list(self.data.columns)
             columns = [column for column in columns if column not in self.time_column]
             self.selected_columns = columns
 
     def write_data(self):
+        """
+        # Description
+            - influxDB에 데이터를 입력하는 기능
+        """
         print("Writing Data ...")
         print('=========== ms name : '+self.ms_name+' ===========')
         print(self.data.tail(2))
@@ -107,9 +121,10 @@ class Collector():
 
     def collect_clean_data(self, data):
         """
-        data를 clean, write 하는 함수
-        param data: 사용자가 저장하고 싶은 데이터
-        type data: dataframe
+        # Description
+            data를 clean, write 하는 함수
+            - param data: 사용자가 저장하고 싶은 데이터
+            - type data: dataframe
         """
         cdbt = CDBT(data, self.selected_columns, self.time_column, self.dtcpm, self.field_type)
         self.data = cdbt.clean_data()
@@ -118,14 +133,16 @@ class Collector():
 
     def collect_clean_dataset(self):
         """
-        dataset을 clean, write 하는 함수로 대용량 데이터일 경우 이 함수를 활용
+        # Description
+            dataset을 clean, write 하는 함수로 대용량 데이터일 경우 활용
         """
         for data in self.dataset:
             self.collect_clean_data(data)
 
     def collect_by_data_read_type(self):
         """
-        data_read_type(basic, selectedData, highCapacity)에 따라 데이터를 읽고 저장하는 함수
+        # Description
+            data_read_type(basic, selectedData, highCapacity)에 따라 데이터를 읽고 저장하는 기능
         """
         if self.data_read_type == "highCapacity":
             self.get_high_capacity_data()
@@ -139,6 +156,10 @@ class Collector():
         
     
     def collect(self):
+        """
+        # Description
+            파일 또는 폴더를 구분하여 각 데이터들을 처리하는 인터페이스
+        """
         if self.upload_type == "File":
             self.collect_by_data_read_type()
         elif self.upload_type == "Folder":

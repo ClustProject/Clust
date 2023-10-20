@@ -2,7 +2,21 @@ from sklearn.metrics import mean_squared_error
 import pandas as pd
 import numpy as np
 
-def get_RMSE_with_original_and_processedData(original,  processed, partial_number, feature_name):
+def get_RMSE_with_original_and_processedData(original, processed, partial_number, feature_name):
+    """
+        # Description
+            다른 곳에서 아직 활용한 적 없는 함수로 보임. 추후 수정 필요.
+
+        # Args
+            - original
+            - processed
+            - partial_number
+            - feature_name
+            
+        # Returns
+            - No Returns
+            
+    """
     raw_value = original[partial_number][feature_name].values
     df = pd.DataFrame(data = {'raw':raw_value})
     for i, raw_clean in enumerate(processed):
@@ -21,6 +35,17 @@ def smape(a, f):
     return 1/len(a)* np.sum(2*np.abs(f-a)/(np.abs(a)+np.abs(f))*100)
 
 def calculate_metrics_df(df):
+    """
+        # Description     
+            - 데이터 프레임 값 계산       
+
+        # Args
+            - df (_pd.dataFrame_)
+
+        # Returns
+            - Dictionary Result
+ 
+    """
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
     return {'mae' : round(mean_absolute_error(df.value, df.prediction),2),
             'rmse' : round(mean_squared_error(df.value, df.prediction) ** 0.5,2),

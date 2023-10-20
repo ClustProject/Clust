@@ -3,30 +3,27 @@ import pandas as pd
 from dateutil.parser import parse
 from datetime import datetime, timedelta
 pd.set_option('mode.chained_assignment',  None)
-import re,logging
+import re
 
 class CleanDataByType():
     def __init__(self, data, selected_columns, time_column, dtcpm, field_type):
         """
-        Data Type 별 중복이 없이 하나의 시간 스탬프를 갖는 테이블 데이터 형태로 정리해주는 Class
-        :param data : 저장을 위해 정리하고 싶은 데이터
-        :type : DataFrame
+        # Description
+            Data Type 별 중복이 없이, 하나의 시간 스탬프를 갖는 테이블 데이터 형태로 정리해주는 Class
+
+        # Args        
+           - data (_pd.DataFrame_) : 분석 및 활용이 용이하도록 유일한 시간 스탬프를 갖는 테이블 데이터 형태로 정의
+           - selected_columns (_list_) : 저장하고 싶은 columns만 선택해 기입한 parameter, 변경하고 싶은 columns의 이름도 기입 가능
+           - time_column (_String or Dictionary_) : 데이터 저장할 시 시간 스탬프로 지정할 column 이름, 여러개의 시간 column이 존재할 시(type 4) 여러개를 기입하여 시간 스탬프를 병합한 후 하나의 단일 시간 스탬프로 변환
+           - dtcpm (_list_) : duplicated time column processing method Parameter 로 시간이 중복되는 데이터 타입(type 3)인 경우 중복된 시간에 해당하는 value 를 처리하는 방법에 대한 parameter
+           - field_type (_pd.DataFrame_) 
         
-        :param selected_columns : 저장하고 싶은 columns만 선택해 기입한 parameter, 변경하고 싶은 columns의 이름도 기입 가능
-        :type : list
-        
-        :param time_column : 데이터 저장할 시 시간 스탬프로 지정할 column 이름, 여러개의 시간 column이 존재할 시(type 4) 여러개를 기입하여 시간 스탬프를 병합한 후 하나의 단일 시간 스탬프로 변환
-        :type : string or dictionary
-        :param dtcpm : duplicated time column processing method Parameter 로 시간이 중복되는 데이터 타입(type 3)인 경우 중복된 시간에 해당하는 value 를 처리하는 방법에 대한 parameter
-        :type : list
+        # Example
         >>> selected_columns = [{"Selected_columns":['out_pm25_보정전', 'out_pm10_보정전', 'out_온도', "out_습도"]},
                                 {"Rename_columns":["out_pm25_raw", "out_pm10_raw", "out_temp", "out_humi"]}]
         >>> time_column = {"Year":"거래일", "Month":"거래일", "Day":"거래일", "Hour":"시간대", "Minute":"-", "Second":"-"}
         >>> dtcpm = [{"Selected_columns":["out_humi", "out_temp"]}, 
-                    {"Processing_method":["Max", "Min"]}]
-        :return self.data : data - 분석 및 활용이 용이하도록 유일한 시간 스탬프를 갖는 테이블 데이터 형태로 정의
-        :type : DataFrame
-        
+                    {"Processing_method":["Max", "Min"]}]     
         """
         self.data = data
         self.selected_columns = selected_columns
@@ -34,8 +31,12 @@ class CleanDataByType():
         self.dtcpm = dtcpm
         self.field_type = field_type
 
-    ## 시간 Column 병합 및 24시 변환 (Data Type 4)
+   
     def time_combine_conversion(self):
+        """    
+            # Description
+                시간 형태를 가공한 후 변수에 저장하는 기능         
+        """
         if self.time_column["Year"] != "-":
             if self.time_column["Year"] == self.time_column["Month"] == self.time_column["Day"]:
                 self.data["date"] = pd.to_datetime(self.data[self.time_column["Year"]])
@@ -81,6 +82,10 @@ class CleanDataByType():
 
 
     def time_combine_conversion_24(self):
+        """    
+            # Description
+                시간 24시를 00으로 변경 및 특정 포맷으로 변환 후 변수에 저장하는 기능         
+        """
         try:
             if self.time_column["Year"] != "-":
                 if self.time_column["Year"] == self.time_column["Month"] == self.time_column["Day"]:
@@ -181,14 +186,22 @@ class CleanDataByType():
                 self.time_parse()
 
     def time_parse(self):
+        """    
+            # Description
+                시간 변수를 데이터의 인덱스로 지정       
+        """
         try:
             self.data[self.time_column] = parse(self.data[self.time_column])
             self.data.set_index(self.time_column, inplace=True)
         except:
             print("Time Column Error")
     
-    ## 시간 중복 시 데이터 처리하는 부분 (Data Type 3)
-    def duplicate_column(self):   
+    
+    def duplicate_column(self):
+        """    
+            # Description
+                시간 중복 시 데이터 처리하는 부분 (Data Type 3)       
+        """   
         duplicate_dict ={}
         for n in range(len(self.dtcpm[0]["Selected_columns"])):
             if self.dtcpm[1]["Processing_method"][n] == "Remove":
@@ -207,8 +220,12 @@ class CleanDataByType():
 
         return data_duplicate
 
-    ## Data Clean
+    
     def clean_data(self):
+        """    
+            # Description
+                Data Clean 인터페이스. 데이터를 확인하고 시간을 변경한 뒤 저장.    
+        """   
         if type(self.time_column) == dict:
             time_list = pd.unique(list(x for x in (self.time_column.values()) if x != "-")).tolist()
             for num in range(len(time_list)):

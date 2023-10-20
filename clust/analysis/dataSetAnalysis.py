@@ -9,7 +9,7 @@ class DataSetAnalysis():
     def get_multiple_max_correlation_value_table_with_lag(self, analysis_param, df_set):
         """
             # Description
-                - lag를 이용하여 가장 상관 관계가 높은 값의 value table 추출
+                - lag를 적용하여 상관관계를 구한 후 가장 높은 값의 value table 추출
 
             # Args
                 - analysis_param (_Dictionary_)
@@ -22,8 +22,8 @@ class DataSetAnalysis():
         column_list = next(iter((df_set.items())))[1].columns
         max_correlation_value_timelag = pd.DataFrame(index = column_list)
         
-        feature_key = analysis_param['feature_key'] #사용하는 값인지요?
-        lag_number = analysis_param['lag_number'] #사용하는 값인지요?
+        #feature_key = analysis_param['feature_key'] #사용하는 값인지요?
+        #lag_number = analysis_param['lag_number'] #사용하는 값인지요?
 
         for df_name in df_set.keys():
             data = df_set[df_name]
