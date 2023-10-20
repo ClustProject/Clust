@@ -3,17 +3,19 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-import pandas as pd
+
 def add_holiday_feature(data):
     """
-    A function that adds a new holiday column by designating holidays and weekends as holiday days during the data period.
+    # Description
+        A function that adds a new holiday column by designating holidays and weekends as holiday days during the data period.
 
-    Args:
-        data (dataframe) : Time series data
+    # Args
+        - data (_pd.dataframe_) : Time series data
 
-    Returns:
-        dataframe : Time sereis data with "Holiday" column
+    # Returns
+        - data (_pd.dataframe_) : Time sereis data with "Holiday" column
     """
+
     # 요일 Feature 생성
     data["Day"] = data.index.day_name()
 
@@ -35,13 +37,14 @@ def add_holiday_feature(data):
 
 def split_data_by_holiday(data):
     """
-    Split the data by holiday/non-holiday.
+    # Description
+        Split the data by holiday/non-holiday.
 
-    Args:
-        data (dataframe): Time series data
+    # Args
+        - data (_pd.dataframe_) : Time series data
 
-    Returns:
-        dictionary: Return value composed of dataframes divided according to each label of holiday and notholiday.
+    # Returns
+        - split_data_by_holiday (_Dictionary_) : Return value composed of dataframes divided according to each label of holiday and notholiday.
     """
     # Get data with holiday feature
     data = add_holiday_feature(data)

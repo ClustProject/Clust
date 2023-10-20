@@ -1,5 +1,4 @@
 import sys
-import os
 sys.path.append("../")
 sys.path.append("../../")
 import datetime
@@ -8,18 +7,19 @@ from Clust.clust.preprocessing.dataPreprocessing import DataPreprocessing
 import pandas as pd
 
 def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, frequency=None):
-
     """
-    get Cycle Data Set
+        # Description
+            get Cycle Data Set        
 
-    Args:
-        data_input (dataframe ): query_data
-        feature_cycle (string): feature_cycle
-        feature_cycle_times (int): feature_cycle_times
-        frequency (int): frequency (option)
-    
-    Returns:
-        result(Dictionary): Cycle DataSet, or None
+        # Args
+            - data_input (_pd.dataframe_) : query_data
+            - feature_cycle (_String_) : feature_cycle
+            - feature_cycle_times (_int_) : feature_cycle_times
+            - frequency (_int_) : frequency (option)
+        
+        # Returns
+            - result (_Dictionary_) : Cycle DataSet, or None
+
     """
     result = {}
     data_set = getCycleselectDataFrame(data_input, feature_cycle, feature_cycle_times, frequency)
@@ -28,24 +28,27 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
         for data in data_set:
             index_name = data.index[0].strftime('%Y-%m-%d')
             result[index_name] = data
+            
     return result
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
     """
-    get Cycle Data
+        # Description
+            get Cycle Data
 
-    Args:
-        query_data (dataframe): query_data
-        feature_cycle (string): feature_cycle
-        feature_cycle_times (int): feature_cycle_times
-        frequency (int): frequency (option)
-    
-    Returns:
-        List: Cycle Data, or None
+        # Args
+            - query_data (_pd.dataframe_) : query_data
+            - feature_cycle (_String_) : feature_cycle
+            - feature_cycle_times (_int_) : feature_cycle_times
+            - frequency (_int_) : frequency (option)
+        
+        # Returns
+            - data (_List_) : Cycle Data, or None
+
     """
+
     refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': frequency}}
-    output_data = DataPreprocessing().get_refinedData(query_data, refine_param)
-    
+    output_data = DataPreprocessing().get_refinedData(query_data, refine_param)    
 
     # cycle 주기에 따라 적절한 함수 적용
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html
@@ -84,19 +87,21 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
     """
     return data
 
-def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):
-    # 단위의 데이터 셋 리턴
+def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):    
     """
-    Split the data by num*unit
+    # Description
+        - 단위의 데이터 셋 리턴
+        - Split the data by num * unit
 
-    Args:
-        data (dataframe): timeseires data
-        unit (str): "H", "D", "W", "M", "A" 중 하나로 시간 단위 나타냄
-        num (int): data cycle times
-        FullCycle (bool): 완벽한 데이터만 살릴 것인지(True), 양쪽의 군더더기 데이터를 살릴 것인지 (False)
+    # Args
+        - data (_pd.Dataframe_) : timeseires data
+        - unit (_str_) : "H", "D", "W", "M", "A" 중 하나로 시간 단위 나타냄
+        - num (_int_) : data cycle times
+        - FullCycle (_bool_) : 완벽한 데이터만 살릴 것인지(True), 양쪽의 군더더기 데이터를 살릴 것인지 (False)
     
-    Returns:
-        split_data_set(List): 분할된 데이터에 대한 list
+    # Returns
+        - split_data_set (_List_) : 분할된 데이터에 대한 list
+
     """""
     split_data_set = []
 

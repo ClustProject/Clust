@@ -11,27 +11,30 @@ from Clust.clust.transformation.splitDataByCondition import holiday
 
 def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
     """
-    A function that adds a "Working" column constructed according to the input working time.
+    # Description
+        A function that adds a "Working" column constructed according to the input working time.
 
-    - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
-      If there is no holiday information in the data, the function automatically creates it.
-    - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
+        - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
+        If there is no holiday information in the data, the function automatically creates it.
+        - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
 
-    Args:
-        data (dataframe) : Time series data
-        workingtime_criteria (dictionary) : Working time criteria information
+    # Args
+        - data (_pd.Dataframe_) : Time series data
+        - workingtime_criteria (_Dictionary_) : Working time criteria information
         
-    Example:
+    # Example
         >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
     
-    Returns:
-        dataframe : Time sereis data with "Working" column    
+    # Returns
+        - data (_pd.Dataframe_) : Time sereis data with "Working" column    
     """
+
     if "HoliDay" not in data.columns: 
         data = holiday.add_holiday_feature(data)
     
     work_idx_list = list(locate(workingtime_criteria["label"], lambda x: x == "working"))
     working_row_df = pd.DataFrame()
+    
     for work_idx in work_idx_list:
         working_start = workingtime_criteria["step"][work_idx]
         working_end = workingtime_criteria["step"][work_idx+1]
@@ -55,20 +58,23 @@ def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'l
 
 def split_data_by_working(data_input, workingtime_criteria={'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
     """
-    Split the data by working/notworking.
+    # Description
+        Split the data by working/notworking.
 
-    Args:
-        data (dataframe): Time series data
-        workingtime_criteria (dictionary) : Working time criteria information
+    # Args
+        - data_input (_pd.Dataframe_) : Time series data
+        - workingtime_criteria (_Dictionary_) : Working time criteria information
         
-    Example:
+    # Example
         >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
 
-    Returns:
-        dictionary: Return value composed of dataframes divided according to each label of working and notworking.
+    # Returns
+        - split_data_by_working (_Dictionary_) : Return value composed of dataframes divided according to each label of working and notworking.
     """
+
     # Get data with working feature
     data = get_working_feature(data_input, workingtime_criteria)
+
     # Split Data by Working time
     split_data_by_working = {}
     split_data_by_working["working"] = data["working" == data["Working"]].drop(["Day", "Holiday", "Working"], axis=1)
