@@ -7,15 +7,15 @@ from Clust.clust.transformation.splitDataByCondition import holiday
 
 def get_mean_analysis_result_by_holiday(data):
     """
-    # Description
-        - Holiday & Not Holiday 에 따른 데이터의 평균 값을 Meta로 생성하는 함수
-        - 휴일과 휴일이 아닌 날에 따른 분석을 위해 make_holiday_column 함수로 추출한 "HoliDay" column을 활용
+    
+    Holiday & Not Holiday 에 따른 데이터의 평균 값을 Meta로 생성하는 함수
+    휴일과 휴일이 아닌 날에 따른 분석을 위해 make_holiday_column 함수로 추출한 "HoliDay" column을 활용
 
-    # Args
-        - data (_pd.DataFrame_)
+    Args:
+        data (_pd.DataFrame_)
 
-    # Returns
-        - meanbyholiday_result_dict (_Dictionary_) : Holiday, Not Holiday 의 평균 값을 포함한 Dictionary Meta
+    Returns:
+        Dictionary : meanbyholiday_result_dict, Holiday, Not Holiday 의 평균 값을 포함한 Dictionary Meta
 
     """
     #self.data = self.make_holiday_column()

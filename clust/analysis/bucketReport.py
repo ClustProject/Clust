@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 def make_count_report_byBucket(resultSet, bucket_list, saveFlag = True):
     """
-    - make value counting report based on each feature and bucket_name
+    make value counting report based on each feature and bucket_name
     
     Args:
         resultSet(pd.DataFrame): dataframe index=each bucket_name, column = features value = category number after clustering

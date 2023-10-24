@@ -7,37 +7,36 @@ from Clust.clust.transformation.general.basicTransform import nan_to_none_in_dic
 
 class StatisticsAnalysis():    
     def __init__(self, data):
-        """
-            # Description
-                Generate statistical analysis results. There are 2 types.
-                1. Basic statistical analysis provided by Pandas
-                2. Analyze the distribution according to the criterion category (label) by data column
+        """        
+        Generate statistical analysis results. There are 2 types.
+        1. Basic statistical analysis provided by Pandas
+        2. Analyze the distribution according to the criterion category (label) by data column
             
-            # Args
-                data (_pd.dataframe_) : Time Series Data
+        Args:
+            data (_pd.dataframe_) : Time Series Data
         """
         self.data = data
 
     def get_basic_analysis_result(self):
-        """
-            # Description
-                - Generate the basic statistical analysis results provided by Pandas. 
-                - The analysis result is information about the statistical distribution of the data.
+        """       
+        Generate the basic statistical analysis results provided by Pandas. 
+        The analysis result is information about the statistical distribution of the data.
                     
-            # Returns
-                - statistics_result_dict (_Dictionary_) : Analysis Results
+        Returns:
+            Dictionary : statistics_result_dict, Analysis Results
                 
-            # Example
-            >>> AnalysisResult = {'column1': {
-                'count': 1007583.0,
-                'mean': 353.9929951180201,
-                'std': 84.57299647078351,
-                'min': 177.0,
-                '25%': 279.0,
-                '50%': 366.0,
-                '75%': 413.0,
-                'max': 870.0
-                }}
+        Example:
+        >>> AnalysisResult = {'column1': {
+            'count': 1007583.0,
+            'mean': 353.9929951180201,
+            'std': 84.57299647078351,
+            'min': 177.0,
+            '25%': 279.0,
+            '50%': 366.0,
+            '75%': 413.0,
+            'max': 870.0
+            }}
+
         """
         labels = ["count", "mean", "std", "min", "25%", "50%", "75%", "max"]
         statistics_result_dict = self.data.describe().to_dict()
@@ -46,24 +45,23 @@ class StatisticsAnalysis():
         return statistics_result_dict
     
     def get_count_by_label_analysis_result(self, base_meta):
-        """
-        # Description
-            - Generate analysis results for the distribution according to the criterion category (label) for each data column.
-            - Essentially, Label Information must exist in bucket_meta_info of the measurement.
+        """        
+        Generate analysis results for the distribution according to the criterion category (label) for each data column.
+        Essentially, Label Information must exist in bucket_meta_info of the measurement.
 
-        # Args
-            - base_meta (_Dictionary_) : bucket_meta_info of the measurement
+        Args:
+            base_meta (_Dictionary_) : bucket_meta_info of the measurement
 
-        # Returns
-            - countbyfeaturelabel_result_dict (_Dictionary_) : Anaysis Results
+        Returns:
+            Dictionary : Anaysis Results, countbyfeaturelabel_result_dict  
 
-        # Example
-            >>> AnalysisResult = {'column1': [
-                {'value': 775053, 'name': '좋음'},
-                {'value': 134025, 'name': '보통'},
-                {'value': 19865, 'name': '나쁨'},
-                {'value': 227, 'name': '매우나쁨'}
-                ]}
+        Example :
+        >>> AnalysisResult = {'column1': [
+            {'value': 775053, 'name': '좋음'},
+            {'value': 134025, 'name': '보통'},
+            {'value': 19865, 'name': '나쁨'},
+            {'value': 227, 'name': '매우나쁨'}
+            ]}
         """
         data_cut = pd.DataFrame()
         countbyfeaturelabel_result_dict = {}
