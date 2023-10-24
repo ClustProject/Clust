@@ -9,7 +9,7 @@ def get_data_result(select_type, data_input, select_param=None):
     Args:
         select_type (string):select type 
         data_input (dictionary) :original data set
-        param: select parameter
+        param (dictionary): select parameter
     
     Returns:
         dictionary: Return selected dictionary dataset or dataframe

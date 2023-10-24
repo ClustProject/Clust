@@ -9,12 +9,14 @@ sys.path.append("../../")
 class CycleData():
     """
     # Description
-        Cycle - Hour, Day, Week, Month, Year
+    Cycle - Hour, Day, Week, Month, Year
+
     """
     def __init__(self):
         """
         # Description
             All data to be stored must start with '00:00:00'.
+
         """
         # self.start, self.end = self.getTimePointByDayUnit(data)
         # self.data = data[self.start: self.end] #(??)
@@ -24,21 +26,22 @@ class CycleData():
 
     def getHourCycleSet(self, data, num, FullCycle):
         """
-            # Description
-                - Split the data by time ('00:00 to 59:59').
-                - If num is 2 or more, split num*hour units.
+        # Description
+            - Split the data by time ('00:00 to 59:59').
+            - If num is 2 or more, split num*hour units.
 
-            # Args
-                - data (_pd.dataframe_) : timeseires data
-                - num (_int_) : data cycle times
-                - FullCycle (_bool_) : split complete or not
+        Args:
+            data (_pd.dataframe_) : timeseires data
+            num (_int_) : data cycle times
+            FullCycle (_bool_) : split complete or not
+        
+        Returns:
+            List : dataFrameCollectionResult(data split by Hour Cycle)
+
             
-            # Returns
-                - dataFrameCollectionResult (_List_) : data split by Hour Cycle
-
-            # Note
-            --------
-            if set cycle Hour and num=3 --> hour*num --> split by 3Hours
+        Note
+        --------
+        if set cycle Hour and num=3 --> hour * num --> split by 3Hours
 
         """
         hour_first = data.index[0]
@@ -92,20 +95,21 @@ class CycleData():
 
     def getDayCycleSet(self, data, num, FullCycle):        
         """
-            # Description
-                - day 단위의 데이터 셋 리턴
-                - Split the data by time ('00:00:00 ~ 23:59:59').
-                - If num is 2 or more, split num*day units.
+        # Description
+            - day 단위의 데이터 셋 리턴
+            - Split the data by time ('00:00:00 ~ 23:59:59').
+            - If num is 2 or more, split num*day units.
 
-            # Args
-                - data (_pd.dataframe_) : timeseires data
-                - num (_int_) : data cycle times
-                - FullCycle (_bool_) : split complete or not
-            
-            # Returns
-                - dataFrameCollectionResult (_List_) : data split by Day Cycle
+        Args:
+            data (_pd.dataframe_) : timeseires data
+            num (_int_) : data cycle times
+            FullCycle (_bool_) : split complete or not
+        
+        Returns:
+            List : dataFrameCollectionResult(data split by Day Cycle)
 
-        """""
+
+        """
         # 첫 시간과 마지막 시간 구하기
         day_first = data.index[0]
         day_last = data.index[-1]
@@ -166,15 +170,15 @@ class CycleData():
             - Split the data by time ('Monday 00:00:00 ~ Sunday 23:59:59').
             - If num is 2 or more, split num*week units. 예를 들어서 num이 2일 경우, 2주 단위로 자름
 
-        # Args
-            - data (_pd.dataframe_) : timeseires data
-            - num (_int_) : data cycle times
-            - FullCycle (_bool_) : split complete or not
+        Args:
+            data (_pd.dataframe_) : timeseires data
+            num (_int_) : data cycle times
+            FullCycle (_bool_) : split complete or not
         
-        # Returns
-            - dataFrameCollectionResult (_List_) : data split by Day Cycle
+        Returns:
+            List : dataFrameCollectionResult(data split by Day Cycle)
             
-        """""
+        """
         week_first = data.index[0]
         week_last = data.index[-1]
         
@@ -234,15 +238,15 @@ class CycleData():
             - Split the data by time ('1st 00:00:00 ~  last day 23:59:59').
             - If num is 2 or more, split num*month units.
 
-        # Args
-            - data (_pd.dataframe_): timeseires data
-            - num (_int_): data cycle times
-            - FullCycle (_bool_): split complete or not
+        Args:
+            data (_pd.dataframe_): timeseires data
+            num (_int_): data cycle times
+            FullCycle (_bool_): split complete or not
         
-        # Returns
-            - dataFrameCollectionResult (_List_) : data split by Day Cycle
+        Returns:
+            List : dataFrameCollectionResult(data split by Day Cycle)
 
-        """""
+        """
         month_first = data.index[0]
         month_last = data.index[-1]
 
@@ -315,14 +319,14 @@ class CycleData():
             - Split the data by time ('01-01 00:00:00 ~  12-31 23:59:59').
             - If num is 2 or more, split num*year units.
 
-        # Args
-            - data (_pd.dataframe_): timeseires data
-            - num (_int_): data cycle times
-            - FullCycle (_bool_): split complete or not
+        Args:
+            data (_pd.dataframe_): timeseires data
+            num (_int_): data cycle times
+            FullCycle (_bool_): split complete or not
         
-        # Returns
-            - dataFrameCollectionResult (_List_) : data split by Day Cycle
-        """""
+        Returns:
+            List : dataFrameCollectionResult(data split by Day Cycle)
+        """
         year_first = data.index[0]
         year_last = data.index[-1]
 

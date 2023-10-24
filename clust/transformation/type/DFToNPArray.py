@@ -5,15 +5,19 @@ import numpy as np
 from Clust.clust.transformation.purpose import machineLearning as ML
 def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
     """
-    # Description
-        - dataframe을 numpy array로 변경
+    Description
+    - dataframe을 numpy array로 변경
 
-    # Args
-        - X, y (_pd.dataframe_)
-        - transformParameter (_Dictionary_)
+    Args:
+        X (dataframe): X dataframe
+        y (dataframe): y dataframe
+        transformParameter(Dictionary) : transform parameters
 
-    # Returns
-        - X_array, y_array (_numpy.array_) : shape ===> (len(df)/window_size , window_size, column_num) ==> (batch, seq_length, input_size )
+    Returns:
+        X_array, y_array (numpy.array) : X_array, y_array 
+
+    >>> shape ===> (len(df)/window_size , window_size, column_num) ==> (batch, seq_length, input_size )
+
     """
     window_size = transformParameter['past_step']
     max_nan_limit_ratio = transformParameter['max_nan_limit_ratio']
@@ -47,22 +51,21 @@ def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
 #YK
 def transDFtoNP_infer(dfX, windowNum = 0, dim = None):
     """
-        # Description
-            - Make NumpyArray by input DataFrame
-            - if windowNum = 0 ----> slice X by day
-            - if windowNum = N ----> slice X by windowNum
-        
-        # Example
-            >>> Retunrn 
-            ... X.shape (sampleNum, featureNum, sequenceNum )
-            ... y.shape (sampleNum, )
+    Description
+        - Make NumpyArray by input DataFrame
+        - if windowNum = 0 ----> slice X by day
+        - if windowNum = N ----> slice X by windowNum
+    
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
-        # Args
-            - dfX (_pd.Dataframe_) : dfX       
-            - windowNum (_Interger_) : windowNum
+    Args:
+        dfX (Dataframe) : dfX       
+        windowNum(Interger) : windowNum
 
-        # Returns
-            - X (_numpy array_)
+    Returns:
+        numpy.array: X
     
     """
     import datetime as dt
@@ -99,10 +102,10 @@ def transDFtoNP(dfX, dfy, windowNum = 0, dim = None):
     if windowNum = 0 ----> slice X by day
     if windowNum = N ----> slice X by windowNum
     
-    Example:
-        >>> Retunrn 
-        ... X.shape (sampleNum, featureNum, sequenceNum )
-        ... y.shape (sampleNum, )
+
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
     Args:
         dfX (DataFrame): dfX
@@ -110,7 +113,7 @@ def transDFtoNP(dfX, dfy, windowNum = 0, dim = None):
         windowNum (Interger): windowNum
 
     Returns:
-        numpy array:  X, y
+        numpy.array:  X, y
     
     """
     import datetime as dt
@@ -155,10 +158,9 @@ def transDFtoNP2(dfX, windowNum = 0, dim = None):
     if windowNum = 0 ----> slice X by day
     if windowNum = N ----> slice X by windowNum
     
-    Example:
-        >>> Retunrn 
-        ... X.shape (sampleNum, featureNum, sequenceNum )
-        ... y.shape (sampleNum, )
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
     Args:
         dfX (DataFrame): dfX
@@ -166,7 +168,7 @@ def transDFtoNP2(dfX, windowNum = 0, dim = None):
         windowNum (Interger): windowNum
 
     Returns:
-        numpy array:  X, y
+        numpy.array:  X, y
     
     """
     import datetime as dt
@@ -206,10 +208,10 @@ def trans_df_to_np(dfX, dfy, windowNum = 0, dim = None):
     if windowNum = 0 ----> slice X by day
     if windowNum = N ----> slice X by windowNum
     
-    Example:
-        >>> Retunrn 
-        ... X.shape (sampleNum, featureNum, sequenceNum )
-        ... y.shape (sampleNum, )
+
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
     Args:
         dfX (DataFrame): dfX
@@ -217,7 +219,7 @@ def trans_df_to_np(dfX, dfy, windowNum = 0, dim = None):
         windowNum (Interger): windowNum
 
     Returns:
-        numpy array:  X, y
+        numpy.array:  X, y
     
     """
     import datetime as dt
@@ -265,10 +267,10 @@ def trans_df_to_np_inf(dfX, windowNum = 0, dim = None):
     if windowNum = 0 ----> slice X by day
     if windowNum = N ----> slice X by windowNum
     
-    Example:
-        >>> Retunrn 
-        ... X.shape (sampleNum, featureNum, sequenceNum )
-        ... y.shape (sampleNum, )
+
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
     Args:
         dfX (DataFrame): dfX
@@ -276,7 +278,7 @@ def trans_df_to_np_inf(dfX, windowNum = 0, dim = None):
         windowNum (Interger): windowNum
 
     Returns:
-        numpy array:  X, y
+        numpy.array:  X, y
     
     """
     import datetime as dt

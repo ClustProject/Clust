@@ -11,8 +11,8 @@ def add_holiday_feature(data):
     Args:
         data (_pd.dataframe_) : Time series data
 
-    Returns:
-        pd.dataframe : data, Time sereis data with "Holiday" column
+    # Returns
+        - data (_pd.dataframe_) : Time sereis data with "Holiday" column
     """
 
     # 요일 Feature 생성
@@ -38,11 +38,11 @@ def split_data_by_holiday(data):
     """
     Split the data by holiday/non-holiday.
 
-    Args :
-        data (_pd.dataframe_) : Time series data
+    # Args
+        - data (_pd.dataframe_) : Time series data
 
-    Returns
-        Dictionary : split_data_by_holiday, Return value composed of dataframes divided according to each label of holiday and notholiday.
+    # Returns
+        - split_data_by_holiday (_Dictionary_) : Return value composed of dataframes divided according to each label of holiday and notholiday.
     """
     # Get data with holiday feature
     data = add_holiday_feature(data)

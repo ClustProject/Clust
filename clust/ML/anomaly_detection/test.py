@@ -16,12 +16,10 @@ class AnomalyDetTest():
         Set Parameters for Test
 
         Args:
-        test_params(dict): test parameter
+            test_params(dict): test parameter
 
-        Example:
-
-            >>> param = { "device": "cpu",
-            ...           "batch_size": 16 }
+        >>> param = { "device": "cpu",
+        ...           "batch_size": 16 }
 
         """
         self.test_params = test_params
@@ -62,7 +60,7 @@ class AnomalyDetTest():
     def test(self):
         """
         Test model and return result
-        # 각모델마다 결과값이 다를 것 같은데, 결과 통일 했던 f1_score 추가해주세요.
+
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data

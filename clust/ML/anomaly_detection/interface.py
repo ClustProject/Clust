@@ -16,7 +16,7 @@ class BaseAnomalyDetModel(abc.ABC):
         train/validation data loader는 create_trainloader 메서드에서 정의하고, 학습을 위한 파라미터와 함께 입력인자로 전달받도록 합니다.
         학습 과정의 마지막에는 self.model 에 최종 weights를 로드하도록 합니다.
 
-        ex)
+
         Args:
             params (dict): parameters for train
             train_loader (Dataloader): train data loader
@@ -34,7 +34,7 @@ class BaseAnomalyDetModel(abc.ABC):
         test data loader는 create_testloader 메서드에서 정의하고, 테스트를 위한 파라미터와 함께 입력인자로 전달받도록 합니다.
         테스트 후에는 결과 데이터와 metric을 return 하도록 합니다.
          
-        ex)
+
         Args:
             params (dict): parameters for test  # TBD
             test_loader (DataLoader): data loader
@@ -73,7 +73,7 @@ class BaseAnomalyDetModel(abc.ABC):
         학습 결과 모델을 반환하기 위한 ``export_model`` 메서드 입니다.
         현재 self.model 객체를 return 하도록 합니다.
 
-        ex)
+
         Returns:
             self.model (Object): current model object
         """
@@ -85,7 +85,7 @@ class BaseAnomalyDetModel(abc.ABC):
         학습 결과 모델을 저장하기 위한 ``save_model`` 메서드 입니다.
         save_path 를 입력 인자로 받아 해당 경로에 특정 형식으로 저장하며, 동일 형식을 고려한 load_model 정의가 필요합니다.
 
-        ex)
+
         Args:
             save_path (string): path to save model
         """
@@ -97,7 +97,7 @@ class BaseAnomalyDetModel(abc.ABC):
         학습된 모델을 로드하기 위한 ``load_model`` 메서드 입니다.
         model_file_path 를 입력 인자로 받아 해당 경로에 저장된 모델을 로드하며, save_model 에서 정의한 형식과 호환되도록 정의해야 합니다.
 
-        ex)
+
         Args:
             model_file_path (string): path to load saved model
         """
@@ -110,7 +110,7 @@ class BaseAnomalyDetModel(abc.ABC):
         학습에 필요한 data loader 정의 인자들을 입력으로 받고, train 메서드에서 받아 바로 학습에 활용할 수 있도록 정의합니다.
         DataLoader 형식의 trian_loader, valid_loader 를 return 하도록 합니다.
 
-        ex)
+
         Args:
             batch_size (integer): batch size
             train_x (dataframe): train X data
@@ -132,7 +132,7 @@ class BaseAnomalyDetModel(abc.ABC):
         테스트에 필요한 data loader 정의 인자들을 입력으로 받고, test 메서드에서 받아 바로 테스트에 활용할 수 있도록 정의합니다.
         DataLoader 형식의 test_loader 를 return 하도록 합니다.
 
-        ex)
+
         Args:
             batch_size (integer): batch size
             val_x (dataframe): validation X data
@@ -150,7 +150,7 @@ class BaseAnomalyDetModel(abc.ABC):
         추론에 필요한 data loader 정의 인자들을 입력으로 받고, detect 메서드에서 받아 바로 테스트에 활용할 수 있도록 정의합니다.
         DataLoader 형식의 detect_loader 를 return 하도록 합니다.
 
-        ex)
+
         Args:
             batch_size (integer): 
             x_data (dataframe): inference X data

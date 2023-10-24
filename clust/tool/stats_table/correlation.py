@@ -1,27 +1,24 @@
 class Correlation():
     """
-    # Description
-        get Correlation Matrix and related information
+    get Correlation Matrix and related information
 
     """
     def __init__(self, data):
         """
-        # Description
-            set input data
+        set input data
 
-        # Args
-            - data (_pd.dataFrame_)
+        Args:
+            data (_pd.dataFrame_) : data
 
         """
         self.data = data
 
     def getCorrelationMatrix(self):
         """
-        # Description
-            get pearson correlation Matrix
+        get pearson correlation Matrix
 
-        # Returns
-            - corrMtx (_pd.DataFrame_) : correlation Matrix
+        Returns:
+            _pd.DataFrame_ : corrMtx(correlation Matrix)
 
         """
         self.corrMtx = self.data.corr()
@@ -30,11 +27,11 @@ class Correlation():
 
     def _get_redundant_pairs(self):        
         """
-        # Description
-            Get diagonal and lower triangular pairs of correlation matrix
+        Get diagonal and lower triangular pairs of correlation matrix
 
-        # Returns
-            - pairs_to_drop (_pd.DataFrame_) : pairs of correlation matrix
+        Returns:
+            _pd.DataFrame_ : pairs_to_drop(pairs of correlation matrix)
+
         """
         pairs_to_drop = set()
         cols = self.data.columns
@@ -47,16 +44,15 @@ class Correlation():
 
     def get_top_abs_correlations(self, ranking=5, target = None):
         """
-        # Description
-            Get the highest correlation pairs
+        Get the highest correlation pairs
 
-        # Args
-            - data (_pd.dataFrame_) : data
-            - ranking (_Integer_) : variable to specify the top Nth value
-            - target (_String_) : If target is specified, only results related to target name are provided
+        Args:
+            data (_pd.dataFrame_) : data
+            ranking (_Integer_) : variable to specify the top Nth value
+            target (_String_) : If target is specified, only results related to target name are provided
 
-        # Returns
-            - result (_series of DataFrame_) : pairs of correlation matrix
+        Returns:
+            _series of DataFrame_ : result(pairs of correlation matrix)
 
         """
         au_corr = self.getCorrelationMatrix().abs().unstack()

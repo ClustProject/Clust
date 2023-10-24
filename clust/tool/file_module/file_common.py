@@ -7,15 +7,17 @@ import os
 
 def check_path(directory, file_name) :               
     """           
-    # Description
         - 파일을 저장할 폴더 없으면 생성
         - 기존에 폴더에 저장된 파일 삭제
 
-    # Input Data
-        - String
-        ```
-            /home/jianso/문서/Code/CLUST/KETIAppDataServer/static/img/eda/
-        ```
+    Args:
+        directory(string) : directory file path
+        file_name(string) : file name
+
+    Example: ::
+
+        /home/jianso/문서/Code/CLUST/KETIAppDataServer/static/img/eda/
+
 
     """
     
@@ -27,15 +29,14 @@ def check_path(directory, file_name) :
 
 def get_user_file_path(user_directory, file_name) :   
     """           
-    # Description
-        root 경로와 user 경로를 합쳐서 반환
+    root 경로와 user 경로를 합쳐서 반환
 
-    # Input Data
-        user_diretory(_string_)
-        file_name(_string_)
+    Args:
+        user_diretory(_string_) : directory
+        file_name(_string_) : file name
 
-    # Returns       
-        file_path(_string_)
+    Returns:
+        string : file_path
 
     """
 

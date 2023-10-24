@@ -1,43 +1,64 @@
 import numpy as np
 
 def split_data_by_ratio(data, split_ratio, mode=None, window_size=None):
-        """
-        Split Data By Ratio. It usually makes train/validation data and train/test data
-        """
-        print(mode)
-        """ TODo체크 후 삭제
-        if mode == "Classification": # Xdata Freq : 11분 15초 / ydata Freq : 1 Days
-            data_date = np.unique(data.index.date)
-            length1 = int(len(data_date)*split_ratio)
-            data1, data2 = data[:str(data_date[length1-1])], data[str(data_date[length1]):]
-        """
-        if mode == "window_split": # 입력 windows 를 기준으로 split
-            import math
-            round_num = math.ceil(len(data)/window_size)
-            d1_num = window_size * int(round_num *split_ratio)
-            data1 = data[:d1_num]
-            data2 = data[d1_num:]
-            """ TODO 체크 후 삭제
-            data_date = []
-            
-            for i in range(round_num):
-                try:
-                    data_date.append(data.iloc[[(i+1)*window_size-1]].index)
-                except IndexError: # 결합 데이터의 길이가 공통 기간으로 기준 삼을 경우 y class data와 끝 시간이 일치하지 않은 경우 (Classification)
-                    print("data length : ",len(data), " but  {} th windows index : ".format(i), (i+1)*window_size-1)
-                    data_date.append(data.iloc[[len(data)-1]].index)
+    """
+    Split Data By Ratio. It usually makes train/validation data and train/test data
 
-            length1 = int(len(data_date) * split_ratio)
-            data1 = data[:str(data_date[length1-1][0])]
-            data2 = data[len(data1):]
-            """
-            
-        else:
-            length1=int(len(data)*split_ratio)
-            data1, data2 = data[:length1], data[length1:]
-        return data1, data2
+    Args:
+        data (dataframe): data
+        split_ratio (dataframe): split ratio(default 0.8)
+        mode (string): window_split or step_split
+        window_size (integer) : window size
+
+    Returns:
+        numpy.array : data1, data2
+
+    """
+    print(mode)
+    """ TODo체크 후 삭제
+    if mode == "Classification": # Xdata Freq : 11분 15초 / ydata Freq : 1 Days
+        data_date = np.unique(data.index.date)
+        length1 = int(len(data_date)*split_ratio)
+        data1, data2 = data[:str(data_date[length1-1])], data[str(data_date[length1]):]
+    """
+    if mode == "window_split": # 입력 windows 를 기준으로 split
+        import math
+        round_num = math.ceil(len(data)/window_size)
+        d1_num = window_size * int(round_num *split_ratio)
+        data1 = data[:d1_num]
+        data2 = data[d1_num:]
+        """ TODO 체크 후 삭제
+        data_date = []
+        
+        for i in range(round_num):
+            try:
+                data_date.append(data.iloc[[(i+1)*window_size-1]].index)
+            except IndexError: # 결합 데이터의 길이가 공통 기간으로 기준 삼을 경우 y class data와 끝 시간이 일치하지 않은 경우 (Classification)
+                print("data length : ",len(data), " but  {} th windows index : ".format(i), (i+1)*window_size-1)
+                data_date.append(data.iloc[[len(data)-1]].index)
+
+        length1 = int(len(data_date) * split_ratio)
+        data1 = data[:str(data_date[length1-1][0])]
+        data2 = data[len(data1):]
+        """
+        
+    else:
+        length1=int(len(data)*split_ratio)
+        data1, data2 = data[:length1], data[length1:]
+    return data1, data2
 
 def check_nan_status(np_X, np_y, nan_limit_num):
+    """
+    Check NaN 
+
+    Args:
+        np_X (numpy.array): X data
+        np_y (numpy.array): y data
+        nan_limit_num (integer): NaN limit
+
+    Returns:
+        numpy.array : np_X, np_y
+    """
     nan_X = np.isnan(np_X).sum()
     # step1
     if (nan_limit_num > nan_X):
@@ -52,7 +73,8 @@ def check_nan_status(np_X, np_y, nan_limit_num):
     return np_X, np_y
 
 def trans_by_step_info(X, y, transformParameter):
-    """transform for RNN style training
+    """
+    transform for RNN style training
 
     Args:
         X (dataframe): _description_
@@ -60,7 +82,7 @@ def trans_by_step_info(X, y, transformParameter):
         transformParameter (_type_): transform parameter
 
     Returns:
-        X_array, y_array(numpy.array): transformed data for RNN style training
+        numpy.array : X_array, y_array(transformed data for RNN style training)
     """
     X_array, y_array =[], []
     n_steps = transformParameter['past_step']

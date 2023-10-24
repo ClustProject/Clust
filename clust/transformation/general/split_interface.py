@@ -58,15 +58,17 @@ def split_data_from_dataframe(split_type, data, split_param):
         dictionary: Return value has measurements as keys and split result as values. 
                     split result composed of dataframes divided according to each condition
                     
-    split_param example:
+    split_param example: :: 
+
         1. split_type: cycle
-        >>> split_param = {'feature_cycle': 'Day', 'feature_cycle_times': 1}
+            split_param = {'feature_cycle': 'Day', 'feature_cycle_times': 1}
         2. split_type: working
-        >>> split_param = {'workingtime_criteria' : {'step': [0, 8, 18, 24], 'label': ['notworking', 'working', 'notworking']}}
+            split_param = {'workingtime_criteria' : {'step': [0, 8, 18, 24], 'label': ['notworking', 'working', 'notworking']}}
         3. split_type: holiday
-        >>> split_param = {}
+            split_param = {}
         4. split_type: timestep 
-        >>> split_param = {'timestep_criteria' : {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}}
+            split_param = {'timestep_criteria' : {'step': [0, 6, 12, 17, 20, 24], 'label': ['dawn', 'morning', 'afternoon', 'evening', 'night']}}
+
     """
     
     if split_type=='holiday':

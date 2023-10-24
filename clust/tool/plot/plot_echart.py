@@ -9,10 +9,10 @@ def get_echart_json_result(graph_type, df)  :
 
     Args:
         graph_type(_str_) : ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density'] 
-        df(_pandas.dataFrame_)
+        df(_pandas.dataFrame_) : df
 
-    Returns:       
-        result_json (dict) : result json
+    Returns:
+        dictionary : result_json
             
     """   
     if graph_type == 'heat_map' :  

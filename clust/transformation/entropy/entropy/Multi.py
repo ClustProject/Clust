@@ -9,11 +9,17 @@ from math import floor
 from math import ceil
 
 def Multi(Data, S):
- #  generate the consecutive coarse-grained time series
- #  Input:   Data: time series;
- #           S: the scale factor
- # Output:
- #           M_Data: the coarse-grained time series at the scale factor S
+     """
+     generate the consecutive coarse-grained time series
+
+     Args:
+        Data (np.array) : time series data
+        S (integer) : the scale factor
+
+    Returns:
+        np.array : M_Data
+     
+     """
      J = 0;
      M_Data = [];
      L = len(Data);

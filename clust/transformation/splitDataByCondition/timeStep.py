@@ -12,15 +12,16 @@ def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24
         - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
         - Used when the period of data time information is less than 1 hour.
 
-    # Args
-        - data (_pd.dataframe_) : Time series data
-        - timestep_criteria (_Dictionary_) : TimeStep criteria information
+    Args:
+        data (_pd.dataframe_) : Time series data
+        timestep_criteria (_Dictionary_) : TimeStep criteria information
         
-    # Example
-        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+
+    >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
     
-    # Returns
-        - data (_pd.dataframe_) : Time sereis data with "TimeStep" column
+    Returns:
+        _pd.dataframe_ : data( Time sereis data with "TimeStep" column)
+
     """
     timestep = timestep_criteria["step"]
     timelabel = timestep_criteria["label"]
@@ -37,15 +38,15 @@ def split_data_by_timestep(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "lab
         # Description
             Split the data by TimeStep.
 
-        # Args
-            - data (_pd.dataframe_) : Time series data
-            - timestep_criteria (_Dictionary_) : TimeStep criteria infromation
+        Args:
+            data (_pd.dataframe_) : Time series data
+            timestep_criteria (_Dictionary_) : TimeStep criteria infromation
             
-        # Example
-            >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
 
-        # Returns
-            - split_data_by_timestep (_Dictionary_) : Return value composed of dataframes divided according to each label of timestep.
+        >>> timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}
+
+        Returns:
+            _Dictionary_ : split_data_by_timestep(Return value composed of dataframes divided according to each label of timestep.)
         """
         
         # Get data with timestep feature

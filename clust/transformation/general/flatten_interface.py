@@ -8,7 +8,7 @@ def make_univariate_df(data, new_column_name):
         new_column_name (str): new univariate column name
 
     Returns:
-        result_df (pd.DataFrame): data frame with one column
+        pd.DataFrame : result_df(data frame with one column)
     """
     result_df = pd.DataFrame()
     for name in data:
@@ -27,7 +27,7 @@ def make_data_with_time_index(data, start_time, frequency):
         frequency(int): minutes, time series data description duration
 
     Returns:
-        data (pd.DataFrame): data frame with time index (index name = time)
+        pd.DataFrame : data(data frame with time index (index name = time))
     """
     time_index = pd.date_range(start=start_time, freq = str(frequency)+"T", periods=len(data))
     data.set_index(time_index, inplace = True)
@@ -54,7 +54,8 @@ def make_uni_variate_with_time_index(data, flatten_param):
             >>> new_column_name(int or None) : new column name, option 
             
     Returns:
-        result_df (pd.DataFrame): data frame with time index (index name = time)
+        pd.DataFrame : result_df(data frame with time index (index name = time))
+
     """
     start_time = flatten_param['start_time']
     frequency = flatten_param['frequency']
