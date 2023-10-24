@@ -4,10 +4,11 @@ def show_clustering_result_by2DPCA(data, label):
     1) getPCA result (n_components = 2)
     
     Args:
-            data (numpy.ndarray): original data to be clustered : shape = (data_num, ts_data_len) 
-            label (numpy.ndarray): classification (clustering) labels :shpae = (ts_data_len)
+        data (numpy.ndarray): original data to be clustered : shape = (data_num, ts_data_len) 
+        label (numpy.ndarray): classification (clustering) labels :shpae = (ts_data_len)
             
-
+    Returns:
+        np.array : rlt_pca
     """
     print("Dimension: ", data.shape[1], "---->", 2)
     from sklearn.decomposition import PCA

@@ -8,10 +8,9 @@ def trans3NPtoDF(X, y, startTime):
     Every Sample of y has (one value) related to the value of X.
     Every New Sample can be separated by time index (Every Days)
 
-    Example:
-        >>> Retunrn 
-        ... X.shape (sampleNum, featureNum, sequenceNum )
-        ... y.shape (sampleNum, )
+    >>>     Retunrn 
+    ...     X.shape (sampleNum, featureNum, sequenceNum )
+    ...     y.shape (sampleNum, )
 
     Args:
         X (3D numpy array): X
@@ -67,9 +66,9 @@ def trans2NPtoDF(array, startTime, data_freq):
         startTime (string): start Time of DataFrame Index
         data_freq (string): time frequency of DataFrame
 
-    Example:
-        >>> startTime : "2022-01-01"
-        >>> data_freq : "1S"
+        
+    >>>     startTime : "2022-01-01"
+    >>>     data_freq : "1S"
 
 
     Returns:

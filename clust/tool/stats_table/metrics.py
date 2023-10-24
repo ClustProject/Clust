@@ -4,17 +4,14 @@ import numpy as np
 
 def get_RMSE_with_original_and_processedData(original, processed, partial_number, feature_name):
     """
-        # Description
-            다른 곳에서 아직 활용한 적 없는 함수로 보임. 추후 수정 필요.
+    다른 곳에서 아직 활용한 적 없는 함수로 보임. 추후 수정 필요.
 
-        # Args
-            - original
-            - processed
-            - partial_number
-            - feature_name
-            
-        # Returns
-            - No Returns
+    Args:
+        original
+        processed
+        partial_number
+        feature_name
+
             
     """
     raw_value = original[partial_number][feature_name].values
@@ -36,14 +33,13 @@ def smape(a, f):
 
 def calculate_metrics_df(df):
     """
-        # Description     
-            - 데이터 프레임 값 계산       
+    calculate dataframe value    
 
-        # Args
-            - df (_pd.dataFrame_)
+    Args:
+        df (_pd.dataFrame_) : dataframe
 
-        # Returns
-            - Dictionary Result
+    Returns:
+        dictionary : dictionary result(mae, rmse, mape, smape, r2)
  
     """
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score

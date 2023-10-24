@@ -13,20 +13,20 @@ def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'l
     """
     # Description
         A function that adds a "Working" column constructed according to the input working time.
-
         - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
-        If there is no holiday information in the data, the function automatically creates it.
+        - If there is no holiday information in the data, the function automatically creates it.
         - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
 
-    # Args
-        - data (_pd.Dataframe_) : Time series data
-        - workingtime_criteria (_Dictionary_) : Working time criteria information
+    Args:
+        data (_pd.Dataframe_) : Time series data
+        workingtime_criteria (_Dictionary_) : Working time criteria information
         
-    # Example
-        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
+
+    >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
     
-    # Returns
-        - data (_pd.Dataframe_) : Time sereis data with "Working" column    
+    Returns:
+        _pd.Dataframe_ : data(Time sereis data with "Working" column)
+
     """
 
     if "HoliDay" not in data.columns: 
@@ -61,15 +61,16 @@ def split_data_by_working(data_input, workingtime_criteria={'step': [0, 9, 18, 2
     # Description
         Split the data by working/notworking.
 
-    # Args
-        - data_input (_pd.Dataframe_) : Time series data
-        - workingtime_criteria (_Dictionary_) : Working time criteria information
+    Args:
+        data_input (_pd.Dataframe_) : Time series data
+        workingtime_criteria (_Dictionary_) : Working time criteria information
         
-    # Example
-        >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
 
-    # Returns
-        - split_data_by_working (_Dictionary_) : Return value composed of dataframes divided according to each label of working and notworking.
+    >>> workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}
+
+    Returns:
+        _Dictionary_ : split_data_by_working(Return value composed of dataframes divided according to each label of working and notworking.)
+
     """
 
     # Get data with working feature

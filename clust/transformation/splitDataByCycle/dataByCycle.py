@@ -8,17 +8,17 @@ import pandas as pd
 
 def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, frequency=None):
     """
-        # Description
-            get Cycle Data Set        
+    # Description
+    get Cycle Data Set        
 
-        # Args
-            - data_input (_pd.dataframe_) : query_data
-            - feature_cycle (_String_) : feature_cycle
-            - feature_cycle_times (_int_) : feature_cycle_times
-            - frequency (_int_) : frequency (option)
-        
-        # Returns
-            - result (_Dictionary_) : Cycle DataSet, or None
+    Args:
+        data_input (_pd.dataframe_) : query_data
+        feature_cycle (_String_) : feature_cycle
+        feature_cycle_times (_int_) : feature_cycle_times
+        frequency (_int_) : frequency (option)
+    
+    Returns:
+        Dictionary : result(Cycle DataSet, or None)
 
     """
     result = {}
@@ -33,17 +33,17 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
     """
-        # Description
-            get Cycle Data
+    # Description
+    get Cycle Data
 
-        # Args
-            - query_data (_pd.dataframe_) : query_data
-            - feature_cycle (_String_) : feature_cycle
-            - feature_cycle_times (_int_) : feature_cycle_times
-            - frequency (_int_) : frequency (option)
-        
-        # Returns
-            - data (_List_) : Cycle Data, or None
+    Args:
+        query_data (_pd.dataframe_) : query_data
+        feature_cycle (_String_) : feature_cycle
+        feature_cycle_times (_int_) : feature_cycle_times
+        frequency (_int_) : frequency (option)
+    
+    Returns:
+        List : data(Cycle Data, or None)
 
     """
 
@@ -90,19 +90,19 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
 def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):    
     """
     # Description
-        - 단위의 데이터 셋 리턴
-        - Split the data by num * unit
+    - 단위의 데이터 셋 리턴
+    - Split the data by num * unit
 
-    # Args
-        - data (_pd.Dataframe_) : timeseires data
-        - unit (_str_) : "H", "D", "W", "M", "A" 중 하나로 시간 단위 나타냄
-        - num (_int_) : data cycle times
-        - FullCycle (_bool_) : 완벽한 데이터만 살릴 것인지(True), 양쪽의 군더더기 데이터를 살릴 것인지 (False)
+    Args:
+        data (_pd.Dataframe_) : timeseires data
+        unit (_str_) : "H", "D", "W", "M", "A" 중 하나로 시간 단위 나타냄
+        num (_int_) : data cycle times
+        FullCycle (_bool_) : 완벽한 데이터만 살릴 것인지(True), 양쪽의 군더더기 데이터를 살릴 것인지 (False)
     
-    # Returns
-        - split_data_set (_List_) : 분할된 데이터에 대한 list
+    Returns:
+        List : split_data_set(분할된 데이터에 대한 list)
 
-    """""
+    """
     split_data_set = []
 
     d_frequency = data.index[1]- data.index[0]
