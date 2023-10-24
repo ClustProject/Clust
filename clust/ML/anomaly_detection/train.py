@@ -47,7 +47,6 @@ class AnomalyDetTrain():
         """
         set train, val data & transform data for training
 
-        # regression task
         Args:
             train_x (np.array): train X data
             train_y (np.array): train y data (optional)

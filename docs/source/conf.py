@@ -20,7 +20,7 @@ from recommonmark.parser import CommonMarkParser
 
 project = 'Clust'
 copyright = '2023, Clust'
-author = 'Clust'
+author = 'KETI'
 release = '2.0.0'
 
 
@@ -41,6 +41,9 @@ autodoc_default_options = {
     'undoc-members': True,
     'exclude-members': '__weakref__'
 }
+
+extensions = ['rst2pdf.pdfbuilder']
+pdf_documents = [('index', u'rst2pdf', u'Sample rst2pdf doc', u'Your Name'),]
 
 autodoc_mock_imports = ["matplotlib.nanolib_helper"]
 # autoclass_contetn = 'both'
@@ -82,3 +85,45 @@ napoleon_include_private_with_doc = True
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+
+latex_engine = 'xelatex'
+latex_use_xindy = False
+
+latex_elements = {
+# The paper size ('letterpaper' or 'a4paper').
+'papersize': 'letterpaper',
+
+# The font size ('10pt', '11pt' or '12pt').
+'pointsize': '10pt',
+
+# Additional stuff for the LaTeX preamble.
+'preamble': '',
+
+# Latex figure (float) alignment
+'figure_align': 'htbp',
+}
+
+# Grouping the document tree into LaTeX files. List of tuples
+# (source start file, target name, title,
+#  author, documentclass [howto, manual, or own class]).
+
+master_doc = 'index'
+
+latex_documents = [
+  (master_doc, 'clust.tex', u'Clust Documentation',
+   u'KETI', 'manual'),
+]
+
+
+man_pages = [
+    (master_doc, 'Clust', u'Clust Documentation',
+     [author], 1)
+]
+
+
+texinfo_documents = [
+  (master_doc, 'Clust', u'Clust Documentation',
+   author, 'Clust', 'Clust',
+   'Clust'),
+]
