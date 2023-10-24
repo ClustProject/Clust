@@ -38,6 +38,11 @@ class CNN1D(nn.Module):
 
 
     def forward(self, x):
+        """
+        forawrd method
+        
+        """
+
         x = self.layer1(x)
         x = self.layer2(x)
         x = x.view(x.size(0), -1)

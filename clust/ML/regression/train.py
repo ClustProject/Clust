@@ -26,15 +26,13 @@ class RegressionTrain():
         Set Parameters for train
 
         Args:
-        params(dict): parameters for train
+            params(dict): parameters for train
 
-        Example:
-
-            >>> params = { 'weight_decay': 0.00001, 
-            ...            'lr':0.0001,
-            ...            'device':"cpu",
-            ...            'batch_size':16,
-            ...            'n_epochs':10    }
+        >>> params = { 'weight_decay': 0.00001, 
+        ...            'lr':0.0001,
+        ...            'device':"cpu",
+        ...            'batch_size':16,
+        ...            'n_epochs':10    }
         """
         self.train_params = train_params
 
@@ -61,7 +59,6 @@ class RegressionTrain():
         """
         set train, val data & transform data for training
 
-        # regression task
         Args:
             train_x (np.array): train X data
             train_y (np.array): train y data (optional)

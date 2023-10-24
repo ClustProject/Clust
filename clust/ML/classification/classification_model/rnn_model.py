@@ -8,11 +8,11 @@ import datetime
 from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
-from Clust.clust.ML.classification.interface import BaseRegressionModel
+from Clust.clust.ML.classification.interface import BaseClassificationModel
 from Clust.clust.ML.classification.models.rnn import RNN
 
 
-class RNNModel(BaseRegressionModel):
+class RNNModel(BaseClassificationModel):
     """
 
     """
@@ -138,14 +138,14 @@ class RNNModel(BaseRegressionModel):
         Predict Regression result for test dataset based on the trained model
 
         Args:
-            test_params (dict): parameters for test  # TBD
+            test_params (dict): parameters for test 
             test_loader (DataLoader): data loader
 
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data
-            mse (float): mean square error  # TBD
-            mae (float): mean absolute error    # TBD
+            mse (float): mean square error 
+            mae (float): mean absolute error 
         """
         device = test_params['device']
         batch_size = test_params['batch_size']
@@ -200,7 +200,7 @@ class RNNModel(BaseRegressionModel):
         Predict regression result for inference dataset based on the trained model
 
         Args:
-            infer_params (dict): parameters for inference     # TBD
+            infer_params (dict): parameters for inference  
             inference_loader (DataLoader): inference data loader
 
         Returns:
@@ -282,6 +282,7 @@ class RNNModel(BaseRegressionModel):
             train_loader (DataLoader): train data loader
             val_loader (DataLoader): validation data loader
         """
+        
         # dim = 3
         # # if self.model_name == "FC_cf":
         # #    dim = 2

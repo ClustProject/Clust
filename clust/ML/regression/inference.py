@@ -19,10 +19,8 @@ class RegressionInference():
         Args:
             infer_params(dict): inference parameter
 
-        Example:
-
-            >>> param = { "device": "cpu",
-            ...           "batch_size": 1 }
+        >>> param = { "device": "cpu",
+        ...           "batch_size": 1 }
         """
         self.infer_params = infer_params
 

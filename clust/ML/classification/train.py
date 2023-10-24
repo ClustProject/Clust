@@ -28,11 +28,14 @@ class ClassificationTrain():
         Set Parameter for train
 
         Args:
-        param(dict): parameter for train
-            >>> param = { "device":"cpu",
-                         "batch_size":16,
-                         "num_classes":,
-                         "n_epochs":10,}
+            param(dict): parameter for train
+
+
+        >>> param = { "device":"cpu",
+        ...          "batch_size":16,
+        ...          "num_classes":,
+        ...          "n_epochs":10,}
+
         """
         self.train_params = train_params
 

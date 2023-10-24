@@ -17,7 +17,8 @@ import pandas as pd
 
 # Predictor train pipeline
 def CLUST_anomalyDet_train(train_X, train_y, val_X, val_y, model_info):
-    """ 모델 train 수행 후 모델 저장
+    """ 
+    모델 train 수행 후 모델 저장
 
     Args:
         train_X (DataFrame): 입력 train X
@@ -40,15 +41,16 @@ def CLUST_anomalyDet_train(train_X, train_y, val_X, val_y, model_info):
     adt.save_best_model(model_file_path)
 
 def CLUST_anomalyDet_test(test_X, test_y, model_info):
-    """ Anomaly Detection Test
+    """ 
+    Anomaly Detection Test
 
     Args:
         test_X (DataFrame): 입력 test X
         test_y (DataFrame): 입력 test y
         model_info (dict): 모델 파라미터
-            model_method (str): 모델 메서드
-            model_file_path (str): 모델 파일 패스
-            model_parameter (dict): 파라미터
+        model_method (str): 모델 메서드
+        model_file_path (str): 모델 파일 패스
+        model_parameter (dict): 파라미터
 
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
@@ -68,7 +70,9 @@ def CLUST_anomalyDet_test(test_X, test_y, model_info):
     return preds, trues
 
 def CLUST_anomalyDet_inference(infer_X, model_info):
-    """get inference prediction for regression model
+    """
+    get inference prediction for regression model
+    
     Args:
         infer_X (np.array): inference data X
         model_info (dict): model parameters

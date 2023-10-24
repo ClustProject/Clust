@@ -4,7 +4,8 @@ sys.path.append("../../")
 
 ############# Xy
 def Xy_data_preparation(ingestion_param_X, data_y_flag, ingestion_param_y, ingestion_method, db_client):
-    """학습 하기 위한 X, y 데이터를 준비
+    """
+    학습 하기 위한 X, y 데이터를 준비
 
     Args:
         ingestion_param_X (dict): influx db에서 x 데이터를 읽기 위한 파라미터
@@ -30,7 +31,8 @@ def Xy_data_preparation(ingestion_param_X, data_y_flag, ingestion_param_y, inges
 
 
 def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param):
-    """X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
+    """
+    X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
 
     Args:
         data_name_X (string): X 데이터 이름
@@ -38,12 +40,14 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
         data_name_y (string): y 데이터 이름
         data_y (pd.DataFrame): y 데이터
         scaler_param (dict): scaler 관련 파라미터
-            - scaler_path (str): 스케일러를 저장하기 위한 기본 주소
-            - scaler_flag (str): 스케일링 적용 여부
-            - scale_method (string): 스케일 방법
+
+    >>> scaler_param = { "scaler_path" : 스케일러를 저장하기 위한 기본 주소,
+    ...                  "scaler_flag": 스케일링 적용 여부,
+    ...                  "scale_method":스케일 방법 }
 
     Returns:
-        dataX_scaled (pd.DataFrame), datay_scaled (pd.DataFrame):스케일링을 거친 X, y 데이터프레임
+        dataX_scaled (pd.DataFrame), datay_scaled (pd.DataFrame) : 스케일링을 거친 X, y 데이터프레임
+
     """
 
     # X Data Scaling
@@ -69,7 +73,8 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
     return dataX_scaled, datay_scaled
 
 def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path, scaler_param):
-    """X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
+    """
+    X, y 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
 
     Args:
         data_X (pd.DataFrame): X 데이터
@@ -91,7 +96,8 @@ def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path,
     return test_X, scaler_X , test_y, scaler_y 
 
 def X_data_scaling_infer(data_X, X_scaler_file_path, y_scaler_file_path, scaler_param):
-    """X 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
+    """
+    X 값에 대한 SCALING을 진행한 데이터 생성, 생성한 스케일러의 이름을 자동 생성하고 전달함
 
     Args:
         data_X (pd.DataFrame): X 데이터
@@ -111,7 +117,8 @@ def X_data_scaling_infer(data_X, X_scaler_file_path, y_scaler_file_path, scaler_
 
 ############# Clean
 def clean_low_quality_column(data, transform_info):
-    """퀄러티가 좋지 않은 컬럼은 삭제함
+    """
+    퀄러티가 좋지 않은 컬럼은 삭제함
 
     Args:
         data (pd.DataFrame):입력 데이터
@@ -140,13 +147,13 @@ def split_data_by_mode(X, y, split_ratio, transform_param):
     """학습 및 검증 데이터 분할
 
     Args:
-        
         X (pd.DataFrame):입력 X 데이터
         y (pd.DataFrame):입력 y 데이터
         split_ratio (float): 학습/검증을 분할하기 위한 비율
         transform_param(dict): 데이터를 변환하기 위한 파라미터
-            split_mode (str): 분할하는 방법
-            day_window_size (int): 일을 기준으로 한 윈도우 사이즈
+
+    >>> transform_param = { "split_mode" : 분할하는 방법,
+    ...                     "day_window_size": 일을 기준으로 한 윈도우 사이즈 }
 
     Returns:
         train_x, val_x, train_y, val_y (pd.DataFrame), transform_param(dict): 분할된 데이터 및 transform 파라미터
@@ -169,9 +176,10 @@ def transform_data_by_split_mode(transformParameter, X, y):
 
     Args:
         transformParameter (dict): split mode 에 따른 변형을 위한 파라미터
-            split_mode (str): split mode, window_split or step_split
         X (pd.DataFrame): x 데이터
         y (pd.DataFrame): y 데이터
+
+    >>> transformParameter = { split mode, window_split or step_split }
 
     Returns:
         X_array, y_array (np.array): 학습을 위해 최종적으로 준비된 데이터
@@ -197,19 +205,22 @@ def CLUST_regression_train(train_X_array, train_y_array, val_X_array, val_y_arra
         val_X_array (np.array): 입력 val X
         val_y_array (np.array):입력 val y
         model_info (dict): 모델 학습 정보
+
     >>> train_parameter = {'lr': 0.0001,
-            'weight_decay': 1e-06,
-            'device': 'cpu',
-            'n_epochs': 10,
-            'batch_size': 16}
+                            'weight_decay': 1e-06,
+                            'device': 'cpu',
+                            'n_epochs': 10,
+                            'batch_size': 16}
+
     >>> model_method = [LSTM_rg|GRU_rg|CNN_1D_rg|LSTM_FCNs_rg]
+
     >>> modelParameter = {'rnn_type': 'lstm',
-                'input_size': 3,
-                'hidden_size': 64,
-                'num_layers': 2,
-                'output_dim': 1,
-                'dropout': 0.1,
-                'bidirectional': True}
+                            'input_size': 3,
+                            'hidden_size': 64,
+                            'num_layers': 2,
+                            'output_dim': 1,
+                            'dropout': 0.1,
+                            'bidirectional': True}
             
     """
     from Clust.clust.ML.regression.train import RegressionTrain as RML
@@ -239,8 +250,13 @@ def CLUST_regresstion_test(test_X_array, test_y_array, model_info):
             model_file_path (str): 모델 파일 패스
             model_parameter (dict): 파라미터
 
+    >>> model_info = { "model_method" : 모델 메서드,
+    ...                "model_file_path": 모델 파일 패스, 
+    ...                "model_parameter": 파라미터 }
+    
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
+
     """
     test_parameter = model_info['train_parameter']
     model_method = model_info['model_method']
@@ -280,7 +296,9 @@ def get_scaler_information_by_y_flag(data_y_flag, scaler_X, scaler_y, feature_X_
 
 
 def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
-    """get final result (after inverse scaling), test metrics
+    """
+    get final result (after inverse scaling), test metrics
+    
     Args:
         preds (np.array): prediction value array
         trues (np.array): true value array
@@ -303,7 +321,9 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
 # regression inference pipeline
 from Clust.clust.ML.regression.inference import RegressionInference as RI
 def CLUST_regression_inference(infer_X, model_info):
-    """get inference prediction for regression model
+    """
+    get inference prediction for regression model
+
     Args:
         infer_X (np.array): inference data X
         model_info (dict): model parameters
@@ -330,7 +350,8 @@ def CLUST_regression_inference(infer_X, model_info):
 # classification train pipeline
 from Clust.clust.ML.classification.train import ClassificationTrain as CML
 def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_array, model_info):
-    """classification 수행하고 적절한 모델을 저장함
+    """
+    classification 수행하고 적절한 모델을 저장함
 
     Args:
         train_X_array (np.array): 입력 train X
@@ -338,19 +359,22 @@ def CLUST_classification_train(train_X_array, train_y_array, val_X_array, val_y_
         val_X_array (np.array): 입력 val X
         val_y_array (np.array):입력 val y
         model_info (dict): 모델 학습 정보
+
     >>> train_parameter = {'lr': 0.0001,
-            'weight_decay': 1e-06,
-            'device': 'cpu',
-            'n_epochs': 10,
-            'batch_size': 16}
+                            'weight_decay': 1e-06,
+                            'device': 'cpu',
+                            'n_epochs': 10,
+                            'batch_size': 16}
+
     >>> model_method = [LSTM_cf|GRU_cf|CNN_1D_cf|LSTM_FCNs_cf]
+
     >>> modelParameter = {'rnn_type': 'lstm',
-                'hidden_size': 64,
-                'num_layers': 2,
-                'output_dim': 1,
-                'dropout': 0.1,
-                'bidirectional': True,
-                'num_classes': 6}
+                            'hidden_size': 64,
+                            'num_layers': 2,
+                            'output_dim': 1,
+                            'dropout': 0.1,
+                            'bidirectional': True,
+                            'num_classes': 6}
             
     """
 
@@ -381,6 +405,13 @@ def clust_classification_test(test_X_array, test_y_array, model_info):
             model_parameter (dict): 파라미터
             model_file_path (str): 모델 파일 패스
 
+            
+    >>> model_info = { "train_parameter" : 학습 파라미터,
+    ...                "model_method" : 모델 메서드,
+    ...                "model_file_path": 모델 파일 패스, 
+    ...                "model_parameter": 파라미터 }
+
+    
     Returns:
         preds, trues (np.arrau): 예측값, 실제값
     """
@@ -401,7 +432,9 @@ def clust_classification_test(test_X_array, test_y_array, model_info):
 
 from Clust.clust.ML.classification.inference import ClassificationInference as CI
 def clust_classification_inference(infer_X, model_info):
-    """get inference prediction for classification model
+    """
+    get inference prediction for classification model
+
     Args:
         infer_X (np.array): inference data X
         model_info (dict): model parameters

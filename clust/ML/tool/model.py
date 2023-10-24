@@ -17,7 +17,8 @@ def get_model_path(train_data_path_list, method):
     :param method: train method
     :type method: str
 
-    example
+    Example:
+
         >>>  trainDataPathList =['DBName', 'MSName', 'columnName' ]
         >>>  trainMethod ='brits'
         >>>  modelFilePath = MI.getModelFilePath(trainDataPathList, self.trainMethod)
@@ -61,7 +62,9 @@ def save_pickle_model(model, model_file_path):
 
 
 def load_pickle_model(model_file_path):
-    """ load model: : dafult file type is pickle
+    """ 
+    load model: : dafult file type is pickle
+
     Args:
         model_file_path(str) : model_file_path
     

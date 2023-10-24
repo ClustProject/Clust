@@ -9,17 +9,19 @@ class SomTrain(Train):
         
         """
         Args:
-        param(dict): parameter for clustering
-            >>> param = {"som_x":2,
-                             "som_y":2,
-                             "neighborhood_function":"gaussian",
-                             "activation_distance":"euclidean",
-                             "epochs":5000}
+            param(dict): parameter for clustering
+
+        >>> param = {"som_x":2,
+        ...                 "som_y":2,
+        ...                 "neighborhood_function":"gaussian",
+        ...                 "activation_distance":"euclidean",
+        ...                 "epochs":5000}
         """
         super().__init__()
         
     def set_param(self, param):
-        """interpret_clustering parameter, overriding from super class
+        """
+        interpret_clustering parameter, overriding from super class
         
         """
         self.som_x = param.get('som_x')
@@ -33,7 +35,9 @@ class SomTrain(Train):
         """
 
     def train(self, data):
-        """ train miniSom amd return miniSom instance
+        """ 
+        train miniSom amd return miniSom instance
+
         Args:
             data(series):input data
         
@@ -52,14 +56,17 @@ class SomTest(Test):
         super().__init__()
 
     def predict(self, data):
-        """make winner_node (self.win_map) and get clustering label
+        """
+        make winner_node (self.win_map) and get clustering label
 
         Args:
             data(series):data
             
         Return:
             cluster_map(array): cluster map result of input data
-            >>> example> [1, 2, 0]
+
+        >>> example> [1, 2, 0]
+        
         """
         self.X = data
         self.win_map = self.model.win_map(data)

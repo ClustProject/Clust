@@ -4,7 +4,8 @@ class Train:
     """Clustering Train Super Class"""
 
     def __init__(self):
-        """ param interpretation
+        """ 
+        param interpretation
 
         Args:
             param (dict): parameter for clustering by specific clustering methods
@@ -13,7 +14,8 @@ class Train:
 
     # TODO overriding
     def set_param(self, param):
-        """ param interpretation
+        """ 
+        param interpretation
 
         Args:
             param (dict): parameter for clustering by specific clustering methods
@@ -21,7 +23,9 @@ class Train:
         pass
     
     def train(self, data):
-        """training model Each method should define
+        """
+        training model Each method should define
+
         Args:
             data (series): input data for training
         """
@@ -29,13 +33,18 @@ class Train:
         pass
 
 class Test:
-    """Clustering Super Class"""
+    """
+
+    Clustering Super Class
+
+    """
 
     def __init__(self):
         pass
     
     def set_model(self, model):
-        """ set new model
+        """ 
+        set new model
 
         Args:
             model
@@ -45,14 +54,16 @@ class Test:
 
     ## TODO overriding
     def predict(self, data):
-        """get calustering label
+        """
+        get calustering label
 
         Args:
             data(series):data
             
         Return:
             self.y(array): label result by
-            >>> example> [1, 2, 0]
+
+        >>> example> [1, 2, 0]
         """
         self.X = data
         self.y = []
@@ -61,12 +72,12 @@ class Test:
 
     def plot_ts_by_label(self, X, y):
         """
-            Show clustering result 
+        Show clustering result 
             
-            Args:
-                X (numpy.ndarray): 2d array of timeseries dataset
-                y (numpy.ndarray): 1d array (label result)    
-                cluster_centers_ (numpy.ndarray): 1d array 
+        Args:
+            X (numpy.ndarray): 2d array of timeseries dataset
+            y (numpy.ndarray): 1d array (label result)    
+            cluster_centers_ (numpy.ndarray): 1d array 
         """
         
         def get_cluster_centers(center_type):
@@ -107,7 +118,8 @@ class Test:
     
     
     def select_specific_label_df(self, label, df, y):
-        """select only specific column data of dataframe based on label
+        """
+        select only specific column data of dataframe based on label
 
         Args:
             label (int): specific class name

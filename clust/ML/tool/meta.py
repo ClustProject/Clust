@@ -2,7 +2,8 @@ import json
 import os
 
 def read_model_meta_by_db_style(model_meta_db_style, meta_json_path, model_name): 
-    """db style에 따라 model meta를 읽어옴, 아직 모듈화 안되어 있음 우선 여기에..
+    """
+    db style에 따라 model meta를 읽어옴, 아직 모듈화 안되어 있음 우선 여기에..
     # TODO 수정해야함
 
     Args:
@@ -24,7 +25,8 @@ def read_model_meta_by_db_style(model_meta_db_style, meta_json_path, model_name)
 
 ##################Mongo DB
 def save_model_meta_into_mongodb(mongodb_client, model_meta,db_name,collection_name):
-    """model meta 를 몽고디비에 저장함
+    """
+    model meta 를 몽고디비에 저장함
 
     Args:
         mongodb_client (instance): mongodb instnace
@@ -124,6 +126,7 @@ def save_model_meta_into_local(json_file_path, new_model_meta):
 def read_json(json_file_path):
     """
     The function can read json file.  
+
     Args:
         json_file_path(string): json file path
 
@@ -139,6 +142,7 @@ def read_json(json_file_path):
 def write_json(json_file_path, text):
     """
     The function writes text into json_file 
+    
     Args:
         json_file_path(string): json file path
         text(dict): text to be written 

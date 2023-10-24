@@ -3,7 +3,8 @@ import torch
 
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_dim, seq_len, dropout_prob, bidirectional, rnn_type):
-        """The __init__ method that initiates an RNN instance.
+        """
+        The __init__ method that initiates an RNN instance.
 
         Args:
             input_size (int): The number of nodes in the input layer
@@ -46,7 +47,8 @@ class RNN(nn.Module):
         # self.fc = nn.Linear(self.num_directions * hidden_size * seq_len, output_dim)                                                                                                                   
 
     def forward(self, x):
-        """The forward method takes input tensor x and does forward propagation
+        """
+        The forward method takes input tensor x and does forward propagation
 
         Args:
             x (torch.Tensor): The input tensor of the shape (batch size, sequence length, input_size)

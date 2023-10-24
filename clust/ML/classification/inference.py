@@ -24,15 +24,13 @@ class ClassificationInference():
         Set Parameter for Test
 
         Args:
-        param(dict): train parameter
+            param(dict): train parameter
 
 
-        Example:
-
-            >>> param = { "lr":0.0001,
-            ...            "device":"cpu",
-            ...            "batch_size":16,
-            ...            "n_epochs":10    }
+        >>> param = { "lr":0.0001,
+        ...            "device":"cpu",
+        ...            "batch_size":16,
+        ...            "n_epochs":10    }
         """
         self.infer_params = infer_params
 
@@ -77,7 +75,7 @@ class ClassificationInference():
         inference model and return result
 
         Returns:
-            preds (ndarray): prediction data
+            ndarray : preds
         """
         print("\nStart inference\n")
         preds = self.model.inference(self.infer_params, self.inference_loader)

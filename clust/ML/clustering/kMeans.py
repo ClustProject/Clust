@@ -17,8 +17,8 @@ class KMeansTrain(Train):
         Args:
             param(dict): parameter for clustering
 
-            >>> param = {"n_clusters":3,
-                        "metric":"euclidean"}
+        >>> param = {"n_clusters":3,
+                    "metric":"euclidean"}
 
         """
         self.n_clusters = param.get('n_clusters')
@@ -51,7 +51,7 @@ class KMeansTest(Test):
         Return:
             self.y(array): label result
             
-            >>> example> [1, 2, 0]
+        >>> example> [1, 2, 0]
         """
 
         self.X = data
@@ -66,8 +66,10 @@ class KMeansTest(Test):
 
 def search_best_n_clust(data, param):
     """
-    - get multiple cluster result. (n_cluster = 2 ~ param['n_cluster])
-        1) get cluster labels 2) make silhouette and distortion score matrics
+    get multiple cluster result. (n_cluster = 2 ~ param['n_cluster])
+    
+    1) get cluster labels 
+    2) make silhouette and distortion score matrics
     
     Args:
         data (numpy.ndarray): data to be clustered

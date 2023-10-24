@@ -8,12 +8,12 @@ import datetime
 from torch.utils.data import DataLoader, TensorDataset
 
 from Clust.clust.ML.tool import model as ml_model
-from Clust.clust.ML.classification.interface import BaseRegressionModel
+from Clust.clust.ML.classification.interface import BaseClassificationModel
 from Clust.clust.ML.classification.models.lstm_fcns import LSTMFCNs
 
 
 
-class LSTMFCNsModel(BaseRegressionModel):
+class LSTMFCNsModel(BaseClassificationModel):
     """
 
     """
@@ -198,7 +198,7 @@ class LSTMFCNsModel(BaseRegressionModel):
         Predict regression result for inference dataset based on the trained model
 
         Args:
-            infer_params (dict): parameters for inference     # TBD
+            infer_params (dict): parameters for inference 
             inference_loader (DataLoader): inference data loader
 
         Returns:

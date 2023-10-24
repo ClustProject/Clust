@@ -17,8 +17,10 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"{device}" " is available.")
 
 def convert_param_for_backend(params):
-    """frontend에서 전달하는 파라미터를 백엔드에서 원활하게 사용하고, 필요한 데이터를 추가하여 백엔드로 보내기 위함 
-    # 향후 서비스에 맞게 수정해야함
+    """
+    frontend에서 전달하는 파라미터를 백엔드에서 원활하게 사용하고, 필요한 데이터를 추가하여 백엔드로 보내기 위함 
+
+    - 향후 서비스에 맞게 수정해야함
 
     Args:
         params (dict): dictionary data input
@@ -52,7 +54,8 @@ def convert_param_for_backend(params):
     return params
 
 def chagne_type_str_to_bool(dict_data):
-    """frontend에서 전달하는 dictionary json data를 python에서 활용 가능한 형태로 bool string을 변형함
+    """
+    frontend에서 전달하는 dictionary json data를 python에서 활용 가능한 형태로 bool string을 변형함
 
     Args:
         dict_data (dict): dictionary data input
@@ -80,7 +83,8 @@ def chagne_type_str_to_bool(dict_data):
     return dict_data
 
 def check_model_name(model_name, model_name_info):
-    """It makes model name by default value and additional information
+    """
+    It makes model name by default value and additional information
 
     Args:
         model_name (string): default model name
@@ -99,7 +103,8 @@ def check_model_name(model_name, model_name_info):
 
 # # --------------------------------- training ---------------------------------------------------
 def get_train_data_meta(params, meta_client):
-    """get train data meta information
+    """
+    get train data meta information
 
     Args:
         params (dict): it must include 'bk_name_X', and 'ms_name_X' keys.
@@ -119,8 +124,13 @@ def get_train_data_meta(params, meta_client):
     return result
 
 def train_data_preparation(params, influxdb_client):
-    """prepare data for train using ML_pipeline,
-        1. Ingest 2. Scale 3. Clean 4. Split 5. Transform
+    """
+    prepare data for train using ML_pipeline
+    1. Ingest 
+    2. Scale 
+    3. Clean 
+    4. Split 
+    5. Transform
 
     Args:
         params (dict): parameters including 'ingestion_param_X', 'ingestion_param_y', 'scaler_param', and 'transform_param'.
@@ -164,13 +174,16 @@ def train_data_preparation(params, influxdb_client):
     return train_X_array, train_y_array, val_X_array, val_y_array
 
 def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
-    """ train using train/val data and given model information
+    """ 
+    train using train/val data and given model information
+
     Args:
         params (dict): parameters including 'model_info' and 'ingestion_param_X'.
         train_X_array (ndarray): train X data
         train_y_array (ndarray): train y data
         val_X_array (ndarray): validation X data
         val_y_array (ndarray): validation y data
+
     Returns:
         params: trained model info including model file path.
     """
@@ -210,8 +223,11 @@ def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
 
 # --------------------------------- test ---------------------------------------------------
 def test_data_preparation(params, influxdb_client):
-    """prepare data for test using ML_pipeline,
-        1. Ingest 2. Scale 3. Transform
+    """
+    prepare data for test using ML_pipeline,
+    1. Ingest 
+    2. Scale 
+    3. Transform
 
     Args:
         params (dict): parameters including 'ingestion_param_X', 'ingestion_param_y', 'scaler_param', and 'transform_param'.
@@ -233,7 +249,8 @@ def test_data_preparation(params, influxdb_client):
     return test_X_array, test_y_array, scaler_X, scaler_y
 
 def ML_test(params, test_X_array, test_y_array, scaler):
-    """test using given data and model information
+    """
+    test using given data and model information
 
     Args:
         params (dict): parameters including 'model_info', 'scaler_param', 'ingestion_param_X' and 'ingestion_param_y'.
@@ -267,7 +284,8 @@ def ML_test(params, test_X_array, test_y_array, scaler):
 
 # --------------------------------- inference ---------------------------------------------------
 def _get_scaled_np_data(data, scaler, scaler_param):
-    """scaling given data in numpy array format
+    """
+    scaling given data in numpy array format
 
     Args:
         data (ndarray): given data
@@ -284,11 +302,14 @@ def _get_scaled_np_data(data, scaler, scaler_param):
     return scaled_data
 
 def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
-    """return scaled data and scaler
+    """
+    return scaled data and scaler
+
     Args:
         data (ndarray): given data
         scaler_file_path (str): scaler file path
         scaler_param (bool): scaler flag
+
     Returns:
         result (ndarray): scaled data
         scaler (scaler): scaler
@@ -302,10 +323,13 @@ def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
     return result, scaler
 
 def infer_data_preparation(params, data):
-    """return scaled X data and y scaler
+    """
+    return scaled X data and y scaler
+
     Args:
         params (dict):
         data (ndarray): given data X for inference
+
     Returns:
         scaled_infer_X (ndarray): scaled data X
         scaler_y (scaler): y scaler
@@ -317,7 +341,8 @@ def infer_data_preparation(params, data):
     return scaled_infer_X, scaler_y
 
 def ML_inference(params, infer_X_array, scaler):
-    """_summary_
+    """
+    _summary_
 
     Args:
         params (dict): parameters including 'model_info', 'scaler_param', and 'ingestion_param_y'

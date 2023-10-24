@@ -17,12 +17,10 @@ class RegressionTest():
         Set Parameters for Test
 
         Args:
-        test_params(dict): test parameter
+            test_params(dict): test parameter
 
-        Example:
-
-            >>> param = { "device": "cpu",
-            ...           "batch_size": 16 }
+        >>> param = { "device": "cpu",
+        ...           "batch_size": 16 }
 
         """
         self.test_params = test_params

@@ -68,6 +68,10 @@ def get_scaled_data(data, scaler, scaler_param):
 
 # p3_training
 def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
+    """
+    data scaling
+
+    """
     if scaler_param=='scale':
         DS = DataScaler(scaler_method, scaler_root_path)
         #from Clust.clust.transformation.general import dataScaler

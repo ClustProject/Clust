@@ -16,6 +16,7 @@ from Clust.clust.ML.regression.models.rnn import RNN
 class RNNClust(BaseRegressionModel):
     """
     RNN Regression & forecast model class
+    
     """
     def __init__(self, model_params):
         """

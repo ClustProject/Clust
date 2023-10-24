@@ -6,7 +6,8 @@ from Clust.clust.ML.tool.model import load_pickle_model, save_pickle_model
 #TODO 나중에 수정해야함 전반적인 구조들과 스트럭쳐
 
 def clusteringByMethod(data, parameter, model_path):
-    """ make clustering result of multiple dataset 
+    """ 
+    make clustering result of multiple dataset 
 
     Retrieves rows pertaining to the given keys from the Table instance
     represented by table_handle.  String keys will be UTF-8 encoded.
@@ -86,7 +87,8 @@ def clusteringByMethod(data, parameter, model_path):
 
 
 def clusteringByCDM(data, parameter, model_path):
-    """ make clustering result of multiple dataset 
+    """ 
+    make clustering result of multiple dataset 
 
     Retrieves rows pertaining to the given keys from the Table instance
     represented by table_handle.  String keys will be UTF-8 encoded.

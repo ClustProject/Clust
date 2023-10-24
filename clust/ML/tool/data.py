@@ -40,9 +40,12 @@ def get_saved_integrated_data(data_save_mode, data_name, data_folder_path=None, 
 
 
 def DF_to_series(data):
-    """make input data for clustering. 
+    """
+    make input data for clustering. 
+
     Args:
         data(np.dataFrame): input data
+        
     Return:
         series_data(series): transformed data for training, and prediction
 

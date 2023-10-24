@@ -19,15 +19,13 @@ class ClassificationTest():
         Set Parameter for Test
 
         Args:
-        param(dict): train parameter
+            param(dict): train parameter
 
 
-        Example:
-
-            >>> param = { "lr":0.0001,
-            ...            "device":"cpu",
-            ...            "batch_size":16,
-            ...            "n_epochs":10    }
+        >>> param = { "lr":0.0001,
+        ...            "device":"cpu",
+        ...            "batch_size":16,
+        ...            "n_epochs":10    }
 
         """
         self.test_params = test_params
@@ -75,14 +73,9 @@ class ClassificationTest():
         Test model and return result
 
         Returns:
-            preds (ndarray): prediction data
-            trues (ndarray): original data
-            mse (float): mean square error  # TBD
-            mae (float): mean absolute error    # TBD
+            ndarray, float : (arr) preds, trues / (float) mse, mae
         """
         print("\nStart testing data\n")
         preds, probs, trues, acc = self.model.test(self.test_params, self.test_loader)
 
         return preds, probs, trues, acc
-
-        

@@ -19,9 +19,9 @@ from recommonmark.parser import CommonMarkParser
 
 
 project = 'Clust'
-copyright = '2022, Clust'
+copyright = '2023, Clust'
 author = 'Clust'
-release = '1.0.0'
+release = '2.0.0'
 
 
 source_suffix = {
@@ -34,8 +34,16 @@ source_parsers = {
                 '.md': CommonMarkParser,
 }
 
-autodoc_mock_imports = ["matplotlib.nanolib_helper"]
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'bysource',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
 
+autodoc_mock_imports = ["matplotlib.nanolib_helper"]
+# autoclass_contetn = 'both'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
