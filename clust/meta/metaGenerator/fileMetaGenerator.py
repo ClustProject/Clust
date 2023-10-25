@@ -12,19 +12,19 @@ def DBNameToDomainSubDomainName(dbname):
 """
 class FileMetaGenerator():
     """
-    - fileMetaInfo에 따라서 file의 meta 정보를 읽고, meta 형식에 따라 additionalMeta가 있을 경우 추가하여 생성함
+    fileMetaInfo에 따라서 file의 meta 정보를 읽고, meta 형식에 따라 additionalMeta가 있을 경우 추가하여 생성함
 
-        1. get_file_meta()
-            - fileName 유효한 경우 읽고 fileMeta 생성
-            - fileName 유효하지 않는 경우 fileMeta {}로 초기화
-            * fileMeta는 필수 table_name을 포함하고 있다고 가정함
+    1. get_file_meta()
+        - fileName 유효한 경우 읽고 fileMeta 생성
+        - fileName 유효하지 않는 경우 fileMeta {}로 초기화
+            - fileMeta는 필수 table_name을 포함하고 있다고 가정함
 
-        2. get_file_and_additionalMeta(additional)
-            - get_file_meata() 로 fileMeta 생성
-            - fileMeta가 dictionary인 경우 (single)
-                - fileMeta가 + additonal meta 정보를 합쳐 생성
-            - fileMeta가 list인 경우 (multi)
-                - fileMeta의 개별 dictionary에 대해 +additional meta  합치고 반환
+    2. get_file_and_additionalMeta(additional)
+        - get_file_meata() 로 fileMeta 생성
+        - fileMeta가 dictionary인 경우 (single)
+            - fileMeta가 + additonal meta 정보를 합쳐 생성
+        - fileMeta가 list인 경우 (multi)
+            - fileMeta의 개별 dictionary에 대해 +additional meta  합치고 반환
 
     """
     # Algorithm에 대해서 한번 더 컨펌
@@ -35,8 +35,8 @@ class FileMetaGenerator():
        :type fileMetaInfo: dictionary
 
         >>> file_meta_info = {
-            "filePath" : "../Clust.clust.meta/metaSchema",
-            "fileName" : "MSLocationMeta_Air_Indoor_체육시설.json" }
+        ... "filePath" : "../Clust.clust.meta/metaSchema",
+        ... "fileName" : "MSLocationMeta_Air_Indoor_체육시설.json" }
         """
 
         self.file_path = fileMetaInfo["filePath"]
@@ -44,9 +44,11 @@ class FileMetaGenerator():
     
     def get_file_and_additionalMeta(self, additional_meta):
         """
-       :param additional_meta: add할 정보
+
+        :param additional_meta: add할 정보
        :type additional_meta: dictionary
 
+    
         >>> additional_meta = {
             "keyword": [
                 "kweather", "고등학교", "indoor","air", "co2", "pm10", "pm25", "voc", "temp", "humi", "pm01", "noise",

@@ -6,6 +6,13 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from Clust.clust.meta.metaDataManager.wizMongoDbApi import WizApiMongoMeta
 
 def get_meta_table(mongodb_url):
+    """
+    meta for api
+
+    Agrs:
+        mongodb_url(string) : mongo api
+    
+    """
     wiz_c = WizApiMongoMeta(mongodb_url)
     
     main_domian_list =  ['air', 'farm', 'factory', 'bio', 'life', 'energy',\
