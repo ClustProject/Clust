@@ -17,9 +17,6 @@ class SerialImputation():
     def get_dataWithSerialImputationMethods(self, data, imputation_param):
         """ This function cleans the data by applying several missing data handling methods. 
 
-
-        
-
         Args:
             data (DataFrame): input data
             imputation_param (json): parameter of imputation

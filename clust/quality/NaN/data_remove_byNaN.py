@@ -8,6 +8,17 @@ class DataRemoveByNaNStatus():
         pass
     ## Select one remove method : (time, ratio, num)
     def removeNaNData(self, data, NanInfoForCleanData):
+        """
+        remove NaN Data by Time or Num or Ratio        
+        
+        Args:
+            data(dataframe) : data
+            NaNInfoForCleanData(dictionary) : NaNInfoForCleanData
+
+        Returns:
+            dataframe : data
+        """
+
         type = NanInfoForCleanData['type']
         # 0,0 일 경우 NaN 이 하나 이상일 경우 모두 삭제
         if type=='time':
@@ -28,7 +39,19 @@ class DataRemoveByNaNStatus():
             data = self.removeNaNDataByRatio(data, ConsecutiveNanLimitNum, totalNanLimitNum)    
         return data
     
+
     def removeNaNDataByTime(self, data, ConsecutiveNanLimitTime_second, totalNaNLimitTime_second):
+        """
+        remove NaN Data by Ratio        
+        
+        Args:
+            data(dataframe) : data
+            ConsecutiveNanLimitTime_second(integer) : Consecutive Nan Limit Time(second)
+            totalNaNLimitTime_second(integer) : total NaN Limit Time(second)
+
+        Returns:
+            dataframe : data
+        """
         if len(data)>0:
             totalNanLimitTime = timedelta(seconds = totalNaNLimitTime_second)
             frequency = data.index[-1]- data.index[-2]
@@ -44,6 +67,17 @@ class DataRemoveByNaNStatus():
         return data
     
     def removeNaNDataByNum(self, data, ConsecutiveNanLimitNum, totalNanLimitNum):
+        """
+        remove NaN Data by Num        
+        
+        Args:
+            data(dataframe) : data
+            ConsecutiveNanLimitNum(integer) : Consecutive Nan Limit Num
+            totalNanLimitNum(integer) : total NaN Limit Num
+
+        Returns:
+            dataframe : data
+        """
         if len(data)>0:
             data = self.removeNaNDataByTotalNaNLimitNum(totalNanLimitNum, data)
             if len(data.columns)>0:
@@ -51,6 +85,17 @@ class DataRemoveByNaNStatus():
         return data
     
     def removeNaNDataByRatio(self, data, ConsecutiveNanLimitRatio, totalNanLimitRatio):
+        """
+        remove NaN Data by Raion        
+        
+        Args:
+            data(dataframe) : data
+            ConsecutiveNanLimitRatio(float) : Consecutive Nan Limit Ratio
+            totalNanLimitRatio(float) : total NaN Limit Ratio
+
+        Returns:
+            dataframe : data
+        """
         if len(data)>0:
             data_length = len(data)
             totalNanLimitNum = int(data_length * totalNanLimitRatio)
@@ -77,6 +122,17 @@ class DataRemoveByNaNStatus():
         return data
     
     def removeNaNDataByConsecutiveNaNLimitNum(self, ConsecutiveNanLimitNum, data):
+        """
+        remove NaN Data by Consecutive NaN Limit Num        
+        
+        Args:
+            data(dataframe) : data
+            ConsecutiveNanLimitNum(float) : Consecutive Nan Limit Num
+
+        Returns:
+            dataframe : data
+        """
+
         self.consecutiveNanCountMap = self.consecutiveNaNCountMap(data)
         #plt.show()
         for column_name in data.columns:

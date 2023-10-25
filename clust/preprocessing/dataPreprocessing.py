@@ -23,11 +23,11 @@ class DataPreprocessing():
             * remove_duplication :It removes duplicated data.
             * static_frequency :The data will have a constant timestamp index. 
 
-        Args
+        Args:
             data (DataFrame): data
             refine_param (Dictionary): refinement parameter
             
-        Returns
+        Returns:
             DataFrame: refinedData, refined DataFrame output
 
         **refine_param additional info**::
@@ -42,7 +42,7 @@ class DataPreprocessing():
             >>> refine_param = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': None}}
             >>> refine_param2 = {"remove_duplication": {'flag': True}, "static_frequency": {'flag': True, 'frequency': "3H"}}
             >>> refinementData = DataPreprocessing().get_refinedData(data, refine_param)
-        ```
+        
         """
         result = data.copy()
         if refine_param["remove_duplication"]['flag']== True:

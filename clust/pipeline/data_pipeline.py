@@ -58,6 +58,7 @@ def pipeline(data, module_list, edafalg =False):
         DataFrame or Dictionary : data
 
     Example:
+
             >>> pipeline_list = 
             ...     [['data_refinement', refine_param],
             ...     ['data_outlier', outlier_param],
@@ -157,7 +158,7 @@ def pipeline_connection_check(pipeline, input_type):
         input_type (string): 데이터 인풋타입, "DF" or "DFSet"
         
      Returns:
-        output_type(Bool): True or False, 유효성 여부 전달
+        Bool : output_type (True or False, 유효성 여부 전달)
     """
     for pipe in pipeline:
         method = pipe[0]
@@ -180,7 +181,7 @@ def pipeline_module_check(method, input_type):
         input_type (string): 데이터 인풋타입, "DF" or "DFSet"
 
     Returns:
-        output_type(string): 데이터 output 타입, "DF" or "DFSet"/ or None
+        String : output_type (데이터 output 타입, "DF" or "DFSet"/ or None)
     
     """
     
@@ -213,6 +214,14 @@ def get_shape(data):
         return (d1, d2)
     
 def pipeline_result_EDA(data, module_name):
+    """
+    For EDA 
+    
+    Args:
+        data() : data
+        module_name(string) : module name
+    
+    """
     # For EDA
     import math
     import matplotlib.pyplot as plt

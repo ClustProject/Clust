@@ -38,6 +38,7 @@ class errorToNaN():
             >>> certain_param= {'flag': True, 'abnormal_value_list': abnormal_value_list, 'data_min_max_limit': min_max}
             
             >>> data_with_more_certain_nan = errorToNaN.errorToNaN().getDataWithCertainNaN(data, certain_param)
+
         """
         if 'data_min_max_limit' in certain_param:
             self.limit_min_max = certain_param['data_min_max_limit']   
@@ -90,6 +91,7 @@ class errorToNaN():
             ...                    'param': {'outlierDetectorConfig': [{'algorithm': 'IF', 'percentile': 99, 'alg_parameter': alg_parameter}]}}
 
             >>> data_with_more_uncertain_nan = errorToNaN.errorToNaN().getDataWithUncertainNaN(data, uncertain_param)
+            
         """    
         if uncertain_param['flag'] == True:
             from Clust.clust.preprocessing.errorDetection import unCertainError

@@ -11,7 +11,9 @@ class BasicImputation():
     """ This class supports basic imputation methods.
     """
     def __init__(self, data, method, max, parameter):
-        """ Set data, imputation method, max imputation limit value, imputation parameter 
+        """ 
+        Set data, imputation method, max imputation limit value, imputation parameter 
+
         """
         self.method = method
         self.data = data
@@ -21,11 +23,17 @@ class BasicImputation():
         self.parameter = parameter
 
     def makeDF(self, series_result):
+        """
+        series data to datafreame
+
+        """
         dfResult = pd.DataFrame(series_result, columns = self.columns, index = self.index)
         return dfResult
 
     def ScikitLearnMethod(self):
-        """ Get imputed data from scikit library methods. (KNN, MICE)
+        """ 
+        Get imputed data from scikit library methods. (KNN, MICE)
+        
         """
         data = self.data
         # TODO Extend parameter

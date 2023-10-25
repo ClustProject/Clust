@@ -75,97 +75,99 @@ def set_outlier_param(param):
         param (dict): outlier 관련 파라미터
     
     Note
-    -------
+    ----------
     uncertain_error_to_NaN.flag가 True일 경우 uncertain_error_to_NaN.algorithm 에 따라 uncertain_error_to_NaN 에서 입력 받는 key들이 달라짐.  
 
-    Example:
-        uncertain_error_to_NaN의 Parameter 예시
-        1. algorithm : SR
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+
+    **uncertain_error_to_NaN of uncertain_error_to_NaN Example**:
+
+        >>>  1. algorithm : SR
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{
-        ...             'algorithm': 'SR',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'period': 24}
-        ...         }
-        ...     }}}
+        ...                                 'algorithm': 'SR',
+        ...                                 'percentile': 95,
+        ...                                  'alg_parameter' : {'period': 24}
+        ...                                 }
+        ...         }}}
         
-        2. algorithm : IF
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+        >>> 2. algorithm : IF
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{ 
-        ...             'algorithm': 'IF',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'estimator': 100}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'IF',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'estimator': 100}
+        ...                                 }
+        ...         }}
 
-        3. algorithm : KDE
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+        >>> 3. algorithm : KDE
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{
-        ...             'algorithm': 'KDE',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'leaf_size': 40}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'KDE',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'leaf_size': 40}
+        ...                                 }
+        ...         }}
 
-        4. algorithm : LOF
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+        >>> 4. algorithm : LOF
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{
-        ...             'algorithm': 'LOF',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'neighbors': 20}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'LOF',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'neighbors': 20}
+        ...                                 }
+        ...         }}
 
-        5. algorithm : MoG
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+        >>> 5. algorithm : MoG
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{ 
-        ...             'algorithm': 'MoG',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'component': 1}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'MoG',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'component': 1}
+        ...                                 }
+        ...         }}
 
-        6. algorithm : IQR
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True,
+        >>> 6. algorithm : IQR
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True,
         ...         'outlier_detector_config':{
-        ...             'algorithm': 'IQR',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'weight': 100}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'IQR',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'weight': 100}
+        ...                                 }
+        ...         }}
 
-        7. algorithm : SD
-        >>> param = {
-        ...     'certain_error_to_NaN': {'flag': True},
-        ...     'uncertain_error_to_NaN': {
-        ...         'flag': True, 
+        >>> 7. algorithm : SD
+        ...     param = {
+        ...         'certain_error_to_NaN': {'flag': True},
+        ...         'uncertain_error_to_NaN': {
+        ...                                 'flag': True, 
         ...         'outlier_detector_config':{
-        ...             'algorithm': 'SD',
-        ...             'percentile': 95,
-        ...             'alg_parameter' : {'period': 24, 'limit': 15}
-        ...         }
-        ...     }}
+        ...                                 'algorithm': 'SD',
+        ...                                 'percentile': 95,
+        ...                                 'alg_parameter' : {'period': 24, 'limit': 15}
+        ...                                 }
+        ...         }}
 
     Returns:
-        data_outlier_param: 최종 파라미터
+        Dictionary : data_outlier_param
+
     """
     
     data_outlier_param = {}
@@ -202,11 +204,14 @@ def set_outlier_param(param):
     return data_outlier_param
 
 def get_outlier_detection_param(algorithm, param):
-    """ outlier detection을 위한 parameter로 알고리즘과 이에 근거한 parameter를 입력 받으
+    """ outlier detection을 위한 parameter로 알고리즘과 이에 근거한 parameter를 입력 받음
 
     Args:
         algorithm (string): outlier detection algorithm ['SR'|'IF'| 'KDE'| 'LOF'|'MoG'|'IQR'| 'SD']
         param (dictionary): parameter for algorithm
+
+    Algorithm :
+
         >>> SR - period
         >>> IF - percentile,  estimator
         >>> KDE - leaf_size
@@ -217,7 +222,8 @@ def get_outlier_detection_param(algorithm, param):
         
 
     Returns:
-        result(dict): final parameter
+        Dictionary : result (final parameter)
+
     """
     
     if algorithm =='SR':
@@ -285,6 +291,11 @@ def get_outlier_detection_param(algorithm, param):
 
 
 def get_outlier_detection_param_meta_server(algorithm, algorithmParam):
+    """
+    outlier detection을 위한 parameter로 알고리즘에 따른 parameter를 받음
+    
+    
+    """
     Parameter = {
         "IF": {  # Estimators (1~100)
             # ensemble에 활용하는 모델 개수, i(default: 100, 데이터 크기에 적합하게 설정)

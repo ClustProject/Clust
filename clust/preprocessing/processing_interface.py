@@ -38,6 +38,7 @@ def clustering_app_t1(min_max={'min_num':{}, "max_num":{}}, timedelta_frequency_
     Args:
         min_max(dict): min max restriction information of data
         timedelta_frequency_sec: timedelta for refined data processing
+        
     Returns:
         Dictionary: default_process_param
     """

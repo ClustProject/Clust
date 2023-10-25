@@ -10,7 +10,7 @@ def get_data_result(quality_type, data_input, quality_param):
             - Clean Data by each column
                 - Delete bad quality column
                 - Impute missing data in surviving columns of baseline quality by the NaNInfoCleanData parameter (using linear replacement)
-            - input data must be processed and refined by preprocessing(after refining and making more NaN )
+            - input data must be processed and refined by preprocessing (after refining and making more NaN)
 
         Args:
             quality_type (string) : quality check type

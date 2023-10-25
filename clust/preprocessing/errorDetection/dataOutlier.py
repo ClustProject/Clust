@@ -17,11 +17,12 @@ class DataOutlier():
     def __init__(self, raw_data):
         """
         AlgorithmList =[ 'IF', 'KDE', 'LOF', 'MoG', 'SR']
-        # 1. Isolation Forest (IF)
-        # 2. Kernel density estimation (KDE) 
-        # 3. LOF:Local Outlier Factor (LOF)
-        # 4. Mixture of Gaussian (MoG)
-        # 5. SR: Spectral Residual(SR)
+
+        1. Isolation Forest (IF)
+        2. Kernel density estimation (KDE) 
+        3. LOF:Local Outlier Factor (LOF)
+        4. Mixture of Gaussian (MoG)
+        5. SR: Spectral Residual(SR)
 
         Args:
             raw_data (DataFrame): train data whose shape is (num_index x num_variable)

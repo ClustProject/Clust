@@ -20,8 +20,9 @@ class unCertainErrorRemove():
         Returns:
             json: result - Noise Index
 
-        self.outlierIndex
-        self.mergedOutlierIndex
+        
+        >>> self.outlierIndex
+        ... self.mergedOutlierIndex
 
         """
         outlierDetectorConfigs =self.param['outlierDetectorConfig']
@@ -50,6 +51,8 @@ class unCertainErrorRemove():
 
     def getIntersectionIndex(self, outlierIndex):
         """    
+        
+
         Args:
             outlierIndex (json): Noise Index
             

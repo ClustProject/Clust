@@ -16,9 +16,11 @@ class CertainErrorRemove():
         self.min_max_limit = min_max_limit
     
     def getDataWitoutcertainError(self):
-        #Main Function
-        # - Delete duplicated data
-        # - Delete Out of range error 
+        """
+        - Delete duplicated data
+        - Delete Out of range error 
+        """
+        # Main Function
 
         data_out = self.data.copy()
         data_out = self._out_of_range_error_remove (data_out, self.min_max_limit)
@@ -44,7 +46,8 @@ class CertainErrorRemove():
         
         Example:
 
-            >>> output = CertainErrorRemove().getDataWitoutcertainError(daata, min_max_limit)     
+            >>> output = CertainErrorRemove().getDataWitoutcertainError(daata, min_max_limit)    
+
         """
 
         data_out = data.copy()
@@ -80,6 +83,7 @@ class CertainErrorRemove():
         Example:
 
             >>> output = CertainErrorRemove().remove_out_of_range_error(data, min_max_limit)     
+            
         """
 
         # 특정 이상치 nan 처리 
