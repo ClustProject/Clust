@@ -6,7 +6,7 @@ sys.path.append("../../../")
 sys.path.append("../../../../")
 
 # from sklearn.metrics import classification_report
-# from Clust.clust.tool.stats_table import metrics
+from Clust.clust.tool.stats_table import metrics
 from sklearn.metrics import roc_auc_score, f1_score
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
@@ -205,17 +205,11 @@ def AD_test(params, test_X, test_y, scaler):
     
     result_metrics = dict()
     if params['model_info']['model_purpose'] == 'anomaly_detection':
-        preds, trues = AD_pipeline.CLUST_anomalyDet_test(test_X,
+        preds, trues, thres = AD_pipeline.CLUST_anomalyDet_test(test_X,
                                                          test_y,
                                                          params['model_info'])
         df_result = ml_data.get_prediction_df_result(preds, trues, scaler_param=False, scaler=None, feature_list=feature_list, target_col=target)
-        auroc = roc_auc_score(trues, preds)
-        thres = np.percentile(preds, 80)
-        f1 = f1_score(trues, (preds > thres).astype(np.float16))
-        result_metrics = {
-            'AUROc': auroc,
-            'f1': f1
-        }
+        result_metrics = metrics.calculate_anomaly_metrics(preds, trues, thres)
 
     result = {'result': echart.getEChartFormatResult(df_result), 'result_metrics': result_metrics}
 

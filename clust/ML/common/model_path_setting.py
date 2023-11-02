@@ -59,6 +59,14 @@ my_model_info_list = {
             # Anomaly Detection Model
             "BeatGAN_ad":{
                 "model_root_path": my_model_root_path, 
-                "model_info_path": ["beatgan_ad"],
-                "model_file_names":['model.pkl']}
+                "model_info_path": ["Beatgan_ad"],
+                "model_file_names":['model.pkl']},
+            "AT_ad":{
+                "model_root_path": my_model_root_path,
+                "model_info_path": ["AT_ad"],
+                "model_file_names": ['model.pkl']},
+            "LSTM_VAE_ad":{
+                "model_root_path": my_model_root_path,
+                "model_info_path": ["LSTM_VAE_ad"],
+                "model_file_names": ['model_pkl']}
 }

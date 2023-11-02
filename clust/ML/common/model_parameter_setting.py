@@ -17,7 +17,7 @@ def set_model_parameter(model_info):
     input_size = model_info['input_size']
     regression_model_list = ['LSTM_rg' , 'GRU_rg',  'CNN_1D_rg', 'LSTM_FCNs_rg',  'FC_rg']
     classification_model_list = [ 'LSTM_cf', 'GRU_cf', 'LSTM_cf', 'CNN_1D_cf', 'LSTM_FCNs_cf', 'FC_cf']
-    anomaly_detection_model_list = ['BeatGAN_ad', 'LSTM_VAE_ad']
+    anomaly_detection_model_list = ['BeatGAN_ad', 'AT_ad', 'LSTM_VAE_ad']
 
     if model_method in regression_model_list:
         model_parameter = get_regression_model_parameter(model_method, model_info['model_parameter'], seq_len, input_size)
@@ -164,12 +164,26 @@ def get_anomaly_detection_model_parameter(model_method, model_info, seq_len, inp
         model_parameter = {
             'input_size': input_size,
             'seq_len': seq_len,
-            'in_c': model_info['in_c'],
             'hidden_c': model_info['hidden_c'],
             'latent_c': model_info['latent_c']
         }
+    elif model_method == 'AT_ad':
+        model_parameter = {
+            'input_size': input_size,
+            'seq_len': seq_len,
+            'k': model_info['k'],
+            'win_size': model_info['win_size'],
+            'output_c': model_info['output_c'],
+            'anomaly_ratio': model_info['anomaly_ratio']    # TBD
+        }
     elif model_method == 'LSTM_VAE_ad':
-        pass
+        model_parameter = {
+            'input_size': input_size,
+            'seq_len': seq_len,
+            'win_size': model_info['win_size'],
+            'hidden_c': model_info['hidden_c'],
+            'latent_c': model_info['latent_c']
+        }
                 
     return model_parameter
 

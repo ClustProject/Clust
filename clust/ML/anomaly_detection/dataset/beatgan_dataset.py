@@ -6,7 +6,7 @@ from torch.utils.data import Dataset
 class BeatganDataset(Dataset):
     def __init__(self, data_x: pd.DataFrame, data_y: pd.DataFrame = None,
                  window_size: int = 320, stride: int = 1,
-                 ):
+                 inference:bool = False):
         super(BeatganDataset, self).__init__()
         '''
         Dataset for BeatGAN 
@@ -33,8 +33,10 @@ class BeatganDataset(Dataset):
         self.window_size = window_size
         self.stride = stride 
         
+        self.inference = inference
+        
     def __len__(self):
-        return int((len(self.X)-self.window_size)/self.stride)
+        return int((len(self.X)-self.window_size)//self.stride)
     
     def __getitem__(self, idx):
         '''
@@ -53,7 +55,7 @@ class BeatganDataset(Dataset):
         
         # Aggregation of label y : choose last label 
         if self.Y is not None:
-            y = y[-1]
+            y = y.max()
             return x,y 
         
         else:

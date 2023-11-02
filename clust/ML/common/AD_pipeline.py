@@ -65,9 +65,9 @@ def CLUST_anomalyDet_test(test_X, test_y, model_info):
     adt.set_param(test_parameter)
     adt.set_model(model_method, model_file_path, model_parameter)
     adt.set_data(test_X, test_y)
-    preds, trues = adt.test()
+    preds, trues, thres = adt.test()
 
-    return preds, trues
+    return preds, trues, thres
 
 def CLUST_anomalyDet_inference(infer_X, model_info):
     """

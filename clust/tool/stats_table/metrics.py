@@ -49,3 +49,21 @@ def calculate_metrics_df(df):
             'smape': round(smape(df.value, df.prediction),2),
             'r2' : round(r2_score(df.value, df.prediction),2)
     }
+
+def calculate_anomaly_metrics(preds, trues, thres, auroc_only:bool=False):
+    """
+    metrics for anomaly detection i.e., accuracy, recall, precision, F-score
+
+    """
+    from sklearn.metrics import roc_auc_score, f1_score, accuracy_score, recall_score, precision_score
+    
+    auroc = roc_auc_score(trues.astype(np.uint8), preds)
+    if auroc_only:
+        return auroc
+    else:
+        return {
+            'accuracy': accuracy_score(trues, (preds > thres).astype(np.float16)),
+            'recall': recall_score(trues, (preds > thres).astype(np.float16)),
+            'precision': precision_score(trues, (preds > thres).astype(np.float16)),
+            'f_score': f1_score(trues, (preds > thres).astype(np.float16))
+        }

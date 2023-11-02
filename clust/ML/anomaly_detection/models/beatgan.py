@@ -31,30 +31,27 @@ class Discriminator(nn.Module):
     Args:
             in_c : Number of input channel (Number of columns of input data)
             hidden_c : Number of channel of hidden layer 
-            latent_c : Number of channel of latent feature (between Encoder - Decoder)
     Example:
         D = Discriminator(
             in_c     = 51,
-            hidden_c = 32,
-            latent_c = 16
+            hidden_c = 32
         )
     '''
-    def __init__(self,in_c: int, hidden_c: int, latent_c: int):
+    def __init__(self,in_c: int, hidden_c: int):
         super(Discriminator,self).__init__()
         
-        self.layers = list(Encoder(in_c,hidden_c,latent_c).layers.children())
+        self.layers = list(Encoder(in_c,hidden_c,1).layers.children())
         self.encoder = nn.Sequential(*self.layers[:-1])
-        self.classifier = nn.Conv1d(self.layers[-1].in_channels,1,10,1,0,bias=False)
+        self.classifier = nn.Sequential(self.layers[-1])
+        self.classifier.add_module('Sigomid', nn.Sigmoid())
         
         
     def forward(self,x):
         # Feature extraction 
-        latent = self.encoder(x)
-        
-        logit = self.classifier(latent)
-        logit = logit.squeeze(2)
-        logit = torch.sigmoid(logit)
-        return logit, latent 
+        features = self.encoder(x)
+        classifier = self.classifier(features)
+        classifier = classifier.view(-1,1).squeeze(1)
+        return classifier, features 
         
 
 def weights_init(mod):
@@ -91,15 +88,17 @@ class Encoder(nn.Module):
         '''
         self.in_c = in_c # num of features of input data 
         self.hc = hidden_c
-        # self.layers = self.build_layers(latent_c)
-        self.layers = nn.Sequential(
-            conv_block(in_c, hidden_c),
-            conv_block(hidden_c * 1, hidden_c * 1 * 2),
-            conv_block(hidden_c * 2, hidden_c * 2 * 2),
-            conv_block(hidden_c * 4, hidden_c * 4 * 2),
-            conv_block(hidden_c * 8, hidden_c * 8 * 2),    
-            nn.Conv1d(hidden_c * 16, latent_c, 10, 1, 0, bias=False)        
-            )
+        self.layers = self.build_layers(latent_c)
+    
+    def build_layers(self,latent_c):
+        layers = [] 
+        for i,c in enumerate([0,1,2,4,8]):
+            if i == 0:
+                layers.append(conv_block(self.in_c,self.hc,bn=False))        
+            else:
+                layers.append(conv_block(self.hc*c,self.hc*c*2))
+        layers.append(nn.Conv1d(self.hc * 16, latent_c, 10, 1, 0, bias=False))
+        return nn.Sequential(*layers)
     
     def forward(self,x):
         return self.layers(x)

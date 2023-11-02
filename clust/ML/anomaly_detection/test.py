@@ -60,13 +60,14 @@ class AnomalyDetTest():
     def test(self):
         """
         Test model and return result
-
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data
-            
+            thres (): threshold for anomaly detection
         """
         print("\nStart testing data\n")
-        preds, trues = self.model.test(self.test_params, self.test_loader)
+        # TBD
+        # metrics = self.model.test(self.test_params, self.test_loader)
+        preds, trues, thres = self.model.test(self.test_params, self.test_loader)
 
-        return preds, trues
+        return preds, trues, thres

@@ -1,13 +1,21 @@
 import torch
+import numpy as np
+import random
 from pathlib import Path
 
 from Clust.clust.ML.anomaly_detection.clust_models.rnn_predictor_clust import RNNAnomalyClust
 from Clust.clust.ML.anomaly_detection.clust_models.beatgan_clust import BeatganClust
+from Clust.clust.ML.anomaly_detection.clust_models.AT_clust import ATClust
+from Clust.clust.ML.anomaly_detection.clust_models.lstm_clust import LSTMClust
 
 # Set the random seed manually for reproducibility.
 random_seed = 42
 torch.manual_seed(random_seed)
 torch.cuda.manual_seed(random_seed)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+np.random.seed(random_seed)
+random.seed(random_seed)
 
 class AnomalyDetTrain():
     def __init__(self):
@@ -36,6 +44,10 @@ class AnomalyDetTrain():
             self.model = RNNAnomalyClust(self.model_params)
         elif model_method == 'BeatGAN_ad':
             self.model = BeatganClust(self.model_params)
+        elif model_method == 'AT_ad':
+            self.model = ATClust(self.model_params)
+        elif model_method == 'LSTM_VAE_ad':
+            self.model = LSTMClust(self.model_params)
         else:
             print('Choose the model correctly')
 
