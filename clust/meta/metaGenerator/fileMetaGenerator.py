@@ -50,12 +50,11 @@ class FileMetaGenerator():
 
     
         >>> additional_meta = {
-            "keyword": [
-                "kweather", "고등학교", "indoor","air", "co2", "pm10", "pm25", "voc", "temp", "humi", "pm01", "noise",
-                "실내", "공기질", "환경", "미세먼지", "날씨", "온도", "습도", "이산화탄소", "소음"
-                , "temperature", "humidity", "air , "high school", "fine dust"
-            ],
-            "description" : "This is weather data",
+                "keyword": [
+                            "kweather", "고등학교", "indoor","air", "co2", "pm10", "pm25", "voc", "temp", "humi", "pm01", "noise",
+                            "실내", "공기질", "환경", "미세먼지", "날씨", "온도", "습도", "이산화탄소", "소음",
+                            "temperature", "humidity", "air , "high school", "fine dust" ],
+                "description" : "This is weather data",
             }
 
         :returns: 최종 메타 정보
@@ -86,6 +85,7 @@ class FileMetaGenerator():
     def _add_custom_meta(self, metaOrigin, additional_meta):
         """
         - 기존 meta에 custom 메타를 dicionary단위로 붙임
+        
         :param meta: 기존 메타
         :type meta: dictionary or list
 

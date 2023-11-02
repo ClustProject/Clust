@@ -8,6 +8,7 @@ class CertainErrorRemove():
     **Data Preprocessing Modules**::
 
             ``Sensor Min Max Check``, ``Remove no numeric data``
+
     """
     def __init__(self, data, min_max_limit, abnormal_value_list={'all':[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0] }):
         # TODO JW min_max 통과하는 모듈도 업그레이드 해야함
@@ -40,13 +41,12 @@ class CertainErrorRemove():
             DataFrame: New Dataframe having more (or same) NaN
 
         **Two Outlier Detection Modules**::
-            
-            - remove _out_of_range_error
-            - Delete Out of range error
+                
+                remove _out_of_range_error
+                Delete Out of range error
         
-        Example:
 
-            >>> output = CertainErrorRemove().getDataWitoutcertainError(daata, min_max_limit)    
+        >>> output = CertainErrorRemove().getDataWitoutcertainError(daata, min_max_limit)    
 
         """
 
@@ -80,9 +80,8 @@ class CertainErrorRemove():
         Returns:
             DataFrame: New Dataframe having more (or same) NaN
         
-        Example:
 
-            >>> output = CertainErrorRemove().remove_out_of_range_error(data, min_max_limit)     
+        >>> output = CertainErrorRemove().remove_out_of_range_error(data, min_max_limit)     
             
         """
 

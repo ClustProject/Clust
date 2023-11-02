@@ -5,11 +5,10 @@ class errorToNaN():
     
     **Two Outlier Detection Modules**::
 
-            datawithMoreCertainNaN, datawithMoreUnCertainNaN
+        datawithMoreCertainNaN, datawithMoreUnCertainNaN
         
-        ``datawithMoreCertainNaN``: Clear Error to NaN
-
-        ``datawithMoreUnCertainNaN``: UnClear Error to NaN
+        datawithMoreCertainNaN: Clear Error to NaN
+        datawithMoreUnCertainNaN: UnClear Error to NaN
     """
     def __init__(self):
         # Uncertain Remove 에 대한 조절 파라미터 필요 # input parameter로 받아야 함
@@ -31,6 +30,7 @@ class errorToNaN():
             DataFrame: data with More Certain NaN
 
         Example:
+
             >>> from Clust.clust.preprocessing.errorDetection import errorToNaN
 
             >>> min_max = {'max_num': {'in_temp': 80, 'in_humi': 100}, 'min_num': {'in_temp': -40, 'in_humi': 0}}
@@ -84,6 +84,7 @@ class errorToNaN():
             DataFrame: data with More UnCertain NaN
 
         Example:
+        
             >>> from Clust.clust.preprocessing.errorDetection import errorToNaN
 
             >>> alg_parameter = {'IF_estimators': 100, 'IF_max_samples': 'auto', 'IF_contamination': 0.01, 'IF_max_features': 1.0, 'IF_bootstrap': True}

@@ -114,9 +114,6 @@ def get_preprocessed_data(processing_type, param, data):
         datawithMoreCertainNaN, datawithMoreUnCertainNaN = DP.get_errorToNaNData(refined_data, outlier_param)
         ###########
         result = DP.get_imputedData(datawithMoreUnCertainNaN, imputation_param)
-        print("#+#+#+#+#+#+#+##+++++++++++#+#+#+#+##")
-        print(result)
-        print("#+#+#+#+#+#+#+##+++++++++++#+#+#+#+##")
     
     # Additional Processing    
     if processing_type =='smoothing':

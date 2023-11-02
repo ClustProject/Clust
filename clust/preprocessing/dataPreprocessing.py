@@ -20,8 +20,8 @@ class DataPreprocessing():
         """
         This function gets refined data with static frequency, without redundency data. 
         It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
-            * remove_duplication :It removes duplicated data.
-            * static_frequency :The data will have a constant timestamp index. 
+        * remove_duplication :It removes duplicated data.
+        * static_frequency :The data will have a constant timestamp index. 
 
         Args:
             data (DataFrame): data
@@ -81,10 +81,8 @@ class DataPreprocessing():
         **Two Outlier Detection Modules**::
 
             datawithMoreCertainNaN, datawithMoreUnCertainNaN
-        
-        ``datawithMoreCertainNaN``: Clear Error to NaN
-
-        ``datawithMoreUnCertainNaN``: UnClear Error to NaN
+            datawithMoreCertainNa: Clear Error to NaN
+            datawithMoreUnCertainNaN: UnClear Error to NaN
 
         
             
