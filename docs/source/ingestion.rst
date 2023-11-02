@@ -2,7 +2,7 @@ Clust: ingestion
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    ingestion/ingestion.influx
    ingestion/ingestion.mongo

@@ -2,7 +2,7 @@ Clust: tool
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    tool/tool.file_module
    tool/tool.plot

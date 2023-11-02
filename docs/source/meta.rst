@@ -2,7 +2,7 @@ Clust: meta
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    meta/meta.metaFormatCheck
 

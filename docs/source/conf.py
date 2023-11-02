@@ -17,6 +17,8 @@ sys.path.insert(0, os.path.abspath('../../../..'))
 import sphinx_rtd_theme
 from recommonmark.parser import CommonMarkParser
 
+from docutils.writers.latex2e import Babel
+Babel.language_codes = {'ko':'korean', 'en':'english'}
 
 project = 'Clust'
 copyright = '2023, Clust'
@@ -91,17 +93,20 @@ latex_engine = 'xelatex'
 latex_use_xindy = False
 
 latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-'papersize': 'letterpaper',
+    # The paper size ('letterpaper' or 'a4paper').
+    'papersize': 'letterpaper',
 
-# The font size ('10pt', '11pt' or '12pt').
-'pointsize': '10pt',
+    # The font size ('10pt', '11pt' or '12pt').
+    'pointsize': '10pt',
 
-# Additional stuff for the LaTeX preamble.
-'preamble': '',
+    # Additional stuff for the LaTeX preamble.
+     'preamble': r'''\setmainfont{Noto Serif CJK KR}
+                     \setsansfont{Noto Sans CJK KR}
+                     \setmonofont{Noto Sans Mono CJK KR}
+    ''',
 
-# Latex figure (float) alignment
-'figure_align': 'htbp',
+    # Latex figure (float) alignment
+    'figure_align': 'htbp',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples

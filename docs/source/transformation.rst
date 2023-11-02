@@ -2,7 +2,7 @@ Clust: transformation
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    transformation/transformation.entropy
    transformation/transformation.featureExtension

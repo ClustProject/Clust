@@ -2,7 +2,7 @@ Clust: integration
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    integration/integration.meta
 

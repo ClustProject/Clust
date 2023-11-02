@@ -1,8 +1,8 @@
-Clust: Machine Learning
+Clust: machine learning
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    ML/ML.anomaly_detection
    ML/ML.classification
