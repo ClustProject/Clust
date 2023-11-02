@@ -13,10 +13,10 @@ class DataAnalysis():
 
         Args:
             analysis_param (_Dictionary_)
-            >>> 'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
-            
             df (_pd.dataFrame_)
 
+        >>> 'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
+            
         Returns:
             pd.dataFrame : max_position_correlation_table
 
@@ -45,9 +45,9 @@ class DataAnalysis():
         Returns   
             pd.dataframe : result                              
 
-        Example
+
         >>> time_scale = {"x_frequency" : {"unit":"H", "num":1}, 
-                "y_frequency" : {"unit":"D", "num":1}}
+                            "y_frequency" : {"unit":"D", "num":1}}
         """
 
         x_frequency_unit = time_scale["x_frequency"]['unit']

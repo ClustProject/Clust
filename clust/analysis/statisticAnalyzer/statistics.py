@@ -25,17 +25,17 @@ class StatisticsAnalysis():
         Returns:
             Dictionary : statistics_result_dict, Analysis Results
                 
-        Example:
+
         >>> AnalysisResult = {'column1': {
-            'count': 1007583.0,
-            'mean': 353.9929951180201,
-            'std': 84.57299647078351,
-            'min': 177.0,
-            '25%': 279.0,
-            '50%': 366.0,
-            '75%': 413.0,
-            'max': 870.0
-            }}
+                                        'count': 1007583.0,
+                                        'mean': 353.9929951180201,
+                                        'std': 84.57299647078351,
+                                        'min': 177.0,
+                                        '25%': 279.0,
+                                        '50%': 366.0,
+                                        '75%': 413.0,
+                                        'max': 870.0
+                                        } }
 
         """
         labels = ["count", "mean", "std", "min", "25%", "50%", "75%", "max"]
@@ -55,13 +55,13 @@ class StatisticsAnalysis():
         Returns:
             Dictionary : Anaysis Results, countbyfeaturelabel_result_dict  
 
-        Example :
+
         >>> AnalysisResult = {'column1': [
-            {'value': 775053, 'name': '좋음'},
-            {'value': 134025, 'name': '보통'},
-            {'value': 19865, 'name': '나쁨'},
-            {'value': 227, 'name': '매우나쁨'}
-            ]}
+                                        {'value': 775053, 'name': '좋음'},
+                                        {'value': 134025, 'name': '보통'},
+                                        {'value': 19865, 'name': '나쁨'},
+                                        {'value': 227, 'name': '매우나쁨'}
+                                        ] }
         """
         data_cut = pd.DataFrame()
         countbyfeaturelabel_result_dict = {}

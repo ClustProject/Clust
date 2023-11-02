@@ -10,14 +10,14 @@ def get_analysis_result(analysis_method, analysis_param, input_data):
     input에 따른 분석 결과를 도출하기 위해 두개의 함수로 분기하는 함수
 
     Args:
-        analysis_method (_str_) : 분석 방법    
-        >>> ['original' | 'correlation']    
-
+        analysis_method (_str_) : 분석 방법
         analysis_param (_dict_) : analysis method에 따른 적절한 파라미터
-        >>> 'analysis_param' = {'feature_key': 'PM10', 
-        ...                     'lag_number': '24'}        
-     
         input_data (_pd.dataFrame_ or _dict(pd.dataFrame)_) : 두가지 input type이 있을 수 있으며, analysis_method에 따라 input type은 고정됨
+
+    >>> analysis_method = ['original' | 'correlation']    
+
+    >>> 'analysis_param' = {'feature_key': 'PM10', 
+                            'lag_number': '24'}        
 
     Returns:
         pd.dataFrame : df_analysis, 분석 결과
@@ -49,9 +49,8 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
     Returns:
         _pd.dataframe_ : df_analysis, 분석 결과     
         
-
-#TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것   
     """
+    #TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것
     
     da = dataAnalysis.DataAnalysis()
     if analysis_method == 'original':
@@ -80,19 +79,20 @@ def get_analysis_by_data_set(analysis_method, analysis_param, input_df_set):
 
     Args:
         analysis_method (_str_) : 분석 방법
-        >>> ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
-    
         analysis_param (_dict_) : analysis method에 따른 적절한 파라미터
-        >>> 'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
-    
         input_df (_pd.dataFrame_) : 분석에 필요한 인풋 데이터
+
+
+    >>> analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
+
+    >>> 'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
 
     Returns:
         pd.dataframe : df_analysis, 분석 결과
         
-    TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것
     
     """
+    # TODO: 각 analysis_method에 따른 파라미터 예제 모두 기입할 것
     
     dsa = dataSetAnalysis.DataSetAnalysis()
     if analysis_method == 'multiple_maxabs_correlation_value_table_with_lag':

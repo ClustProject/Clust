@@ -2,7 +2,7 @@ Clust : analysis
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    analysis/analysis.statisticAnalyzer
 

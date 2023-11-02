@@ -55,22 +55,3 @@ CLUST PLATFORM
    pipeline
 
 
-
-
-
-
-
-
-
-Abstract
-==================
-This Project
-
-
-
-.. Indices and tables
-.. ==================
-
-.. * :ref:`genindex`
-.. * :ref:`modindex`
-.. * :ref:`search`

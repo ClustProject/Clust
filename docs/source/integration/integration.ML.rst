@@ -2,7 +2,7 @@ ML
 =================================
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    ML/integration.ML_py
 

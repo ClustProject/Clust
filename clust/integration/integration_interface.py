@@ -55,6 +55,9 @@ def get_data_result(integration_type, data_set, integration_param):
     if integration_type =="multiple_dataset_integration":
         from Clust.clust.integration.integrationInterface import IntegrationInterface
         result = IntegrationInterface().multipleDatasetsIntegration(integration_param, data_set)
+        print("~!~!~!~!~#~!@#@!~$@$~@$~$~@$~$@!$!$!@$!@$!@#%#")
+        print(result)
+        print("~!~!~!~!~#~!@#@!~$@$~@$~$~@$~$@!$!$!@$!@$!@#%#")
     
     return result
 

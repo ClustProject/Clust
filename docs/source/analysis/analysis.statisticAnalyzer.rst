@@ -5,7 +5,7 @@ statistics
 ------------------------------
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    statisticAnalyzer/analysis.statisticAnalyzer_py
    
