@@ -9,10 +9,13 @@ def get_graph_result(graph_format, graph_type, df, param = None):
     graph_type에 따라 그래프 생성에 필요한 정보를 가공하고, graph_format 방법으로 결과를 리턴하는 함수
 
     Args:
-        graph_type(_str_) :  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+        graph_type(_str_) :  graph type
         graph_format : ['web' | 'plt' | 'img']
         df(_pandas.dataFrame_) : dataframe
         param (json) : parameter
+
+    >>>     graph_type = 
+    ...     ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
 
     Returns:
         img or plt or json: result

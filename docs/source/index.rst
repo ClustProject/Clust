@@ -7,7 +7,7 @@ Introduction
 =================================
 
 What is Clust?
------------
+------------------------------
 
 
 설명 1
@@ -26,21 +26,18 @@ example 2
    example
 
 
+|
 
-설명 3
+CLUST PLATFORM
 ----------------------------
-example 3
+- `CLUST Data Analytics Platform <http://imrc-clust.keti.re.kr:20001/Index/>`_
+- `CLUST Data Management Platform <http://imrc-clust.keti.re.kr:20002/>`_
 
-
-
-
-
-
-
+|
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Repository:
+   :maxdepth: 1
+   :caption: CLUST Repository:
    
    analysis
    ingestion

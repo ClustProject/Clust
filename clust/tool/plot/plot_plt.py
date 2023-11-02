@@ -7,9 +7,12 @@ def get_plt_result(graph_type, data):
     graph_type에 따라 plt을 생성하여 리턴함.
 
     Args:
-        graph_type(_str_) :  ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+        graph_type(_str_) :  graph type
         data(dataframe) : input data
       
+    >>>     graph_type = 
+    ...     ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+
     Returns:      
         plot : plt 
             

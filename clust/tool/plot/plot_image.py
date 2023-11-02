@@ -11,8 +11,11 @@ def get_img_result(graph_type, df):
     graph_type에 따라 생성한 plt이미지를 byte string으로 변환하여 리턴함.    
 
     Args:
-        graph_type(_str_) : ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
+        graph_type(_str_) : grapy type
         df(dataframe) : dataframe
+
+    >>>     graph_type = 
+    ...     ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density' ] 
 
     Returns:
         _pandas.dataFrame_ : jpg_data
