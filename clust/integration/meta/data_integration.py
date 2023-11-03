@@ -133,6 +133,15 @@ class DataIntegration():
         return reStructuredData 
 
     def converting_sampling_method(self, sampling_method_string):
+        """
+        Description 추가 필요
+
+        Args:
+            sampling_method_string(string) : mean or median or objectDownFunc or objectUpFunc
+
+        Resturns:
+            np.array : sampling_method
+        """
         def objectDownFunc(x):
             c = Counter(x)
             mostFrequent = c.most_common(1)

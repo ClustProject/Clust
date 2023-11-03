@@ -8,22 +8,11 @@ Introduction
 
 What is Clust?
 ------------------------------
+(clust에 대한 전반적인 설명)
+
+(clust 구조 이미지 삽입)
 
 
-설명 1
-----------------
-example 1
-
-
-
-
-설명 2
--------------------
-example 2
-
-::
-   
-   example
 
 
 |
@@ -32,6 +21,22 @@ CLUST PLATFORM
 ----------------------------
 - `CLUST Data Analytics Platform <http://imrc-clust.keti.re.kr:20001/Index/>`_
 - `CLUST Data Management Platform <http://imrc-clust.keti.re.kr:20002/>`_
+
+(플랫폼 간단한 설명 추가?)
+
+|
+
+
+
+
+예시 코드
+-------------------
+| 예시 코드를 각 repository별로 간단하게 추가 시켜야하는가?
+| 각 repository마다 꼭 필요한 부분이 있다면 그 부분 체크 필요
+
+::
+   
+   example
 
 
 |

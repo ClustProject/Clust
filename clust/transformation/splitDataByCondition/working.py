@@ -11,11 +11,10 @@ from Clust.clust.transformation.splitDataByCondition import holiday
 
 def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
     """
-    # Description
-        A function that adds a "Working" column constructed according to the input working time.
-        - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
-        - If there is no holiday information in the data, the function automatically creates it.
-        - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
+    A function that adds a "Working" column constructed according to the input working time.
+    - If there is holiday information in the data, the name of the corresponding column must be set as "HoliDay" and then entered in the parameter. 
+    - If there is no holiday information in the data, the function automatically creates it.
+    - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
 
     Args:
         data (_pd.Dataframe_) : Time series data
@@ -58,8 +57,7 @@ def get_working_feature(data, workingtime_criteria = {'step': [0, 9, 18, 24], 'l
 
 def split_data_by_working(data_input, workingtime_criteria={'step': [0, 9, 18, 24], 'label': ['notworking', 'working', 'notworking']}):
     """
-    # Description
-        Split the data by working/notworking.
+    Split the data by working/notworking.
 
     Args:
         data_input (_pd.Dataframe_) : Time series data

@@ -21,7 +21,7 @@ def clean_nan_df(data_set, nan_processing_param, timedelta_frequency_sec):
         timedelta_frequency_sec (datetime): time frequency seconds, timedelta type
 
     Returns:
-        clean_data (dataframe) : clean data
+        dataframe : clean_data
     
     """
 
@@ -50,7 +50,7 @@ def get_cleand_data(data, clean_level, integration_freq_sec, nan_processing_para
         nan_processing_param (dict): feature cycle parameter
 
     Returns:
-        result (dataframe) : clean data
+        dataframe : result
     
     """
     if clean_level == 4:

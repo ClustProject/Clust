@@ -1,8 +1,7 @@
 timeAnalyzer
 =================================
 
-timeAnalyzer
-------------------------------
+
 .. toctree::
    :maxdepth: 2
    :caption: Subpackages:

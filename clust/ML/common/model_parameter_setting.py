@@ -9,7 +9,7 @@ def set_model_parameter(model_info):
         input_size (_type_): _description_
 
     Returns:
-        model_parameter(dict):model_parameter
+        dictionary : model_parameter
 
     """
     model_method = model_info['model_method']

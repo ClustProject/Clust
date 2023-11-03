@@ -250,7 +250,7 @@ class BeatganClust(BaseAnomalyDetModel):
         export trained model 
 
         Returns:
-            {'G': self.G, 'D' :self.D} (dict): current model object
+            Dictionary: {'G': self.G, 'D' :self.D} / current model object
         """
         return {'G': self.G, 'D' :self.D}
 
@@ -376,6 +376,7 @@ class BeatganClust(BaseAnomalyDetModel):
     def _train_step(self, train_loader)-> list:
         """
         Args: 
+            train_loader : train_loader
         
         """
         self.schedulerD.step()

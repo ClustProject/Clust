@@ -37,12 +37,12 @@ class DataAnalysis():
         """        
         데이터를 서로 다른 X, y 축 프리컨시로 샘플링한 결과를 생성함
 
-        Args
+        Args:
             data (_pd.Dataframe_) : Input data
             time_scale (_Dictionary_) : The time frequency scale of the x-axis and y-axis
             sampling_flag (_bool_) : 입력 데이터의 빈도와 탐색하고 싶은 데이터의 기준 빈도가 같아서 빈도 다운 샘플링이 필요 없는 경우 False를 입력
             
-        Returns   
+        Returns:
             pd.dataframe : result                              
 
 

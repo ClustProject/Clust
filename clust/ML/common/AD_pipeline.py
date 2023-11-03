@@ -53,7 +53,8 @@ def CLUST_anomalyDet_test(test_X, test_y, model_info):
         model_parameter (dict): 파라미터
 
     Returns:
-        preds, trues (np.arrau): 예측값, 실제값
+        np.array : preds, trues / 예측값, 실제값
+
     """
     from Clust.clust.ML.anomaly_detection.test import AnomalyDetTest
     test_parameter = model_info['train_parameter']
@@ -78,7 +79,8 @@ def CLUST_anomalyDet_inference(infer_X, model_info):
         model_info (dict): model parameters
 
     Returns:
-        preds (np.array): prediction value array
+        np.array : preds(prediction value array)
+
     """
     from Clust.clust.ML.anomaly_detection.inference import AnomalyDetInference
     inference_parameter = model_info['train_parameter']

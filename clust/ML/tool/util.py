@@ -8,7 +8,8 @@ def get_dict_from_two_array(input_key, input_value):
         input_value (array): input array for value
 
     Returns:
-        dict_result(dict): dictionary type result -> key: input_key, value: input_value
+        dictionary : dict_result(dictionary type result -> key: input_key, value: input_value)
+
     """
     dict_result = dict(zip(input_key, map(str, input_value)))
     return dict_result
@@ -23,9 +24,9 @@ def count_label_info(labels):
         labels (numpy.array): label data
 
     Returns:
-        count (list of tuple) : number of label
+        list of tuple : count(number of label)
 
-    example > [(0, 93), (1, 24), (2, 35)]
+    >>> [(0, 93), (1, 24), (2, 35)]
     
     """
     import collections 

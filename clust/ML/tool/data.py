@@ -10,9 +10,8 @@ from Clust.clust.ML.tool import scaler
 # p2_dataSelection
 def get_saved_integrated_data(data_save_mode, data_name, data_folder_path=None, db_name=None, db_client = None):
     """
-    if data_save_mode == CSV, get data from csv file
-
-    if data_save_mode == influx, get data from influx db
+    - if data_save_mode == CSV, get data from csv file
+    - if data_save_mode == influx, get data from influx db
 
     Args:
         data_save_mode (string): data save mode
@@ -22,7 +21,7 @@ def get_saved_integrated_data(data_save_mode, data_name, data_folder_path=None, 
         db_client (db_client): db_client
 
     Returns:
-        data (dataframe) : data
+        dataframe : data
     
     """
     if data_save_mode =='CSV':
@@ -47,7 +46,7 @@ def DF_to_series(data):
         data(np.dataFrame): input data
         
     Return:
-        series_data(series): transformed data for training, and prediction
+        series : series_data(transformed data for training, and prediction)
 
     """
     series_data = data.to_numpy().transpose()
@@ -68,7 +67,7 @@ def get_prediction_df_result(predictions, values, scaler_param, scaler, feature_
         target_col (string): target column
 
     Returns:
-        df_result (dataframe) : prediction & true data
+        dataframe : df_result(prediction & true data)
     
     """
     print(scaler_param)
@@ -103,9 +102,11 @@ def get_train_val_data(data, feature_list, scaler_root_path, split_ratio, scaler
         windows (int): window size
 
     Returns:
-        train (dataframe) : train data
-        val (dataframe) : validation data
-        scaler_file_path (string) : scaler file path
+        dataframe : train, val
+
+    Returns:
+        string : scaler_file_path
+
     
     """
     train_val, scaler_file_path = scaler.get_data_scaler(scaler_param, scaler_root_path, data[feature_list], scaler_method)

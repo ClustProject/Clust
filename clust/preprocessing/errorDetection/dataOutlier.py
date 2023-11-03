@@ -111,6 +111,8 @@ class DataOutlier():
     ### Outlier Detector
     def getOneDetectionResult(self, data, config):
         """    
+
+        
         Args:
             data (dataFrame): data for outlier Detetcion
             config (dictionary): config

@@ -28,7 +28,7 @@ def convert_param_for_backend(params):
         params (dict): dictionary data input
 
     Returns:
-        params (dict): dictionary data output
+        dictionary : params(dictionary data output)
 
     """
     # chage tpye string to bool -> ex) 'true' -> True
@@ -64,7 +64,7 @@ def chagne_type_str_to_bool(dict_data):
         dict_data (dict): dictionary data input
 
     Returns:
-        dict_data (dict): dictionary data output
+        dictionary : dict_data(dictionary data output)
     """
 
     for key, value in dict_data.items():
@@ -94,7 +94,7 @@ def check_model_name(model_name, model_name_info):
         model_name_info (array): model name information
 
     Returns:
-        model_name(str): final model name
+        string : model_name(final model name)
     """
     # model name & path
     if model_name is None or model_name == 'None':
@@ -131,7 +131,7 @@ def AD_train(params, train_X, train_y, val_X, val_y):
         test_X (DataFrame): test data
 
     Returns:
-        params: trained model info including model file path.
+        dictionary: params(trained model info including model file path)
     """
     # model info update (if necessary)
     from Clust.clust.ML.common import model_parameter_setting
@@ -176,10 +176,10 @@ def test_data_preparation(params):
         influxdb_client (influxdb client): influxdb client.
 
     Returns:
-        test_X_array (ndarray): test X data
-        test_y_array (ndarray): test y data
-        scaler_X (scaler): X scaler
-        scaler_y (scaler): y scaler
+        np.array: test_X_array, test_y_array
+
+    Returns:
+        scaler: scaler_X, scaler_y
     """
 
     pass
@@ -195,7 +195,7 @@ def AD_test(params, test_X, test_y, scaler):
         scaler (scaler): X or y sclaer
 
     Returns:
-        result (dict): dictionary contains Echart format Dataframe result and result metrics
+        dictionary : result(dictionary contains Echart format Dataframe result and result metrics)
     """
     if params['data_y_flag']:
         feature_list = params['ingestion_param_y']['feature_list']
@@ -226,7 +226,7 @@ def _get_scaled_np_data(data, scaler, scaler_param):
         scaler_param (bool): scaler flag
 
     Returns:
-        scaled_data (ndarray): scaled data
+        ndarray : scaled_data
     """
     if scaler_param=='scale':
         scaled_data = scaler.transform(data)
@@ -244,8 +244,11 @@ def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
         scaler_param (bool): scaler flag
 
     Returns:
-        result (ndarray): scaled data
-        scaler (scaler): scaler
+        ndarray : result(scaled data)
+
+    Returns:
+        scaler : scaler
+
     """
     scaler =None
     result = data
@@ -266,8 +269,11 @@ def infer_data_preparation(params, data):
         data (ndarray): given data X for inference
 
     Returns:
-        scaled_infer_X (ndarray): scaled data X
-        scaler_y (scaler): y scaler
+        ndarray : scaled_infer_X(scaled data X)
+
+    Returns:
+        scaler : scaler_y
+
     """
     
     scaled_infer_X, scaler_X = _get_scaled_infer_data(data, params['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], params['scaler_param']['scaler_flag'])
@@ -285,7 +291,8 @@ def AD_inference(params, infer_X, scaler):
         scaler (scaler): y scaler
 
     Returns:
-        prediction_result (pd.DataFrame): prediction result 
+        pd.DataFrame : prediction_result
+
     """
     target = params['ingestion_param_y']['feature_list']
 

@@ -6,7 +6,6 @@ from Clust.clust.data import df_data, df_set_data
 
 def get_data_result(ingestion_type, db_client, param) : 
     """ 
-    Description
     - Get data by condition
 
     Args:

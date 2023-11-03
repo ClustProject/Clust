@@ -52,7 +52,7 @@ class Correlation():
             target (_String_) : If target is specified, only results related to target name are provided
 
         Returns:
-            _series of DataFrame_ : result(pairs of correlation matrix)
+            series of DataFrame : result(pairs of correlation matrix)
 
         """
         au_corr = self.getCorrelationMatrix().abs().unstack()

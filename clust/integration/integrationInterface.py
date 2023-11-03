@@ -84,8 +84,8 @@ class IntegrationInterface():
             DataFrame: integrated_data by transform
 
         Example:
-        >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 
-        ...                     'end_time': Timestamp('2018-01-05 00:00:00')}
+            >>> overlap_duration = {'start_time': Timestamp('2018-01-03 00:00:00'), 
+            ...                     'end_time': Timestamp('2018-01-05 00:00:00')}
         """
         
         ## simple integration

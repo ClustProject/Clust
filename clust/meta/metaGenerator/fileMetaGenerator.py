@@ -46,7 +46,7 @@ class FileMetaGenerator():
         """
 
         :param additional_meta: add할 정보
-       :type additional_meta: dictionary
+        :type additional_meta: dictionary
 
     
         >>> additional_meta = {

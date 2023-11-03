@@ -5,8 +5,7 @@ import numpy as np
 from Clust.clust.transformation.purpose import machineLearning as ML
 def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
     """
-    Description
-    - dataframe을 numpy array로 변경
+    dataframe을 numpy array로 변경
 
     Args:
         X (dataframe): X dataframe
@@ -14,7 +13,7 @@ def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
         transformParameter(Dictionary) : transform parameters
 
     Returns:
-        X_array, y_array (numpy.array) : X_array, y_array 
+        numpy.array : X_array, y_array 
 
     >>> shape ===> (len(df)/window_size , window_size, column_num) ==> (batch, seq_length, input_size )
 
@@ -51,15 +50,15 @@ def trans_DF_to_NP_by_windowNum(X, y, transformParameter):
 #YK
 def transDFtoNP_infer(dfX, windowNum = 0, dim = None):
     """
-    Description
-        - Make NumpyArray by input DataFrame
-        - if windowNum = 0 ----> slice X by day
-        - if windowNum = N ----> slice X by windowNum
+    - Make NumpyArray by input DataFrame
+    - if windowNum = 0 ----> slice X by day
+    - if windowNum = N ----> slice X by windowNum
     
     >>>     Retunrn 
     ...     X.shape (sampleNum, featureNum, sequenceNum )
     ...     y.shape (sampleNum, )
 
+    
     Args:
         dfX (Dataframe) : dfX       
         windowNum(Interger) : windowNum

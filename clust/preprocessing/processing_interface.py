@@ -11,9 +11,12 @@ def get_data_result(processing_type, data_input, processing_param=None):
     Produce processing data according to processing_type and processing_param.
 
     Args:
-        processing_type (string) = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
-        processing_param (dict)  or None   
-        data_input (pandas.dataFrame or dict)
+        processing_type (string) : processing type
+        data_input (pandas.dataFrame or dict) : data
+        processing_param (dict) or None : processing parameter
+
+    >>> processing_type = ['refinement'|'error_to_NaN'|'certain_error_to_NaN|
+                            'uncertain_error_to_NaN'|imputation'|'step_3'|'scaling'|'smoothing']
 
     Returns:         
         pandas.dataFrame or dict: New Data (Dataset) after processing
@@ -59,9 +62,12 @@ def get_preprocessed_dataset(processing_type, param, data_set):
     Produces clean dataset consisting of multiple data according to the processing_type and param
 
     Args:
-        processing_type (string): ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
+        processing_type (string): processing type
         param (dict): parameter for preprocessing
         data_set (dict): input dataset
+
+    >>> processing_type = ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|
+                            'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
 
     Returns:
         Dictionary: New Dataset after preprocessing
@@ -79,9 +85,12 @@ def get_preprocessed_data(processing_type, param, data):
     Produces only one clean data according to the processing_type and param
 
     Args:
-        processing_type (string): ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
+        processing_type (string): processing type
         param (dict): parameter for preprocessing
         data (DataFrame): input data
+
+    >>> processing_type = ['refinement'|'error_to_NaN'|'certain_error_to_NaN'|
+                            'uncertain_error_to_NaN'|'imputation'|'step_3'|'smoothing'|'scaling']
         
     Returns:
         DataFrame: New Dataframe after preprocessing 

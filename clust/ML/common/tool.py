@@ -11,7 +11,8 @@ def random_nan_df(df, nan_ratio):
         nan_ratio (float): nan 적용 비율
 
     Returns:
-        df (pd.DataFrame): 출력
+        pd.DataFrame : df
+
     """
     for col in df.columns:
         df.loc[df.sample(frac=nan_ratio). index, col] = pd.np.nan
@@ -24,7 +25,7 @@ def get_default_day_window_size(data):
         data (pd.DataFrame):입력 데이터
 
     Returns:
-        day_window_size (int): 일을 기준으로 한 윈도우 사이즈
+        integer : day_window_size(일을 기준으로 한 윈도우 사이즈)
         
     """
     from datetime import timedelta 
@@ -44,7 +45,7 @@ def get_default_model_name(model_name, app_name, model_method, model_clean):
         model_clean (_type_): _description_
 
     Returns:
-        _type_: _description_
+        string : model name
     """
     if model_name is None:
         model_name = app_name+ '_'+ model_method + '_' + str(model_clean)
@@ -62,7 +63,7 @@ def get_default_model_path(model_name, data_name, model_method, train_parameter)
         train_parameter (dict): 학습을 위한 파라미터
 
     Returns:
-        modelFilePath(str): 최종 모델 파일 패스
+        string : modelFilePath(최종 모델 파일 패스)
     """
     
     from Clust.clust.transformation.general.dataScaler import encode_hash_style

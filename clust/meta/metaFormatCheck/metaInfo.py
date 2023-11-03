@@ -47,11 +47,11 @@ def check_including_keyList(dict_input, key_list) :
     
 
     Args:
-        (Dict) dict_input = {'tags': [], 'fields': ...
-        (list) key_list  =['a', 'b' ...]
+        dict_input(Dict) : 'tags': [], 'fields': ...
+        key_list(list)  : 'a', 'b' ...
 
     Returns:
-        (Boolean) True|False
+        Boolean : True|False
     
     """
 

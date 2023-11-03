@@ -61,7 +61,7 @@ class RegressionInference():
         inference model and return result
 
         Returns:
-            preds (ndarray): prediction data
+            nd.array : preds
         """
         print("\nStart inference\n") 
         preds = self.model.inference(self.infer_params, self.inference_loader)
