@@ -42,7 +42,7 @@ class SomTrain(Train):
             data(series):input data
         
         Return:
-            som (MiniSom instnace): MiniSom result instance
+            MiniSom instnace: som(MiniSom result instance)
         """
         data_length = (data.shape[1])
 
@@ -63,8 +63,7 @@ class SomTest(Test):
             data(series):data
             
         Return:
-            cluster_map(array): cluster map result of input data
-
+            array: cluster_map(cluster map result of input data)
         >>> example> [1, 2, 0]
         
         """

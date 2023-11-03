@@ -9,7 +9,7 @@ def get_meta_table(mongodb_url):
     """
     meta for api
 
-    Agrs:
+    Args:
         mongodb_url(string) : mongo api
     
     """

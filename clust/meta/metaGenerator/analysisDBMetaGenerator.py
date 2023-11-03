@@ -148,8 +148,7 @@ class analysisDBMetaGenerator():
             value (string): 변형해주고 싶은 Meta value로 string type이여야 한다.
 
         Returns:
-            - "None"이면 nan으로 변형된 값
-            - "None"이 아니였다면 value 그대로 반환
+            NaN or value
         """
         if value == "None":
             value = np.nan
@@ -165,8 +164,7 @@ class analysisDBMetaGenerator():
             value (string): 변형해주고 싶은 Meta value로 string type이여야 한다.
 
         Returns:
-            - nan이면 "None"으로 변형된 값
-            - nan이 아니였다면 value 그대로 반환
+            NaN or value
         """
         if np.isnan(value):
             value = "None"

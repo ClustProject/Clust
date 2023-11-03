@@ -7,10 +7,9 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(
 
 def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
     """
-    # Description
-        A function that adds a "TimeStep" column constructed according to the input timeStep.            
-        - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
-        - Used when the period of data time information is less than 1 hour.
+    A function that adds a "TimeStep" column constructed according to the input timeStep.            
+    - Since the function is classified based on Hour, the Input data time frequency must be Hour, Minute, or Second.
+    - Used when the period of data time information is less than 1 hour.
 
     Args:
         data (_pd.dataframe_) : Time series data
@@ -35,8 +34,7 @@ def get_timestep_feature(data, timestep_criteria = {"step":[0, 6, 12, 17, 20, 24
 
 def split_data_by_timestep(data, timestep = {"step":[0, 6, 12, 17, 20, 24], "label":["dawn", "morning", "afternoon", "evening", "night"]}):
         """
-        # Description
-            Split the data by TimeStep.
+        Split the data by TimeStep.
 
         Args:
             data (_pd.dataframe_) : Time series data

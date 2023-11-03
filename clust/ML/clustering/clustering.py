@@ -127,7 +127,7 @@ class Test:
             y (numpy.ndarray): 1d array (label result)   
 
         Returns:
-            final_df: final selected df
+            dataframe: final_df(final selected df)
         """
         column_list=list(df.columns)
 

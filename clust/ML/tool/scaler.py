@@ -17,8 +17,10 @@ def get_scaled_test_data(data, scaler_file_path, scaler_param):
         scaler_param (int): scale or noscale
 
     Returns:
-        result (dataframe) : scaled data
-        scaler (scaler) : scaler
+        dataframe : result(scaled data)
+
+    Returns:
+        scaler : scaler
     
     """
     scaler =None
@@ -38,7 +40,7 @@ def get_scaler_file(scaler_file_path):
         scaler_file_path (string): clean or noclean
 
     Returns:
-        scaler (scaler) : scaler    
+        scaler : scaler    
     
     """
     import joblib
@@ -56,7 +58,7 @@ def get_scaled_data(data, scaler, scaler_param):
         scaler_param (int): scale or noscale
 
     Returns:
-        scaled_data (dataframe) : scaled data
+        dataframe : scaled_data
     
     """
     if scaler_param=='scale':
@@ -70,6 +72,18 @@ def get_scaled_data(data, scaler, scaler_param):
 def get_data_scaler(scaler_param, scaler_root_path, data, scaler_method):
     """
     data scaling
+
+    Args:
+        scaler_param(dict) : scaler parameter
+        scaler_root_path(str) : scaler file path
+        data(dataframe) : data
+        scaler_method(str) : 'minxmax'
+
+    Returns:
+        dataframe: result_data
+
+    Returns:
+        string: scaler_file_path
 
     """
     if scaler_param=='scale':

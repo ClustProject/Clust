@@ -15,21 +15,25 @@ class analysisMSMetaGenerator():
         """
         :param analysis_param: analysis를 위한 param
         :type analysis_param: dictionary
-
-        >>> analysisParam = {
-            "dbName": "air",
-            "collectionName": "indoor_유치원",
-            "measurementList" : None, 
-            "functionList" : None
-        }
-        >>>>>> functionList : Analyzed Method Name 으로 list type으로 받음
-        >>>>>>>>> functionList example : None or ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
         
         :param influx_instance: instance to get data from influx DB
         :type influx_instance: instance of InfluxClient class
 
         :param mongo_instance: instance url to get meta data from mongo DB
         :type mongo_instance: string
+
+        
+        >>> analysisParam = {
+            "dbName": "air",
+            "collectionName": "indoor_유치원",
+            "measurementList" : None, 
+            "functionList" : None
+        }
+
+        >>> functionList : Analyzed Method Name 으로 list type으로 받음
+        ... functionList example : None or ["StatisticsAnalyzer", "MeanByHoliday", "MeanByWorking", "MeanByTimeStep", "CountByFeatureLabel"]
+
+
         """
 
         self.mongodb_db = analysis_param["dbName"]

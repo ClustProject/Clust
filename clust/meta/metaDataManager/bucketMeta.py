@@ -8,9 +8,7 @@ def get_min_max_info_from_bucketMeta(db_client, db_name) :
         db_name (String) : domain name ( ex. 'air_indoor_경로당' )
 
     Returns:
-        data_min_max_limit (Dict) : {
-            "max_num":{...}, "min_num":{...}
-        }   
+        Dictionary : data_min_max_limit( { "max_num":{...}, "min_num":{...}} )
     
     """
 
@@ -35,7 +33,7 @@ def update_old_dict_with_new_dict(oldDict, newDict) :
         newDict (Dict) :Old key와 동일 Key값이 있는 경우 업데이트 하고, 새로운 Key 값이 있는 경우 생성한다.
 
     Returns:
-        oldDict (Dict) : updated data
+        Dictionary :oldDict(updated data)
     
     """
 

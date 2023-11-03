@@ -2,16 +2,15 @@ import os
 
 def save_csv_data(data_folder_path, data_name, data):
     """    
-        # Description
-            - 데이터를 csv 파일로 저장하는 기능
+    데이터를 csv 파일로 저장하는 기능
 
-        # Args
-            - data_folder_path (_String_) : folder path
-            - data_name (_String_) : file name
-            - data (_pd.dataFrame_) : data to be saved as CSV
+    Args:
+        data_folder_path (_String_) : folder path
+        data_name (_String_) : file name
+        data (_pd.dataFrame_) : data to be saved as CSV
 
-        # Returns
-            - file_name (_String_)
+    Returns:
+        _String_ : file_name
 
     """
     if not os.path.exists(data_folder_path):
@@ -25,17 +24,14 @@ def save_csv_data(data_folder_path, data_name, data):
 
 def save_influx_data(db_name, data_name, data, db_client):
     """    
-        # Description
-            - 데이터를 influxDB에 저장하는 기능
+    데이터를 influxDB에 저장하는 기능
 
-        # Args
-            - data_folder_path (_String_) : folder path
-            - data_name (_String_) : file name
-            - data (_pd.dataFrame_) : data to be saved as CSV
-            - db_client (_instance_) : influxDB instance    
-        
-        # Returns
-            - No Returns
+    Args:
+        data_folder_path (_String_) : folder path
+        data_name (_String_) : file name
+        data (_pd.dataFrame_) : data to be saved as CSV
+        db_client (_instance_) : influxDB instance    
+    
 
     """
     bk_name = db_name

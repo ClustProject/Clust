@@ -18,6 +18,7 @@ class AnomalyDetTest():
         Args:
             test_params(dict): test parameter
 
+            
         >>> param = { "device": "cpu",
         ...           "batch_size": 16 }
 
@@ -32,6 +33,7 @@ class AnomalyDetTest():
             model_method (string): model method name  
             model_file_path (string): path for trained model  
             model_params (dict): hyperparameter for model
+
         """
         self.model_params = model_params
 
@@ -60,6 +62,7 @@ class AnomalyDetTest():
     def test(self):
         """
         Test model and return result
+        
         Returns:
             preds (ndarray): prediction data
             trues (ndarray): original data

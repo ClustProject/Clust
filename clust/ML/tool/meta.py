@@ -12,7 +12,7 @@ def read_model_meta_by_db_style(model_meta_db_style, meta_json_path, model_name)
         model_name (str): model name
 
     Returns:
-        model_meta(str): model meta
+        string : model meta
     """
     if  model_meta_db_style == "document":
         from Clust.clust.ML.tool import meta
@@ -35,7 +35,7 @@ def save_model_meta_into_mongodb(mongodb_client, model_meta,db_name,collection_n
         collection_name (str): collection_name
 
     Returns:
-        answer(int): 200(OK), 500(fail)
+        integer : answer( 200(OK), 500(fail) )
     """
     try :
         result = mongodb_client.insert_document(db_name, collection_name, model_meta)
@@ -59,7 +59,7 @@ def read_model_meta_from_mongodb(mongodb_client, db_name, collection_name, model
         model_name(string) : model or meta name
 
     Returns:
-        model_meta (dict): mongo meta result
+        dictionary : model_meta(mongo meta result)
         
     """
     model_meta = mongodb_client.get_document_by_json(db_name, collection_name,{'model_info.model_name':model_name} )
@@ -76,15 +76,16 @@ def read_model_meta_from_local(json_file_path, model_name=None):
         model_name (str): 정보를 읽으려는 model name
 
     Returns:
-        model_meta: 해당 model name의 모델 메타
+        dictionary : model_meta
+
     """
     model_meta = read_json(json_file_path)
     model_meta_first_key = list(model_meta.keys())[0]
     if model_name:
         model_meta = model_meta[model_name]
     else:
-        model_meta = model_meta[model_meta_first_key
-                                ]
+        model_meta = model_meta[model_meta_first_key]
+        
     return model_meta
 
 def read_model_list_from_local(json_file_path):
@@ -94,7 +95,7 @@ def read_model_list_from_local(json_file_path):
         json_file_path (str): model info가 적힌 file path
 
     Returns:
-        model_list[array]: 모델 리스트
+        list : model_list
     """
     model_meta = read_json(json_file_path)
     model_list = list(model_meta.keys())
@@ -109,7 +110,7 @@ def save_model_meta_into_local(json_file_path, new_model_meta):
         new_model_meta (dict): 정보를 새롭게 기록하려는 메타 데이터
 
     Returns:
-        _type_: _description_
+        integer : answer( 200(OK), 500(fail) )
     """
     meta_info = read_json(json_file_path)
     meta_info[new_model_meta['model_info']["model_name"]] = new_model_meta
@@ -131,7 +132,8 @@ def read_json(json_file_path):
         json_file_path(string): json file path
 
     Returns:
-        json_result(json): json file text
+        json : json_result(json file text)
+
     """
     check_json_file (json_file_path)
     if os.path.isfile(json_file_path):

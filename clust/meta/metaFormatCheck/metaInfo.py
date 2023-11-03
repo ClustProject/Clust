@@ -43,15 +43,15 @@ def seperate_bucket_name(bucketName) :
 def check_including_keyList(dict_input, key_list) :
      
     """
-        dict_input이 key_list의 모든 key값을 포함 하는지 확인
-        
+    dict_input이 key_list의 모든 key값을 포함 하는지 확인
+    
 
-        Args:
-            (Dict) dict_input = {'tags': [], 'fields': ...
-            (list) key_list  =['a', 'b' ...]
+    Args:
+        dict_input(Dict) : 'tags': [], 'fields': ...
+        key_list(list)  : 'a', 'b' ...
 
-        Returns:
-            (Boolean) True|False
+    Returns:
+        Boolean : True|False
     
     """
 

@@ -18,10 +18,10 @@ class DataPreprocessing():
     
     def get_refinedData(self, data, refine_param):
         """
-        This function gets refined data with static frequency, without redundency data. 
-        It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
-            * remove_duplication :It removes duplicated data.
-            * static_frequency :The data will have a constant timestamp index. 
+        - This function gets refined data with static frequency, without redundency data. 
+        - It refines data adaptively depending on flag status. (remove_duplication, static_frequency)
+        - remove_duplication :It removes duplicated data.
+        - static_frequency :The data will have a constant timestamp index. 
 
         Args:
             data (DataFrame): data
@@ -60,8 +60,9 @@ class DataPreprocessing():
     def get_errorToNaNData(self, data, outlier_param):
 
         """
-        This function gets data with more NaN. This function converts data identified as errors to NaN. 
-        This module finds fake data generated due to network errors, etc., and converts it to NaN.
+        - This function gets data with more NaN. 
+        - This function converts data identified as errors to NaN. 
+        - This module finds fake data generated due to network errors, etc., and converts it to NaN.
 
         Args:
             data (DataFrame): data
@@ -81,10 +82,8 @@ class DataPreprocessing():
         **Two Outlier Detection Modules**::
 
             datawithMoreCertainNaN, datawithMoreUnCertainNaN
-        
-        ``datawithMoreCertainNaN``: Clear Error to NaN
-
-        ``datawithMoreUnCertainNaN``: UnClear Error to NaN
+            datawithMoreCertainNa: Clear Error to NaN
+            datawithMoreUnCertainNaN: UnClear Error to NaN
 
         
             

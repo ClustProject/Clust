@@ -49,7 +49,7 @@ class KMeansTest(Test):
             data(series):data
             
         Return:
-            self.y(array): label result
+            array: self.y(label result)
             
         >>> example> [1, 2, 0]
         """
@@ -76,7 +76,7 @@ def search_best_n_clust(data, param):
         max_cluster_num(int): Max number of clusters to form.     
         
     Returns:
-        metric (dataFrame): dataframe with silhouette_score and distortion_score
+        dataFrame: metric(dataframe with silhouette_score and distortion_score)
 
     """
     from sklearn.metrics import silhouette_score

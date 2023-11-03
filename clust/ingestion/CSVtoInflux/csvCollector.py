@@ -14,28 +14,28 @@ from Clust.clust.ingestion.CSVtoInflux.cleanDataByType import CleanDataByType as
 class Collector():
     def __init__(self, collect_parameter, db_client):
         """
-        # Description
-            데이터 수집 및 저장하는 Class
+        데이터 수집 및 저장하는 Class
 
-        # Args    
-            - collect_parameter (_Dictionary_) : 데이터를 저장하기에 필요한 Parameter
-            - db_client (_instance_) : instance to get data from influx DB       
+        Args: 
+            collect_parameter (_Dictionary_) : 데이터를 저장하기에 필요한 Parameter
+            db_client (_instance_) : instance to get data from influx DB       
         
         >>> collect_parameter = {
-                "uploadType" : upload_type,
-                "dataReadType" : data_read_type,
-                "dbName" : db_name,
-                "msName" : { 
-                    "folder_fileListName_flag" : True, # folder안의 file list 이름으로 msName을 지정할 시 True (Folder 업로드시 사용)
-                    "name" : None # folder_fileListName_flag가 True 인 경우 직접 msName 을 기입하는 name 은 None 기입
-                },
-                "filePath" : path,
-                "selectedDatas" : selected_datas, # data read type 이 selectedData 인 경우 필요한 param
-                "timeColumnName" : time_column,
-                "selectedColumns" : selected_columns,
-                "duplicatedTimeColumnProcessingMethod" : dtcpm,
-                "encoding" : encoding
-            }
+                        "uploadType" : upload_type,
+                        "dataReadType" : data_read_type,
+                        "dbName" : db_name,
+                        "msName" : { 
+                                "folder_fileListName_flag" : True, # folder안의 file list 이름으로 msName을 지정할 시 True (Folder 업로드시 사용)
+                                "name" : None # folder_fileListName_flag가 True 인 경우 직접 msName 을 기입하는 name 은 None 기입
+                                },
+                        "filePath" : path,
+                        "selectedDatas" : selected_datas, # data read type 이 selectedData 인 경우 필요한 param
+                        "timeColumnName" : time_column,
+                        "selectedColumns" : selected_columns,
+                        "duplicatedTimeColumnProcessingMethod" : dtcpm,
+                        "encoding" : encoding
+                        }
+
         """
         ## InfluxDB
         self.db_client = db_client
@@ -72,9 +72,8 @@ class Collector():
             
     def get_data_by_condition(self):
         """
-        # Description
-            - 사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
-            - Data Upload Type2에 해당
+        - 사용자가 입력한 특정 컬럼이 특정 조건을 만족하는 데이터만 추출하는 함수
+        - Data Upload Type2에 해당
         """
         self.get_basic_data()
         for n in range(len(self.selected_datas[0]["Selected_columns"])):
@@ -93,15 +92,13 @@ class Collector():
 
     def get_high_capacity_data(self):
         """
-        # Description
-            - 파일 사이즈가 큰 csv를 읽고 변수에 저장하는 기능
+        파일 사이즈가 큰 csv를 읽고 변수에 저장하는 기능
         """
         self.dataset = pd.read_csv(self.file_path, chunksize=25000, encoding=self.encoding, error_bad_lines=False)        
     
     def set_selected_column(self):
         """
-        # Description
-            - 사용할 칼럼들을 self.selected_columns 변수에 저장하는 기능
+        사용할 칼럼들을 self.selected_columns 변수에 저장하는 기능
         """
         if self.selected_columns == None:
             columns = list(self.data.columns)
@@ -110,8 +107,7 @@ class Collector():
 
     def write_data(self):
         """
-        # Description
-            - influxDB에 데이터를 입력하는 기능
+        influxDB에 데이터를 입력하는 기능
         """
         print("Writing Data ...")
         print('=========== ms name : '+self.ms_name+' ===========')
@@ -121,10 +117,9 @@ class Collector():
 
     def collect_clean_data(self, data):
         """
-        # Description
-            data를 clean, write 하는 함수
-            - param data: 사용자가 저장하고 싶은 데이터
-            - type data: dataframe
+        data를 clean, write 하는 함수
+        - param data: 사용자가 저장하고 싶은 데이터
+        - type data: dataframe
         """
         cdbt = CDBT(data, self.selected_columns, self.time_column, self.dtcpm, self.field_type)
         self.data = cdbt.clean_data()
@@ -133,16 +128,14 @@ class Collector():
 
     def collect_clean_dataset(self):
         """
-        # Description
-            dataset을 clean, write 하는 함수로 대용량 데이터일 경우 활용
+        dataset을 clean, write 하는 함수로 대용량 데이터일 경우 활용
         """
         for data in self.dataset:
             self.collect_clean_data(data)
 
     def collect_by_data_read_type(self):
         """
-        # Description
-            data_read_type(basic, selectedData, highCapacity)에 따라 데이터를 읽고 저장하는 기능
+        data_read_type(basic, selectedData, highCapacity)에 따라 데이터를 읽고 저장하는 기능
         """
         if self.data_read_type == "highCapacity":
             self.get_high_capacity_data()
@@ -157,8 +150,7 @@ class Collector():
     
     def collect(self):
         """
-        # Description
-            파일 또는 폴더를 구분하여 각 데이터들을 처리하는 인터페이스
+        파일 또는 폴더를 구분하여 각 데이터들을 처리하는 인터페이스
         """
         if self.upload_type == "File":
             self.collect_by_data_read_type()

@@ -64,8 +64,7 @@ class RegressionTest():
         Test model and return result
 
         Returns:
-            preds (ndarray): prediction data
-            trues (ndarray): original data
+            nd.array : preds, trues
         """
         print("\nStart testing data\n")
         preds, trues = self.model.test(self.test_params, self.test_loader)

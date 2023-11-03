@@ -3,8 +3,15 @@ sys.path.append("../")
 
 def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     
-    ms_name = meta_info['ms_name']
+    # for influx
     bucket_name = meta_info['bucket_name']
+    ms_name = meta_info['ms_name']
+
+    # for mongo
+    domain_name = meta_info['domain_name']
+    collection_name = meta_info['collection_name']
+
+    # parameters
     ingestion_type = meta_info['ingestion_type']
     ingestion_param = meta_info['ingestion_param']
     integration_param = meta_info['integration_param']
@@ -19,7 +26,7 @@ def save_processed_integrated_data_meta(db_client, mongo_client, meta_info):
     db_client.write_db(bucket_name, ms_name, data)
     # 3. Save Meta##########################
     meta_info['integration_param']['integration_frequency'] = meta_info['integration_param']['integration_frequency'].total_seconds()
-    mongo_client.insert_document(bucket_name, ms_name, meta_info)
+    mongo_client.insert_document(domain_name, collection_name, meta_info)
     
     
     
@@ -34,11 +41,14 @@ def ingestion_processing_integration(db_client, ingestion_type, ingestion_param,
     else:
         from Clust.clust.preprocessing import processing_interface
         multiple_dataset = processing_interface.get_data_result(processing_type, multiple_dataset, process_param)
+    
+    print("#+#+#+#+#+#+#+##+++++++++++#+#+#+#+##")
+    print(multiple_dataset)
+    print("#+#+#+#+#+#+#+##+++++++++++#+#+#+#+##")
 
     # 3. Data Integration
     from Clust.clust.integration import integration_interface
     data = integration_interface.get_data_result('multiple_dataset_integration', multiple_dataset, integration_param)
-
     
         
     return data

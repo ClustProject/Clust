@@ -144,7 +144,7 @@ class RNNClust(BaseRegressionModel):
             inference_loader (DataLoader): inference data loader
 
         Returns:
-            preds (ndarray) : Inference result data
+            nd.array : preds(Inference result data)
         """
         device = infer_params['device']
         batch_size = infer_params['batch_size']
@@ -178,7 +178,8 @@ class RNNClust(BaseRegressionModel):
         export trained model 
 
         Returns:
-            self.model (Object): current model object
+            object : self.model(current model object)
+
         """
         return self.model
 
@@ -214,8 +215,7 @@ class RNNClust(BaseRegressionModel):
             val_y (dataframe): validation y data (regression only)
 
         Returns:
-            train_loader (DataLoader): train data loader
-            val_loader (DataLoader): validation data loader
+            DataLoader : train_loader, val_loader
         """
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
@@ -241,7 +241,7 @@ class RNNClust(BaseRegressionModel):
             test_y (np.array): test y data
         
         Returns:
-            test_loader (DataLoader) : test data loader
+            DataLoader : test_loader
         """
         features, targets = torch.Tensor(test_x), torch.Tensor(test_y)
 
@@ -261,7 +261,7 @@ class RNNClust(BaseRegressionModel):
             infer_x (np.array): inference X data
         
         Returns:
-            inference_loader (DataLoader) : inference data loader
+            DataLoader : inference_loader
         """
         # ensure input shape is [batch_size, seq_len, input_size]
         if len(infer_x.shape) != 3:

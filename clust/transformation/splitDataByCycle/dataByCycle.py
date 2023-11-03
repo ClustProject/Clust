@@ -8,7 +8,6 @@ import pandas as pd
 
 def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, frequency=None):
     """
-    # Description
     get Cycle Data Set        
 
     Args:
@@ -33,7 +32,6 @@ def getCycleSelectDataSet(data_input, feature_cycle, feature_cycle_times, freque
 
 def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, frequency=None):
     """
-    # Description
     get Cycle Data
 
     Args:
@@ -89,7 +87,6 @@ def getCycleselectDataFrame(query_data, feature_cycle, feature_cycle_times, freq
 
 def cycle_data_set(data, unit, unit_delta_time, num, FullCycle):    
     """
-    # Description
     - 단위의 데이터 셋 리턴
     - Split the data by num * unit
 

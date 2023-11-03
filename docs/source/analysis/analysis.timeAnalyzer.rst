@@ -1,11 +1,10 @@
 timeAnalyzer
 =================================
 
-timeAnalyzer
-------------------------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Subpackages:
 
    timeAnalyzer/analysis.timeAnalyzer_py
 

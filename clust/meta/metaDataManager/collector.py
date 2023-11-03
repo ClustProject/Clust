@@ -112,7 +112,7 @@ class ReadData():
         :param influx_instance: influx_instance
         :type influx_instance: instance of InfluxClient class
 
-        :returns: 결과 데이터
+        :returns: multiple_dataset(결과 데이터)
         :rtype: dataframe 
 
         """

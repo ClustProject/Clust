@@ -15,7 +15,8 @@ def Xy_data_preparation(ingestion_param_X, data_y_flag, ingestion_param_y, inges
         db_client (_type_): influx db client
 
     Returns:
-        data_X(pd.DataFrame), data_y(pd.DataFrame):각각의 데이터프레임
+        pd.DataFrame : data_X, data_y
+
     """
     print(ingestion_param_X)
     from Clust.clust.data import data_interface
@@ -46,7 +47,7 @@ def Xy_data_scaling_train(data_name_X, data_X, data_name_y, data_y, scaler_param
     ...                  "scale_method":스케일 방법 }
 
     Returns:
-        dataX_scaled (pd.DataFrame), datay_scaled (pd.DataFrame) : 스케일링을 거친 X, y 데이터프레임
+        pd.DataFrame : dataX_scaled, datay_scaled / 스케일링을 거친 X, y 데이터프레임
 
     """
 
@@ -84,10 +85,11 @@ def Xy_data_scaling_test(data_X, data_y, X_scaler_file_path, y_scaler_file_path,
         scaler_param (dict): scaler 관련 파라미터
 
     Returns:
-        test_X (pd.DataFrame): scaled X
-        scaler_X (scaler): X scaler
-        test_y (pd.DataFrame): scaled y
-        scaler_y (scaler): y scaler
+        pd.DataFrame : test_X, test_y
+
+    Returns:
+        scaler : scaler_X, scaler_y
+
     """
     from Clust.clust.ML.tool import scaler as ml_scaler
     test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
@@ -106,8 +108,11 @@ def X_data_scaling_infer(data_X, X_scaler_file_path, y_scaler_file_path, scaler_
         scaler_param (dict): scaler 관련 파라미터
 
     Returns:
-        infer_X (pd.DataFrame): scaled X
-        scaler_y (scaler): y scaler
+        pd.DataFrame : infer_X
+
+    Returns:
+        scaler : scaler_y
+
     """
     from Clust.clust.ML.tool import scaler as ml_scaler
     infer_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, X_scaler_file_path, scaler_param)
@@ -125,7 +130,8 @@ def clean_low_quality_column(data, transform_info):
         transform_info (dict): 어느정도의 퀄러티까지의 컬럼을 삭제할 것인가에 대한 기준
 
     Returns:
-        data (pd.DataFrame):처리 데이터
+        pd.DataFrame : data
+
     """
     
     model_clean = transform_info['data_clean_option']
@@ -156,7 +162,11 @@ def split_data_by_mode(X, y, split_ratio, transform_param):
     ...                     "day_window_size": 일을 기준으로 한 윈도우 사이즈 }
 
     Returns:
-        train_x, val_x, train_y, val_y (pd.DataFrame), transform_param(dict): 분할된 데이터 및 transform 파라미터
+        pd.DataFrame : train_x, val_x, train_y, val_y
+
+    Returns:
+        dictionary : transform_param(분할된 데이터 및 transform 파라미터)
+
     """
     if transform_param['split_mode'] =='window_split':
         transform_param['future_step'] = None
@@ -182,7 +192,8 @@ def transform_data_by_split_mode(transformParameter, X, y):
     >>> transformParameter = { split mode, window_split or step_split }
 
     Returns:
-        X_array, y_array (np.array): 학습을 위해 최종적으로 준비된 데이터
+        np.array : X_array, y_array(학습을 위해 최종적으로 준비된 데이터)
+
     """
     print("transformParameter['split_mode']: ", transformParameter['split_mode'])
     if transformParameter['split_mode'] =='window_split':
@@ -246,16 +257,13 @@ def CLUST_regresstion_test(test_X_array, test_y_array, model_info):
         test_X_array (np.array): 입력 test X
         test_y_array np.array): 입력 test y
         model_info (dict): 모델 파라미터
-            model_method (str): 모델 메서드
-            model_file_path (str): 모델 파일 패스
-            model_parameter (dict): 파라미터
 
     >>> model_info = { "model_method" : 모델 메서드,
     ...                "model_file_path": 모델 파일 패스, 
     ...                "model_parameter": 파라미터 }
     
     Returns:
-        preds, trues (np.arrau): 예측값, 실제값
+        np.array : preds, trues /  예측값, 실제값
 
     """
     test_parameter = model_info['train_parameter']
@@ -283,7 +291,10 @@ def get_scaler_information_by_y_flag(data_y_flag, scaler_X, scaler_y, feature_X_
         feature_y_list (list): feature_y_list
 
     Returns:
-        scaler, feature_list: scaler, feature list of scaler
+        scaler: scaler
+
+    Returns:
+        list :feature_list
     """
     if data_y_flag:
         scaler = scaler_y
@@ -308,7 +319,11 @@ def get_final_metrics(preds, trues, scaler_param, scaler, feature_list, target):
         target (string): target feature
 
     Returns:
-        df_result(pd.dataframe), result_metrics(dict): final result and test metrics
+        pd.dataframe : df_result
+
+    Returns:
+        dictionary : result_metrics(final result and test metrics)
+
     """
     from Clust.clust.tool.stats_table import metrics
     from Clust.clust.ML.tool import data as ml_data 
@@ -329,7 +344,8 @@ def CLUST_regression_inference(infer_X, model_info):
         model_info (dict): model parameters
 
     Returns:
-        preds (np.array): prediction value array
+        np.array : preds(prediction value array)
+
     """
 
     inference_parameter = model_info['train_parameter']
@@ -400,11 +416,6 @@ def clust_classification_test(test_X_array, test_y_array, model_info):
         test_X_array (np.array): 입력 test X
         test_y_array np.array): 입력 test y
         model_info (dict): 모델 파라미터
-            train_parameter (dict): 학습 파라미터
-            model_method (str): 모델 메서드
-            model_parameter (dict): 파라미터
-            model_file_path (str): 모델 파일 패스
-
             
     >>> model_info = { "train_parameter" : 학습 파라미터,
     ...                "model_method" : 모델 메서드,
@@ -413,7 +424,8 @@ def clust_classification_test(test_X_array, test_y_array, model_info):
 
     
     Returns:
-        preds, trues (np.arrau): 예측값, 실제값
+        np.array : preds, trues / 예측값, 실제값
+
     """
 
     test_parameter = model_info['train_parameter']
@@ -440,7 +452,8 @@ def clust_classification_inference(infer_X, model_info):
         model_info (dict): model parameters
 
     Returns:
-        preds (np.array): prediction value array
+        np.array : preds(prediction value array)
+
     """
 
     inference_parameter = model_info['train_parameter']

@@ -26,7 +26,8 @@ def convert_param_for_backend(params):
         params (dict): dictionary data input
 
     Returns:
-        params (dict): dictionary data output
+        dictionary : params(dictionary data output)
+
     """
     # chage tpye string to bool -> ex) 'true' -> True
     params = chagne_type_str_to_bool(params)
@@ -61,7 +62,7 @@ def chagne_type_str_to_bool(dict_data):
         dict_data (dict): dictionary data input
 
     Returns:
-        dict_data (dict): dictionary data output
+        dictionary : params(dictionary data output)
     """
 
     for key, value in dict_data.items():
@@ -91,7 +92,7 @@ def check_model_name(model_name, model_name_info):
         model_name_info (array): model name information
 
     Returns:
-        model_name(str): final model name
+        string: model_name
     """
     # model name & path
     if model_name is None or model_name == 'None':
@@ -111,7 +112,7 @@ def get_train_data_meta(params, meta_client):
         meta_client (mongodb client):mongodb
 
     Returns:
-        result (dict): measurement information meta
+        dictionary : result(measurement information meta)
     """
     bk_name = params['bucket_name']
     ms_name = params['ms_name']
@@ -137,10 +138,8 @@ def train_data_preparation(params, influxdb_client):
         influxdb_client (influxdb client): influxdb client.
 
     Returns:
-        train_X_array (ndarray): train X data
-        train_y_array (ndarray): train y data
-        val_X_array (ndarray): validation X data
-        val_y_array (ndarray): validation y data
+        ndarray : train_X_array, train_y_array, val_X_array, val_y_array
+
     """
     # 1. Oirignla data ingestion
     data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], 
@@ -185,7 +184,7 @@ def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
         val_y_array (ndarray): validation y data
 
     Returns:
-        params: trained model info including model file path.
+        dictionary : params(trained model info including model file path)
     """
     # model info update
     from Clust.clust.ML.common import model_parameter_setting
@@ -234,10 +233,11 @@ def test_data_preparation(params, influxdb_client):
         influxdb_client (influxdb client): influxdb client.
 
     Returns:
-        test_X_array (ndarray): test X data
-        test_y_array (ndarray): test y data
-        scaler_X (scaler): X scaler
-        scaler_y (scaler): y scaler
+        ndarray : test_X_array, test_y_array
+
+    Returns:
+        scaler : scaler_X, scaler_y
+
     """
     # 1. Oirignla data ingestion
     data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], params['data_y_flag'], params['ingestion_param_y'], 'ms_all', influxdb_client)
@@ -259,7 +259,8 @@ def ML_test(params, test_X_array, test_y_array, scaler):
         scaler (scaler): X or y sclaer
 
     Returns:
-        result (dict): dictionary contains Echart format Dataframe result and result metrics
+        dictionary : result(dictionary contains Echart format Dataframe result and result metrics)
+
     """
     if params['data_y_flag']:
         feature_list = params['ingestion_param_y']['feature_list']
@@ -293,7 +294,7 @@ def _get_scaled_np_data(data, scaler, scaler_param):
         scaler_param (bool): scaler flag
 
     Returns:
-        scaled_data (ndarray): scaled data
+        ndarray : scaled_data
     """
     if scaler_param=='scale':
         scaled_data = scaler.transform(data)
@@ -311,8 +312,11 @@ def _get_scaled_infer_data(data, scaler_file_path, scaler_param):
         scaler_param (bool): scaler flag
 
     Returns:
-        result (ndarray): scaled data
-        scaler (scaler): scaler
+        ndarray : reuslt(scaled data)
+
+    Returns:
+        scaler : scaler
+
     """
     scaler =None
     result = data
@@ -350,7 +354,7 @@ def ML_inference(params, infer_X_array, scaler):
         scaler (scaler): y scaler
 
     Returns:
-        prediction_result (pd.DataFrame): prediction result 
+        pd.DataFrame : prediction_result
     """
     target = params['ingestion_param_y']['feature_list']
 

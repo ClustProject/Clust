@@ -17,11 +17,11 @@ def plot_predictions(df_result):
         ...                     y=df_baseline.prediction,
         ...                     mode="lines",
         ...                     line={"dash": "dot"},
-        ...             name='linear regression',
-        ...             marker=dict(),
-        ...             text=df_baseline.index,
-        ...             opacity=0.8,
-        ...             )
+        ...                     name='linear regression',
+        ...                     marker=dict(),
+        ...                     text=df_baseline.index,
+        ...                     opacity=0.8,
+        ...                     )
         >>> data.append(baseline)
 
     """

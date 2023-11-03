@@ -101,8 +101,7 @@ class CNN1DClust(BaseRegressionModel):
             test_loader (DataLoader): data loader
 
         Returns:
-            preds (ndarray): prediction data
-            trues (ndarray): original data
+            nd.array : preds, trues
         """
         device = test_params['device']
         batch_size = test_params['batch_size']
@@ -143,7 +142,7 @@ class CNN1DClust(BaseRegressionModel):
             inference_loader (DataLoader): inference data loader
 
         Returns:
-            preds (ndarray) : Inference result data
+            nd.array : preds(Inference result data)
         """
         device = infer_params['device']
         batch_size = infer_params['batch_size']
@@ -213,8 +212,7 @@ class CNN1DClust(BaseRegressionModel):
             val_y (np.array): validation y data
 
         Returns:
-            train_loader (DataLoader): train data loader
-            val_loader (DataLoader): validation data loader
+            DataLoader : train_loader, val_loader
         """
         datasets = []
         for dataset in [(train_x, train_y), (val_x, val_y)]:
@@ -241,7 +239,7 @@ class CNN1DClust(BaseRegressionModel):
             test_y (np.array): test y data
         
         Returns:
-            test_loader (DataLoader) : test data loader
+            DataLoader : test_loader
         """
         test_data = TensorDataset(torch.Tensor(test_x), torch.Tensor(test_y))
         test_loader = DataLoader(test_data, batch_size=batch_size, shuffle=True, drop_last=True)
@@ -258,7 +256,7 @@ class CNN1DClust(BaseRegressionModel):
             infer_x (np.array): inference X data
         
         Returns:
-            inference_loader (DataLoader) : inference data loader
+            DataLoader : inference_loader
         """
         # ensure input shape is [batch_size, seq_len, input_size]
         if len(infer_x.shape) != 3:

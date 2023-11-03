@@ -111,6 +111,8 @@ class DataOutlier():
     ### Outlier Detector
     def getOneDetectionResult(self, data, config):
         """    
+
+        
         Args:
             data (dataFrame): data for outlier Detetcion
             config (dictionary): config
@@ -121,7 +123,7 @@ class DataOutlier():
             >>> config = { 
             ...     'algorithm': 'IF', # outlier detection에 활용할 알고리즘 정의, {'SR', 'LOF', 'MoG', 'KDE', 'IF'} 중 택 1            
             ...     'alg_parameter': alg_parameter like default AlgParameter    # option
-            ... }
+            ...     }
             >>> data_outlier = mod.DataOutlier(raw_data)
             >>> replaced_data, index_list = data_outlier.getOneDetectionResult(config, 95)
 

@@ -14,8 +14,7 @@ class CycleData():
     """
     def __init__(self):
         """
-        # Description
-            All data to be stored must start with '00:00:00'.
+        All data to be stored must start with '00:00:00'.
 
         """
         # self.start, self.end = self.getTimePointByDayUnit(data)
@@ -26,9 +25,8 @@ class CycleData():
 
     def getHourCycleSet(self, data, num, FullCycle):
         """
-        # Description
-            - Split the data by time ('00:00 to 59:59').
-            - If num is 2 or more, split num*hour units.
+        - Split the data by time ('00:00 to 59:59').
+        - If num is 2 or more, split num*hour units.
 
         Args:
             data (_pd.dataframe_) : timeseires data
@@ -95,10 +93,9 @@ class CycleData():
 
     def getDayCycleSet(self, data, num, FullCycle):        
         """
-        # Description
-            - day 단위의 데이터 셋 리턴
-            - Split the data by time ('00:00:00 ~ 23:59:59').
-            - If num is 2 or more, split num*day units.
+        - day 단위의 데이터 셋 리턴
+        - Split the data by time ('00:00:00 ~ 23:59:59').
+        - If num is 2 or more, split num*day units.
 
         Args:
             data (_pd.dataframe_) : timeseires data
@@ -165,10 +162,9 @@ class CycleData():
 
     def getWeekCycleSet(self, data, num, FullCycle):     
         """
-        # Description
-            - Week 단위의 데이터 셋 리턴
-            - Split the data by time ('Monday 00:00:00 ~ Sunday 23:59:59').
-            - If num is 2 or more, split num*week units. 예를 들어서 num이 2일 경우, 2주 단위로 자름
+        - Week 단위의 데이터 셋 리턴
+        - Split the data by time ('Monday 00:00:00 ~ Sunday 23:59:59').
+        - If num is 2 or more, split num*week units. 예를 들어서 num이 2일 경우, 2주 단위로 자름
 
         Args:
             data (_pd.dataframe_) : timeseires data
@@ -233,10 +229,9 @@ class CycleData():
 
     def getMonthCycleSet(self, data, num, FullCycle):       
         """
-        # Description
-            - Month 단위의 데이터셋 리턴
-            - Split the data by time ('1st 00:00:00 ~  last day 23:59:59').
-            - If num is 2 or more, split num*month units.
+        - Month 단위의 데이터셋 리턴
+        - Split the data by time ('1st 00:00:00 ~  last day 23:59:59').
+        - If num is 2 or more, split num*month units.
 
         Args:
             data (_pd.dataframe_): timeseires data
@@ -312,12 +307,10 @@ class CycleData():
 
 
     def getYearCycleSet(self, data, num, FullCycle):
-      
         """
-        # Description
-            - Year 단위의 데이터셋 리턴
-            - Split the data by time ('01-01 00:00:00 ~  12-31 23:59:59').
-            - If num is 2 or more, split num*year units.
+        - Year 단위의 데이터셋 리턴
+        - Split the data by time ('01-01 00:00:00 ~  12-31 23:59:59').
+        - If num is 2 or more, split num*year units.
 
         Args:
             data (_pd.dataframe_): timeseires data
