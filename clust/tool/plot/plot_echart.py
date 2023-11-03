@@ -1,6 +1,6 @@
 import json
 import numpy as np
-
+import pandas as pd
 
 def get_echart_json_result(graph_type, df)  :
     """ 
@@ -15,42 +15,42 @@ def get_echart_json_result(graph_type, df)  :
         dictionary : result_json
             
     """   
-    if graph_type == 'heat_map' :  
-        '''
-                CO2     Noise      PM10      PM25      Temp      VoCs     humid
-        CO2    1.000000  0.498797  0.316684  0.368846 -0.095152  0.275486  0.228707
-        Noise  0.498797  1.000000  0.157772  0.185372  0.468728  0.350617 -0.288541
-        PM10   0.316684  0.157772  1.000000  0.994489 -0.059075  0.361747  0.609859
+    data={}
+    
+    if isinstance(df, pd.DataFrame):
+        if graph_type == 'heat_map' :  
+            '''
+                    CO2     Noise      PM10      PM25      Temp      VoCs     humid
+            CO2    1.000000  0.498797  0.316684  0.368846 -0.095152  0.275486  0.228707
+            Noise  0.498797  1.000000  0.157772  0.185372  0.468728  0.350617 -0.288541
+            PM10   0.316684  0.157772  1.000000  0.994489 -0.059075  0.361747  0.609859
+            
+            '''   
+            data = df.round(1).to_json()
+                    
+        elif graph_type == 'line_chart' :
+            data = get_index_value_by_columns(df)
         
-        '''   
-        data = df.round(1).to_json()
-                
-    elif graph_type == 'line_chart' :
-        data = get_index_value_by_columns(df)
-    
-    elif graph_type == 'bar_chart' :
-        data = get_bar_data(df)
+        elif graph_type == 'bar_chart' :
+            data = get_bar_data(df)
 
-    elif graph_type == 'box_plot' :
-        data = get_index_value_by_columns(df)
-    
-    elif graph_type == 'scatter' :
-        data = get_scatter_data(df)
-    
-    elif graph_type == 'area' :
-        data = get_index_value_by_columns(df)
-    
-    elif graph_type == 'histogram' : 
-        #echart 제공 안 됨
-        data = get_index_value_by_columns(df)    
-    
-    elif graph_type == 'density' : 
-        #echart 제공 안 됨
-        data = get_index_value_by_columns(df)
-    
-    else   :
-        data = {}
-
+        elif graph_type == 'box_plot' :
+            data = get_index_value_by_columns(df)
+        
+        elif graph_type == 'scatter' :
+            data = get_scatter_data(df)
+        
+        elif graph_type == 'area' :
+            data = get_index_value_by_columns(df)
+        
+        elif graph_type == 'histogram' : 
+            #echart 제공 안 됨
+            data = get_index_value_by_columns(df)    
+        
+        elif graph_type == 'density' : 
+            #echart 제공 안 됨
+            data = get_index_value_by_columns(df)
+        
         
     result  = json.dumps(data)
 
@@ -84,7 +84,9 @@ def get_index_value_by_columns(df):
     import pandas as pd
     if isinstance(df.index, pd.DatetimeIndex):
         result['index'] = list(df.index.strftime('%Y-%m-%d %H:%M'))
-    
+    else:
+        result['index'] = list(df.index)
+
     result['value']={}
     
     for column in df.columns:

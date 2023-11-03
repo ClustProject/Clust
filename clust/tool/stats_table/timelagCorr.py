@@ -29,15 +29,18 @@ class TimeLagCorr():
 
         """
         lags    = np.arange(-lag_number, lag_number, 1)
-        d1      = dataSet[column]
-        d2DF    = dataSet.drop(column, axis=1)
+        if column in list(dataSet.columns):
+            d1      = dataSet[column]
+            d2DF    = dataSet.drop(column, axis=1)
 
-        result = pd.DataFrame(index = lags)
-        for d2_column in d2DF.columns:
-            d2 = d2DF[d2_column]
-            result[d2_column] = self.timelag_crosscorr(d1, d2, lags)
+            result = pd.DataFrame(index = lags)
+            for d2_column in d2DF.columns:
+                d2 = d2DF[d2_column]
+                result[d2_column] = self.timelag_crosscorr(d1, d2, lags)
 
-        result = result.round(2)
+            result = result.round(2)
+        else:
+            result = None
         
         return result
         

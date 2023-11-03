@@ -29,8 +29,10 @@ class DataAnalysis():
         from Clust.clust.tool.stats_table import timelagCorr
         CCT = timelagCorr.TimeLagCorr()
         result = CCT.df_timelag_crosscorr(df, feature_key, lag_number)
-        max_position_correlation_table = CCT.get_absmax_index_and_values(result) 
-        
+        if isinstance(result, pd.DataFrame):
+            max_position_correlation_table = CCT.get_absmax_index_and_values(result) 
+        else:
+            max_position_correlation_table = None
         return max_position_correlation_table
    
     def scale_different_x_y_frequency(self, time_scale, data, sampling_flag = True):
