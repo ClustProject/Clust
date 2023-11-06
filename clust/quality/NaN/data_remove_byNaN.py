@@ -106,6 +106,16 @@ class DataRemoveByNaNStatus():
         return data
  
     def consecutiveNaNCountMap(self, data):
+        """
+        Count consecutive NaN 
+        
+        Args:
+            data(dataframe) : data
+
+        Returns:
+            dataframe : consecutiveNanCountMap
+
+        """
         consecutiveNanCountMap = pd.DataFrame() 
         column_list = data.columns
         for column_name in column_list:
@@ -114,6 +124,15 @@ class DataRemoveByNaNStatus():
         return consecutiveNanCountMap
     
     def removeNaNDataByTotalNaNLimitNum(self, totalNanLimitNum, data):
+        """
+        remove NaN Data by Total NaN Limit Num 
+
+        Args:
+            data(dataframe) : data
+
+        Returns:
+            dataframe : data
+        """
         columnNaNCountSet = data.isnull().sum()
         for column_name in data.columns:
             columnNaNCount = columnNaNCountSet[column_name]

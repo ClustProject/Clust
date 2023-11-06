@@ -11,6 +11,9 @@ def get_meta_table(mongodb_url):
 
     Args:
         mongodb_url(string) : mongo api
+
+    Returns:
+        json : exploration_js
     
     """
     wiz_c = WizApiMongoMeta(mongodb_url)

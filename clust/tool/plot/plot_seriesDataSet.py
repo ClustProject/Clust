@@ -4,6 +4,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 def groupSeriesFig(data, title, fig_width, fig_height, fig_width_num = 4):
+    """
+    
+    
+    """
     id_num = len(data)
     fig_height_num = int(np.ceil(id_num/fig_width_num))
 
@@ -19,6 +23,10 @@ def groupSeriesFig(data, title, fig_width, fig_height, fig_width_num = 4):
 
 
 def show_all_column_data(data, fig_width, fig_height, fig_width_num = 4):
+    """
+    
+    
+    """
     column_num = len(data.columns)
     fig_height_num = int(np.ceil(column_num/fig_width_num))
     ax = data.plot(subplots=True, layout=(fig_height,fig_width), figsize=(fig_width, fig_height)).bach()

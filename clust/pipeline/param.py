@@ -4,6 +4,18 @@ sys.path.append("../..")
 import datetime
 
 def set_default_param():
+    """
+    set default parameter for pipeline
+
+    
+    Returns:
+        default_param : default parameter
+
+    >>> default_param: {
+                        data_refinement, data_outlier, data_split, data_selection, data_integration,
+                        data_quality_check, data_imputation, data_smoothing, data_scaling
+                        }
+    """
     default_param={}
     ## 1. refine_param
     data_freq_min = 60
@@ -65,6 +77,7 @@ def set_default_param():
     
     ## 9. scaling_param
     default_param['data_scaling']={'flag': True, 'method':'minmax'} 
+
     return default_param
 
 def set_outlier_param(param):
@@ -293,7 +306,13 @@ def get_outlier_detection_param(algorithm, param):
 def get_outlier_detection_param_meta_server(algorithm, algorithmParam):
     """
     outlier detection을 위한 parameter로 알고리즘에 따른 parameter를 받음
-    
+
+    Args:
+        algorithm(string): algorithm
+        algorithmParam(integer): algorithm parameter
+
+    Returns:
+        Dictionary : Parameter[algorithm]
     
     """
     Parameter = {

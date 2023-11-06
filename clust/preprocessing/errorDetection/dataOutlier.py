@@ -159,6 +159,9 @@ class DataOutlier():
     
     def getModel(self, data_col):
         """
+
+
+
         Args:
             data_col (np.array): data for each column
             
@@ -189,6 +192,9 @@ class DataOutlier():
     
     def getIndexList(self, data_col, model):
         """
+        
+
+
         Args:
             data_col (np.array): data for each column
             model (model): fitted model of selected outlier detection algorithm
@@ -208,6 +214,9 @@ class DataOutlier():
     
 def showResult(data, result, outlierIndex):
     """
+
+
+
     Args:
         data_col (np.array): data for each column
         model (model): fitted model of selected outlier detection algorithm
@@ -226,6 +235,9 @@ def showResult(data, result, outlierIndex):
 
 def getMoreNaNDataByNaNIndex(data, NaNIndex):
     """
+
+
+
     Args:
         data_col (DataFrame): data
         NaNIndex (Dictionary): NaNIndex
@@ -242,6 +254,9 @@ def getMoreNaNDataByNaNIndex(data, NaNIndex):
 
 def getNaNIndex(data):
     """
+
+
+    
     Args:
         data_col (DataFrame): data
         

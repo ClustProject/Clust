@@ -17,6 +17,8 @@ What is Clust?
 
 |
 
+
+
 CLUST PLATFORM
 ----------------------------
 - `CLUST Data Analytics Platform <http://imrc-clust.keti.re.kr:20001/Index/>`_
@@ -42,10 +44,35 @@ CLUST PLATFORM
 |
 
 
+CLUST PLATFORM
+----------------------------
+- `CLUST Data Analytics Platform <http://imrc-clust.keti.re.kr:20001/Index/>`_
+
+.. image:: ../image/clust_cda.png
+   :scale: 50%
+   :alt: clsut cda platform
+   :align: center
+
+|
+
+- `CLUST Data Management Platform <http://imrc-clust.keti.re.kr:20002/>`_
+
+.. image:: ../image/clust_cdm.png
+   :scale: 50%
+   :alt: clsut cdm platform
+   :align: center
+
+
+
+
+|
+
+
+CLUST Repository
+------------------------------------
 
 .. toctree::
    :maxdepth: 1
-   :caption: CLUST Repository:
    
    analysis
    ingestion

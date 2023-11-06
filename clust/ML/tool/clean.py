@@ -13,7 +13,7 @@ from Clust.clust.quality.NaN import clean_feature_data
 # p3_training
 def clean_nan_df(data_set, nan_processing_param, timedelta_frequency_sec):
     """
-    
+    Remove NaN data & Imputation by cycle data set
 
     Args:
         data_set (dataframe): data set
