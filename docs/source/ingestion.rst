@@ -12,9 +12,19 @@ CSV에서 추출한 데이터를 InfluxDB, MongoDB 또는 반대로 Database에 
 
 InfluxDB
 ---------------------------------
- Authentication Information
+시간 특성을 가진 시계열 데이터의 효율적인 운용을 위하여 일반적인 RDB(Relational Database)가 아닌 시계열에 특화된 TSDB(Time Series Database)를 사용하였다.
+일반 RDB와 다르게 TSDB인 InfluxDB는 Database = Bucket , table = measurement 라고 명명한다. 
+InfluxDB 구버전인 1.x 이하의 버전에서는 InfluxQL를 사용하며 일반적인 SQL Query와 유사한 모습을 보여준다. 하지만 2.x 이상 버전부터 독자적인 flux Query를 사용하여 시계열 데이터에 특화된 언어를 사용한다.
+본 Documents의 Ingetion/Influx에서 두가지의 Query를 사용법을 확인할 수 있다.
 
-::
+.. image:: ../image/influx_aa.png
+   :scale: 50%
+   :alt: influx structure
+   :align: center
+
+
+
+Authentication Information: ::
 
    Authentication={
          "url" : url,
@@ -23,21 +33,14 @@ InfluxDB
          }
 
 
-
-.. image:: ../image/influx_aa.png
-   :scale: 50%
-   :alt: influx structure
-   :align: center
-   
-
-
 |
 
 MongoDB
 ----------------------------------
- Authentication Information
+InfluxDB에 저장되는 Data와 트레이닝된 Model의 메타 정보를 저장하기 위하여 MongoDB를 사용하였다.
+MongoDB는 NoSql구조로서 Database, colletion, document로 구성되어 있다. 
 
-::
+Authentication Information: ::
 
    Authentication={
             "username" : username,
@@ -57,9 +60,17 @@ MongoDB
 
 
 
+CSV
+-----------------------------
+- dataframe save to CSV
+- CSV to dataframe
+
+
+|
+
+
 Packages
 -----------------------------
-
 
 .. toctree::
    :maxdepth: 2
