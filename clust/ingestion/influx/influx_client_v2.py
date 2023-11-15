@@ -595,8 +595,9 @@ class InfluxClient():
                 |> range(start: {start_time}, stop: {end_time}) 
                 |> filter(fn: (r) => r._measurement == "{ms_name}")
                 |> filter(fn: (r) => r.{tag_key} == "{tag_value}")
+                |> group(columns: ["_field"])
                 |> drop(columns: ["_start", "_stop", "_measurement"])
-                |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+                |> count()
                 '''
         else:
             query = f'''
@@ -607,8 +608,16 @@ class InfluxClient():
             |> drop(columns: ["_start", "_stop", "_measurement"])
             |> count()
             '''
+        print("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
         data_frame = self.DBClient.query_api().query_data_frame(query)
-        data_count = int(data_frame["_value"][0])
+        print(data_frame)
+        print("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
+        print(type(data_frame))
+        print("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ")
+        if data_frame.empty:
+            data_count = 0
+        else:
+            data_count = int(data_frame["_value"][0])
 
         return data_count
 
@@ -790,3 +799,60 @@ class InfluxClient():
 
         """
         self.DBClient.close()
+
+
+    def get_data_by_time_resampling(self, freq, start_time, end_time, bk_name, ms_name, tag_key=None, tag_value=None):
+        """
+        Get data of the specific measurement based on :guilabel:`start-end duration`
+        *get_datafront_by_duration(self, start_time, end_time)*
+
+        Args:
+            start_time (Timestamp): start time
+            end_time (Timestamp): end time
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+            tag_key (string): tagkey (option) 
+            tag_value (string): tagValue (option)
+        
+        Returns:
+            Dataframe: df, time duration
+        """
+
+        if isinstance(start_time, str):
+            if 'T' not in start_time:
+                if len(start_time) < 12:
+                    start_time = start_time + " 00:00:00"
+                    end_time = end_time + " 23:59:59"
+                start_time = datetime.strptime(start_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+                end_time = datetime.strptime(end_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+            else:
+                pass
+        else: #Not String:
+            start_time = start_time.strftime(UTC_Style)
+            end_time = end_time.strftime(UTC_Style)
+
+        if tag_key:
+            if tag_value:
+                query = f'''
+                from(bucket: "{bk_name}") 
+                |> range(start: {start_time}, stop: {end_time}) 
+                |> filter(fn: (r) => r._measurement == "{ms_name}")
+                |> filter(fn: (r) => r.{tag_key} == "{tag_value}")
+                |> aggregateWindow(every: {freq}, fn: mean)
+                |> drop(columns: ["_start", "_stop", "_measurement"])
+                |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+                '''
+        else:
+            query = f'''
+            from(bucket: "{bk_name}") 
+            |> range(start: {start_time}, stop: {end_time}) 
+            |> filter(fn: (r) => r._measurement == "{ms_name}")
+            |> aggregateWindow(every: {freq}, fn: mean)
+            |> drop(columns: ["_start", "_stop", "_measurement"])
+            |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+            '''
+            
+        data_frame = self.DBClient.query_api().query_data_frame(query=query)
+        data_frame = self.cleanup_df(data_frame)
+
+        return data_frame
