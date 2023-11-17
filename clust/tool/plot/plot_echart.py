@@ -15,7 +15,7 @@ def get_echart_json_result(graph_type, df)  :
         dictionary : result_json
             
     """   
-    data={}
+    data = {}
     
     if isinstance(df, pd.DataFrame):
         if graph_type == 'heat_map' :  
@@ -26,7 +26,12 @@ def get_echart_json_result(graph_type, df)  :
             PM10   0.316684  0.157772  1.000000  0.994489 -0.059075  0.361747  0.609859
             
             '''   
-            data = df.round(1).to_json()
+            result ={}
+            #heat map 경우 min, max 추가
+            result['max']=df.max().max()
+            result['min']=df.min().min()
+            result['value']=df.round(1).to_json()
+            data = result
                     
         elif graph_type == 'line_chart' :
             data = get_index_value_by_columns(df)
