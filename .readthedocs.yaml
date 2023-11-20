@@ -25,6 +25,12 @@ sphinx:
   configuration: docs/source/conf.py
   fail_on_warning: true
 
+
+before_build:
+  - pip install -r requirements.txt
+  - pip install -e git+https://github.com/ClustProject/Clust.git#egg=Clust
+
+
   # You can configure Sphinx to use a different builder, for instance use the dirhtml builder for simpler URLs
   # builder: "dirhtml"
   # Fail on all warnings to avoid broken references
