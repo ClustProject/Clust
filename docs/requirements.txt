@@ -49,3 +49,6 @@ tensorflow-estimator
 tslearn
 tqdm
 ujson
+
+
+-e git+https://github.com/ClustProject/Clust.git#egg=Clust
