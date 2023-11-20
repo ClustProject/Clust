@@ -113,6 +113,10 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 
+# PDF에 목차 추가
+latex_use_parts = True
+
+
 master_doc = 'index'
 
 latex_documents = [

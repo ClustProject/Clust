@@ -40,7 +40,6 @@ scikit-learn
 scipy
 simplejson
 sranodec
-sklearn
 sympy
 tensorboard
 tensorboard-data-server
