@@ -51,4 +51,4 @@ tqdm
 ujson
 
 
--e git+https://github.com/ClustProject/Clust.git#egg=Clust
+git+https://github.com/ClustProject/Clust.git#egg=Clust
