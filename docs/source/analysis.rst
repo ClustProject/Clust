@@ -1,4 +1,4 @@
-Clust : analysis
+Clust: analysis
 =================================
 
 (해당 Repository에 대한 설명)
