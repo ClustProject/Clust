@@ -64,15 +64,15 @@ CLUST Repository
    :maxdepth: 2
    
    analysis
+   data
    ingestion
    integration
    meta
    ML
+   pipeline
    preprocessing
    quality
    tool
    transformation
-   data
-   pipeline
 
 

@@ -6,11 +6,13 @@ sys.path.append("../../..")
 def get_data_result(quality_type, data_input, quality_param):
     """
         Interface function to check data quality.
-        * quality_type : data_with_clean_feature
-            - Clean Data by each column
-                - Delete bad quality column
-                - Impute missing data in surviving columns of baseline quality by the NaNInfoCleanData parameter (using linear replacement)
-            - input data must be processed and refined by preprocessing (after refining and making more NaN)
+        quality_type : data_with_clean_feature
+        - Clean Data by each column
+
+            - Delete bad quality column
+            - Impute missing data in surviving columns of baseline quality by the NaNInfoCleanData parameter (using linear replacement)
+            
+        - input data must be processed and refined by preprocessing (after refining and making more NaN)
 
         Args:
             quality_type (string) : quality check type
@@ -21,10 +23,12 @@ def get_data_result(quality_type, data_input, quality_param):
             DataFrame: Clean Data
 
         Example:
+
             >>> quality_param = {
             ...    "quality_method":"data_with_clean_feature", 
             ...    "quality_param":{"nan_processing_param":{'type':'num', 'ConsecutiveNanLimit':100, 'totalNaNLimit':1000}}
             ...    }
+
     """
 
     nan_processing_param = quality_param['nan_processing_param'] 

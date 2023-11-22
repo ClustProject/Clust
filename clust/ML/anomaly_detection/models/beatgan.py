@@ -4,18 +4,21 @@ import torch
 import torch.nn as nn
 
 class Generator(nn.Module):
-    '''
+    """
     Args:
-            in_c : Number of input channel (Number of columns of input data)
-            hidden_c : Number of channel of hidden layer 
-            latent_c : Number of channel of latent feature (between Encoder - Decoder)
+        in_c : Number of input channel (Number of columns of input data)
+        hidden_c : Number of channel of hidden layer 
+        latent_c : Number of channel of latent feature (between Encoder - Decoder)
+
     Example:
-        G = Generator(
-            in_c     = 51,
-            hidden_c = 32,
-            latent_c = 16
-        )
-    '''
+
+        >>> G = Generator(
+                in_c     = 51,
+                hidden_c = 32,
+                latent_c = 16
+                )
+
+    """
     def __init__(self,in_c: int, hidden_c: int, latent_c: int):
         super(Generator,self).__init__()
         self.encoder = Encoder(in_c,hidden_c,latent_c)
@@ -27,16 +30,19 @@ class Generator(nn.Module):
         return recon_x, latent_z
     
 class Discriminator(nn.Module):
-    '''
+    """
     Args:
-            in_c : Number of input channel (Number of columns of input data)
-            hidden_c : Number of channel of hidden layer 
+        in_c : Number of input channel (Number of columns of input data)
+        hidden_c : Number of channel of hidden layer 
+
     Example:
-        D = Discriminator(
-            in_c     = 51,
-            hidden_c = 32
-        )
-    '''
+        
+        >>> D = Discriminator(
+                in_c     = 51,
+                hidden_c = 32
+                )
+    """
+
     def __init__(self,in_c: int, hidden_c: int):
         super(Discriminator,self).__init__()
         
@@ -74,18 +80,20 @@ def weights_init(mod):
 class Encoder(nn.Module):
     def __init__(self,in_c: int, hidden_c :int, latent_c: int):
         super(Encoder, self).__init__()
-        '''
+        """
         Args:
             in_c : Number of input channel (Number of columns of input data)
             hidden_c : Number of channel of hidden layer 
             latent_c : Number of channel of latent feature (between Encoder - Decoder)
+
         Example:
-            E = Encoder(
-                in_c     = 51,
-                hidden_c = 32,
-                latent_c = 16
-            )
-        '''
+
+            >>> E = Encoder(
+                    in_c     = 51,
+                    hidden_c = 32,
+                    latent_c = 16
+                    )
+        """
         self.in_c = in_c # num of features of input data 
         self.hc = hidden_c
         self.layers = self.build_layers(latent_c)
@@ -106,18 +114,20 @@ class Encoder(nn.Module):
 class Decoder(nn.Module):
     def __init__(self, in_c: int, hidden_c: int, latent_c: int):
         super(Decoder,self).__init__()
-        '''
+        """
         Args:
             in_c : Number of input channel (Number of columns of input data)
             hidden_c : Number of channel of hidden layer 
             latent_c : Number of channel of latent feature (between Encoder - Decoder)
+
         Example:
-            D = Decoder(
-                in_c     = 51,
-                hidden_c = 32,
-                latent_c = 16
-            )
-        '''
+
+            >>> D = Decoder(
+                    in_c     = 51,
+                    hidden_c = 32,
+                    latent_c = 16
+                    )
+        """
         self.layers = nn.Sequential(
             conv_tp_block(latent_c,hidden_c*16,10,1,0),
             conv_tp_block(hidden_c*16,hidden_c*8),
@@ -133,13 +143,16 @@ class Decoder(nn.Module):
         return self.layers(x)
 
 def conv_block(in_c: int, out_c: int, kernel: int=4, stride: int=2, padding=1, b=False, bn=False):
-    ''' Convolution Block for Encoder, Decoder 
+    """
+    Convolution Block for Encoder, Decoder 
+
     Args:
         in_c  : Number of input channel 
         out_c : Number of output channel 
         b     : Bias 
         bn    : Batch Normalization 
-    '''
+
+    """
     cblock = [] 
     cblock.append(nn.Conv1d(in_c, out_c, kernel, stride, padding, bias=b))
     if bn:
@@ -148,13 +161,15 @@ def conv_block(in_c: int, out_c: int, kernel: int=4, stride: int=2, padding=1, b
     return nn.Sequential(*cblock)
 
 def conv_tp_block(in_c: int, out_c: int, kernel: int=4, stride: int=2, padding=1, b=False, bn=False):
-    '''Convolution Transpose Block for Decoder 
+    """
+    Convolution Transpose Block for Decoder 
+
     Args:
         in_c  : Number of input channel 
         out_c : Number of output channel 
         b     : Bias 
         bn    : Batch Normalization 
-    '''
+    """
     return nn.Sequential(
         nn.ConvTranspose1d(in_c, out_c, kernel, stride, padding, bias=b),
         nn.BatchNorm1d(out_c),
