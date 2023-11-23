@@ -47,6 +47,7 @@ javascript E-chart 그래프 생성 관련 툴이다.
 **graph type**
 
 ::
+
    ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density'] 
 
 
@@ -57,6 +58,7 @@ pyplot 생성을 위한 툴이다. 사용자 지정 graph type에 따라 plt를 
 **graph type**
 
 ::
+   
    ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
 
 
