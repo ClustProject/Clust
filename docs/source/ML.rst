@@ -15,17 +15,24 @@ Example 1
 
 ML Structure & Inheritance
 
-.. image:: ../image/ml_1.png
-   :scale: 70%
-   :alt: ml_1
+.. figure:: ../image/machine_learning/ml_1.png
+   :scale: 50%
+   :alt: machine learning Structure
    :align: center
+   :class: with-border
+
+   machine learning Structure
+
 
 |
 
-.. image:: ../image/ml_2.png
+.. figure:: ../image/machine_learning/ml_2.png
    :scale: 80%
-   :alt: ml_2
+   :alt: machine learning Structure
    :align: center
+   :class: with-border
+
+   machine learning Structure
 
 
 |

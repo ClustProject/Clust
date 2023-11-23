@@ -6,7 +6,7 @@ plot, stats table 이미지, 설명 추가
 
 Plot EDA
 
-.. image:: ../image/plot_eda.png
+.. image:: ../image/tool/plot_eda.png
    :scale: 70%
    :alt: Plot EDA
    :align: center

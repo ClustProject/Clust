@@ -17,10 +17,15 @@ InfluxDB
 InfluxDB 구버전인 1.x 이하의 버전에서는 InfluxQL를 사용하며 일반적인 SQL Query와 유사한 모습을 보여준다. 하지만 2.x 이상 버전부터 독자적인 flux Query를 사용하여 시계열 데이터에 특화된 언어를 사용한다.
 본 Documents의 Ingetion/Influx에서 두가지의 Query를 사용법을 확인할 수 있다.
 
-.. image:: ../image/influx_aa.png
+
+.. figure:: ../image/ingestion/influx_structure.png
    :scale: 50%
    :alt: influx structure
    :align: center
+   :class: with-border
+
+   InfluxDB Structure
+
 
 
 
@@ -49,12 +54,13 @@ Authentication Information: ::
             "port" : port
             }
 
-
-.. image:: ../image/mongo_aa.png
+.. figure:: ../image/ingestion/mongo_structure.png
    :scale: 50%
    :alt: mongo structure
    :align: center
+   :class: with-border
 
+   MongoDB Structure
 
 |
 

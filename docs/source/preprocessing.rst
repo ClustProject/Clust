@@ -12,10 +12,15 @@ Preprocessing
 
 preprocessing module
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-.. image:: ../image/preprocessing_module.png
+.. figure:: ../image/preprocessing/preprocessing_module.png
    :scale: 50%
    :alt: preprocessing module image
    :align: center
+   :class: with-border
+
+   preprocessing module
+
+
 
 |
 
@@ -27,7 +32,7 @@ Preprocessing Pipeline
 데이터는 하나의 데이터 혹은 여러 개의 데이터 묶음에 대해서 일괄 처리가 가능하다. 데이터 전처리는 파라미터의 기술 내용에 따라 취사 선택하여 활용된다.
 만약 데이터 전처리 파라미터가 정의되지 않은 경우 processing parameter를 생성하는 함수를 통해 자동으로 생성이 가능하다.
 
-.. figure:: ../image/preprocessing_pipeline.png
+.. figure:: ../image/preprocessing/preprocessing_pipeline.png
    :scale: 50%
    :alt: preprocessing pipeline image
    :align: center
