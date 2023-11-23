@@ -23,7 +23,12 @@ def get_graph_result(graph_format, graph_type, df, param = None):
 
             
     """
-        
+
+    # by graph_type
+    if graph_type =='area':
+        df = abs(df)
+
+    # by graph_format
     if graph_format =='web':
         result = plot_echart.get_echart_json_result(graph_type, df) # return echart style json
     elif graph_format =='plt':
