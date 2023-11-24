@@ -9,9 +9,9 @@ integration_interface
    :show-inheritance:
 
 
-integrationInterface
+integration_by_method
 ---------------------------------------
-.. automodule:: clust.integration.integrationInterface
+.. automodule:: clust.integration.integration_by_method
    :members:
    :undoc-members:
    :show-inheritance:

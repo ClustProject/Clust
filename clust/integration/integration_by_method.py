@@ -7,7 +7,7 @@ from Clust.clust.integration.ML import RNNAEAlignment
 from Clust.clust.integration.meta import data_integration
 
 
-class IntegrationInterface():
+class IntegrationByMethod():
     """
     Data Integration Class
     """

@@ -1,6 +1,5 @@
 
 import plotly.graph_objects as go
-import chart_studio.plotly as py
 from plotly.offline import *
 
 def plot_predictions(df_result):

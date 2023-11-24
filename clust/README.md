@@ -34,7 +34,7 @@ clust/
   │       └── csvCollector.py 
   │
   ├── integration
-  │   ├── integrationInterface.py
+  │   ├── integration_by_method.py
   │   ├── integration_interface.py
   │   ├── meta 
   │   │   ├── data_integration.py 
@@ -89,7 +89,6 @@ clust/
   │   │   ├── plot_image.py
   │   │   ├── plot_interface.py
   │   │   ├── plot_plt.py
-  │   │   ├── plot_seriesDataSet.py
   │   │   └── plot_two_data.py
   │   └── stats_table
   │       ├── correlation.py

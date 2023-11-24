@@ -42,14 +42,6 @@ plt
    :show-inheritance:
 
 
-series dataset
-------------------------------
-.. automodule:: clust.tool.plot.plot_seriesDataSet
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
 two Data
 ------------------------------
 .. automodule:: clust.tool.plot.plot_two_data

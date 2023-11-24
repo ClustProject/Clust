@@ -134,7 +134,7 @@ class DataIntegration():
 
     def converting_sampling_method(self, sampling_method_string):
         """
-        Description 추가 필요
+        데이터 변환시 샘플링하는 방법을 mean, median 혹은 가장 common한 값으로 정의하는 모듈
 
         Args:
             sampling_method_string(string) : mean or median or objectDownFunc or objectUpFunc

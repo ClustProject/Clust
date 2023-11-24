@@ -6,12 +6,14 @@ File 관련, Plot 관련, 분석 테이블 생성 관련 모듈이 존재한다.
 |
 File Module
 ----------------------------------------------------------
-파일 경로 확인 및 경로 String 반환 기능을 제공한다.
+파일 처리에 대한 기능을 포함하며 현재 아래와 같은 기능을 제공한다.
+- 파일 경로의 존재 유무 확인 (check_path)
+- 파일 경로 String 반환  (get_user_file_path)
 
 |
-Plot Module
+Plot Module (interface)
 ----------------------------------------------------------
-데이터 분석 결과를 그래프로 시각화할 때 필요한 기능들을 제공한다.
+데이터 혹은 그 분석 결과를 여러가지 타입과 포맷으로 시각화하기 위한 필요 기능들을 제공한다.
 
 .. figure:: ../image/tool/docs_plot_img.png
    :scale: 50%
@@ -21,30 +23,37 @@ Plot Module
 
    Plot Module
 
-
 Plot Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-결과 시각화를 위한 사용자 지정 파라미터는 해당 인터페이스를 통과한다.
-시용자 지정에 따라 echart tool, plot tool, image tool 등 활용 툴이 달라진다.
-
-
-Plot Echart
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-javascript E-chart 그래프 생성 관련 툴이다.
-사용자 지정 graph type에 따라 데이터 프레임을 json 형태로 가공하여 리턴하는 기능을 제공한다.
-
-**Input Parameter**
-
-- graph type
-
-::
-
-   ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' | 'histogram' | 'area' | 'density'] 
+결과 시각화를 위한 사용자 지정 파라미터와 데이터 프레임을 바탕으로 각 포맷에 따른 시각화 결과를 생성한다.
+시용자 지정에 따라 echart tool, plt tool, image tool 를 활용한다.
 
 
 Plot Plt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot 생성을 위한 툴이다. 사용자 지정 graph type에 따라 plt를 생성한 후 리턴하는 기능을 제공한다.
+pyplot용 객체 plt를 생성을 위한 툴이다. 
+
+Plot Echart
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+javascript E-chart 그래프 생성 관련 툴이다. 사용자 지정 graph type에 따라 데이터 프레임을 json 형태로 가공하여 리턴하는 기능을 제공한다.
+
+Plot Image
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyplot 이미지 관련 툴이다. 사용자 지정 graph type에 따라 plt 이미지를 생성하고, 이미지를 byte string으로 변환 후 리턴하는 기능을 제공한다.
+
+
+Plot Module (ETC)
+----------------------------------------------------------
+
+Plot feature
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+특정 조건 및 입력에 따라 plt를 생성하는 툴이다.
+
+Plot two data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+두개의 컬럼에 대해서 비교하는 시계열 데이터를 생성한다. 보통 머신러닝 후 실제 데이터와 예측된 데이터를 비교하기 위해 쓰인다.
+
+
 
 **Input Parameter**
 
@@ -55,42 +64,32 @@ pyplot 생성을 위한 툴이다. 사용자 지정 graph type에 따라 plt를 
    ['heat_map' | 'line_chart' | 'bar_chart' | 'scatter' | 'box_plot' |'histogram'| 'area'|'density'] 
 
 
-Plot Image
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot 이미지 관련 툴이다. 사용자 지정 graph type에 따라 plt 이미지를 생성하고, 이미지를
-byte string으로 변환 후 리턴하는 기능을 제공한다.
+**Input Parameter**
 
+- graph format
 
-Plot feature
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot feature 관련 툴이다.
+::
 
-Plot seriesDataSet
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot seriesDataSet 관련 함수를 제공한다.
-(현재 사용하지 않는 툴 2023.11.23 기준)
+   ['web' | 'image' | 'plt' ] 
 
-Plot two data
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot 데이터 predictions 함수를 제공한다.
 
 
 |
 Stats Table Module
 ----------------------------------------------------------
-데이터의 상관관계를 구하고 테이블을 제공하는 기능을 모아둔 패키지이다.
+데이터를 통계적으로 분석하고 그 결과를 테이블로 제공하는 기능을 모아둔 패키지이다.
 
 Correlation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Correlation 기능을 모아둔 클래스이다.
+데이터에 대한 상관 관계를 도출하는 도구를 모아둔 클래스이다.
 
 Metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Metrics 관련 함수들을 모아두었다.
+기계 학습 성능 비교를 위한 Metrics 생성 함수를 제공한다.
 
 timelagCorr
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TimeLag Correlation 기능을 모아둔 클래스이다.
+TimeLag Correlation을 생성하는 기능을 제공하는 클래스이다.
 
 
 |
