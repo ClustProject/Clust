@@ -1,6 +1,6 @@
-timeAnalyzer
+Time Analyzer
 =================================
-
+|
 mean_by_holiday
 ------------------------------
 .. automodule:: clust.analysis.timeAnalyzer.mean_by_holiday

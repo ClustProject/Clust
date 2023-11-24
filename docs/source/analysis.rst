@@ -54,17 +54,16 @@ Analysis Interface는 사용자 지정 파라미터를 확인한 후,
 
 **Input Parameter**
 
-- analysis_method (_str_) : 분석 방법    
-- analysis_param (_dict_) : analysis method에 따른 적절한 파라미터
+- analysis_method : 분석 방법    
+- analysis_param : analysis method에 따른 적절한 파라미터
 
 ::
         
 
     >>> analysis_method = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency'] # dataframe input
     ... ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag'] # dictionary input  
-
-    >>> 'analysis_param' = {} #original, scaling       
-    ... analysis_param = {'feature_key': 'PM10', 'lag_number': '24'} 
+          
+    >>> analysis_param = {'feature_key': 'PM10', 'lag_number': '24'} 
     ...                    # max_correlation_value_index_with_lag
     ...                    # multiple_maxabs_correlation_value_table_with_lag, 
     ...                    # multiple_maxabs_correlation_index_table_with_lag
@@ -73,26 +72,24 @@ Analysis Interface는 사용자 지정 파라미터를 확인한 후,
     ...                                   'y_frequency': {'unit': 'D', 'num': 1}}} # scale_xy_frequency
     
 
-
-
 |
-bucketReport
+Bucket Report
 ----------------------------------------------------------
 bucket 이름과 feature에 의거한 리포트 정보를 생성하는 모듈이다.
 
 |
-dataAnalysis
+Data Analysis
 ----------------------------------------------------------
 단일 데이터 또는 데이터셋 분석과 관련한 함수를 모아놓은 패키지이다.
 
 
-Data Analysis
+Single Data Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 사용자 지정 파라미터에 의거하여 단일 데이터를 분석하는 기능이다. Clust EDA Single 메뉴에서 활용한다.
 
 **Input Parameter**
 
-- analysis_method (_str_) : 분석 방법    
+- analysis_method : 분석 방법    
 
 ::
   
@@ -113,7 +110,7 @@ DataSet Analysis
 
 **Input Parameter**
 
-- analysis_method (_str_) : 분석 방법    
+- analysis_method : 분석 방법    
 
 ::
 
@@ -122,11 +119,11 @@ DataSet Analysis
 
 .. figure:: ../image/analysis/docs_dataSet_analysis_img.png
    :scale: 30%
-   :alt: Data Set scaling 분석 시각화 결과
+   :alt: DataSet scaling 분석 시각화 결과
    :align: center
    :class: with-border
 
-   Data Set scaling 분석 시각화 결과
+   DataSet scaling 분석 시각화 결과
 |
 Packages
 -----------------------------
