@@ -52,7 +52,7 @@ Analysis Interface는 사용자 지정 파라미터를 확인한 후,
 그에 따라 단일 데이터 또는 데이터셋 분석을 결정하는 인터페이스이다.
 사용자 지정 파라미터에는 analysis_method와 analysis_param이 있다.
 
-**user parameter**
+**Input Parameter**
 
 - analysis_method (_str_) : 분석 방법    
 - analysis_param (_dict_) : analysis method에 따른 적절한 파라미터
@@ -90,7 +90,7 @@ Data Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 사용자 지정 파라미터에 의거하여 단일 데이터를 분석하는 기능이다. Clust EDA Single 메뉴에서 활용한다.
 
-**user parameter**
+**Input Parameter**
 
 - analysis_method (_str_) : 분석 방법    
 
@@ -111,7 +111,7 @@ DataSet Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 데이터셋을 분석하는 기능이다. Clust EDA Multiple 메뉴에서 활용한다.
 
-**user parameter**
+**Input Parameter**
 
 - analysis_method (_str_) : 분석 방법    
 

@@ -1,36 +1,25 @@
 Clust: tool
 =================================
-Clust tool은 특정 메뉴에서 사용하는 툴을 모아놓은 패키지라기 보단, 모든 모듈 곳곳에서 
-활용하는 툴을 모아놓은 패키지이다.
-크게 file 관련, plot 관련, 분석 테이블 생성 관련 모듈이 존재한다.
+CLUST tool 패키지에는 CLUST Platform 여러 곳에서 공통으로 활용하는 기능들인 
+File 관련, Plot 관련, 분석 테이블 생성 관련 모듈이 존재한다.
 
--
-tool 설명
-plot, stats table 이미지, 설명 추가
+|
+File Module
+----------------------------------------------------------
+파일 경로 확인 및 경로 String 반환 기능을 제공한다.
 
+|
+Plot Module
+----------------------------------------------------------
+데이터 분석 결과를 그래프로 시각화할 때 필요한 기능들을 제공한다.
 
-Plot EDA
-
-.. image:: ../image/tool/plot_eda.png
-   :scale: 70%
-   :alt: Plot EDA
+.. figure:: ../image/tool/docs_plot_img.png
+   :scale: 50%
+   :alt: Plot Module
    :align: center
+   :class: with-border
 
-|
-
-
-File
-----------------------------------------------------------
-파일 입출력 관련 기능을 제공하는 툴이다.
-
-|
-
-
-Plot
-----------------------------------------------------------
-데이터 분석 결과를 그래프로 시각화 할 때 사용하는 툴이다. 
-
-[간단한 설명 + 이미지]
+   Plot Module
 
 
 Plot Interface
@@ -44,7 +33,9 @@ Plot Echart
 javascript E-chart 그래프 생성 관련 툴이다.
 사용자 지정 graph type에 따라 데이터 프레임을 json 형태로 가공하여 리턴하는 기능을 제공한다.
 
-**graph type**
+**Input Parameter**
+
+- graph type
 
 ::
 
@@ -55,7 +46,9 @@ Plot Plt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pyplot 생성을 위한 툴이다. 사용자 지정 graph type에 따라 plt를 생성한 후 리턴하는 기능을 제공한다.
 
-**graph type**
+**Input Parameter**
+
+- graph type
 
 ::
    
@@ -72,35 +65,28 @@ Plot feature
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pyplot feature 관련 툴이다.
 
-
 Plot seriesDataSet
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot seriesDataSet 관련 툴이다.
+pyplot seriesDataSet 관련 함수를 제공한다.
 (현재 사용하지 않는 툴 2023.11.23 기준)
-
 
 Plot two data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot 데이터 예측 관련 툴이다.
+pyplot 데이터 predictions 함수를 제공한다.
 
 
 |
-
-
-Stats Table
+Stats Table Module
 ----------------------------------------------------------
 데이터의 상관관계를 구하고 테이블을 제공하는 기능을 모아둔 패키지이다.
-
 
 Correlation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Correlation 기능을 모아둔 클래스이다.
 
-
 Metrics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Metrics 관련 함수들을 모아두었다.
-
 
 timelagCorr
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -108,8 +94,6 @@ TimeLag Correlation 기능을 모아둔 클래스이다.
 
 
 |
-
-
 Packages
 -----------------------------
 
