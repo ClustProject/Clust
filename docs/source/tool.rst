@@ -4,7 +4,6 @@ CLUST tool 패키지에는 CLUST Platform 여러 곳에서 공통으로 활용�
 File 관련, Plot 관련, 분석 테이블 생성 관련 모듈이 존재한다.
 
 |
-
 File Module
 ----------------------------------------------------------
 파일 처리에 대한 기능을 포함하며 현재 아래와 같은 기능을 제공한다.
@@ -13,41 +12,101 @@ File Module
 - 파일 경로 String 반환  (get_user_file_path)
 
 |
-
 Plot Module (interface)
 ----------------------------------------------------------
 데이터 혹은 그 분석 결과를 여러가지 타입과 포맷으로 시각화하기 위한 필요 기능들을 제공한다.
 
-.. figure:: ../image/tool/docs_plot_img.png
-   :scale: 50%
-   :alt: Plot Module
+.. figure:: ../image/tool/docs_plot_interface_img_1.png
+   :scale: 60%
+   :alt: plot_interface
    :align: center
    :class: with-border
 
-   Plot Module
-
+   [그림.plot_interface 기능]
 
 Plot Interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 결과 시각화를 위한 사용자 지정 파라미터와 데이터 프레임을 바탕으로 각 포맷에 따른 시각화 결과를 생성한다.
-시용자 지정에 따라 echart tool, plt tool, image tool 를 활용한다.
+시용자 지정 파라미터에 따라 echart tool, plt tool, image tool 를 활용한다.
+
+.. figure:: ../image/tool/docs_plot_interface_img_2.png
+   :scale: 60%
+   :alt: plot_interface
+   :align: center
+   :class: with-border
+
+   [그림. graph_format 파라미터에 따른 그래프 생성 결과]
 
 
 Plot Plt
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 pyplot용 객체 plt를 생성을 위한 툴이다. 
 
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+
+   * - Input
+     - graph_format (_str_), graph_type (_str_), df (_dataFrame_), Param (_option_, _json_)
+
+   * - Output
+     - plt_ (_pyplot module_) 
+
 
 Plot Echart
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-javascript E-chart 그래프 생성 관련 툴이다. 사용자 지정 graph type에 따라 데이터 프레임을 json 형태로 가공하여 리턴하는 기능을 제공한다.
+javascript E-chart 그래프 생성 관련 툴이다. 
+사용자 지정 graph type에 따라 데이터 프레임을 json 형태로 가공하여 리턴하는 기능을 제공한다.
+가공된 json은 E-chart에서 그래프 생성에 활용한다.
+
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+
+   * - Input
+     - graph_format (_str_), graph_type (_str_), df (_dataFrame_), Param (_option_, _json_)
+
+   * - Output
+     - result_json (_json_)  
 
 
 Plot Image
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pyplot 이미지 관련 툴이다. 사용자 지정 graph type에 따라 plt 이미지를 생성하고, 이미지를 byte string으로 변환 후 리턴하는 기능을 제공한다.
+pyplot 이미지 관련 툴이다. 사용자 지정 graph type에 따라 plt 이미지를 생성하고, 
+이미지를 byte string으로 변환 후 리턴하는 기능을 제공한다.
+
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+
+   * - Input
+     - graph_format (_str_), graph_type (_str_), df (_dataFrame_), Param (_option_, _json_)
+
+   * - Output
+     - base64_jpgData (str)
 
 
+|
+**Plot Graph Image Result**
+
+.. figure:: ../image/tool/docs_plot_graph_img.png
+   :scale: 60%
+   :alt: graph_type별 파라미터에 따른 그래프 이미지
+   :align: center
+   :class: with-border
+
+   [그림. graph_type별 파라미터에 따른 그래프 이미지]
+
+|
 Plot Module (ETC)
 ----------------------------------------------------------
 
@@ -79,9 +138,7 @@ Plot two data
    ['web' | 'image' | 'plt' ] 
 
 
-
 |
-
 Stats Table Module
 ----------------------------------------------------------
 데이터를 통계적으로 분석하고 그 결과를 테이블로 제공하는 기능을 모아둔 패키지이다.

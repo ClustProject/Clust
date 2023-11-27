@@ -24,7 +24,7 @@ class FileMetaGenerator():
         - fileMeta가 dictionary인 경우 (single)
             - fileMeta가 + additonal meta 정보를 합쳐 생성
         - fileMeta가 list인 경우 (multi)
-            - fileMeta의 개별 dictionary에 대해 +additional meta  합치고 반환
+            - fileMeta의 개별 dictionary에 대해 +additional meta 합치고 반환
 
     """
     # Algorithm에 대해서 한번 더 컨펌
