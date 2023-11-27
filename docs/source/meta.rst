@@ -1,8 +1,8 @@
 Clust: meta
 =================================
-시계열 데이터의 추가 정보인 Meta 데이터를 관리할 수 있는 기능들을 모아놓은 패키지이다. 주로 CLUST Data Management Server에서 활용된다.
+시계열 데이터의 추가 정보인 Meta 데이터를 관리할 수 있는 기능들을 모아놓은 패키지이다. 주로 CLUST Data Management Server에서 활용한다.
 
-
+|
 .. figure:: ../image/meta/docs_meta_img.png
    :scale: 70%
    :alt: 이미지
@@ -48,12 +48,20 @@ metaGenerator
 
 analysisDBMetaGenerator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-BK -분석 A 메타를 생성 관련 기능들을 제공한다. 특정 Bucket 하위에 존재하는 measurement들의 분석 정보를 수집하고,
-measurement분석 정보의 평균값을 계산하며, 최종 BK -분석 A 메타를 생성하는데 활용할 수 있다.
+BK -분석 A 메타를 생성 관련 기능들을 제공한다.
+
+- Features
+   - 특정 Bucket 하위에 존재하는 measurement들의 분석 정보를 수집
+   - measurement분석 정보의 평균값을 계산
+   - BK -분석 A 메타를 생성
 
 analysisMSMetaGenerator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-MS -분석 A 메타를 생성 관련 기능들을 제공한다. 사용자가 지정한 분석 방법을 확인하고, 분석 결과를 생성한다.
+MS -분석 A 메타를 생성 관련 기능들을 제공한다.
+
+- Features
+   - 사용자가 지정한 분석 방법을 확인
+   - MS -분석 A 메타를 생성
 
 fileMetaGenerator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -69,7 +77,7 @@ ingestion_meta_exploration
 CLUST 고정 11개 도메인에 해당하는 메타 정보를 데이터 베이스에서 가져온다.
 
 
-**main_domian_list**
+**고정 main domian list**
 
 ::
 
