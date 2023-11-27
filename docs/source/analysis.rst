@@ -5,6 +5,7 @@ CLUST 플랫폼은 사용자가 시계열 데이터를 적극 활용 할 수 있
 Clust Analysis 패키지는 분석 메타 생성에 활용되는 도구로써 사용자 지정 파라미터에 의거한 기능들을 제공한다.
 
 |
+
 Analyzer
 ----------------------------------------------------------
 Analyzer는 지정 라벨(Statistic Analyzer) 또는 지정 시간(Time Analyzer)에 따라 데이터를 분석하는 모듈들이다. 
@@ -28,6 +29,7 @@ Statistic Analyzer는 지정 라벨을 이용하여 시계열 데이터를 분�
 
 
 |
+
 Time Analyzer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Time Analyzer는 시간 기준에 따라 시계열 데이터를 분석하는 모듈이다. 
@@ -72,12 +74,15 @@ Analysis Interface는 사용자 지정 파라미터를 확인한 후,
     ...                                   'y_frequency': {'unit': 'D', 'num': 1}}} # scale_xy_frequency
     
 
+
 |
+
 Bucket Report
 ----------------------------------------------------------
 bucket 이름과 feature에 의거한 리포트 정보를 생성하는 모듈이다.
 
 |
+
 Data Analysis
 ----------------------------------------------------------
 단일 데이터 또는 데이터셋 분석과 관련한 함수를 모아놓은 패키지이다.
@@ -92,10 +97,10 @@ Single Data Analysis
 - analysis_method : 분석 방법    
 
 ::
-  
-
-  analysis_method = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency']
+   
+   analysis_method = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency']
     
+
 .. figure:: ../image/analysis/docs_data_analysis_img.png
    :scale: 30%
    :alt: Single Data scaling 분석 시각화 결과
@@ -103,6 +108,7 @@ Single Data Analysis
    :class: with-border
 
    Single Data scaling 분석 시각화 결과
+
 
 DataSet Analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -113,9 +119,8 @@ DataSet Analysis
 - analysis_method : 분석 방법    
 
 ::
+   analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
 
-
- analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
 
 .. figure:: ../image/analysis/docs_dataSet_analysis_img.png
    :scale: 30%
@@ -124,7 +129,11 @@ DataSet Analysis
    :class: with-border
 
    DataSet scaling 분석 시각화 결과
+
+   
 |
+
+
 Packages
 -----------------------------
 

@@ -105,12 +105,42 @@ Error Detection
 --------------------------------
 
 
-Error to NaN
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 Certain Error
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+시계열 데이터 상 확실한 에러 데이터에 대해서만 제거한다. 각 Feature별 데이터 존재 가능 범위 밖의 데이터나 불필요하게 반복되는 데이터를 삭제하는데 유용하게 사용이 가능하다.
+
+- Features
+   - 유효구간 내부의 데이터만 판별
+   - 특정 에러 값에 대해 데이터 처리 가능하도록 Python 해석 가능한 NaN으로 표기
+   - 해당 함수를 거치면 Error라고 판별한 데이터가 NaN으로 변경되기 때문에 Input보다 더 많은 NaN 데이터가 발생
+
+
+**Certain Parameter Example**
+
+::
+  
+  if certain_param['flag']:
+    certain_param['abnormal_value_list'] = {'all':[99.9, 199.9, 299.9, 9999, -99.9, -199.9, -299.9, -9999, -9999.0]} 
+    certain_param['data_min_max_limit']  = { 'max_num': {
+          'in_temp': 80,
+          'in_humi': 100,
+          'in_co2': 10000,
+          'in_voc': 60000,
+          'in_noise': 90,
+          'in_pm10': 1000,
+          'in_pm25': 1000,
+          'in_pm01': 1000},
+          'min_num': {'in_temp': -40,
+          'in_humi': 0,
+          'in_co2': 0,
+          'in_voc': 0,
+          'in_noise': 35,
+          'in_pm10': 0,
+          'in_pm25': 0,
+          'in_pm01': 0}}
+
 
 
 UnCertain Error
