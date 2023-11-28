@@ -11,11 +11,11 @@ Clust/
 
 
 
-Introduction
-=================================
+# CLUST Introduction
 
-What is Clust?
-------------------------------
+
+## What is Clust?
+
 CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 
 
@@ -24,6 +24,8 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 그러므로 CLUST 기술은 이와 같은 다수 시계열 데이터를 보다 쉽게 다루는 것을 목표로 개발되었다.
 
 |
+
+<img src="../image/index/p1.png" width="500" height="300">
 
 .. figure:: ../image/index/p1.png
    :scale: 10%
@@ -72,8 +74,8 @@ CLUST Package provides the ability to utilize multiple time series data stored i
 |
 
 
-CLUST PACKAGES
-----------------------------
+## CLUST PACKAGES
+
 CLUST Packages는 분석, 데이터 인출 및 처리, 데이터 결합, 메타 생성, 데이터 처리, 데이터 품질 향상, 데이터 활용 도구, 데이터 변환, 기계학습 및 일련의 과정의 파이프라인 구성을 위한 소프트웨어를 제공한다. 
 해당 패키지는 Github에 공개되어 있으며 https://github.com/ClustProject/Clust 에서 확인할 수 있다. 본 홈페이지는 해당 소스코드에 대한 간단한 설명과 소개로 이루어진다.
 
@@ -81,8 +83,8 @@ CLUST Packages는 분석, 데이터 인출 및 처리, 데이터 결합, 메타 
 |
 
 
-CLUST PLATFORM
-----------------------------
+## CLUST PLATFORM
+
 CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하는 플랫폼과 메타 데이터를 같이 활용하여 데이터를 생성, 처리, 출력 등 기술을 적용한 플랫폼 2가지를 소개한다.
 
 
@@ -99,8 +101,8 @@ CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하
 |
 
 
-`CLUST Data Analytics Platform <http://imrc-clust.keti.re.kr:20001/Index/>`_
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### [CLUST Data Analytics Platform](http://imrc-clust.keti.re.kr:20001/Index/)
+
 CDA(CLUST Data Analytics) 플랫폼은 복잡한 데이터셋에 대해 여러 각도로 분석할 수 있는 도구를 제공합니다. 사용자들은 하나의 인터페이스에서 손쉽게 데이터 추출, 분석, 데이터 시각화 처리를 할 수 있으며, 복합적 시간 데이터셋에서 직관적으로 통찰력을 얻을 수 있습니다.
 
 .. figure:: ../image/index/clust_server_structure.png
@@ -113,8 +115,8 @@ CDA(CLUST Data Analytics) 플랫폼은 복잡한 데이터셋에 대해 여러 �
 
 
 
-`CLUST Data Management Platform <http://imrc-clust.keti.re.kr:20002/>`_
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+### [CLUST Data Management Platform](http://imrc-clust.keti.re.kr:20002/)
+
 CDM(CLUST Data Management) 플랫폼은 시계열 데이터와 메타 데이터를 다루는 플랫폼으로, 사용자가 데이터 입력, 확인, 생성, 검색, 통합 처리 기술을 적용 가능한 기능을 제공합니다.
 
 .. figure:: ../image/index/meta_server.png
@@ -132,46 +134,41 @@ CDM(CLUST Data Management) 플랫폼은 시계열 데이터와 메타 데이터�
 
 
 
-Repository For Open Software On Github
---------------------------------------------------
+## Repository For Open Software On Github
+
 - KETI
-   - `CLUST <https://github.com/ClustProject/Clust.git>`_
+   - [CLUST](https://github.com/ClustProject/Clust.git)
 - Daliworks
-   - `DWAIoTDeviceMonitoring <https://github.com/ClustProject/DWAIoTDeviceMonitoring.git>`_
-   - `DWAIoTFarmMonitoring <https://github.com/ClustProject/DWAIoTFarmMonitoring.git>`_
+   - [DWAIoTDeviceMonitoring](https://github.com/ClustProject/DWAIoTDeviceMonitoring.git)
+   - [DWAIoTFarmMonitoring](https://github.com/ClustProject/DWAIoTFarmMonitoring.git)
 - WiseItech
-   - `WSAutoMLAdmin <https://github.com/ClustProject/WSAutoMLAdmin.git>`_
-   - `WSAutoMLUser <https://github.com/ClustProject/WSAutoMLUser.git>`_
+   - [WSAutoMLAdmin](https://github.com/ClustProject/WSAutoMLAdmin.git)
+   - [WSAutoMLUser](https://github.com/ClustProject/WSAutoMLUser.git)
 - Kweather
-   - `KWTApptimeseriseVisualization <https://github.com/ClustProject/KWTApptimeseriseVisualization.git>`_
-   - `KWTDataAnalysistool <https://github.com/ClustProject/KWTDataAnalysistool.git>`_
+   - [KWTApptimeseriseVisualization](https://github.com/ClustProject/KWTApptimeseriseVisualization.git)
+   - [KWTDataAnalysistool](https://github.com/ClustProject/KWTDataAnalysistool.git)
 - KU
-   - `KUDataRepresentation <https://github.com/ClustProject/KUDataRepresentation.git>`_
-   - `KUDataMultitasklearning <https://github.com/ClustProject/KUDataMultitasklearning.git>`_
+   - [KUDataRepresentation](https://github.com/ClustProject/KUDataRepresentation.git)
+   - [KUDataMultitasklearning](https://github.com/ClustProject/KUDataMultitasklearning.git)
 - KWU
-   - `KWUMultimodalityFusion <https://github.com/ClustProject/KWUMultimodalityFusion.git>`_
-   - `KWUAnalysisModel <https://github.com/ClustProject/KWUAnalysisModels.git>`_
+   - [KWUMultimodalityFusion](https://github.com/ClustProject/KWUMultimodalityFusion.git)
+   - [KWUAnalysisModel](https://github.com/ClustProject/KWUAnalysisModels.git)
 
 
 |
 
 
-CLUST Packages
-------------------------------------
-
-.. toctree::
-   :maxdepth: 1
-   
-   analysis
-   data
-   ingestion
-   integration
-   meta
-   ML
-   pipeline
-   preprocessing
-   quality
-   tool
-   transformation
+## CLUST Packages
+- analysis
+- data
+- ingestion
+- integration
+- meta
+- ML
+- pipeline
+- preprocessing
+- quality
+- tool
+- transformation
 
 
