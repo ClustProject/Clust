@@ -18,7 +18,7 @@ CLUST의 Machine Learning 패키지는 확장이 용이하고 유연한 모델 �
 모델 활용 목적에 따른 3종의 엔트리 포인트는 플랫폼 수준에서 관리되며, 모든 인터페이스 모델을 선택적으로 참조하여 활용한다.
 
 .. figure:: ../image/machine_learning/ml_1.png
-   :scale: 50%
+   :scale: 70%
    :alt: machine learning Structure
    :align: center
    :class: with-border
@@ -26,7 +26,15 @@ CLUST의 Machine Learning 패키지는 확장이 용이하고 유연한 모델 �
    machine learning Structure
 
 
-<이미지 하나 더 추가>
+.. figure:: ../image/machine_learning/ml_entry.png
+   :scale: 45%
+   :alt: machine learning Point
+   :align: center
+   :class: with-border
+
+   machine learning Point
+
+
 
 
 Interface Models
@@ -53,13 +61,22 @@ Interface Models
          pass
 
 
+.. figure:: ../image/machine_learning/ml_interface.png
+   :scale: 80%
+   :alt: machine learning interface
+   :align: center
+   :class: with-border
+
+   machine learning base & interface Model
+
 
 
 
 Model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Classification과 Regression에서 사용하는 Model은 'LSTM', 'GRU', 'CNN_1D', 'LSTM_FCNs', Anomaly Detection에서 사용하는 Model은 'AnomalyTransformer', 'RNN', 'ATTN'이다.
-
+Classification과 Regression에서 사용하는 Model은 ``LSTM``, ``GRU``, ``CNN_1D``, ``LSTM_FCNs``, 
+Anomaly Detection에서 사용하는 Model은 ``AnomalyTransformer``, ``RNN``, ``ATTN`` 등이 있다. Clustering은 대표적인 ``Kmeans`` 와 ``Som`` 을 사용한다.
+아래의 코드는 Clust에서 제공하는 ML 과정에서 model을 선택하여 해당 모델의 정보를 가져오는 과정이다.
 
 ::
 
@@ -78,33 +95,53 @@ Classification과 Regression에서 사용하는 Model은 'LSTM', 'GRU', 'CNN_1D'
 
 
 
-<이미지 추가>
-
-
 
 
 Pipeline
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-<이미지 추가>
+아래의 그림은 현재 Clust Machine Learning 패키지를 이용하여 모델 생성 및 활용하는 ``Pipeline`` 이다.
+모델을 훈련시키기에 앞서 데이터를 정제, 스케일링, 변환 등 처리 작업을 거친다.
 
 
 |
 
 
-.. figure:: ../image/machine_learning/ml_2.png
-   :scale: 80%
-   :alt: machine learning Structure
+.. figure:: ../image/machine_learning/ml_pipeline.png
+   :scale: 50%
+   :alt: machine learning pipeline
    :align: center
    :class: with-border
 
-   machine learning Structure
+   machine learning pipeline
 
 
 
 |
+
+
+
+Parameter
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Clust Machine Learning 패키지에서는 데이터 및 모델을 사용하기 위해서 각 정보를 담고 있는 메타 데이터가 필수적이다.
+
+
+
+
+.. figure:: ../image/machine_learning/ml_parameter.png
+   :scale: 75%
+   :alt: machine learning parameter
+   :align: center
+   :class: with-border
+
+   machine learning parameter
+
+
+
+
+|
+
+
+
 
 
 
