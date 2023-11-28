@@ -1,6 +1,7 @@
 Clust: meta
 =================================
-시계열 데이터의 추가 정보인 Meta 데이터를 관리할 수 있는 기능들을 모아놓은 패키지이다. 주로 CLUST Data Management Server에서 활용한다.
+시계열 데이터의 추가 정보인 Meta 데이터를 관리할 수 있는 기능들을 모아놓은 패키지이다. 
+주로 CLUST Data Management Server에서 활용한다.
 
 |
 
@@ -31,7 +32,6 @@ Bucket 메타와 Measurement 메타를 확인한다.
    :class: with-border
 
    [그림. CLUST 메타 데이터 정보 조회 화면]
-
 
 |
 
