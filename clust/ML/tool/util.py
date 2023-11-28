@@ -11,6 +11,8 @@ def get_dict_from_two_array(input_key, input_value):
         dictionary : dict_result(dictionary type result -> key: input_key, value: input_value)
 
     """
+   
+
     dict_result = dict(zip(input_key, map(str, input_value)))
     return dict_result
 
