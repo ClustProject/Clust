@@ -82,21 +82,20 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
 
 def get_analysis_by_data_set(analysis_method, analysis_param, input_df_set):
     """ 
-    analysis_method가 'multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag' 둘 중 하나의 경우 분석 수행
+    analysis_method가 'multiple_maxabs_correlation_value_table_with_lag', 
+    'multiple_maxabs_correlation_index_table_with_lag' 둘 중 하나의 경우 분석 수행
 
     Args:
         analysis_method (_str_) : 분석 방법
         analysis_param (_dict_) : analysis method에 따른 적절한 파라미터
         input_df (_pd.dataFrame_) : 분석에 필요한 인풋 데이터
 
-
     >>> analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
 
     >>> 'analysis_param': {'feature_key': 'PM10', 'lag_number': '24'}
 
     Returns:
-        pd.dataframe : df_analysis, 분석 결과
-        
+        pd.dataframe : df_analysis, 분석 결과        
     
     """
     dsa = dataSetAnalysis.DataSetAnalysis()

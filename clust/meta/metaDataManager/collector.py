@@ -7,7 +7,6 @@ from Clust.clust.meta.metaDataManager import wizMongoDbApi as wiz
 # packcage : InputSourceController
 # class : Collector
 
-
 class ReadData(): 
     def __init__(self):
         """"
@@ -43,28 +42,26 @@ class ReadData():
         
     def set_process_param(self, new_process_param):
         """
-        Process Param을 새롭게 정의
+        Process Param을 새롭게 정의하는 함수
         
-        :param new_process_param: 새롭게 정의할 processParam
-        :type new_process_param: dictionary
+        Args:
+            new_process_param (_dictionary_) : 새롭게 정의할 processParam
+
         """
         self.process_param = new_process_param
     
     def get_bucket_meta(self, domain, sub_domain, mongo_instance):
         """
-        bucket meta를 읽기
+        bucket meta를 가져옴 
+        (위즈온텍 API 활용)
         
-        :param domain: domain
-        :type domain: string
+        Args:
+            domain (_str_)    
+            sub_domain _str_)    
+            mongo_instance (_mongo_instance_)           
 
-        :param domain: sub_domain
-        :type domain: string
-
-        :param domain: mongo_instance
-        :type domain: string
-
-        :returns: bucket_meta 정보
-        :rtype: dictionary
+        Returns:
+            Dictionary : bucket_meta, bucket_meta 정보            
 
         """
         db_name ="bucket"
@@ -77,22 +74,17 @@ class ReadData():
     
     def get_ms_meta(self, domain, sub_domain, mongo_instance, table_name):
         """
-        MS meta를 읽기
+        MS meta를 가져옴
         
-        :param domain: domain
-        :type domain: string
+        Args:
+            domain (_str_)      
+            sub_domain (_str_)    
+            mongo_instance (_mongo_instance_)  
+            table_name (_str_)            
 
-        :param sub_domain: sub_domain
-        :type sub_domain: string
-
-        :param mongo_instance: mongo_instance
-        :type mongo_instance: string
-        
-        :param table_name: table_name
-        :type table_name: string
-
-        :returns: ms_meta 정보
-        :rtype: dictionary
+        Returns:
+            Dictionary : ms_meta 정보
+    
         """
         mongodb_c = wiz.WizApiMongoMeta(mongo_instance)
         ms_meta = mongodb_c.read_mongodb_document_by_get(domain, sub_domain, table_name)
@@ -103,17 +95,13 @@ class ReadData():
         """
         Influx에서 1년 기간의 시계열 데이터 인출하고 전처리 하여 전달
 
-        :param bucket_name: domain_subdomain 으로 Influx DB의 데이터베이스 이름
-        :type bucket_name: string
+        Args:
+            bucket_name (_str_) : domain_subdomain 으로 Influx DB의 데이터베이스 이름       
+            measurement_name (_str_) : Measuremnt 명(데이터 명)
+            influx_instance (_influx_instance_) : instance of InfluxClient class            
 
-        :param measurement_name: Measuremnt 명(데이터 명)
-        :type measurement_name: string
-
-        :param influx_instance: influx_instance
-        :type influx_instance: instance of InfluxClient class
-
-        :returns: multiple_dataset(결과 데이터)
-        :rtype: dataframe 
+        Returns:
+            pd.dataframe : multiple_dataset(결과 데이터)            
 
         """
         days = 365
@@ -129,17 +117,13 @@ class ReadData():
         """
         Influx에서 전체 기간의 시계열 데이터 인출하고 전처리 하여 전달
 
-        :param bucket_name: domain_subdomain 으로 Influx DB의 데이터베이스 이름
-        :type bucket_name: string
+        Args:
+            bucket_name (_str_) : domain_subdomain 으로 Influx DB의 데이터베이스 이름  
+            measurement_name (_str_) : Measuremnt 명(데이터 명)
+            influx_instance (_influx_instance_) : instance of InfluxClient class         
 
-        :param measurement_name: Measuremnt 명(데이터 명)
-        :type measurement_name: string
-
-        :param influx_instance: influx_instance
-        :type influx_instance: instance of InfluxClient class
-
-        :returns: 결과 데이터
-        :rtype: dataframe 
+        Returns:
+            pd.dataframe : 결과 데이터            
 
         """
         data_nopreprocessing = influx_instance.get_data(bucket_name, measurement_name)

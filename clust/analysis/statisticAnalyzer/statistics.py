@@ -13,11 +13,9 @@ class StatisticsAnalysis():
         1. Basic statistical analysis provided by Pandas
         2. Analyze the distribution according to the criterion category (label) by data column
             
-        Parameters:
-            data (_pd.dataframe_) : Time Series Data
-        
-        Returns:
-            - 
+        Args:
+            data (_pd.dataframe_): Time Series Data
+    
         """
         self.data = data
 
@@ -27,7 +25,7 @@ class StatisticsAnalysis():
         The analysis result is information about the statistical distribution of the data.
                     
         Returns:
-            Dictionary : statistics_result_dict, Analysis Results
+            Dictionary: statistics_result_dict, Analysis Results
                 
 
         >>> AnalysisResult = {'column1': {
@@ -54,10 +52,10 @@ class StatisticsAnalysis():
         Essentially, Label Information must exist in bucket_meta_info of the measurement.
 
         Args:
-            base_meta (_Dictionary_) : bucket_meta_info of the measurement
+            base_meta (_Dictionary_): bucket_meta_info of the measurement
 
         Returns:
-            Dictionary : Anaysis Results, countbyfeaturelabel_result_dict  
+            Dictionary: Anaysis Results, countbyfeaturelabel_result_dict  
 
 
         >>> AnalysisResult = {'column1': [

@@ -12,11 +12,11 @@ def get_mean_analysis_result_by_timestep(data, timestep_criteria = {"step":[0, 6
     설정된 Time Step, Time Label 에 따른 데이터의 평균 값을 Meta 로 생성하는 함수
     Time Step 에 따른 Time Label 정보를 분석하기 위해 make_timestep_column 함수로 추출한 "TimeStep" column 을 활용
 
-    Args :
+    Args:
         data (_pd.DataFrame_)
         timestep_criteria (_Dictionary_)
 
-    Returns :
+    Returns:
         Dictionary : Time Label 에 따른 평균 값을 포함한 Dictionary Meta
     """
     data = timeStep.get_timestep_feature(data, timestep_criteria)
