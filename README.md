@@ -82,7 +82,7 @@ CDA(CLUST Data Analytics) 플랫폼은 복잡한 데이터셋에 대해 여러 �
 
 
 <p align="center">
-   <img src="docs/image/index/clust_server_structure.png" width="500" height="300">
+   <img src="docs/image/index/clust_server_structure.png" width="500" height="500">
 </p>
 
 
@@ -93,7 +93,7 @@ CDM(CLUST Data Management) 플랫폼은 시계열 데이터와 메타 데이터�
 
 
 <p align="center">
-   <img src="docs/image/index/meta_server.png" width="500" height="300">
+   <img src="docs/image/index/meta_server.png" width="500" height="500">
 </p>
 
 
