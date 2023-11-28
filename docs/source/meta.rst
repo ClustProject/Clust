@@ -24,6 +24,17 @@ Bucket 메타와 Measurement 메타를 확인한다.
 
 |
 
+.. figure:: ../image/meta/docs_meta_structure_img.png
+   :scale: 70%
+   :alt: 이미지
+   :align: center
+   :class: with-border
+
+   [그림. CLUST 메타 데이터 정보 조회 화면]
+
+
+|
+
 metaDataManager
 ----------------------------------------------------------
 
@@ -49,6 +60,14 @@ wizMongoDbApi
 
 metaGenerator
 ----------------------------------------------------------
+
+.. figure:: ../image/meta/docs_meta_view_img.png
+   :scale: 30%
+   :alt: 이미지
+   :align: center
+   :class: with-border
+
+   [그림. metaGenerator를 활용하는 CLUST Platform]
 
 analysisDBMetaGenerator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

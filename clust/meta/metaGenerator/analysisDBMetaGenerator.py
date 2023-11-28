@@ -31,6 +31,7 @@ class analysisDBMetaGenerator():
         
         :param mongo_instance: instance url to get meta data from mongo DB
         :type mongo_instance: string
+        
         """
         
         self.db_name = dbName
