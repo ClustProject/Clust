@@ -11,7 +11,7 @@ File Module
 
 - Features
    - 파일 경로의 존재 유무 확인 (check_path)
-   - 파일 경로 String 반환  (get_user_file_path)
+   - 파일 경로 String 반환 (get_user_file_path)
 
 |
 

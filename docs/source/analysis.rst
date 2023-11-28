@@ -23,16 +23,18 @@ Statistic Analyzer는 지정 라벨을 이용하여 시계열 데이터를 분�
    :align: center
    :class: with-border
 
-   [그림.Visual Result of Statistic Analyzer]
+   [그림. Visual Result of Statistic Analyzer]
 
 
 |
 
 Time Analyzer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Time Analyzer는 시간 기준에 따라 시계열 데이터를 분석하는 모듈이다. 
-시간 기준은 세 가지로, mean_by_holiday, mean_by_timeStep, mean_by_working 모듈로 분류된다. 
-각 모듈은 분석 기준과 분석된 정보를 활용하여 시각화 자료를 생성할 수 있다.
+Time Analyzer는 시간 기준에 따라 
+mean_by_holiday, mean_by_timeStep, mean_by_working 
+각 모듈을 활용하여 시계열 데이터를 분석한다.
+모듈은 분석 기준과 분석된 정보를 활용하여 시각화 자료를 생성할 수 있다.
+
 
 - Features
    - mean_by_holiday : 평일, 휴일 기준으로 시계열 데이터를 분석
@@ -40,19 +42,19 @@ Time Analyzer는 시간 기준에 따라 시계열 데이터를 분석하는 모
    - mean_by_working : 근무 시간 기준으로 분석
 
 .. figure:: ../image/analysis/docs_analysis_img_3.png
-   :scale: 30%
+   :scale: 50%
    :alt: Visual Result of mean_by_timeStep Time Analyzer
    :align: center
    :class: with-border
 
-   [그림.Visual Result of mean_by_timeStep Time Analyzer]
+   [그림. Visual Result of mean_by_timeStep Time Analyzer]
 
 |
 
 Analysis Interface
 ----------------------------------------------------------
 Analysis Interface는 사용자 지정 파라미터를 확인한 후, 
-그에 따라 단일 데이터 또는 데이터셋 분석을 결정하는 인터페이스이다.
+그에 따라 단일 데이터 또는 데이터셋 분석을 결정한다.
 사용자 지정 파라미터에는 analysis_method와 analysis_param이 있다.
 
 **Input Parameter Example**
@@ -63,8 +65,13 @@ Analysis Interface는 사용자 지정 파라미터를 확인한 후,
 ::
        
 
-    analysis_method = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency'] # dataframe input
-    ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag'] # dictionary input  
+    analysis_method = [
+      "original", 'correlation', 'scaling', 
+      'max_correlation_value_index_with_lag',
+      'scale_xy_frequency'] # dataframe input
+    #or
+    ['multiple_maxabs_correlation_value_table_with_lag', 
+    'multiple_maxabs_correlation_index_table_with_lag'] # dictionary input  
           
     analysis_param = {'feature_key': 'PM10', 'lag_number': '24'} 
                        # max_correlation_value_index_with_lag
@@ -100,16 +107,20 @@ Single Data Analysis
 
 ::
    
-   analysis_method = ["original", 'correlation', 'scaling', 'max_correlation_value_index_with_lag','scale_xy_frequency']
+   analysis_method_list = [
+      "original", 'correlation', 'scaling', 
+      'max_correlation_value_index_with_lag',
+      'scale_xy_frequency'
+   ]
     
 
 .. figure:: ../image/analysis/docs_data_analysis_img.png
-   :scale: 30%
+   :scale: 50%
    :alt: Single Data scaling 분석 시각화 결과
    :align: center
    :class: with-border
 
-   [그림.Single Data scaling 분석 시각화 결과]
+   [그림. Single Data scaling 분석 시각화 결과]
 
 
 DataSet Analysis
@@ -122,11 +133,14 @@ DataSet Analysis
 
 ::
 
-   analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
+   analysis_method_list = [
+      'multiple_maxabs_correlation_value_table_with_lag', 
+      'multiple_maxabs_correlation_index_table_with_lag'
+   ]
 
 |
 .. figure:: ../image/analysis/docs_dataSet_analysis_img.png
-   :scale: 30%
+   :scale: 50%
    :alt: DataSet scaling 분석 시각화 결과
    :align: center
    :class: with-border
@@ -134,6 +148,7 @@ DataSet Analysis
    [그림. DataSet scaling 분석 시각화 결과]
 
    
+
 |
 
 

@@ -8,12 +8,16 @@ from Clust.clust.transformation.general.basicTransform import nan_to_none_in_dic
 class StatisticsAnalysis():    
     def __init__(self, data):
         """        
+
         Generate statistical analysis results. There are 2 types.
         1. Basic statistical analysis provided by Pandas
         2. Analyze the distribution according to the criterion category (label) by data column
             
-        Args:
+        Parameters:
             data (_pd.dataframe_) : Time Series Data
+        
+        Returns:
+            - 
         """
         self.data = data
 
