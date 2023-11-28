@@ -1,7 +1,7 @@
 Statistic Analyzer
 =================================
 
-|
+
 statistics
 ------------------------------
 .. automodule:: clust.analysis.statisticAnalyzer.statistics

@@ -23,7 +23,15 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
    :align: center
    :class: with-border
 
-   Clsut 
+|
+
+.. figure:: ../image/index/clust_main.png
+   :scale: 20%
+   :alt: clsut main
+   :align: center
+   :class: with-border
+
+   Clsut
 
 |
 
@@ -43,6 +51,16 @@ The CLUST platform provides an easy-to-use web interface even for non-expert use
 The CLUST package is a modular Python package used on both servers and is published on GitHub. 
 CLUST Package provides the ability to utilize multiple time series data stored in various formats and qualities.
 
+
+.. figure:: ../image/index/clust_total.png
+   :scale: 20%
+   :alt: clsut total
+   :align: center
+   :class: with-border
+
+   Clsut Total
+
+
 |
 
 
@@ -52,10 +70,14 @@ CLUST Packages는 분석, 데이터 인출 및 처리, 데이터 결합, 메타 
 해당 패키지는 Github에 공개되어 있으며 https://github.com/ClustProject/Clust 에서 확인할 수 있다. 본 홈페이지는 해당 소스코드에 대한 간단한 설명과 소개로 이루어진다.
 
 
+|
+
 
 CLUST PLATFORM
 ----------------------------
 CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하는 플랫폼과 메타 데이터를 같이 활용하여 데이터를 생성, 처리, 출력 등 기술을 적용한 플랫폼 2가지를 소개한다.
+
+
 
 .. figure:: ../image/index/clust_server_structure_2.png
    :scale: 50%
