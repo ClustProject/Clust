@@ -25,25 +25,16 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 
 |
 
-<img src="docs/image/index/p1.png" width="500" height="300">
+<div style="text-align:center;">
+   <img src="docs/image/index/p1.png" width="500" height="300">
+</div>
 
-.. figure:: ../image/index/p1.png
-   :scale: 10%
-   :alt: clsut 
-   :align: center
-   :class: with-border
 
-|
+<div style="text-align:center;">
+   <img src="docs/image/index/clust_main.png" width="500" height="300">
+</div>
 
-.. figure:: ../image/index/clust_main.png
-   :scale: 20%
-   :alt: clsut main
-   :align: center
-   :class: with-border
 
-   Clsut
-
-|
 
 CLUST 플랫폼은 크게 두가지가 있다. 하나는 여러 소스의 데이터를 쉽게 찾고 통합하는 도구인 ``CLUST Data Management Server`` 이며, 
 다른 하나는 데이터를 탐색하는 기능을 제공하는 ``CLUST Data Analytics Server`` 이다. 
@@ -51,7 +42,6 @@ CLUST 플랫폼은 전문가가 아닌 사용자도 사용하기 쉬운 웹 인�
 CLUST 패키지는 두 서버에서 사용하는 모듈식 Python 패키지로 Github에서 공개되었다. 
 CLUST Package는 다양한 형식과 품질로 저장된 여러 시계열 데이터를 활용하는 기능을 제공한다.
 
-|
 
 (Eng) Time series data have different data cycles, quality, quantity, length, storage format, collection and utilization purposes, etc. 
 Therefore, integrating and analyzing multiple heterogeneous time series data is more difficult than analyzing a single time series data. 
@@ -62,16 +52,11 @@ The CLUST package is a modular Python package used on both servers and is publis
 CLUST Package provides the ability to utilize multiple time series data stored in various formats and qualities.
 
 
-.. figure:: ../image/index/clust_total.png
-   :scale: 20%
-   :alt: clsut total
-   :align: center
-   :class: with-border
 
-   Clsut Total
+<div style="text-align:center;">
+   <img src="docs/image/index/clust_total.png" width="500" height="300">
+</div>
 
-
-|
 
 
 ## CLUST PACKAGES
@@ -80,8 +65,6 @@ CLUST Packages는 분석, 데이터 인출 및 처리, 데이터 결합, 메타 
 해당 패키지는 Github에 공개되어 있으며 https://github.com/ClustProject/Clust 에서 확인할 수 있다. 본 홈페이지는 해당 소스코드에 대한 간단한 설명과 소개로 이루어진다.
 
 
-|
-
 
 ## CLUST PLATFORM
 
@@ -89,16 +72,10 @@ CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하
 
 
 
-.. figure:: ../image/index/clust_server_structure_2.png
-   :scale: 50%
-   :alt: clsut platform
-   :align: center
-   :class: with-border
+<div style="text-align:center;">
+   <img src="docs/image/index/clust_server_structure_2.png" width="500" height="300">
+</div>
 
-   Clsut Platform
-
-
-|
 
 
 ### [CLUST Data Analytics Platform](http://imrc-clust.keti.re.kr:20001/Index/)
