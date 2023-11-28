@@ -49,7 +49,8 @@ class DfData():
         
         if 'feature_list' in ingestion_param.keys():
             if len(result)>0:
-                result = result[self.ingestion_param['feature_list']]
+                new_feature_list = list(self.ingestion_param['feature_list'].intersection(list(result.columns)))
+                result = result[new_feature_list]
             
         return result
     
