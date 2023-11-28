@@ -131,7 +131,7 @@ DataSet Analysis
    :align: center
    :class: with-border
 
-   [그림.DataSet scaling 분석 시각화 결과]
+   [그림. DataSet scaling 분석 시각화 결과]
 
    
 |
