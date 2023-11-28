@@ -24,7 +24,7 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 그러므로 CLUST 기술은 이와 같은 다수 시계열 데이터를 보다 쉽게 다루는 것을 목표로 개발되었다.
 
 <p align="center">
-   <img src="docs/image/index/p1.png" width="300" height="100">
+   <img src="docs/image/index/p1.png" width="400" height="250">
 </p>
 
 
@@ -51,9 +51,9 @@ CLUST Package provides the ability to utilize multiple time series data stored i
 
 
 
-<div style="text-align:center;">
+<p align="center">
    <img src="docs/image/index/clust_total.png" width="500" height="300">
-</div>
+</p>
 
 
 
@@ -70,9 +70,9 @@ CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하
 
 
 
-<div style="text-align:center;">
+<p align="center">
    <img src="docs/image/index/clust_server_structure_2.png" width="500" height="300">
-</div>
+</p>
 
 
 
@@ -80,13 +80,10 @@ CLUST 기술을 이용하여 시계열 데이터를 시각화, 처리, 분석하
 
 CDA(CLUST Data Analytics) 플랫폼은 복잡한 데이터셋에 대해 여러 각도로 분석할 수 있는 도구를 제공합니다. 사용자들은 하나의 인터페이스에서 손쉽게 데이터 추출, 분석, 데이터 시각화 처리를 할 수 있으며, 복합적 시간 데이터셋에서 직관적으로 통찰력을 얻을 수 있습니다.
 
-.. figure:: ../image/index/clust_server_structure.png
-   :scale: 10%
-   :alt: clsut cda platform
-   :align: center
-   :class: with-border
 
-   Clsut CDA Platform
+<p align="center">
+   <img src="docs/image/index/clust_server_structure.png" width="500" height="300">
+</p>
 
 
 
@@ -94,18 +91,10 @@ CDA(CLUST Data Analytics) 플랫폼은 복잡한 데이터셋에 대해 여러 �
 
 CDM(CLUST Data Management) 플랫폼은 시계열 데이터와 메타 데이터를 다루는 플랫폼으로, 사용자가 데이터 입력, 확인, 생성, 검색, 통합 처리 기술을 적용 가능한 기능을 제공합니다.
 
-.. figure:: ../image/index/meta_server.png
-   :scale: 50%
-   :alt: clsut cdm platform
-   :align: center
-   :class: with-border
 
-   Clsut CDM Platform
-
-|
-
-
-
+<p align="center">
+   <img src="docs/image/index/meta_server.png" width="500" height="300">
+</p>
 
 
 
@@ -129,8 +118,6 @@ CDM(CLUST Data Management) 플랫폼은 시계열 데이터와 메타 데이터�
    - [KWUMultimodalityFusion](https://github.com/ClustProject/KWUMultimodalityFusion.git)
    - [KWUAnalysisModel](https://github.com/ClustProject/KWUAnalysisModels.git)
 
-
-|
 
 
 ## CLUST Packages
