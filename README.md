@@ -25,7 +25,7 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 
 |
 
-<img src="image/index/p1.png" width="500" height="300">
+<img src="docs/image/index/p1.png" width="500" height="300">
 
 .. figure:: ../image/index/p1.png
    :scale: 10%
