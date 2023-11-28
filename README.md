@@ -23,16 +23,14 @@ CLUST(CLUStering Technologies of fragmented data for time-based data analysis)
 그러므로 이질적인 다수의 시계열 데이터를 통합하여 분석하는 것은 단일 시계열 데이터를 분석하는 것 보다 더 어렵다. 
 그러므로 CLUST 기술은 이와 같은 다수 시계열 데이터를 보다 쉽게 다루는 것을 목표로 개발되었다.
 
-|
-
 <p align="center">
-   <img src="docs/image/index/p1.png" width="500" height="300">
+   <img src="docs/image/index/p1.png" width="300" height="100">
 </p>
 
 
-<div style="text-align:center">
-   <img src="docs/image/index/clust_main.png" width="500" height="300">
-</div>
+<p align="center">
+   <img src="docs/image/index/clust_main.png" width="700" height="500">
+</p>
 
 
 
