@@ -5,6 +5,7 @@ CLUST 플랫폼은 사용자가 시계열 데이터를 적극 활용할 수 있�
 Clust Analysis 패키지는 분석 메타 생성에 활용되는 도구로써 사용자 지정 파라미터에 의거한 기능들을 제공한다.
 
 |
+
 Analyzer
 ----------------------------------------------------------
 Analyzer는 지정 라벨(Statistic Analyzer) 또는 지정 시간(Time Analyzer)에 따라 데이터를 분석하는 모듈들이다. 
@@ -124,7 +125,6 @@ DataSet Analysis
 
    analysis_method = ['multiple_maxabs_correlation_value_table_with_lag', 'multiple_maxabs_correlation_index_table_with_lag']
 
-|
 .. figure:: ../image/analysis/docs_dataSet_analysis_img.png
    :scale: 30%
    :alt: DataSet scaling 분석 시각화 결과

@@ -106,7 +106,6 @@ Error Detection
 
 
 
-
 Certain Error
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 시계열 데이터 상 확실한 에러 데이터에 대해서만 제거한다. 각 Feature별 데이터 존재 가능 범위 밖의 데이터나 불필요하게 반복되는 데이터를 삭제하는데 유용하게 사용이 가능하다.
@@ -145,14 +144,104 @@ Certain Error
 
 UnCertain Error
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+데이터의 흐름과트렌드, 통계적 정보를 고려할 때, 에어로 판단될 수 있는 값들을 제거한다.
+
+- Features
+   - 불특정한 튀는 값에 대해서 파라미터에 의거하여 에로러 판별하고 NaN으로 표기
+   - 확실한 NaN 값이 아닌, 불확실한 값까지 Outlier로 처리할 수 있으므로 신중하게 파라미터를 선택해야함
+   - 해당 함수를 거치면 Error라고 판별한 데이터가 NaN으로 변경되기 때문에 Input보다 더 많은 NaN 데이터가 발생
 
 
-data Outlier
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Uncertain Parameter** 
+
+::
+
+   uncertain_param = {
+      'flag': True, 
+      "param": {
+              "outlierDetectorConfig": [ {'algorithm': 'IQR', 'percentile': 99,'alg_parameter': {'weight': 100} } ]
+              }
+      }
+
+
+**Outlier Detection Algorithm** 
+
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Algorithm
+     - Description
+
+   * - Spectral Residual(SR)
+     - 데이터의 일반적인 특징이 아닌 local 영역의 특이한 점을 탐색하며 갑작스런 변화에 민감하게 반응하는 전처리 모듈
+
+   * - Mixture of Gaussian Density Estimation(MoG)
+     - 추정된 정상 데이터의 분포에서 낮은 확률 값을 가지는 데이터를 Outlier로 탐지
+
+   * - Local Outlier Factor(LOF)
+     - 주변 이웃들과의 거리를 통한 밀도를 계산하고 낮은 밀도의 데이터를 Outlier로 탐지
+
+   * - Kernel Density Estimator(KDE)
+     - Kernel을 이용한 Non Parametric Estimator
+
+   * - Isolation Forest(IF)
+     - Tree 재귀적 분할에 의한 알고리즘
+
+   * - Interquartile Range(IQR)
+     - 데이터의 통계적 분포를 간단히 계산하여 이에 벗어난 값에 대해 이상치 탐지
+
+   * - Seasonal Decompotision(SD)
+     - 트랜드, 계절성 등을 고려하여 Residual Signal 값을 계산하고 이에 의거하여 Outlier 탐지
 
 
 
 |
+
+
+
+Refinement
+-------------------------------------
+Refinement는 데이터를 균일하게 하는 모든 전처리 과정을 진행한다. 
+중복된 데이터가 있거나, 데이터 중간에 유실 구간이 있는데 이를 처리하지 않은 채로 분석 및 모델링을 한다면 오류 데이터가 정상 데이터로 간주되게 되어 데이터가 편향된다. 
+제안하는 Refinement는 여러 문재로 인해 생긴 중복된 군더더기 데이터를 삭제하고, 데이터가 없는 구간에 대한 시간 스탬프를 원하는 시간 주기로 기술하여 사건에 따른 데이터의 표현을 명확하게 한다.
+원 데이터보다 유실 처리한 데이터가 많아지더라도 시간에 따른 데이터의 표현은 더욱 명확해질 수 있다.
+
+- Feature
+   - 파라미터 기반 데이터 정리
+   - 중복 데이터 제거
+   - 데이터의 기술 간격의 불규칙성을 균일하게 조정
+   - 시간 순차적으로 데이터 재배열
+   - 기타 데이터 클린징을 수행
+
+
+**Refinement Parameter** 
+
+::
+
+   refine_param = {
+      "remove_duplication": {'flag': True}, 
+      "static_frequency": {'flag': True, 'frequency': None}
+      }
+
+
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - refine_param
+     - Description
+
+   * - remove_duplication
+     - 중복 값 제거 및 윤일한 시간 인덱스를 데이터 반환 
+
+   * - static_frequency
+     - 설정한 시간 정보를 기반으로 데이터 변경
+
+
+|
+
 
 
 Imputation
@@ -198,45 +287,6 @@ Imputation
 
 |
 
-
-
-Refinement
--------------------------------------
-Refinement는 데이터를 균일하게 하는 모든 전처리 과정을 진행한다. 
-중복된 데이터가 있거나, 데이터 중간에 유실 구간이 있는데 이를 처리하지 않은 채로 분석 및 모델링을 한다면 오류 데이터가 정상 데이터로 간주되게 되어 데이터가 편향된다. 
-제안하는 Refinement는 여러 문재로 인해 생긴 중복된 군더더기 데이터를 삭제하고, 데이터가 없는 구간에 대한 시간 스탬프를 원하는 시간 주기로 기술하여 사건에 따른 데이터의 표현을 명확하게 한다.
-원 데이터보다 유실 처리한 데이터가 많아지더라도 시간에 따른 데이터의 표현은 더욱 명확해질 수 있다.
-
-- Feature
-   - 파라미터 기반 데이터 정리
-   - 중복 데이터 제거
-   - 데이터의 기술 간격의 불규칙성을 균일하게 조정
-   - 시간 순차적으로 데이터 재배열
-   - 기타 데이터 클린징을 수행
-
-
-**Refinement Parameter** 
-
-::
-
-   refine_param = {
-      "remove_duplication": {'flag': True}, 
-      "static_frequency": {'flag': True, 'frequency': None}
-      }
-
-
-.. list-table:: 
-   :widths: auto
-   :header-rows: 1
-
-   * - refine_param
-     - Description
-
-   * - remove_duplication
-     - 중복 값 제거 및 윤일한 시간 인덱스를 데이터 반환 
-
-   * - static_frequency
-     - 설정한 시간 정보를 기반으로 데이터 변경
 
 
 
