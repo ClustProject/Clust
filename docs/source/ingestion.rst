@@ -5,6 +5,18 @@ Clust: ingestion
 메타 정보를 저장하는 MongoDB를 사용하고 있다. 더하여 데이터를 주고 받을 때 많이 사용하는 CSV를 생성하거나 InfluxDB에 시계열 데이터 포멧으로
 저장하는 방법들을 소개한다.
 
+|
+
+.. figure:: ../image/ingestion/ingestion_influx_mongo_save.png
+   :scale: 50%
+   :alt: influx mongo save
+   :align: center
+   :class: with-border
+
+   InfluxDB & MongoDB Data Structure
+
+
+
 
 |
 

@@ -4,22 +4,47 @@ Clust : data
 
 Data
 ----------------------------------------------------------
-간단한 설명 + 이미지
+
+
+.. figure:: ../image/data/data_ingestion_structure.png
+   :scale: 60%
+   :alt: data interface
+   :align: center
+   :class: with-border
+
+   Data Interface
+
+
+
+
+
+Dataframe
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+dataset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+|
 
 
 Interface
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-해당 파트 설명
+---------------------------------------------------------------
 
 
-DataFrame
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-해당 파트 설명(df_data + df_set_data)
 
+.. figure:: ../image/data/data_interface.png
+   :scale: 60%
+   :alt: data interface
+   :align: center
+   :class: with-border
 
-Store
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-해당 파트 설명
+   Data Interface
 
 
 
