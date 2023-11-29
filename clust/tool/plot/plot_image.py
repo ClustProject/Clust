@@ -38,10 +38,12 @@ def plt_to_image(plt):
         image_base64 : image_base64
 
     """
-    # send images
-    buf = io.BytesIO()
-    plt.savefig(buf, format='jpg')
-    #image_base64 = base64.b64encode(buf.read())
-    image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
+    image_base64 = 0
+    if plt != None :
+        # send images
+        buf = io.BytesIO()
+        plt.savefig(buf, format='jpg')
+        #image_base64 = base64.b64encode(buf.read())
+        image_base64 = base64.b64encode(buf.getvalue()).decode('utf-8').replace('\n', '')
     
     return image_base64

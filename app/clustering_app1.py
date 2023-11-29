@@ -60,7 +60,9 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
 
 def app_clustering(data, cluster_num, model_type ='som'):
 
-    """clustering number에 기반하녀 model type을 설정하고 클러스터링을 수행함
+    """
+    clustering number에 기반하여 model type을 설정하고 클러스터링을 수행함
+
     Args:
         data(pd.DataFrame)
         cluster_num(int)
@@ -70,6 +72,7 @@ def app_clustering(data, cluster_num, model_type ='som'):
         result_dic (dict)
         plt1
         plt2
+
     """
     model_type = 'som'
 
@@ -99,16 +102,18 @@ def app_clustering(data, cluster_num, model_type ='som'):
     model_path = "model.pkl"
     x_data_series, result, plt1= clusteringByMethod(data, parameter, model_path)    
     
-    # histogram by label
-    from Clust.clust.tool.plot import plot_interface
-    y_df = pd.DataFrame(result)
-            
-    from Clust.clust.ML.tool import util
-    data_name = list(data.columns)
+    if result != None : 
+        # histogram by label
+        from Clust.clust.tool.plot import plot_interface
+        y_df = pd.DataFrame(result)       
 
-    result_dic = util.get_dict_from_two_array(data_name, result)
+                
+        from Clust.clust.ML.tool import util
+        data_name = list(data.columns)
+
+        result = util.get_dict_from_two_array(data_name, result)
     
-    return result_dic, plt1
+    return result, plt1
     
 
 
