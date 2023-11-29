@@ -45,6 +45,7 @@ Dataset Integrator
    4. 통합 데이터 생성
 
 
+|
 
 Integration By Column Characteristic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -81,6 +82,7 @@ Integration Interface
 integration_interface는 손쉬운 통합을 위해 활용하는 인터페이스로 비전문가가 데이터 통합하기 위한 도구를 제공한다. 
 integration을 하는 type으로는 one_feature_based_integration과 multiple_dataset_integration 두가지 방법을 활용할 수 있다. 
 
+|
 
 one feature based integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -88,15 +90,69 @@ one_feature_based_integration 스타일로 데이터를 통합할 경우 특정 
 이 방법은 같은류의 데이터로 클러스터링 하기 위한 데이터셋을 만들떄 주로 활용된다. 
 이때 duration 값이 있다면 해당 duration에 대해서만 데이터를 끊어 결합하며, duration이 없다면 시간 축이 같지 않더라도 무조건 결합한다.
 
+::
+
+   integration_type = 'one_feature_based_integration'
+
+   integration_param = {
+                     "duration": {'start_time': start_time , 'end_time': end_time},
+                     "integration_frequency":timedelta_re_freq_min,
+                     "feature_name": "in_co2" }
+
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+
+   * - Duration(start, end time)
+     - 데이터 기간 설정
+
+   * - integration_frequency
+     - 데이터간의 시간 빈도 설정
+
+   * - feature_name
+     - 중심 컬럼 설정
+
+
+|
 
 multiple dataset integration
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 multiple_dataset_integration 스타일로 데이터를 통합할 경우 무조건 각 데이터의 선택된 feature들을 시간의 축으로 결합한다. 
 이 때 integration_param에 frequency가 지정된 경우엔 지정된 frequency를 중심으로 데이터를 변환하고 결합하고, 지정되지 않은 경우에는 최적의 frequency를 생성하고 이에 의거하여 데이터셋을 결합한다.
 
+::
 
+   integration_type = 'multiple_dataset_integration'
 
+   integration_param = {
+                     "integration_duration_type":"common",
+                     "integration_frequency":timedelta_re_freq_min,
+                     "param":{},
+                     "method":"meta" }
 
+.. list-table:: 
+   :widths: auto
+   :header-rows: 1
+
+   * - Parameter
+     - Description
+
+   * - integration_duration_type
+     - common 공통된 시간으로 합치기 / total 전체시간으로 합치기
+
+   * - integration_frequency
+     - 데이터간의 시간 빈도 설정
+
+   * - param
+     - method가 ML일 경우 transform_param을 추가하여 사용 / 일반적으로 빈칸
+
+   * - method
+     - 용도에 맞게 ['meta', 'ML', 'simple'] 선택하여 사용
+
+   
 |
 
 
