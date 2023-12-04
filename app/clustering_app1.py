@@ -31,8 +31,8 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
         _type_: _description_
     """
     # 1. preprocessing for oneDF
-    from Clust.clust.preprocessing import processing_interface
-    process_param = processing_interface.clustering_app_t1(min_max, timedelta_frequency_min)
+    #from Clust.clust.preprocessing import processing_interface
+    #process_param = processing_interface.clustering_app_t1(min_max, timedelta_frequency_min)
 
     # 2. preprocessing pipeline
     pipeline = [
