@@ -102,16 +102,15 @@ def app_clustering(data, cluster_num, model_type ='som'):
     model_path = "model.pkl"
     x_data_series, result, plt1= clusteringByMethod(data, parameter, model_path)    
     
-    if result != None : 
-        # histogram by label
-        from Clust.clust.tool.plot import plot_interface
-        y_df = pd.DataFrame(result)       
+    if len(result) > 0: 
+        # histogram by label    
 
-                
         from Clust.clust.ML.tool import util
         data_name = list(data.columns)
 
         result = util.get_dict_from_two_array(data_name, result)
+    else:
+        print("no result:", result)
     
     return result, plt1
     

@@ -78,7 +78,7 @@ def clusteringByMethod(data, parameter, model_path):
         plt1 = clust_test.plot_ts_by_label(data_series, result)
     
     else:
-        result = None
+        result = {}
         plt1 = None
         
     
