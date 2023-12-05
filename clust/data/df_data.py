@@ -47,10 +47,17 @@ class DfData():
         elif ingestion_type == 'ms_all':
             result = self.ms_by_all(self.ingestion_param) 
         
+        new_feature_list =list()
+        
         if 'feature_list' in ingestion_param.keys():
+            feature_list = self.ingestion_param['feature_list']
+            feature_result = list(result.columns)
             if len(result)>0:
-                new_feature_list = list(set(self.ingestion_param['feature_list']).intersection(list(result.columns)))
-                result = result[new_feature_list]
+                for feature in feature_list:
+                    if feature in feature_result:
+                        new_feature_list.append(feature)
+                        
+            result = result[new_feature_list]
             
         return result
     
