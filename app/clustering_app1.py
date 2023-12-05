@@ -35,7 +35,10 @@ def clustering_app_c_1(data_set, feature_name, min_max, timedelta_frequency_min,
     #process_param = processing_interface.clustering_app_t1(min_max, timedelta_frequency_min)
 
     # 2. preprocessing pipeline
+    
     pipeline = [
+        ['data_refinement', {"remove_duplication": {'flag': True}, 
+                    "static_frequency": {'flag': True, 'frequency': timedelta_frequency_min}}],
         ['data_integration',{'integration_type': 'one_feature_based_integration',
                              'integration_param': {'feature_name': feature_name,
                             'duration': duration,
