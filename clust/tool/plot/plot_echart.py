@@ -183,14 +183,16 @@ def get_bar_data(df):
         result['index']=list(df.index)
 
     #value 생성
+    df = round(df, 3)
+    ind_column_info = {}
     for column in df.columns:      
-        part = {}
-        value = [ float(round(x,3)) for x in df.loc[:, column].values ]       
-                
-        part[column] = value
-        result['value'].append(part)    
-
+        #value = [ float(round(x,3)) for x in df.loc[:, column].values ]       
+        value = list(df[[column]].T.values.reshape(-1))
+        ind_column_info[column] = value
     
+    # 주석대로 붙인 것 같은데 왜 bar plot 제대로 안나오나요? 
+    result['value'].append(ind_column_info)   
+    print(result) 
 
     return result
 
