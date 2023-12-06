@@ -1,6 +1,7 @@
 import json
 import numpy as np
 import pandas as pd
+from flask import request, jsonify
 
 def get_echart_json_result(graph_type, df)  :
     """ 
@@ -57,9 +58,23 @@ def get_echart_json_result(graph_type, df)  :
             data = get_index_value_by_columns(df)
         
         
-    result  = json.dumps(data)
+    result = json.dumps(data, cls=NumpyEncoder)
+    print(result)
+    print(jsonify(result))
 
     return result
+
+
+import numpy as np
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, np.float32):
+            return float(obj)
+        elif isinstance(obj, np.int64):
+            return float(obj)
+        return super(NumpyEncoder, self).default(obj)
 
 
 def get_index_value_by_columns(df):
