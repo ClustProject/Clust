@@ -195,8 +195,7 @@ def get_bar_data(df):
     #value 생성
     df = round(df, 3)
 
-    for column in df.columns:      
-        #value = [ float(round(x,3)) for x in df.loc[:, column].values ]       
+    for column in df.columns:    
         value = list(df[[column]].T.values.reshape(-1))        
         result['value'].append({column : value})   
         
