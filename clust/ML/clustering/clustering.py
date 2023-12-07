@@ -88,9 +88,11 @@ class Test:
                     cluster_result = X[y == i]
                     if center_type == 'dtw_barycenter_averaging':
                         from tslearn.barycenters import dtw_barycenter_averaging
-                        cluster_centers_[i] = dtw_barycenter_averaging(cluster_result)
+                        dtw_barycenter_average = dtw_barycenter_averaging(cluster_result)
+                        cluster_centers_[i] = dtw_barycenter_average
                     else:
-                        cluster_centers_.append(cluster_result.mean(axis=0)) 
+                        mean_ = cluster_result.mean(axis=0)
+                        cluster_centers_.append(mean_) 
                 else:
                     cluster_centers_.append([]) 
             return cluster_centers_
@@ -112,9 +114,11 @@ class Test:
                 if clust_num+1 <= n_clusters:
                     ax[i][j].set_title('Clust '+str(clust_num))
                     for xx in X[y == clust_num]:
-                        ax[i][j].plot(xx.ravel(), "k-", alpha=.2)
+                        if len(xx)>0:
+                            ax[i][j].plot(xx.ravel(), "k-", alpha=.2)
                     if len(cluster_centers_) > clust_num: #
-                        ax[i][j].plot(cluster_centers_[clust_num].ravel(), "r-")
+                        if len(cluster_centers_[clust_num])>0:
+                            ax[i][j].plot(cluster_centers_[clust_num].ravel(), "r-")
             
         return plt
     
