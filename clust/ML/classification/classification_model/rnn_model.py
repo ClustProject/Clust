@@ -24,6 +24,7 @@ class RNNModel(BaseClassificationModel):
             params (dict): parameters for building a CNN1D model
         """
         # model 생성
+
         self.model_params = model_params
         self.model = RNN(
             rnn_type = self.model_params['rnn_type'],
@@ -206,6 +207,7 @@ class RNNModel(BaseClassificationModel):
         Returns:
             preds (ndarray) : Inference result data
         """
+
         device = infer_params['device']
         batch_size = infer_params['batch_size']
         input_size = self.model_params['input_size']
@@ -216,7 +218,7 @@ class RNNModel(BaseClassificationModel):
         with torch.no_grad():
             preds = []
             for inputs in inference_loader:
-                inputs = inputs.view([batch_size, -1, input_size])
+                inputs = inputs.view([batch_size, -1, input_size]).to(device)
 
                 self.model.to(device)
                 

@@ -280,6 +280,9 @@ def ML_test(params, test_X_array, test_y_array, scaler):
         result_metrics = classification_report(trues, preds, output_dict = True)
         
     result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
+    print("================================================")
+    print(result)
+    print("================================================")
 
     return result
 
@@ -357,6 +360,7 @@ def ML_inference(params, infer_X_array, scaler):
         pd.DataFrame : prediction_result
     """
     target = params['ingestion_param_y']['feature_list']
+    target = ['value_0']
 
     if params['model_info']['model_purpose'] == 'regression':
         preds = ML_pipeline.CLUST_regression_inference(infer_X_array, params['model_info'])
@@ -368,6 +372,6 @@ def ML_inference(params, infer_X_array, scaler):
         base_df_for_inverse[target[0]] = preds
         prediction_result = pd.DataFrame(scaler.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
     else:
-        prediction_result = pd.DataFrame(data={"value": preds}, index=range(len(preds)))
+        prediction_result = pd.DataFrame(data={"value_0": preds}, index=range(len(preds)))
             
     return prediction_result

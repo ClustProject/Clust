@@ -33,6 +33,8 @@ class ClassificationInference():
         ...            "n_epochs":10    }
         """
         self.infer_params = infer_params
+        print("============================================")
+        print(infer_params)
 
         
     def set_model(self, model_method, model_file_path, model_params):
@@ -46,6 +48,8 @@ class ClassificationInference():
         """
 
         self.model_params = model_params
+        print("============================================")
+        print(model_params)
         
         # build initialized model
         if (model_method == 'LSTM_cf') | (model_method == "GRU_cf"):

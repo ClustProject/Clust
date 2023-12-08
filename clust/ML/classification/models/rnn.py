@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch
+device = "cuda" if torch.cuda.is_available() else "cpu"
 
 class RNN(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers, output_dim, seq_len, dropout_prob, bidirectional, rnn_type):
@@ -56,12 +57,12 @@ class RNN(nn.Module):
 
         """
         # Initializing hidden state for first input with zeros
-        h0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+        h0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_().to(device)
 
         # Forward propagation by passing in the input and hidden state into the model
         if self.rnn_type == 'lstm':
             # Initializing cell state for first input with zeros
-            c0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_()
+            c0 = torch.zeros(self.num_directions * self.num_layers, x.size(0), self.hidden_size).requires_grad_().to(device)
             # We need to detach as we are doing truncated backpropagation through time (BPTT)
             # If we don't, we'll backprop all the way to the start even after going through another batch
             # Forward propagation by passing in the input, hidden state, and cell state into the model
