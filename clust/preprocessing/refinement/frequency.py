@@ -95,7 +95,7 @@ class RefineFrequency():
 
 
     def make_static_frequencyData(self, data, freq):
-        """ This function makes data with static frequency.
+        """ This function makes data with static frequency. if freq is None, just pass the data
 
         Args:
             data (DataFrame): input data
@@ -110,8 +110,10 @@ class RefineFrequency():
         """
         data_static_frequency = data.copy()
         data_static_frequency = data_static_frequency.sort_index()
-        data_static_frequency = data_static_frequency.resample(freq).mean()
-        data_static_frequency = data_static_frequency.asfreq(freq=freq)
+        if freq:
+            data_static_frequency = data_static_frequency.resample(freq).mean()
+            data_static_frequency = data_static_frequency.asfreq(freq=freq)
+            
         return data_static_frequency
     
     def get_frequencyWith3DataPoints(self, data):
@@ -150,7 +152,6 @@ class RefineFrequency():
         # TODO Modify it 
         # if etstmated_freq is None, it infers using only two data points.
         
-        ##TODO:  책임님께 질문 2022.09.29 소.이.
         if not estimated_freq:
             try:
                 estimated_freq = (data.index[1]-data.index[0])
