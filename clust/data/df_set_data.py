@@ -160,6 +160,32 @@ class DfSetData():
         
         return bucket_dataSet
     
+    def get_ideal_freq(self, bucket_name, ms_name, start_time, end_time, ms_num, ideal_data_num = 100000):
+        
+        data = self.db_client.get_data_front_by_num(7, bucket_name, ms_name)
+        from Clust.clust.preprocessing.refinement.frequency import RefineFrequency
+        original_freq = RefineFrequency().get_frequencyWith3DataPoints(data)
+        
+        if original_freq:
+            freq_seconds = original_freq.total_seconds()
+        else: 
+            freq_seconds = 60*24
+
+        end_time_T = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+        start_time_t = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+        
+        original_count = (end_time_T -start_time_t)/original_freq
+        total_data_num= ms_num * original_count 
+    
+        if ideal_data_num < total_data_num:
+            ratio = total_data_num/ideal_data_num
+            ideal_freq = freq_seconds * ratio
+            
+        print(freq_seconds, ms_num, total_data_num, ideal_data_num, ideal_freq)
+        ideal_freq = str(round(ideal_freq)) + 's'
+        
+        return ideal_freq
+        
     def all_ms_in_one_bucket(self, ingestion_param):
         """
         It returns dataSet from all MS of a speicific DB(Bucket) from start_time to end_time
@@ -189,30 +215,21 @@ class DfSetData():
         ms_list = self.db_client.measurement_list(bucket_name)
         dataSet ={}
 
+        ## Check Frequency of 1st ms 
+        ms_name_1 = ms_list[0]
+        ms_num = len(ms_list)
+        ideal_freq = self.get_ideal_freq(bucket_name, ms_name_1, start_time, end_time, ms_num, 100000)
+
         for ms_name in ms_list:
             if "ingestion_mode" in list(ingestion_param.keys()):
                 ingestion_mode = ingestion_param['ingestion_mode']
-                data = self.db_client.get_data_front_by_num(7,bucket_name, ms_name)
-                from Clust.clust.preprocessing.refinement.frequency import RefineFrequency
-                original_freq = RefineFrequency().get_frequencyWith3DataPoints(data)
-                freq_seconds = original_freq.total_seconds()
-                original_count = self.db_client.get_data_by_time_count(start_time, end_time, bucket_name, ms_name)
-
                 if "compressed" == ingestion_mode:
-                    if original_count > 1000:
-                        freq = original_count/1000
-                        if freq_seconds < 60.0: # 초
-                            new_freq = str(round(freq * 60)) + 's'
-                        elif 60.0 <= freq_seconds < 3600.0: # 분
-                            new_freq = str(round(freq * 3600)) + 's'
-                        data = self.db_client.get_data_by_time_resampling(new_freq, start_time, end_time, bucket_name, ms_name)
-                    else:
-                        data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
-
+                    data = self.db_client.get_data_by_time_resampling(ideal_freq, start_time, end_time, bucket_name, ms_name)
                 else:
                     data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
             else:
                 data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
+                
             if len(data)>0:
                 if 'feature_list'in ingestion_param.keys():
                     feature_list= ingestion_param['feature_list'] 
