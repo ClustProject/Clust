@@ -188,15 +188,27 @@ class DfSetData():
 
         ms_list = self.db_client.measurement_list(bucket_name)
         dataSet ={}
-        
 
         for ms_name in ms_list:
             if "ingestion_mode" in list(ingestion_param.keys()):
                 ingestion_mode = ingestion_param['ingestion_mode']
+                data = self.db_client.get_data_front_by_num(7,bucket_name, ms_name)
+                from Clust.clust.preprocessing.refinement.frequency import RefineFrequency
+                original_freq = RefineFrequency().get_frequencyWith3DataPoints(data)
+                freq_seconds = original_freq.total_seconds()
+                original_count = self.db_client.get_data_by_time_count(start_time, end_time, bucket_name, ms_name)
+
                 if "compressed" == ingestion_mode:
-                    # data = 간단한 정보를 뽑아오는 기능으로...
-                    # 어떤 방법으로 frequency를 조정할 것인지에 대해서 고민..
-                    pass
+                    if original_count > 1000:
+                        freq = original_count/1000
+                        if freq_seconds < 60.0: # 초
+                            new_freq = str(round(freq * 60)) + 's'
+                        elif 60.0 <= freq_seconds < 3600.0: # 분
+                            new_freq = str(round(freq * 3600)) + 's'
+                        data = self.db_client.get_data_by_time_resampling(new_freq, start_time, end_time, bucket_name, ms_name)
+                    else:
+                        data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
+
                 else:
                     data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
             else:
