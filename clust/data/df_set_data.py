@@ -172,29 +172,40 @@ class DfSetData():
 
         >>> returned dataset ----> {"data1_name":DF1, "data2_name:DF2......}
 
-
         Example:
 
             >>> ingestion_param = {
-            ...    'bucket_name' : 'air_indoor_modelSchool', 
-            ...    'start_time': '2021-09-05 00:00:00',
-            ...    'end_time': '2021-09-11 00:00:00',
-            ...    'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]}
+            ...    'bucket_name' : 'air_indoor_modelSchool', #required parameter
+            ...    'start_time': '2021-09-05 00:00:00', #required parameter
+            ...    'end_time': '2021-09-11 00:00:00', #required parameter
+            ...    'feature_list' : [ 'CO2', 'Noise','PM10','PM25', 'Temp', 'VoCs', 'humid' ]} # optional parameter
+            ...    'ingestion_mode' : 'compressed' # ['compressed', 'original'] # optional parameter
 
         """
-
         bucket_name     = ingestion_param['bucket_name']
         start_time      = ingestion_param['start_time'] 
         end_time        = ingestion_param['end_time']
 
         ms_list = self.db_client.measurement_list(bucket_name)
         dataSet ={}
+        
+
         for ms_name in ms_list:
-            data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
+            if "ingestion_mode" in list(ingestion_param.keys()):
+                ingestion_mode = ingestion_param['ingestion_mode']
+                if "compressed" == ingestion_mode:
+                    # data = 간단한 정보를 뽑아오는 기능으로...
+                    # 어떤 방법으로 frequency를 조정할 것인지에 대해서 고민..
+                    pass
+                else:
+                    data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
+            else:
+                data = self.db_client.get_data_by_time(start_time, end_time, bucket_name, ms_name)
             if len(data)>0:
                 if 'feature_list'in ingestion_param.keys():
                     feature_list= ingestion_param['feature_list'] 
                     data = data[feature_list]
+                
                 dataSet[ms_name] = data
 
         return dataSet
@@ -241,3 +252,4 @@ class DfSetData():
             data_set.update(dataSet_indi)
 
         return data_set
+    
