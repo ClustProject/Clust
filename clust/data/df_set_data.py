@@ -167,21 +167,27 @@ class DfSetData():
         original_freq = RefineFrequency().get_frequencyWith3DataPoints(data)
         
         if original_freq:
-            freq_seconds = original_freq.total_seconds()
+            freq_seconds = int(original_freq.total_seconds())
         else: 
             freq_seconds = 60*24
 
         end_time_T = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
         start_time_t = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
         
-        original_count = (end_time_T -start_time_t)/original_freq
+        original_count = int((end_time_T -start_time_t)/original_freq)
         total_data_num= ms_num * original_count 
     
         if ideal_data_num < total_data_num:
             ratio = total_data_num/ideal_data_num
-            ideal_freq = freq_seconds * ratio
-            
-        print(freq_seconds, ms_num, total_data_num, ideal_data_num, ideal_freq)
+            if ratio > 1:
+                ideal_freq = int(freq_seconds * ratio)
+            else:
+                ideal_freq = int(freq_seconds)
+        
+        print("frequency: ", freq_seconds, 's to ', ideal_freq , 's')
+        print("total_data_num: ", total_data_num, "(ideal num: less than", ideal_data_num, ')')
+        
+
         ideal_freq = str(round(ideal_freq)) + 's'
         
         return ideal_freq
@@ -218,7 +224,7 @@ class DfSetData():
         ## Check Frequency of 1st ms 
         ms_name_1 = ms_list[0]
         ms_num = len(ms_list)
-        ideal_freq = self.get_ideal_freq(bucket_name, ms_name_1, start_time, end_time, ms_num, 100000)
+        ideal_freq = self.get_ideal_freq(bucket_name, ms_name_1, start_time, end_time, ms_num, 1000000)
 
         for ms_name in ms_list:
             if "ingestion_mode" in list(ingestion_param.keys()):
