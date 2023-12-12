@@ -183,11 +183,12 @@ class DfSetData():
                 ideal_freq = int(freq_seconds * ratio)
             else:
                 ideal_freq = int(freq_seconds)
+        else:
+            ideal_freq = freq_seconds
         
         print("frequency: ", freq_seconds, 's to ', ideal_freq , 's')
         print("total_data_num: ", total_data_num, "(ideal num: less than", ideal_data_num, ')')
         
-
         ideal_freq = str(round(ideal_freq)) + 's'
         
         return ideal_freq
@@ -225,6 +226,10 @@ class DfSetData():
         ms_name_1 = ms_list[0]
         ms_num = len(ms_list)
         ideal_freq = self.get_ideal_freq(bucket_name, ms_name_1, start_time, end_time, ms_num, 1000000)
+        print("===================================================")
+        print(ideal_freq)
+        print(start_time)
+        print(end_time)
 
         for ms_name in ms_list:
             if "ingestion_mode" in list(ingestion_param.keys()):
