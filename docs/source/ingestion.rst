@@ -173,8 +173,18 @@ MongoDB는 NoSql구조로서 Database, colletion, document로 구성되어 있�
 
 Save CSV Data
 -----------------------------
-- dataframe save to CSV
-- CSV to dataframe
+해당 파트에서는 시간 정보를 가진 CSV 데이터를 시계열 데이터베이스에 저장하기 위해 데이터프레임으로 생성하는 방법과 반대로 시계열 데이터베이스의 데이터 
+또는 데이터프레임으로 만들어진 시계열 데이터를 CSV로 저장하는 방법에 대하여 설명한다.
+
+- CSV Data to TSDB
+   - CSV Data를 데이터 프레임으로 만든 후, TSDB에 저장
+   - 시간 정보가 중요하기 때문에 중복된 시간 또는 년/월/일/시/초 형식이 맞는지 체크
+   - 컬럼의 중복, 컬럼명 변경, 컬럼 삭제 등 사전에 설정 후 저장 수행
+
+- Dataframe to CSV
+   - Dataframe을 CSV 데이터로 저장
+   - 미리 저장하는 path와 naming 필요
+   - 일반적인 CSV 저장 과정과 동일
 
 
 |

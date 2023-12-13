@@ -2,36 +2,6 @@ Clust : data
 =================================
 
 
-Data
-----------------------------------------------------------
-
-
-.. figure:: ../image/data/data_ingestion_structure.png
-   :scale: 60%
-   :alt: data interface
-   :align: center
-   :class: with-border
-
-   Data Interface
-
-
-
-
-
-Dataframe
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-dataset
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-
-
-|
-
 
 Interface
 ---------------------------------------------------------------
@@ -49,6 +19,54 @@ Interface
 
 
 |
+
+
+
+Data
+----------------------------------------------------------
+
+
+
+
+Single Data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+.. figure:: ../image/data/data_single_type.png
+   :scale: 40%
+   :alt: data single type
+   :align: center
+   :class: with-border
+
+|
+
+
+Multiple Data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. figure:: ../image/data/data_multiple_type.png
+   :scale: 40%
+   :alt: data multiple type
+   :align: center
+   :class: with-border
+
+|
+
+
+.. figure:: ../image/data/data_multiple.png
+   :scale: 40%
+   :alt: data multiple
+   :align: center
+   :class: with-border
+
+
+
+
+|
+
+
 
 
 

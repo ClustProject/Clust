@@ -121,11 +121,11 @@ Clust Machine Learning 패키지에서는 데이터 및 모델을 사용하기 �
 Model
 ------------------------------------------------------
 
-Training Model
+Model Selection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Classification과 Regression에서 사용하는 Model은 ``LSTM``, ``GRU``, ``CNN_1D``, ``LSTM_FCNs``, 
 Anomaly Detection에서 사용하는 Model은 ``AnomalyTransformer``, ``RNN``, ``ATTN`` 등이 있다. Clustering은 대표적인 ``Kmeans`` 와 ``Som`` 을 사용한다.
-아래의 코드는 Clust에서 제공하는 ML 과정에서 model을 선택하여 해당 모델의 정보를 가져오는 과정이다.
+아래의 코드는 ML의 Regression을 수행하기 위해 model을 선택하여 해당 모델의 정보를 가져오는 과정이다. 사용하는 Model만 다를 뿐, 사용하는 함수 및 플로우는 동일하다.
 
 ::
 
@@ -143,17 +143,35 @@ Anomaly Detection에서 사용하는 Model은 ``AnomalyTransformer``, ``RNN``, `
 
 
 
-
 Classification
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+시계열 데이터의 분류(Classification) 타스크를 지원하며, 'CNN_1D', 'LSTM_FCNs', 'LSTM', 'GRU' 모델의 학습과 테스트, 추론을 수행할 수 있다. 
+시계열 데이터의 분류는 시계열 데이터가 입력값으로 주어졌을 때 해당 데이터의 범주를 분류하는 타스크이다.
 
 
+.. figure:: ../image/machine_learning/ml_parameter.png
+   :scale: 75%
+   :alt: Classification Test Result Example
+   :align: center
+   :class: with-border
+
+   Classification Test Result Example
 
 
 
 Regression
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+시계열 데이터의 회귀(Regression) 예측 타스크를 지원하며, 'CNN_1D', 'LSTM_FCNs', 'LSTM', 'GRU' 모델의 학습과 테스트, 추론을 수행할 수 있다. 
+시계열 데이터의 예측 기술은 시계열 데이터가 입력 값으로 주어졌을 때, 해당 데이터의 패턴을 파악하도록 회귀 모델을 학습하여 미래의 데이터를 예측하는 타스크이다.
 
+
+.. figure:: ../image/machine_learning/ml_regression_test_result.png
+   :scale: 20%
+   :alt: Regression Test Result Example
+   :align: center
+   :class: with-border
+
+   Regression Test Result Example
 
 
 Anomaly Detection
