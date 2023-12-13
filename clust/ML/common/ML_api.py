@@ -148,6 +148,9 @@ def train_data_preparation(params, influxdb_client):
                                                  'ms_all', 
                                                  influxdb_client)
     # 2. Scaling
+    
+    if params['model_info']['model_purpose']  == 'classification':
+        params['scaler_param']['scaler_flag'] = 'noscale'
     dataX_scaled, datay_scaled = ML_pipeline.Xy_data_scaling_train(params['ingestion_param_X']['ms_name'], 
                                                                                      data_X, 
                                                                                      params['ingestion_param_y']['ms_name'], 
@@ -277,12 +280,9 @@ def ML_test(params, test_X_array, test_y_array, scaler):
         preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, params['model_info'])
         df_result = ml_data.get_prediction_df_result(preds, trues, params['scaler_param']['scaler_flag'],  scaler, feature_list, target)
 
-        result_metrics = classification_report(trues, preds, output_dict = True)
+        result_metrics = classification_report(trues, preds,output_dict = True)
         
     result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
-    print("================================================")
-    print(result)
-    print("================================================")
 
     return result
 

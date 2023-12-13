@@ -36,6 +36,8 @@ class RNNModel(BaseClassificationModel):
             dropout_prob = self.model_params['dropout'],
             bidirectional = self.model_params['bidirectional']
         )
+        print("*********************************")
+        print(model_params)
 
     def train(self, train_params, train_loader, valid_loader):
         """
