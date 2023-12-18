@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np 
-import datetime
 import matplotlib.pyplot as plt
 
-class FeatureExtension():
+class ETCFeatureExtension():
     
     def __init__(self):
         pass

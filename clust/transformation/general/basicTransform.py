@@ -12,13 +12,6 @@ def get_corrMatrix(data):
     corr_matrix = data.corr(method='pearson').values.tolist()
     return corr_matrix
 
-def DFSetToSeries(dataSet):
-    seriesData =[]
-    for i in range(len(dataSet)):
-        value = dataSet[i].values
-        seriesData.append(value.reshape(len(value)))
-    return seriesData
-
 
 def checkNumericColumns(data, checkColumnList=None):
     """
