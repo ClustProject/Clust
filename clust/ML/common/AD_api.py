@@ -11,6 +11,7 @@ from sklearn.metrics import roc_auc_score, f1_score
 from Clust.clust.ML.tool import scaler as ml_scaler
 from Clust.clust.ML.tool import data as ml_data
 from Clust.clust.ML.common import AD_pipeline
+from Clust.clust.ML.common import ML_pipeline
 from Clust.clust.ML.common import echart
 import numpy as np
 
@@ -107,7 +108,7 @@ def check_model_name(model_name, model_name_info):
 # # --------------------------------- training ---------------------------------------------------
 
 # TODO:
-def train_data_preparation(params):
+def train_data_preparation(params, influxdb_client):
     """
     prepare data for train using AD_pipeline
 
@@ -118,7 +119,36 @@ def train_data_preparation(params):
         train_dataset (torch.Tensor): train dataset
         test_dataset (torch.Tensor): test dataset
     """
-
+    # # 1. Oirignla data ingestion
+    # data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], 
+    #                                              params['data_y_flag'], 
+    #                                              params['ingestion_param_y'],
+    #                                              'ms_all', 
+    #                                              influxdb_client)
+    # # 2. Scaling
+    # dataX_scaled, datay_scaled = ML_pipeline.Xy_data_scaling_train(params['ingestion_param_X']['ms_name'], 
+    #                                                                                  data_X, 
+    #                                                                                  params['ingestion_param_y']['ms_name'], 
+    #                                                                                  data_y, 
+    #                                                                                  params['scaler_param'])
+    # # 3.clean column
+    # dataX_scaled = ML_pipeline.clean_low_quality_column(dataX_scaled, 
+    #                                                     params['transform_param'])
+    # # 4. split train/Val
+    # split_ratio = 0.8
+    # train_X, val_X, train_y, val_y, params['transform_param']= ML_pipeline.split_data_by_mode(dataX_scaled, 
+    #                                                                                          datay_scaled, 
+    #                                                                                          split_ratio, 
+    #                                                                                          params['transform_param'])
+    # # 5. Transform array style
+    # train_X_array, train_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], 
+    #                                                                         train_X, 
+    #                                                                         train_y)
+    # val_X_array, val_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], 
+    #                                                                     val_X, 
+    #                                                                     val_y)
+    
+    # return train_X_array, train_y_array, val_X_array, val_y_array
     pass
 
 def AD_train(params, train_X, train_y, val_X, val_y):
@@ -141,7 +171,6 @@ def AD_train(params, train_X, train_y, val_X, val_y):
     
     from Clust.clust.ML.tool import model as ml_model
     train_data_path_list = [params['model_info']['model_name'], params['ingestion_param_X']['ms_name']]
-    # train_data_path_list = [params['model_info']['model_name'], params['data_param_X']['name']]
     model_file_path = ml_model.get_model_file_path(train_data_path_list, params['model_info']['model_method'])
 
     params['model_info']['model_file_path'] = {

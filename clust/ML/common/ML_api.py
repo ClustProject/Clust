@@ -191,18 +191,23 @@ def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
     """
     # model info update
     from Clust.clust.ML.common import model_parameter_setting
-    params['model_info']['seq_len'] = train_X_array.shape[1] 
-    params['model_info']['input_size'] = train_X_array.shape[2] 
-    params['model_info']['model_parameter'] = model_parameter_setting.set_model_parameter(params['model_info']) 
+    if params['model_info']['model_purpose'] == 'regression' or params['model_info']['model_purpose'] == 'classification':
+        params['model_info']['seq_len'] = train_X_array.shape[1] 
+        params['model_info']['input_size'] = train_X_array.shape[2] 
+        params['model_info']['model_parameter'] = model_parameter_setting.set_model_parameter(params['model_info'])
+    elif params['model_info']['model_purpose'] == 'anomaly_detection':
+        params['model_info']['seq_len'] = train_X_array.shape[0]  # TODO: batch? 
+        params['model_info']['input_size'] = train_X_array.shape[1]  # TODO: batch?
+        params['model_info']['model_parameter'] = model_parameter_setting.set_model_parameter(params['model_info'])
 
     from Clust.clust.ML.tool import model as ml_model
-    train_data_path_list = [params['model_info']['model_name'] , params['ingestion_param_X']['ms_name']]
+    train_data_path_list = [params['model_info']['model_name'], params['ingestion_param_X']['ms_name']]
     model_file_path = ml_model.get_model_file_path(train_data_path_list, params['model_info']['model_method'] )
 
     params['model_info']['model_file_path'] = {
         "modelFile":{
-            "fileName":"model.pth",
-            "filePath":model_file_path
+            "fileName": "model.pth",
+            "filePath": model_file_path
         }
     }
 
@@ -220,6 +225,12 @@ def ML_train(params, train_X_array, train_y_array, val_X_array, val_y_array):
                                                val_X_array, 
                                                val_y_array, 
                                                params['model_info'])
+    elif params['model_info']['model_purpose']  == 'anomaly_detection':
+        ML_pipeline.CLUST_anomalyDet_train(train_X_array,
+                                            train_y_array,
+                                            val_X_array,
+                                            val_y_array,
+                                            params['model_info'])
 
     return params
 
@@ -242,12 +253,19 @@ def test_data_preparation(params, influxdb_client):
         scaler : scaler_X, scaler_y
 
     """
-    # 1. Oirignla data ingestion
+    # 1. Oirignal data ingestion
     data_X, data_y = ML_pipeline.Xy_data_preparation(params['ingestion_param_X'], params['data_y_flag'], params['ingestion_param_y'], 'ms_all', influxdb_client)
-    test_X, scaler_X = ml_scaler.get_scaled_test_data(data_X, params['scaler_param']['scaler_file_path']['XScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
-    test_y, scaler_y = ml_scaler.get_scaled_test_data(data_y, params['scaler_param']['scaler_file_path']['yScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
+    
+    # 2. Scaling
+    # dataX_scaled, scaler_X, datay_scaled, scaler_y = ML_pipeline.Xy_data_scaling_test(data_X, data_y,
+    #                                                               params['scaler_param']['scaler_file_path']['XScalerFile']['filePath'],
+    #                                                               params['scaler_param']['scaler_file_path']['yScalerFile']['filePath'],
+    #                                                               params['scaler_param'])
+    dataX_scaled, scaler_X = ml_scaler.get_scaled_test_data(data_X, params['scaler_param']['scaler_file_path']['XScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
+    data_y_scaled, scaler_y = ml_scaler.get_scaled_test_data(data_y, params['scaler_param']['scaler_file_path']['yScalerFile']['filePath'], params['scaler_param']['scaler_flag'])
 
-    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], test_X, test_y)
+    # 3. Trasnform array style
+    test_X_array, test_y_array = ML_pipeline.transform_data_by_split_mode(params['transform_param'], dataX_scaled, data_y_scaled)
 
     return test_X_array, test_y_array, scaler_X, scaler_y
 
@@ -275,12 +293,16 @@ def ML_test(params, test_X_array, test_y_array, scaler):
         preds, trues = ML_pipeline.CLUST_regresstion_test(test_X_array, test_y_array, params['model_info'])
         df_result = ml_data.get_prediction_df_result(preds, trues, params['scaler_param']['scaler_flag'], scaler, feature_list, target)
         result_metrics =  metrics.calculate_metrics_df(df_result)
-
     elif params['model_info']['model_purpose'] == 'classification':
         preds, probs, trues, acc = ML_pipeline.clust_classification_test(test_X_array, test_y_array, params['model_info'])
         df_result = ml_data.get_prediction_df_result(preds, trues, params['scaler_param']['scaler_flag'],  scaler, feature_list, target)
-
         result_metrics = classification_report(trues, preds,output_dict = True)
+    elif params['model_info']['model_purpose'] == 'anomaly_detection':
+        preds, trues, thres = ML_pipeline.CLUST_anomalyDet_test(test_X_array,
+                                                         test_y_array,
+                                                         params['model_info'])
+        df_result = ml_data.get_prediction_df_result(preds, trues, scaler_param=False, scaler=None, feature_list=feature_list, target_col=target)
+        result_metrics = metrics.calculate_anomaly_metrics(preds, trues, thres)
         
     result = {'result':echart.getEChartFormatResult(df_result), 'result_metrics':result_metrics}
 
@@ -366,6 +388,8 @@ def ML_inference(params, infer_X_array, scaler):
         preds = ML_pipeline.CLUST_regression_inference(infer_X_array, params['model_info'])
     elif params['model_info']['model_purpose'] == 'classification':
         preds = ML_pipeline.clust_classification_inference(infer_X_array, params['model_info'])
+    elif params['model_info']['model_purpose'] == 'anomaly_detection':
+        preds = ML_pipeline.CLUST_anomalyDet_inference(infer_X_array, params['model_info'])
 
     if params['scaler_param']['scaler_flag'] =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
