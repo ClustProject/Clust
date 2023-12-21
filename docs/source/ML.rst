@@ -149,8 +149,8 @@ Classification
 시계열 데이터의 분류는 시계열 데이터가 입력값으로 주어졌을 때 해당 데이터의 범주를 분류하는 타스크이다.
 
 
-.. figure:: ../image/machine_learning/ml_parameter.png
-   :scale: 75%
+.. figure:: ../image/machine_learning/classification_test_result.PNG
+   :scale: 40%
    :alt: Classification Test Result Example
    :align: center
    :class: with-border

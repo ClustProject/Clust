@@ -15,7 +15,12 @@ Purpose
 
 |
 
-(이미지)
+.. figure:: ../image/transformation/transformation_1.png
+   :scale: 60%
+   :alt: transformation_1
+   :align: center
+   :class: with-border
+
 
 |
 
@@ -23,7 +28,11 @@ Purpose
 
 |
 
-(이미지)
+.. figure:: ../image/transformation/transformation_2.png
+   :scale: 60%
+   :alt: transformation_2
+   :align: center
+   :class: with-border
 
 |
 
@@ -88,7 +97,7 @@ Split (Condition)
 
 Split (Cycle)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-데이터를 정해진 주기에 의거하여 분리한다.
+데이터를 정해진 주기(초, 분, 시, 일, 주, 월, 년)에 의거하여 분리한다.
 
 
 Entropy
