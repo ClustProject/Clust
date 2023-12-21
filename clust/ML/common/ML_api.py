@@ -149,8 +149,8 @@ def train_data_preparation(params, influxdb_client):
                                                  influxdb_client)
     # 2. Scaling
     
-    if params['model_info']['model_purpose']  == 'classification':
-        params['scaler_param']['scaler_flag'] = 'noscale'
+    # if params['model_info']['model_purpose']  == 'classification':
+    #     params['scaler_param']['scaler_flag'] = 'noscale'
     dataX_scaled, datay_scaled = ML_pipeline.Xy_data_scaling_train(params['ingestion_param_X']['ms_name'], 
                                                                                      data_X, 
                                                                                      params['ingestion_param_y']['ms_name'], 
@@ -365,7 +365,10 @@ def infer_data_preparation(params, data):
     """
     
     scaled_infer_X, scaler_X = _get_scaled_infer_data(data, params['scaler_param']['scaler_file_path']['XScalerFile']["filePath"], params['scaler_param']['scaler_flag'])
-    scaler_y = ml_scaler.get_scaler_file(params['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
+    if params['scaler_param']['scaler_flag'] == 'scale':
+        scaler_y = ml_scaler.get_scaler_file(params['scaler_param']['scaler_file_path']['yScalerFile']["filePath"])
+    else:
+        scaler_y = None
     
     return scaled_infer_X, scaler_y
 
@@ -391,11 +394,15 @@ def ML_inference(params, infer_X_array, scaler):
     elif params['model_info']['model_purpose'] == 'anomaly_detection':
         preds = ML_pipeline.CLUST_anomalyDet_inference(infer_X_array, params['model_info'])
 
+    print("``````````````````````````")
+    print(preds)
     if params['scaler_param']['scaler_flag'] =='scale':
         base_df_for_inverse = pd.DataFrame(columns=target, index=range(len(preds)))
         base_df_for_inverse[target[0]] = preds
         prediction_result = pd.DataFrame(scaler.inverse_transform(base_df_for_inverse), columns=target, index=base_df_for_inverse.index)
     else:
         prediction_result = pd.DataFrame(data={"value_0": preds}, index=range(len(preds)))
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print(prediction_result)
             
     return prediction_result
