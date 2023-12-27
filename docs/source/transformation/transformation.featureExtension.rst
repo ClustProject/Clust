@@ -10,9 +10,9 @@ encoded Feature Extension
    :show-inheritance:
 
 
-feature extension old
+ETC feature extension
 ------------------------------
-.. automodule:: clust.transformation.featureExtension.feature_extension_old
+.. automodule:: clust.transformation.featureExtension.etcFeatureExtension
    :members:
    :undoc-members:
    :show-inheritance:
