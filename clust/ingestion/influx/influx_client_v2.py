@@ -856,3 +856,92 @@ class InfluxClient():
         data_frame = self.cleanup_df(data_frame)
 
         return data_frame
+    
+
+
+
+
+
+
+
+
+        # first() - 테이블에서 첫번째 레코드 반환
+    def get_first_time_by_range(self, start_time, end_time, bk_name, ms_name):
+        """
+        Get the :guilabel:`first data` of the specific mearuement
+
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            Timestamp: first time in data
+        """
+        if isinstance(start_time, str):
+            if 'T' not in start_time:
+                if len(start_time) < 12:
+                    start_time = start_time + " 00:00:00"
+                    end_time = end_time + " 23:59:59"
+                start_time = datetime.strptime(start_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+                end_time = datetime.strptime(end_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+            else:
+                pass
+        else: #Not String:
+            start_time = start_time.strftime(UTC_Style)
+            end_time = end_time.strftime(UTC_Style)
+
+
+        query = f'''from(bucket: "{bk_name}") 
+        |> range(start: {start_time}, stop: {end_time}) 
+        |> filter(fn: (r) => r._measurement == "{ms_name}")
+        |> group(columns: ["_field"])
+        |> first()
+        |> drop(columns: ["_start", "_stop", "_measurement"])
+        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+        '''
+        query_result = self.DBClient.query_api().query_data_frame(query=query)
+        query_first_time = sorted(query_result["_time"])
+        first_time = query_first_time[0]
+
+        return first_time
+
+        # last() - 테이블에서 마지막 레코드 반환
+    def get_last_time_by_range(self, start_time, end_time, bk_name, ms_name):
+        """
+        Get the :guilabel:`last data` of the specific mearuement
+
+        Args:
+            db_name (string): bucket(database)
+            ms_name (string): measurement
+        
+        Returns:
+            Timestamp: last time in data
+        """
+        if isinstance(start_time, str):
+            if 'T' not in start_time:
+                if len(start_time) < 12:
+                    start_time = start_time + " 00:00:00"
+                    end_time = end_time + " 23:59:59"
+                start_time = datetime.strptime(start_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+                end_time = datetime.strptime(end_time,'%Y-%m-%d %H:%M:%S').strftime(UTC_Style)
+            else:
+                pass
+        else: #Not String:
+            start_time = start_time.strftime(UTC_Style)
+            end_time = end_time.strftime(UTC_Style)
+
+
+        query = f'''
+        from(bucket: "{bk_name}") 
+        |> range(start: {start_time}, stop: {end_time})  
+        |> filter(fn: (r) => r._measurement == "{ms_name}")
+        |> last()
+        |> drop(columns: ["_start", "_stop", "_measurement"])
+        |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+        '''
+
+        query_result = self.DBClient.query_api().query_data_frame(query=query)
+        query_last_time = sorted(query_result["_time"],reverse=True)
+        last_time = query_last_time[0]
+
+        return last_time
