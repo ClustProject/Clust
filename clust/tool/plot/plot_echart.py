@@ -66,8 +66,6 @@ def get_echart_json_result(graph_type, df)  :
         
         
     result = json.dumps(data, cls=NumpyEncoder)
-    print(result)
-    print(jsonify(result))
 
     return result
 

@@ -72,7 +72,7 @@ def get_analysis_by_data(analysis_method, analysis_param, input_df):
 
     elif analysis_method == 'max_correlation_value_index_with_lag':
         df_analysis = da.get_max_correlation_table_with_lag(analysis_param, input_df) 
-        print(df_analysis)
+
         
     elif analysis_method == 'scale_xy_frequency':
         time_scale = analysis_param['time_scale']

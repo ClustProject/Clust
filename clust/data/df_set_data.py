@@ -226,10 +226,6 @@ class DfSetData():
         ms_name_1 = ms_list[0]
         ms_num = len(ms_list)
         ideal_freq = self.get_ideal_freq(bucket_name, ms_name_1, start_time, end_time, ms_num, 1000000)
-        print("===================================================")
-        print(ideal_freq)
-        print(start_time)
-        print(end_time)
 
         for ms_name in ms_list:
             if "ingestion_mode" in list(ingestion_param.keys()):
