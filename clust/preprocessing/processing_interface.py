@@ -98,7 +98,6 @@ def get_preprocessed_data(processing_type, param, data):
     """
 
     DP = DataPreprocessing()
-    
     # 3 step processing
     if processing_type =='refinement':
         result = DP.get_refinedData(data, param)

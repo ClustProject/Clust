@@ -61,6 +61,7 @@ class BasicImputation():
     def simpleMethod(self):
         """ Get imputed data from scikit SimpleImputer methods
         """
+        print("What's goining on? -----linear")
         series_result = SimpleImputer(strategy=self.method, missing_values = np.nan).fit_transform(self.data)
         result = self.makeDF(series_result)
         return result

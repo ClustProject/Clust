@@ -145,7 +145,7 @@ class SerialImputation():
         from Clust.clust.preprocessing.imputation import basicMethod 
         from Clust.clust.preprocessing.imputation import DLMethod 
         basicImpute = basicMethod.BasicImputation(data, method, max_limit, parameter)
-        
+        print("What's goining on? -----Imputation")
         if method in self.ScikitLearnMethods:
             result = basicImpute.ScikitLearnMethod()       
         elif method in self.simpleMethods:
