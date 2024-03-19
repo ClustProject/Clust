@@ -171,9 +171,13 @@ class DfSetData():
         else: 
             freq_seconds = 60*24
 
-        end_time_T = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
-        start_time_t = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
-        
+        if isinstance(start_time, str):
+            end_time_T = datetime.datetime.strptime(end_time, '%Y-%m-%d %H:%M:%S')
+            start_time_t = datetime.datetime.strptime(start_time, '%Y-%m-%d %H:%M:%S')
+        else:
+            end_time_T = end_time
+            start_time_t = start_time
+
         original_count = int((end_time_T -start_time_t)/original_freq)
         total_data_num= ms_num * original_count 
     
